@@ -1,0 +1,1261 @@
+# Reqflow - Product Requirements Document
+
+## The Procurement Front Door for Teams Without Procurement
+
+**Version:** 1.0
+**Date:** February 18, 2026
+**Author:** Product Strategy Team
+**Status:** Draft for Validation
+**Confidentiality:** Internal
+
+---
+
+## Table of Contents
+
+1. [Executive Summary](#1-executive-summary)
+2. [Problem Space](#2-problem-space)
+3. [Competitive Teardown: Why Freqens Isn't Enough](#3-competitive-teardown-why-freqens-isnt-enough)
+4. [Target User & Persona Deep-Dive](#4-target-user--persona-deep-dive)
+5. [Product Vision & Positioning](#5-product-vision--positioning)
+6. [Core Value Propositions](#6-core-value-propositions)
+7. [Feature Specification](#7-feature-specification)
+8. [User Journeys](#8-user-journeys)
+9. [Information Architecture](#9-information-architecture)
+10. [Technical Architecture](#10-technical-architecture)
+11. [Integrations](#11-integrations)
+12. [Data Model](#12-data-model)
+13. [AI/ML Capabilities](#13-aiml-capabilities)
+14. [Pricing Strategy](#14-pricing-strategy)
+15. [Go-to-Market Strategy](#15-go-to-market-strategy)
+16. [Success Metrics & KPIs](#16-success-metrics--kpis)
+17. [Phased Roadmap](#17-phased-roadmap)
+18. [Risks & Mitigations](#18-risks--mitigations)
+19. [Appendix: Freqens Gap Analysis Matrix](#19-appendix-freqens-gap-analysis-matrix)
+
+---
+
+## 1. Executive Summary
+
+### The Problem
+
+Companies between 50-500 employees spend 15-30% of revenue on indirect purchases (SaaS, services, office, travel) with zero structured process. They don't have procurement teams. They have scattered Slack messages, email chains, and a CFO who finds out about new subscriptions on the credit card statement.
+
+Freqens partially addresses this by helping negotiate renewals. But it completely ignores the other 80% of the procurement lifecycle: the moment someone says "I need a tool" to the moment the invoice is paid and reconciled. There is no front door. No approval process. No budget guardrails. No purchase execution. No compliance trail.
+
+### The Opportunity
+
+**Reqflow** is the AI-native procurement execution platform for companies that don't have (and don't want) a procurement department. It's the single front door where every purchase request enters, gets routed, approved, executed, and tracked - automatically.
+
+While Freqens tells you "your Slack renewal is overpriced," Reqflow ensures:
+- The Slack purchase was approved in the first place
+- The right people signed off before money left the account
+- The budget was checked before the PO was issued
+- The invoice was matched and paid correctly
+- The full audit trail exists for compliance
+
+### Market Size
+
+- **TAM:** $45B global procurement software market (2026)
+- **SAM:** $8.2B SMB/mid-market indirect procurement segment
+- **SOM (Year 1):** $82M - French and EU mid-market companies (50-500 employees) without procurement teams
+- **Entry Wedge:** 12,000+ companies in France matching ICP, expanding to UK, DACH, Nordics
+
+### Key Differentiators
+
+1. **Intake-first, not renewal-first** - starts at "I need something," not "your contract is renewing"
+2. **Execution, not just intelligence** - creates POs, routes approvals, processes invoices, tracks budgets
+3. **AI copilot, not AI agent** - the human decides, AI handles the busywork
+4. **5-minute onboarding** - no implementation, no consultants, no 6-week rollout
+5. **Built for the requester** - consumer-grade UX for the person buying, not just the person controlling
+
+---
+
+## 2. Problem Space
+
+### 2.1 The Broken Status Quo
+
+Here's how a typical 200-person company without procurement currently buys:
+
+```
+Employee needs a tool
+    → Asks manager on Slack
+        → Manager says "ask finance"
+            → Finance says "send me an email"
+                → Email sits for 3 days
+                    → CFO asks "do we already have something like this?"
+                        → Nobody knows
+                            → CFO approves via reply-all
+                                → Employee signs up with corporate card
+                                    → Invoice arrives 30 days later
+                                        → Finance has no idea what it's for
+                                            → Reconciliation nightmare
+```
+
+**Average time from "I need this" to "I have this":** 11.4 days for a $500/month SaaS tool.
+
+**Percentage of purchases that follow any formal process:** <20% in companies without procurement.
+
+### 2.2 The Cost of No Process
+
+| Impact Area | Metric | Source |
+|---|---|---|
+| Maverick spend (off-policy purchases) | 40-60% of all indirect spend | Hackett Group 2025 |
+| Duplicate subscriptions | 29% of SaaS tools have functional overlap | Zylo 2025 SaaS Report |
+| Budget overruns from untracked spend | 23% average overspend | Gartner Procurement Research |
+| Time wasted on manual procurement tasks | 8.3 hours/week per finance team member | APQC Benchmarking |
+| Invoice processing cost (manual) | $15-40 per invoice | Ardent Partners |
+| Invoice processing cost (automated) | $2-5 per invoice | Ardent Partners |
+
+### 2.3 Why Existing Solutions Fail SMBs
+
+**Enterprise tools (Coupa, SAP Ariba, GEP):**
+- 6-12 month implementation
+- $100K+ annual cost
+- Require dedicated procurement staff to operate
+- Designed for complexity, not simplicity
+
+**SaaS management tools (Freqens, Spendflo, Vendr):**
+- Only cover renewals/renegotiation
+- No intake, no approval workflows, no PO management
+- No budget enforcement at point of purchase
+- Passive (alert-based) not active (execution-based)
+
+**Card-based spend tools (Ramp, Brex, Spendesk):**
+- Payment-centric, not process-centric
+- Limited pre-purchase controls
+- No structured intake for non-card purchases
+- Weak on services/contract procurement
+
+**The gap:** Nobody owns the full intake-to-pay lifecycle for the 50-500 employee company with zero procurement headcount. That's Reqflow.
+
+---
+
+## 3. Competitive Teardown: Why Freqens Isn't Enough
+
+### 3.1 What Freqens Does Well
+
+Credit where due - Freqens nails these:
+
+- **Renewal detection:** AI reads contracts, extracts dates, alerts the right person at the right time. Genuinely solves the "we forgot to cancel and auto-renewed at a 20% markup" problem.
+- **Price benchmarking:** Anonymized data from 500+ companies gives you leverage. You know if you're paying above market.
+- **Vendor alternatives:** One-click competitor discovery with real pricing data. Saves hours of manual research.
+- **Team satisfaction surveys:** Quantifies whether the team even wants to keep a tool before you negotiate.
+- **Speed to value:** Upload contracts, get insights in hours. No implementation project.
+
+### 3.2 The 14 Critical Gaps Freqens Leaves Wide Open
+
+#### Gap 1: No Purchase Intake / Request Management
+**What's missing:** There is no way for an employee to say "I need to buy something" inside Freqens. No intake form. No request submission. No structured way to capture what's needed, why, and by when.
+
+**User impact:** Requests continue happening via Slack, email, hallway conversations. No single source of truth. No audit trail. The CFO doesn't know what's being requested until money has already been spent.
+
+**Why it matters:** Intake is the #1 driver of procurement compliance. Without a front door, every purchase is maverick spend by definition.
+
+#### Gap 2: No Approval Workflows
+**What's missing:** No routing engine. No multi-level approval chains. No conditional logic (e.g., "over $5K needs VP + Finance sign-off"). No delegation when someone's on vacation.
+
+**User impact:** Approvals happen ad-hoc via email/Slack. No visibility into who approved what and when. No escalation when approvals stall. Budget owners can't enforce policy because there's no policy engine.
+
+**Why it matters:** Without approval workflows, there's no governance. Finance discovers spend after the fact, not before. This is the opposite of spend control.
+
+#### Gap 3: No Budget Tracking or Enforcement
+**What's missing:** No department budgets. No project budgets. No real-time budget consumption tracking. No alerts when a budget is 80% consumed. No hard stops when a budget is exceeded.
+
+**User impact:** The CFO has a spreadsheet with annual budget allocations. Nobody checks it before buying. Departments overspend consistently. Budget reviews happen monthly at best, revealing problems weeks too late.
+
+**Why it matters:** Budget enforcement at the point of purchase is the single highest-ROI procurement control. Every dollar saved here is pure margin.
+
+#### Gap 4: No Purchase Order (PO) Creation or Management
+**What's missing:** Cannot create, issue, send, or track purchase orders. No PO numbers. No 3-way matching (PO vs. receipt vs. invoice).
+
+**User impact:** Vendors receive informal emails or nothing at all. There's no contractual commitment record. When invoices arrive, finance can't match them to authorized purchases. Disputes are impossible to resolve without a PO trail.
+
+**Why it matters:** POs are the backbone of procurement compliance and AP efficiency. Without them, every invoice is a surprise.
+
+#### Gap 5: No Invoice Processing
+**What's missing:** No invoice capture (email, portal, or OCR). No matching. No approval routing for invoices. No payment tracking. No AP automation.
+
+**User impact:** Finance manually enters every invoice. Duplicates slip through. Early payment discounts are missed because invoices sit in someone's inbox. Month-end close is a firefight.
+
+**Why it matters:** AP automation delivers 60-80% cost reduction per invoice. For a company processing 200+ invoices/month, this is tens of thousands in savings annually.
+
+#### Gap 6: No Vendor Onboarding or Compliance
+**What's missing:** No vendor registration portal. No document collection (W-9, insurance, certifications). No risk assessment. No due diligence workflow.
+
+**User impact:** Vendors are added to the system (if there even is one) manually by finance. Compliance documents live in random folders. When audit time comes, nobody can produce the required vendor documentation.
+
+**Why it matters:** Vendor compliance is a regulatory requirement in many industries. Without it, you're exposed to legal, financial, and operational risk.
+
+#### Gap 7: No Spend Policy Engine
+**What's missing:** No configurable rules like "no SaaS purchase over $1K without security review," "all professional services need 2 quotes," or "marketing can't buy tools already covered by existing licenses."
+
+**User impact:** Every purchase decision is ad-hoc. The same mistakes (buying duplicates, skipping security review, ignoring preferred vendors) happen repeatedly because there's no systematic way to enforce rules.
+
+**Why it matters:** Policies without enforcement are just suggestions. A policy engine makes governance automatic, not aspirational.
+
+#### Gap 8: Only Addresses Renewals, Not New Purchases
+**What's missing:** Freqens activates when a renewal date approaches. But 40-60% of indirect spend comes from NEW purchases - first-time tools, new service contracts, one-time purchases. Freqens has nothing for these.
+
+**User impact:** The first purchase of a tool has zero process. No benchmarking (Freqens needs an existing contract to benchmark against). No negotiation prep. No alternatives analysis. The employee picks whatever they found on Google and signs up.
+
+**Why it matters:** The first purchase sets the baseline. Overpaying by 20% on the first contract means you're negotiating down from an inflated starting point for every renewal after.
+
+#### Gap 9: No Spend Visibility Dashboard (Real-Time)
+**What's missing:** Freqens shows contract-level data. It does not show real-time spend by department, category, vendor, or project. No burn-rate tracking. No forecasting.
+
+**User impact:** The CFO can see "we have a Salesforce contract for $50K/year" but can't see "engineering has consumed 78% of their Q1 software budget with 6 weeks left in the quarter."
+
+**Why it matters:** Real-time spend visibility is the difference between reactive finance (discovering problems at month-end) and proactive finance (preventing problems before they happen).
+
+#### Gap 10: No Contract Lifecycle Management
+**What's missing:** Freqens monitors contract dates. But it doesn't manage contracts: no versioning, no clause tracking, no amendment management, no obligation tracking, no contract creation from templates.
+
+**User impact:** Contracts live in email attachments, Google Drive, or the vendor's portal. Nobody can find the latest version. Obligation tracking ("we committed to a minimum volume") is nonexistent.
+
+**Why it matters:** Contract management is a governance requirement. Without it, you don't actually know what you've agreed to.
+
+#### Gap 11: No Multi-Stakeholder Collaboration
+**What's missing:** No shared workspace for purchase decisions. No commenting. No @mentions. No decision threads. No voting or consensus mechanism.
+
+**User impact:** Purchase decisions involve 3-5 people (requester, manager, IT, security, finance) but the conversation happens across 4 different channels with no central record.
+
+**Why it matters:** The #1 reason procurement processes break down is coordination failure. Multi-stakeholder collaboration isn't a nice-to-have - it's the core workflow.
+
+#### Gap 12: No ERP/Accounting Integration for Transactions
+**What's missing:** Freqens doesn't push data into accounting systems. No journal entry creation. No cost center allocation. No accrual management.
+
+**User impact:** Finance manually re-enters data from Freqens into their accounting system. Double work. Risk of transcription errors. Reconciliation is manual.
+
+**Why it matters:** Integration eliminates the "last mile" problem. Without it, the tool creates work instead of eliminating it.
+
+#### Gap 13: No Catalog / Preferred Vendor Management
+**What's missing:** No way to define "these are our approved vendors for cloud hosting" or "use these preferred consultancies." No catalog where employees can browse pre-negotiated options.
+
+**User impact:** Employees Google for solutions every time. They don't know about existing contracts with volume discounts. Spend is fragmented across dozens of vendors instead of consolidated with preferred partners.
+
+**Why it matters:** Preferred vendor programs typically save 15-25% through volume consolidation. Without a catalog, every purchase starts from zero.
+
+#### Gap 14: No Mobile Experience for Approvals
+**What's missing:** No mobile app. No push notifications for pending approvals. No quick-approve from phone.
+
+**User impact:** Approvals (in whatever ad-hoc form they take) stall when the approver is traveling, in meetings, or away from their laptop. Average approval delay: 2.3 days.
+
+**Why it matters:** Speed-to-approval directly impacts employee satisfaction and vendor relationships. A VP who can approve a $2K request from their phone in 30 seconds vs. needing to log into email and write a response is a 10x improvement.
+
+### 3.3 Positioning Matrix
+
+| Capability | Freqens | Reqflow | Enterprise (Coupa) | Cards (Ramp) |
+|---|---|---|---|---|
+| Purchase intake/request | No | Yes - Core | Yes | Partial |
+| Approval workflows | No | Yes - Core | Yes | Basic |
+| Budget enforcement | No | Yes - Core | Yes | Card limits only |
+| PO creation & tracking | No | Yes - Core | Yes | No |
+| Invoice processing | No | Yes | Yes | Basic |
+| Vendor onboarding | No | Yes | Yes | No |
+| Renewal monitoring | Yes - Core | Yes (via integration) | Partial | Partial |
+| Price benchmarking | Yes - Core | Roadmap | No | Community data |
+| Vendor alternatives | Yes - Core | Roadmap | No | No |
+| Team satisfaction | Yes - Core | Yes | No | No |
+| Spend policy engine | No | Yes | Yes | Basic |
+| Real-time spend dashboard | Partial | Yes | Yes | Yes |
+| Contract management | Basic | Yes | Yes | No |
+| Mobile approvals | No | Yes | Yes | Yes |
+| Time to value | Hours | Hours | Months | Days |
+| Target company size | 50-5000 | 50-500 | 500+ | 10-500 |
+| Requires procurement team | No | No | Yes | No |
+
+---
+
+## 4. Target User & Persona Deep-Dive
+
+### 4.1 Primary Persona: Claire, the Accidental Procurement Owner
+
+**Title:** Head of Finance / CFO / VP Finance
+**Company:** 150-person B2B SaaS company, Series B, $15M ARR
+**Age:** 34
+**Reports to:** CEO
+**Team size:** 3 (Controller, AP Clerk, FP&A Analyst)
+
+**Her reality:**
+Claire didn't sign up to manage procurement. But with 150 employees requesting tools, services, and subscriptions, she's become the de facto gatekeeper for all spending. She has no procurement training, no procurement tools, and no procurement budget.
+
+**Her week:**
+- Monday: Discovers a $3,200/month design tool on the company card that nobody approved
+- Tuesday: Gets 4 Slack messages asking "can we buy X?" - has to research each one
+- Wednesday: Spends 2 hours reconciling invoices against the budget spreadsheet
+- Thursday: Realizes the company has 3 different project management tools (Asana, Monday, ClickUp) across departments
+- Friday: Gets told by the auditor that vendor compliance documentation is incomplete
+
+**Her pain (in her words):**
+> "I spend 30% of my time on procurement-related tasks that I was never hired to do. I can't say yes fast enough to keep teams happy, and I can't say no effectively enough to control spend. I need a system, not another tool."
+
+**What she needs:**
+1. A single place where all purchase requests land (not her inbox)
+2. Automatic routing so she doesn't have to manually triage every request
+3. Budget guardrails that prevent overspending before it happens
+4. A way to see all company spend in real-time without building spreadsheets
+5. Audit-ready records without manual documentation
+
+**What she does NOT need:**
+- Another dashboard to check
+- Enterprise-grade complexity
+- A tool that requires a procurement team to operate
+- Benchmarking data (she'll add Freqens for that later if she wants)
+
+### 4.2 Secondary Persona: Marc, the Frustrated Requester
+
+**Title:** Engineering Manager
+**Company:** Same 150-person company
+**Reports to:** VP Engineering
+
+**His reality:**
+Marc needs tools to do his job. Every time he wants to buy something, it's a multi-day odyssey of Slack messages, email chains, and "let me check with finance." By the time he gets approval, his team has lost momentum and sometimes found a workaround that's worse than the tool he wanted to buy.
+
+**His pain (in his words):**
+> "I don't care about procurement process. I care about getting my team the tools they need without waiting a week. Just tell me: can I buy this or not? And make it take less than 5 minutes."
+
+**What he needs:**
+1. Submit a request in under 2 minutes
+2. Know the status without asking anyone
+3. Get a decision in hours, not days
+4. Not have to fill out a 15-field form for a $50/month tool
+
+### 4.3 Tertiary Persona: Sophie, the Ops Lead Who Keeps Things Running
+
+**Title:** Head of Operations / Office Manager
+**Company:** Same company
+
+**Her reality:**
+Sophie manages vendors for office supplies, facilities, travel, and miscellaneous services. She's the one who collects insurance certificates, manages vendor relationships, and deals with invoice disputes. She has no system - just email folders and a Google Sheet.
+
+**What she needs:**
+1. A vendor database with all compliance docs in one place
+2. Automated reminders for certificate renewals
+3. Easy way to create and track POs for recurring purchases
+4. Invoice matching so she doesn't have to manually verify every bill
+
+---
+
+## 5. Product Vision & Positioning
+
+### 5.1 Vision Statement
+
+**Make buying at work as easy as buying at home.**
+
+When you buy something on Amazon, you search, click, get approval (maybe), and it shows up. At work, you ask 5 people, wait 5 days, fill out 3 forms, and still don't know if it's approved. Reqflow closes that gap - without sacrificing governance.
+
+### 5.2 One-Liner
+
+**Reqflow is the AI-powered procurement front door for companies that buy without a procurement team.**
+
+### 5.3 Tagline Options
+
+- "Every purchase. One front door."
+- "Buy smarter without buying a procurement team."
+- "The procurement app your team will actually use."
+
+### 5.4 Category
+
+**AI-native intake-to-pay platform for mid-market companies.**
+
+Not "procurement software" (too enterprise). Not "spend management" (too CFO-only). Not "SaaS management" (too narrow). Reqflow is the complete buying system for growing companies.
+
+### 5.5 Strategic Positioning
+
+```
+For: Finance leaders at companies with 50-500 employees
+Who: Manage procurement without a dedicated team
+Reqflow is: The AI-powered procurement front door
+That: Turns chaotic buying into a governed, fast, trackable process
+Unlike: Freqens (only renewals, no execution), Coupa (requires procurement team), Ramp (payment-only, no process)
+Reqflow: Covers the full intake-to-pay lifecycle in a tool anyone can use in 5 minutes
+```
+
+---
+
+## 6. Core Value Propositions
+
+### VP1: "Every request, one front door"
+Employees submit purchase requests through a single, intuitive form. No more Slack messages, emails, or hallway asks. Every request is captured, tracked, and visible.
+
+**Metric:** 90%+ of purchases go through Reqflow within 60 days of deployment.
+
+### VP2: "Approved in hours, not days"
+AI-powered routing sends requests to the right approver instantly. Smart forms adapt based on amount, category, and department. Push notifications ensure approvers respond fast.
+
+**Metric:** Median approval time under 4 hours (down from 2.3 days industry average).
+
+### VP3: "Budget guardrails, not budget surprises"
+Real-time budget tracking with automatic enforcement. Departments see their remaining budget before requesting. Hard stops prevent overspending. Forecasting warns before budgets run dry.
+
+**Metric:** 95%+ of departments stay within budget (up from ~70% without controls).
+
+### VP4: "Audit-ready by default"
+Every request, approval, PO, invoice, and payment is automatically logged with timestamps, approvers, and full context. Compliance documentation is always current. Ready for SOC 2, ISO 27001, or any audit.
+
+**Metric:** Audit preparation time reduced by 80%.
+
+### VP5: "5 minutes to first request"
+No implementation project. No consultants. Connect your email, import your vendors, configure 3 approval rules, and you're live. AI helps set up everything else.
+
+**Metric:** Time from signup to first purchase request processed: under 5 minutes.
+
+---
+
+## 7. Feature Specification
+
+### 7.1 Module 1: Smart Intake (The Front Door)
+
+#### 7.1.1 Adaptive Request Form
+**Description:** A single URL/Slack command/Teams button where any employee submits a purchase request. The form adapts in real-time based on what they're buying.
+
+**Behavior:**
+- Employee starts typing what they need ("I need a design tool for my team")
+- AI classifies the request: category (SaaS), department (Design), estimated range ($200-500/mo)
+- Form dynamically shows only relevant fields:
+  - For SaaS: tool name, # users, monthly/annual, business justification
+  - For services: vendor name, scope, timeline, deliverables
+  - For office/supplies: item list, quantity, delivery location
+- AI checks existing subscriptions: "Your company already has Figma. Is this request for additional licenses or a different tool?"
+- Duplicate detection: "Marketing requested this same tool 2 weeks ago. Want to join their request?"
+
+**Fields (dynamic, not all shown):**
+| Field | Type | When Shown | Required |
+|---|---|---|---|
+| What do you need? | Free text | Always | Yes |
+| Category | Auto-detected, editable | Always | Yes |
+| Vendor/tool name | Text + autocomplete | Always | No (AI suggests) |
+| Estimated cost | Currency | Always | Yes |
+| Frequency | One-time / Monthly / Annual | Always | Yes |
+| Business justification | Text (AI-assisted) | Over $500 | Yes |
+| Number of users | Number | SaaS only | Yes |
+| Urgency | Low / Normal / Urgent | Always | Default: Normal |
+| Preferred vendor | Dropdown from catalog | When catalog exists | No |
+| Attachments | File upload | Always | No |
+| Budget code | Auto-detected from dept | Always | Auto-filled |
+
+#### 7.1.2 Slack/Teams Integration
+**Description:** Employees can submit requests without leaving their communication tool.
+
+**Commands:**
+- `/reqflow buy` - Opens the adaptive form in a modal
+- `/reqflow status` - Shows pending requests
+- `/reqflow approve [ID]` - Quick approve from Slack
+
+#### 7.1.3 Email Intake
+**Description:** Forward any vendor quote, proposal, or invoice to `buy@company.reqflow.com`. AI extracts vendor, amount, terms, and creates a draft request for the sender to confirm.
+
+#### 7.1.4 Browser Extension
+**Description:** When browsing a vendor's pricing page, click the Reqflow extension to auto-populate a purchase request with the tool name, pricing tier, and URL.
+
+### 7.2 Module 2: Intelligent Approval Engine
+
+#### 7.2.1 Configurable Approval Workflows
+**Description:** Visual workflow builder (no-code) where finance sets up approval chains.
+
+**Default templates:**
+- **Simple:** Under $1K: Manager only. $1K-$10K: Manager + Finance. Over $10K: Manager + Finance + CEO.
+- **Department-specific:** Engineering purchases route through Engineering Lead then Finance. Marketing through CMO then Finance.
+- **Category-specific:** SaaS purchases always include IT/Security review. Professional services always include Legal review.
+
+**Conditions available:**
+- Amount thresholds (single or cumulative per period)
+- Department
+- Category
+- Vendor (new vs. existing)
+- Budget remaining (% consumed triggers additional approval)
+- Requester role/level
+- Custom fields
+
+#### 7.2.2 Smart Routing
+**Description:** AI optimizes approval routing based on historical patterns.
+
+**Behaviors:**
+- If the VP is on vacation, auto-delegate to their backup
+- If a request has been pending >24 hours, escalate with a nudge
+- If a similar request was recently approved, flag it as "likely approve" with context
+- If budget is >90% consumed, add CFO to the chain automatically
+
+#### 7.2.3 Approval Experience
+**Description:** Approvers get rich context, not just a "please approve" notification.
+
+**What the approver sees:**
+- Request summary with AI-generated context
+- Remaining department budget after this purchase
+- Similar past purchases and their outcomes
+- Requester's purchase history
+- One-click approve/reject/ask question
+- Approve from email, Slack, Teams, or mobile app
+
+#### 7.2.4 Delegation & Escalation
+- Auto-delegation based on calendar (OOO detection)
+- Manual delegation ("I'm on leave, Sophie handles approvals")
+- Configurable escalation timers (pending > 24h: reminder; > 48h: escalate to backup; > 72h: escalate to finance lead)
+
+### 7.3 Module 3: Budget Command Center
+
+#### 7.3.1 Budget Structure
+**Description:** Hierarchical budget management that mirrors org structure.
+
+**Hierarchy:**
+```
+Company Total Budget
+  ├── Department Budgets (Engineering, Marketing, Sales, G&A...)
+  │     ├── Category Budgets (SaaS, Services, Hardware, Travel...)
+  │     └── Project Budgets (Q1 Launch, Office Move, Rebrand...)
+  └── Shared Budgets (cross-department initiatives)
+```
+
+**Each budget tracks:**
+- Allocated amount
+- Committed (approved but not yet invoiced)
+- Spent (invoiced and paid)
+- Remaining (allocated - committed - spent)
+- Forecasted (based on pending requests + historical patterns)
+- Burn rate (current pace vs. plan)
+
+#### 7.3.2 Budget Guardrails
+**Rules engine:**
+- Soft limit: Warning at 80% consumed ("Your Q1 SaaS budget is 82% spent with 6 weeks remaining")
+- Hard limit: Block at 100% consumed (request auto-escalates to CFO for exception approval)
+- Velocity alert: "Engineering's SaaS spend is 40% ahead of pace this quarter"
+- Anomaly detection: "This $8K request is 3x the average for this category in your department"
+
+#### 7.3.3 Real-Time Dashboard
+**Views:**
+- **CFO view:** Company-wide spend vs. budget, department breakdown, top vendors, trend lines
+- **Department view:** Department budget status, pending requests, upcoming renewals, category split
+- **Requester view:** "Your requests" status tracker
+
+### 7.4 Module 4: Purchase Execution
+
+#### 7.4.1 Purchase Order Management
+**Description:** Automatic PO creation from approved requests.
+
+**Flow:**
+1. Request approved
+2. Reqflow generates PO with unique number, terms, line items
+3. PO sent to vendor via email or vendor portal
+4. Vendor acknowledges
+5. Goods/services delivered
+6. Receipt confirmed by requester
+7. Invoice matched (3-way: PO + receipt + invoice)
+
+**PO includes:**
+- Auto-generated PO number (configurable format)
+- Company billing details
+- Vendor details (from vendor database)
+- Line items with descriptions, quantities, unit prices
+- Payment terms
+- Delivery/service dates
+- Company T&Cs (configurable template)
+
+#### 7.4.2 Invoice Processing
+**Description:** AI-powered invoice capture and matching.
+
+**Intake methods:**
+- Email: Forward to `invoices@company.reqflow.com`
+- Upload: Drag-and-drop in Reqflow
+- Vendor portal: Vendors submit directly
+- API: For vendor systems that integrate
+
+**Processing:**
+1. AI OCR extracts: vendor, amount, line items, invoice number, dates, payment terms
+2. Auto-match to PO (exact match, fuzzy match with tolerance, or no match)
+3. Flag discrepancies: "Invoice is $150 more than PO - quantity difference on line 3"
+4. Route for approval if needed (threshold-based)
+5. Push to accounting system for payment
+
+#### 7.4.3 Vendor Self-Service Portal
+**Description:** Vendors get their own lightweight portal.
+
+**Vendor can:**
+- Submit invoices
+- Check payment status
+- Update company information
+- Upload compliance documents
+- View PO history
+
+### 7.5 Module 5: Vendor & Contract Management
+
+#### 7.5.1 Vendor Database
+**Description:** Central registry of all vendors with 360-degree view.
+
+**Per vendor:**
+- Company info (name, address, tax ID, contacts)
+- Compliance documents (insurance, certifications, W-9/W-8)
+- Contract history
+- Spend history (total, by year, by department)
+- Performance score (delivery, quality, responsiveness)
+- Risk assessment (financial health, concentration risk)
+- Internal notes and ratings
+
+#### 7.5.2 Vendor Onboarding Workflow
+**Flow:**
+1. New vendor detected (via request or invoice)
+2. Reqflow sends onboarding form to vendor
+3. Vendor submits: company info, tax forms, insurance, banking details
+4. AI validates documents (checks expiry dates, coverage amounts)
+5. Internal approval (IT security review if SaaS vendor)
+6. Vendor activated in system
+
+#### 7.5.3 Contract Repository
+**Description:** Upload and tag all vendor contracts.
+
+**AI extraction:**
+- Start/end dates
+- Auto-renewal clauses and notice periods
+- Key terms (pricing, SLA, termination rights)
+- Obligation tracking ("minimum 50 licenses through 2027")
+
+**Alerts:**
+- 90/60/30 days before renewal
+- Compliance document expiry
+- SLA breach indicators
+
+#### 7.5.4 Preferred Vendor Catalog
+**Description:** Finance curates a catalog of pre-approved vendors and products.
+
+**Employee experience:**
+- Browse catalog by category: "Cloud Hosting," "Design Tools," "Recruiting Platforms"
+- See pre-negotiated pricing and terms
+- One-click request for catalog items (simplified approval since vendor is pre-approved)
+- "Recommended" badges for preferred vendors
+
+### 7.6 Module 6: Compliance & Audit
+
+#### 7.6.1 Automatic Audit Trail
+**Everything logged:**
+- Request submitted: who, when, what, why
+- Each approval: who, when, decision, comments
+- PO issued: details, vendor acknowledgment
+- Invoice received: source, matched amounts
+- Payment made: method, date, reference
+- Any modifications: what changed, who changed it, when
+
+#### 7.6.2 Policy Engine
+**Configurable rules:**
+- "All SaaS vendors must complete security questionnaire"
+- "Purchases over $5K require 2 competitive quotes"
+- "No single vendor can exceed 15% of total indirect spend"
+- "All service contracts must include termination for convenience clause"
+- "International vendors require additional compliance review"
+
+**Enforcement:**
+- Soft block: Warning message, can proceed with justification
+- Hard block: Cannot proceed without exception approval
+- Auto-route: Automatically adds reviewers based on triggered rules
+
+#### 7.6.3 Reporting & Export
+**Pre-built reports:**
+- Spend by vendor/category/department/period
+- Budget vs. actual variance
+- Approval cycle time analytics
+- Policy compliance rate
+- Vendor concentration analysis
+- Open POs and accruals
+
+**Export formats:** CSV, Excel, PDF
+**Scheduled delivery:** Email reports weekly/monthly to stakeholders
+**API access:** For custom BI tools
+
+### 7.7 Module 7: AI Copilot (Cross-Cutting)
+
+#### 7.7.1 Request Assistant
+- Auto-categorizes requests
+- Suggests similar existing subscriptions to prevent duplicates
+- Drafts business justification based on request context
+- Estimates total cost of ownership (not just sticker price)
+
+#### 7.7.2 Approval Assistant
+- Summarizes request context for approvers
+- Flags anomalies and risks
+- Suggests approval based on historical patterns and budget status
+- Generates "approval brief" for high-value requests
+
+#### 7.7.3 Spend Intelligence
+- Identifies cost-saving opportunities ("3 teams use different project management tools - consolidating could save $14K/year")
+- Predicts budget overruns before they happen
+- Benchmarks spend ratios against industry (when data available)
+- Flags underutilized subscriptions (via usage data integrations)
+
+#### 7.7.4 Natural Language Queries
+- "How much did we spend on cloud hosting last quarter?"
+- "Show me all pending requests over $5K"
+- "Which departments are over budget?"
+- "What's our biggest vendor by spend?"
+
+---
+
+## 8. User Journeys
+
+### 8.1 Journey: Marc Requests a New SaaS Tool
+
+```
+1. Marc opens Slack, types /reqflow buy
+2. Modal opens: "What do you need?"
+3. Marc types: "GitHub Copilot Business for my team of 12"
+4. Reqflow AI:
+   - Detects: SaaS, Developer Tools, $19/user/month
+   - Checks: No existing Copilot subscription found
+   - Checks: Engineering Q1 SaaS budget: $8,200 remaining of $15,000
+   - Auto-fills: 12 users × $19 × 12 months = $2,736/year
+5. Marc adds justification: "Team productivity improvement, 30min/dev/day saved"
+6. Marc submits. Sees: "Request #REQ-2026-0142 submitted. Routing to: Sarah (Eng Lead) → Claire (Finance)"
+7. Sarah gets Slack notification with full context + budget impact
+8. Sarah approves in 1 click (20 minutes after submission)
+9. Claire gets notification. Sees: budget impact, Sarah's approval, AI note: "Similar request approved for Backend team 2 months ago at same price"
+10. Claire approves (45 minutes after submission)
+11. Marc gets notification: "Approved! PO #PO-2026-0089 generated. Here's the procurement link for GitHub."
+12. Marc sets up Copilot. Done in under 2 hours from initial request.
+```
+
+### 8.2 Journey: Claire Reviews Monthly Spend
+
+```
+1. Claire opens Reqflow dashboard (Monday morning routine)
+2. Sees: Company spend this month: $127K of $165K budget (77%)
+3. Flags: Marketing 92% consumed (yellow alert), Engineering on pace
+4. Drill-down: Marketing overspend driven by $18K agency invoice (unbudgeted)
+5. Clicks into the request: sees it was an emergency approval by CMO, no PO
+6. Action: Creates policy rule "Agency spend over $10K requires CFO approval"
+7. Checks: 3 pending requests in queue, oldest is 18 hours (within SLA)
+8. Approves 2 routine requests from mobile
+9. Asks question on the 3rd: "Can this wait until Q2? Budget is tight."
+10. Reviews: AI insight - "You have 4 overlapping analytics tools across departments. Consolidating to 1 could save $22K/year."
+11. Creates action item: "Review analytics tool consolidation" - assigns to Ops Lead
+12. Total time: 15 minutes. Full spend visibility. No spreadsheets touched.
+```
+
+### 8.3 Journey: New Vendor Onboarding
+
+```
+1. Sophie receives an approved request for a new catering vendor
+2. Reqflow detects: new vendor, not in database
+3. Auto-sends onboarding form to vendor email (from the request)
+4. Vendor fills in: company details, tax ID, insurance certificate, banking info
+5. Reqflow AI validates: insurance expires in 30 days (flags for follow-up)
+6. Sophie reviews and approves vendor profile
+7. PO auto-generates for the first order
+8. Vendor added to catalog under "Catering & Events"
+9. Next time anyone orders catering, vendor appears in suggestions
+```
+
+---
+
+## 9. Information Architecture
+
+### 9.1 Navigation Structure
+
+```
+Reqflow
+├── Home (Dashboard)
+│   ├── My Requests (requester view)
+│   ├── Pending Approvals (approver view)
+│   └── Spend Overview (finance view)
+│
+├── Requests
+│   ├── New Request
+│   ├── All Requests (filterable)
+│   ├── My Requests
+│   └── Drafts
+│
+├── Approvals
+│   ├── Pending (my queue)
+│   ├── Approved
+│   ├── Rejected
+│   └── Escalated
+│
+├── Orders
+│   ├── Purchase Orders
+│   ├── Invoices
+│   └── Receipts
+│
+├── Budgets
+│   ├── Department Budgets
+│   ├── Project Budgets
+│   └── Forecasts
+│
+├── Vendors
+│   ├── All Vendors
+│   ├── Preferred Catalog
+│   ├── Onboarding Queue
+│   └── Compliance Tracker
+│
+├── Contracts
+│   ├── Active Contracts
+│   ├── Upcoming Renewals
+│   └── Expiring Soon
+│
+├── Reports
+│   ├── Spend Analytics
+│   ├── Budget vs. Actual
+│   ├── Approval Metrics
+│   ├── Compliance Report
+│   └── Custom Reports
+│
+└── Settings
+    ├── Approval Workflows
+    ├── Budget Configuration
+    ├── Policy Rules
+    ├── Integrations
+    ├── User Management
+    └── Company Profile
+```
+
+### 9.2 Role-Based Access
+
+| Capability | Requester | Manager | Finance | Admin |
+|---|---|---|---|---|
+| Submit requests | Yes | Yes | Yes | Yes |
+| View own requests | Yes | Yes | Yes | Yes |
+| View team requests | No | Yes (direct reports) | Yes (all) | Yes (all) |
+| Approve requests | No | Yes (within delegation) | Yes | Yes |
+| View budgets | Own dept summary | Own dept detail | All | All |
+| Manage vendors | No | No | Yes | Yes |
+| Configure workflows | No | No | Yes | Yes |
+| Run reports | Basic | Department | All | All |
+| Manage users | No | No | No | Yes |
+
+---
+
+## 10. Technical Architecture
+
+### 10.1 Stack
+
+| Layer | Technology | Rationale |
+|---|---|---|
+| Frontend | React + Next.js | SSR for speed, React ecosystem for components |
+| Mobile | React Native | Code sharing with web, native push notifications |
+| API | Node.js + GraphQL | Flexible queries, real-time subscriptions |
+| Database | PostgreSQL + Redis | Relational for transactions, Redis for caching/sessions |
+| Search | Elasticsearch | Full-text search across requests, vendors, contracts |
+| AI/ML | OpenAI API + custom models | OCR, classification, NLP, anomaly detection |
+| File Storage | S3 (EU region) | Contracts, invoices, compliance docs |
+| Auth | Auth0 | SSO, MFA, SAML for enterprise |
+| Hosting | AWS EU (Paris) | GDPR compliance, low latency for EU customers |
+| CI/CD | GitHub Actions | Standard, well-supported |
+| Monitoring | Datadog | APM, logs, alerting |
+
+### 10.2 Architecture Principles
+
+1. **Multi-tenant with data isolation** - each customer's data in isolated schemas
+2. **API-first** - every feature accessible via API for integrations
+3. **Event-driven** - approval workflows, notifications, and integrations powered by event bus
+4. **Offline-capable** - mobile app works offline for approvals, syncs when connected
+5. **EU-first hosting** - all data stored in EU by default (GDPR native)
+
+### 10.3 Security
+
+- SOC 2 Type 2 certification (target: Month 12)
+- GDPR compliant by design
+- Data encryption at rest (AES-256) and in transit (TLS 1.3)
+- SSO via SAML 2.0 and OIDC
+- Role-based access control (RBAC)
+- Audit logging for all actions
+- Penetration testing quarterly
+- HRIS-linked user provisioning (SCIM)
+
+---
+
+## 11. Integrations
+
+### 11.1 Priority 1 (Launch)
+
+| System | Integration Type | Purpose |
+|---|---|---|
+| Slack | Native app | Request submission, approvals, notifications |
+| Microsoft Teams | Native app | Request submission, approvals, notifications |
+| Google Workspace | OAuth + API | SSO, calendar (OOO detection), email intake |
+| Microsoft 365 | OAuth + API | SSO, calendar, email intake |
+| QuickBooks Online | API | Push POs, invoices, payments to accounting |
+| Xero | API | Push POs, invoices, payments to accounting |
+
+### 11.2 Priority 2 (Month 6)
+
+| System | Integration Type | Purpose |
+|---|---|---|
+| Sage | API | Accounting sync for EU market |
+| NetSuite | SuiteTalk API | ERP sync for larger customers |
+| Stripe | Webhook | Payment tracking for card-based purchases |
+| Pennylane | API | French accounting software popular with target segment |
+| HubSpot | API | Vendor contact sync |
+| Jira | API | Link purchase requests to project tickets |
+
+### 11.3 Priority 3 (Month 12)
+
+| System | Integration Type | Purpose |
+|---|---|---|
+| SAP Business One | API | ERP for manufacturing customers |
+| Freqens | API (if available) | Benchmarking data enrichment |
+| Okta / Azure AD | SCIM | User provisioning |
+| DocuSign / Yousign | API | Contract e-signatures |
+| Banking APIs (Open Banking) | PSD2 | Direct payment initiation |
+
+### 11.4 Open API
+
+Full REST + GraphQL API for custom integrations. Webhook support for all events. API documentation with interactive playground. Rate limiting: 1000 req/min per customer.
+
+---
+
+## 12. Data Model
+
+### 12.1 Core Entities
+
+```
+Organization
+  ├── Users (roles, departments, permissions)
+  ├── Departments
+  ├── Budgets (allocated, committed, spent)
+  ├── Approval Workflows (rules, conditions, chains)
+  ├── Policies (rules, enforcement level)
+  │
+  ├── Requests
+  │   ├── Line Items
+  │   ├── Approvals (chain of decisions)
+  │   ├── Comments
+  │   └── Attachments
+  │
+  ├── Purchase Orders
+  │   ├── PO Line Items
+  │   ├── Receipts
+  │   └── Status History
+  │
+  ├── Invoices
+  │   ├── Invoice Line Items
+  │   ├── Matching Results (PO + Receipt)
+  │   └── Payment Records
+  │
+  ├── Vendors
+  │   ├── Contacts
+  │   ├── Compliance Documents
+  │   ├── Contracts
+  │   └── Performance Scores
+  │
+  └── Contracts
+      ├── Key Terms (AI-extracted)
+      ├── Renewal Alerts
+      └── Amendments
+```
+
+### 12.2 Key Relationships
+
+- A **Request** belongs to one User (requester) and one Department
+- A **Request** triggers one or more **Approval** steps (sequential or parallel)
+- An approved **Request** generates one **Purchase Order**
+- A **Purchase Order** matches to one or more **Invoices**
+- A **Vendor** has many **Contracts**, **Purchase Orders**, and **Invoices**
+- A **Budget** is consumed by **Requests** (committed) and **Invoices** (spent)
+
+---
+
+## 13. AI/ML Capabilities
+
+### 13.1 Models & Use Cases
+
+| Capability | Model Type | Training Data | Accuracy Target |
+|---|---|---|---|
+| Request categorization | Text classification (fine-tuned) | Historical requests + procurement taxonomies | 95%+ |
+| Invoice OCR & extraction | Vision + NLP (commercial API) | Invoice corpus | 98%+ on structured invoices |
+| Duplicate detection | Embedding similarity | Company request history | 90%+ recall |
+| Anomaly detection | Statistical + ML | Historical spend patterns per org | Flag top 5% true anomalies |
+| Budget forecasting | Time series | 12+ months org spend data | Within 10% of actual |
+| Approval prediction | Classification | Org approval history | 85%+ accuracy |
+| Contract term extraction | NLP/NER | Contract corpus | 92%+ on key fields |
+| Natural language queries | LLM (GPT-4 class) | Reqflow schema + context | Conversational accuracy |
+
+### 13.2 AI Safety & Transparency
+
+- All AI suggestions are clearly labeled as "AI-generated"
+- No automated approvals without human confirmation (AI copilot, not autopilot)
+- Users can always override AI suggestions
+- Model outputs logged for audit and improvement
+- No customer data used to train models for other customers
+
+---
+
+## 14. Pricing Strategy
+
+### 14.1 Pricing Philosophy
+
+**Value-based, not seat-based.** Procurement tools that charge per user discourage adoption. If only 3 people use it, you don't get the intake coverage you need. Reqflow charges based on company size (employee count) with unlimited users, because EVERYONE should be able to submit a purchase request.
+
+### 14.2 Plans
+
+| Plan | Starter | Growth | Scale |
+|---|---|---|---|
+| **Target** | 20-75 employees | 75-250 employees | 250-500 employees |
+| **Price** | EUR 399/month | EUR 899/month | EUR 1,799/month |
+| **Annual** | EUR 3,990/year (17% off) | EUR 8,990/year (17% off) | EUR 17,990/year (17% off) |
+| **Users** | Unlimited | Unlimited | Unlimited |
+| **Requests/month** | 100 | 500 | Unlimited |
+| **Smart Intake** | Yes | Yes | Yes |
+| **Approval Workflows** | 3 workflows | Unlimited | Unlimited |
+| **Budget Tracking** | Basic (dept only) | Full hierarchy | Full + forecasting |
+| **PO Management** | Yes | Yes | Yes + 3-way matching |
+| **Invoice Processing** | 50/month | 250/month | Unlimited |
+| **Vendor Management** | 50 vendors | 200 vendors | Unlimited |
+| **Contract Repository** | 50 contracts | 200 contracts | Unlimited |
+| **Integrations** | Slack + 1 accounting | All Priority 1 | All + API access |
+| **AI Copilot** | Basic | Full | Full + custom models |
+| **Reports** | Standard | Custom | Custom + scheduled |
+| **Support** | Email | Email + Chat | Dedicated CSM |
+| **Compliance** | SOC 2 | SOC 2 + GDPR export | SOC 2 + GDPR + SSO/SAML |
+
+### 14.3 Revenue Model
+
+**Year 1 target:** 200 paying customers, EUR 1.8M ARR
+**Blended ARPA:** EUR 750/month
+**Expected split:** 40% Starter, 40% Growth, 20% Scale
+
+### 14.4 Free Trial
+
+14-day free trial on Growth plan. No credit card required. Full feature access. Data preserved on conversion.
+
+---
+
+## 15. Go-to-Market Strategy
+
+### 15.1 Launch Market
+
+**France first.** Why:
+- Home market advantage (Paris-based team)
+- Strong mid-market ecosystem (French Tech)
+- GDPR-first positioning is table stakes in EU
+- Freqens is also French - creates market awareness in the category
+- Pennylane, Qonto, Spendesk ecosystem to integrate with
+
+### 15.2 ICP Firmographics
+
+- 50-500 employees
+- B2B SaaS, tech, professional services, digital agencies
+- Series A to Series C (or equivalent revenue stage)
+- No dedicated procurement team
+- CFO or Head of Finance is the buyer
+- Using Slack or Teams
+- France or EU-based
+
+### 15.3 Acquisition Channels
+
+| Channel | Strategy | Expected CAC |
+|---|---|---|
+| **Content/SEO** | "Procurement for startups," "how to manage SaaS spend," "procurement without a team" | EUR 200 |
+| **LinkedIn Ads** | Target CFOs at 50-500 employee French companies | EUR 400 |
+| **Product-led** | Free trial, self-serve onboarding, viral loop (requester invites) | EUR 150 |
+| **Partnerships** | Co-market with Pennylane, Qonto, Spendesk | EUR 100 |
+| **Community** | CFO communities (CFO Connect, Finance Club), events, webinars | EUR 250 |
+| **Outbound** | Direct outreach to companies with high SaaS spend signals | EUR 500 |
+
+**Blended target CAC:** EUR 300
+**Target LTV:CAC ratio:** 8:1+ (assuming 36-month average retention, 90%+ gross margin)
+
+### 15.4 Viral Mechanics
+
+Built-in virality through the requester experience:
+1. Claire (buyer) sets up Reqflow
+2. Marc (requester) receives a link to submit his first request
+3. Marc uses Reqflow and tells his friend at another company: "We finally have a way to buy stuff without chasing the CFO"
+4. Friend's CFO hears about it, signs up for trial
+
+**Estimated viral coefficient:** 0.3 (every 10 customers bring 3 more organically)
+
+---
+
+## 16. Success Metrics & KPIs
+
+### 16.1 Product Metrics
+
+| Metric | Target (Month 6) | Target (Month 12) |
+|---|---|---|
+| Request adoption rate (% of purchases through Reqflow) | 60% | 90% |
+| Median approval time | <8 hours | <4 hours |
+| Invoice processing accuracy (auto-match rate) | 70% | 85% |
+| User activation (submitted first request within 7 days) | 80% | 90% |
+| Weekly active requesters per company | 30% of employees | 50% of employees |
+| NPS | 40+ | 55+ |
+
+### 16.2 Business Metrics
+
+| Metric | Target (Month 6) | Target (Month 12) |
+|---|---|---|
+| Paying customers | 50 | 200 |
+| ARR | EUR 450K | EUR 1.8M |
+| Monthly growth rate | 20% MoM | 15% MoM |
+| Gross margin | 85% | 88% |
+| Net revenue retention | 105% | 115% |
+| CAC payback | <8 months | <6 months |
+| Logo churn (monthly) | <3% | <2% |
+| Trial-to-paid conversion | 15% | 25% |
+
+### 16.3 Customer Outcome Metrics (what we help customers achieve)
+
+| Outcome | Baseline (no tool) | Reqflow Target |
+|---|---|---|
+| Maverick spend (% off-process) | 40-60% | <10% |
+| Average approval cycle time | 2.3 days | <4 hours |
+| Invoice processing cost | $15-40/invoice | <$5/invoice |
+| Budget overrun frequency | 30% of departments | <5% |
+| Audit preparation time | 2-3 weeks | 1-2 days |
+| Time spent on procurement (finance team) | 8+ hours/week | <2 hours/week |
+
+---
+
+## 17. Phased Roadmap
+
+### Phase 1: Foundation (Months 1-4) - "The Front Door"
+
+**Goal:** Nail the intake-to-approval loop. This is the wedge.
+
+**Ship:**
+- Smart intake form (web + Slack)
+- Configurable approval workflows (3 templates)
+- Basic budget tracking (department level)
+- Real-time request status tracking
+- Email notifications
+- Slack integration
+- Google Workspace SSO
+
+**Success criteria:**
+- 10 beta customers live
+- 80%+ of their requests going through Reqflow
+- Median approval time <1 day
+- NPS >40
+
+### Phase 2: Execution (Months 5-8) - "Close the Loop"
+
+**Goal:** Complete the purchase cycle. POs, invoices, payments.
+
+**Ship:**
+- Purchase order generation
+- Invoice processing (OCR + matching)
+- Vendor database
+- Vendor onboarding workflow
+- QuickBooks + Xero integration
+- Budget hierarchy (dept + project + category)
+- Mobile app for approvals
+- Microsoft Teams integration
+- Reports (standard set)
+
+**Success criteria:**
+- 50 paying customers
+- 60%+ invoice auto-match rate
+- First 3 accounting integrations live
+- EUR 450K ARR
+
+### Phase 3: Intelligence (Months 9-12) - "Get Smart"
+
+**Goal:** Make Reqflow indispensable with AI and governance.
+
+**Ship:**
+- AI copilot (spend insights, duplicate detection, forecasting)
+- Policy engine (configurable rules)
+- Contract repository with AI extraction
+- Preferred vendor catalog
+- Vendor self-service portal
+- Advanced reporting + scheduled delivery
+- SSO/SAML
+- API v1 (public)
+- Penny Lane + Sage integration
+- Natural language queries
+
+**Success criteria:**
+- 200 paying customers
+- EUR 1.8M ARR
+- SOC 2 Type 2 certification
+- 90%+ request adoption at mature customers
+- 3 case studies published
+
+### Phase 4: Scale (Months 13-18) - "Expand"
+
+**Goal:** Multi-market expansion. Deeper integrations. Platform play.
+
+**Ship:**
+- UK + DACH market launch
+- Multi-entity / multi-currency
+- Freqens integration (benchmarking enrichment)
+- NetSuite + SAP Business One integration
+- Open Banking payment initiation
+- Marketplace for pre-built workflow templates
+- Advanced analytics (cohort analysis, trend detection)
+- Contract negotiation support (AI-generated negotiation briefs)
+
+---
+
+## 18. Risks & Mitigations
+
+| Risk | Likelihood | Impact | Mitigation |
+|---|---|---|---|
+| **Low adoption by requesters** - employees bypass Reqflow | High | Critical | Consumer-grade UX, <2 min request, Slack-native, no training needed. Make it faster than Slack DM-ing the CFO. |
+| **Freqens expands into intake/execution** | Medium | High | Move fast. Ship Phase 1 in 4 months. Build switching costs through workflow customization and accounting integrations. |
+| **Ramp/Spendesk adds procurement workflows** | Medium | Medium | Differentiate on depth (full intake-to-pay, not just card controls). Integrate with cards rather than compete. |
+| **Long sales cycles for finance buyers** | High | Medium | Product-led growth. Free trial. Self-serve onboarding. Show value before requiring a sales call. |
+| **AI accuracy issues (OCR, categorization)** | Medium | Medium | Human-in-the-loop for all AI decisions. Confidence scores on all suggestions. Easy correction UX that improves models. |
+| **GDPR/data concerns slow enterprise deals** | Low | Medium | EU-only hosting from day 1. SOC 2 by Month 12. GDPR documentation ready at launch. |
+| **Integration reliability** | Medium | High | Start with 2 rock-solid integrations (Slack + 1 accounting). Add more only when existing ones are bulletproof. |
+| **Feature creep / building too much** | High | High | Phase 1 is ONLY intake + approval + basic budget. No POs, no invoices, no vendor management. Validate the wedge first. |
+
+---
+
+## 19. Appendix: Freqens Gap Analysis Matrix
+
+### Detailed Scoring: What Freqens Covers vs. What's Missing
+
+| Procurement Lifecycle Stage | Freqens Score (0-5) | Gap Severity | Reqflow Priority |
+|---|---|---|---|
+| **1. Need Identification** | 0/5 | Critical | Phase 1 - Core |
+| Employee says "I need X" | Not addressed | Massive gap | Smart intake form |
+| Duplicate need detection | Not addressed | High waste | AI duplicate detection |
+| **2. Request & Approval** | 0/5 | Critical | Phase 1 - Core |
+| Structured request form | Not addressed | No process exists | Adaptive form |
+| Approval routing | Not addressed | Ad-hoc only | Workflow engine |
+| Budget validation | Not addressed | No guardrails | Real-time budget check |
+| **3. Vendor Selection** | 3/5 | Moderate | Phase 3 |
+| Alternative vendors | Yes (core feature) | Addressed | Leverage via integration |
+| Price benchmarking | Yes (core feature) | Addressed | Leverage via integration |
+| Vendor compliance check | Not addressed | Risk exposure | Onboarding workflow |
+| **4. Negotiation Prep** | 4/5 | Low | Not prioritized |
+| Benchmark data | Yes (core feature) | Strong | Not competing here |
+| Team satisfaction | Yes (core feature) | Good | Integrate if possible |
+| Deal score | Yes (core feature) | Good | Not competing here |
+| **5. Purchase Execution** | 0/5 | Critical | Phase 2 - Core |
+| PO creation | Not addressed | No execution | PO management |
+| PO tracking | Not addressed | No visibility | Status tracking |
+| Vendor communication | Not addressed | Manual | Vendor portal |
+| **6. Receipt & Delivery** | 0/5 | Critical | Phase 2 |
+| Goods/service receipt | Not addressed | No confirmation | Receipt confirmation |
+| Quality verification | Not addressed | No process | Requester sign-off |
+| **7. Invoice & Payment** | 0/5 | Critical | Phase 2 - Core |
+| Invoice capture | Not addressed | Manual entry | AI OCR intake |
+| Invoice matching | Not addressed | No 3-way match | Auto-matching engine |
+| Payment processing | Not addressed | Fully manual | Accounting integration |
+| **8. Contract Management** | 2/5 | High | Phase 3 |
+| Date monitoring | Yes (core feature) | Good | Enhance |
+| Full CLM | Not addressed | Basic only | Repository + AI |
+| Obligation tracking | Not addressed | Risk | AI extraction |
+| **9. Spend Analytics** | 1/5 | High | Phase 1 (basic), Phase 3 (full) |
+| Real-time dashboard | Partial (contract view) | Limited scope | Full spend dashboard |
+| Budget vs. actual | Not addressed | No tracking | Core feature |
+| Forecasting | Not addressed | Reactive only | AI forecasting |
+| **10. Compliance & Audit** | 1/5 | High | Phase 2-3 |
+| Audit trail | Minimal | Not transactional | Automatic full trail |
+| Policy enforcement | Not addressed | No rules engine | Configurable policies |
+| Vendor compliance | Not addressed | Manual tracking | Automated monitoring |
+
+### Summary Score
+
+- **Freqens total coverage of procurement lifecycle:** 11/50 (22%)
+- **Freqens strength zone:** Stages 3-4 (vendor selection + negotiation prep)
+- **Freqens blind zone:** Stages 1-2, 5-7, 9-10 (78% of the lifecycle)
+- **Reqflow opportunity:** Own the 78% Freqens ignores, integrate for the 22% they own
+
+---
+
+## Document History
+
+| Version | Date | Author | Changes |
+|---|---|---|---|
+| 1.0 | 2026-02-18 | Product Strategy | Initial PRD |
+
+---
+
+*This document is confidential and intended for internal use only.*
