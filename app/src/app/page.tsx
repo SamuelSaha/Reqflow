@@ -403,7 +403,7 @@ const Hero = () => (
 
 /* ───── PROBLEM ───── */
 const Problem = () => (
-  <section style={{ padding: "120px 32px", maxWidth: 1200, margin: "0 auto" }}>
+  <section style={{ padding: "160px 32px", maxWidth: 1200, margin: "0 auto" }}>
     <FadeIn>
       <div style={{ textAlign: "center", maxWidth: 700, margin: "0 auto 72px" }}>
         <p style={{ fontSize: 13, fontWeight: 600, color: COLORS.accent, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 16 }}>The problem</p>
@@ -415,7 +415,7 @@ const Problem = () => (
         </p>
       </div>
     </FadeIn>
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }}>
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 20 }}>
       {[
         { metric: "40–60%", label: "of purchases have zero approval trail", icon: "⚡" },
         { metric: "11.4 days", label: "average time to buy a $500/mo tool", icon: "⏱" },
@@ -441,7 +441,7 @@ const Problem = () => (
 
 /* ───── HOW IT WORKS ───── */
 const HowItWorks = () => (
-  <section style={{ padding: "120px 32px", position: "relative" }}>
+  <section style={{ padding: "160px 32px", position: "relative" }}>
     <div style={{ position: "absolute", inset: 0, background: `linear-gradient(180deg, transparent, ${COLORS.accentSoft}, transparent)`, pointerEvents: "none" }} />
     <div style={{ maxWidth: 1200, margin: "0 auto", position: "relative" }}>
       <FadeIn>
@@ -452,7 +452,7 @@ const HowItWorks = () => (
           </h2>
         </div>
       </FadeIn>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 2 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 2 }}>
         {[
           {
             step: "01", title: "Request from Slack",
@@ -526,7 +526,7 @@ const Features = () => {
   ];
 
   return (
-    <section style={{ padding: "120px 32px", maxWidth: 1200, margin: "0 auto" }}>
+    <section style={{ padding: "160px 32px", maxWidth: 1200, margin: "0 auto" }}>
       <FadeIn>
         <div style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 72px" }}>
           <p style={{ fontSize: 13, fontWeight: 600, color: COLORS.accent, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 16 }}>What you get today</p>
@@ -576,7 +576,7 @@ const Features = () => {
 
 /* ───── SOCIAL PROOF ───── */
 const SocialProof = () => (
-  <section style={{ padding: "100px 32px" }}>
+  <section style={{ padding: "140px 32px" }}>
     <div style={{ maxWidth: 1200, margin: "0 auto" }}>
       <FadeIn>
         <div style={{ textAlign: "center", marginBottom: 64 }}>
@@ -586,7 +586,7 @@ const SocialProof = () => (
           </h2>
         </div>
       </FadeIn>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 2 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 2 }}>
         {[
           { before: "2.3 days", after: "<4 hrs", label: "Approval time" },
           { before: "40–60%", after: "<10%", label: "Maverick spend" },
@@ -662,7 +662,7 @@ const Pricing = () => {
   ];
 
   return (
-    <section style={{ padding: "120px 32px", maxWidth: 1280, margin: "0 auto" }}>
+    <section style={{ padding: "160px 32px", maxWidth: 1280, margin: "0 auto" }}>
       <FadeIn>
         <div style={{ textAlign: "center", maxWidth: 600, margin: "0 auto 64px" }}>
           <p style={{ fontSize: 13, fontWeight: 600, color: COLORS.accent, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 16 }}>Pricing</p>
@@ -674,7 +674,7 @@ const Pricing = () => {
           </p>
         </div>
       </FadeIn>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, alignItems: "stretch" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 16, alignItems: "stretch" }}>
         {plans.map((p, i) => (
           <FadeIn key={i} delay={i * 0.08}>
             <div style={{
@@ -740,16 +740,30 @@ const Integrations = () => (
           </p>
         </div>
         <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-          {["Slack", "QuickBooks", "Xero", "Google", "Microsoft"].map(name => (
+          {[
+            { name: "Slack", color: "#E01E5A", logo: <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/></svg> },
+            { name: "QuickBooks", color: "#2CA01C", logo: <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" opacity="0.2"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3-13h-2v2h2V7zm-4 0H9v2h2V7zm4 4h-2v2h2v-2zm-4 0H9v2h2v-2z"/></svg> },
+            { name: "Xero", color: "#13B5EA", logo: <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg> },
+            { name: "Google", color: "#4285F4", logo: <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg> },
+            { name: "Microsoft", color: "#00A4EF", logo: <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M11.4 24H0V12.6h11.4V24zM24 24H12.6V12.6H24V24zM11.4 11.4H0V0h11.4v11.4zm12.6 0H12.6V0H24v11.4z"/></svg> },
+          ].map(({ name, color, logo }) => (
             <div key={name} style={{
               width: 72, height: 72, borderRadius: 14, background: COLORS.bg,
               border: `1px solid ${COLORS.border}`, display: "flex", alignItems: "center",
-              justifyContent: "center", fontSize: 11, fontWeight: 600, color: COLORS.textMuted,
-              transition: "border-color 0.2s",
+              justifyContent: "center", color: color, transition: "all 0.2s",
+              position: "relative", overflow: "hidden",
             }}
-              onMouseEnter={(e) => (e.currentTarget.style.borderColor = COLORS.borderLight)}
-              onMouseLeave={(e) => (e.currentTarget.style.borderColor = COLORS.border)}
-            >{name}</div>
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = color;
+                e.currentTarget.style.background = `${color}15`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = COLORS.border;
+                e.currentTarget.style.background = COLORS.bg;
+              }}
+            >
+              {logo}
+            </div>
           ))}
         </div>
       </div>
