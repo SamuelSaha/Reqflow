@@ -1,50 +1,18 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-
-const COLORS = {
-  bg: "#09090b",
-  surface: "#131316",
-  border: "#27272a",
-  text: "#fafafa",
-  textMuted: "#a1a1aa",
-  textDim: "#71717a",
-  accent: "#22d3ee",
-  accentSoft: "rgba(34, 211, 238, 0.08)",
-  success: "#34d399",
-  warning: "#f59e0b",
-  gradient1: "#22d3ee",
-  gradient2: "#818cf8",
-};
-
-function useInView(threshold = 0.15) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [inView, setInView] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { setInView(true); obs.disconnect(); } },
-      { threshold }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [threshold]);
-  return [ref, inView] as const;
-}
-
-const FadeIn = ({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) => {
-  const [ref, inView] = useInView();
-  return (
-    <div ref={ref} style={{
-      opacity: inView ? 1 : 0,
-      transform: inView ? "translateY(0)" : "translateY(28px)",
-      transition: `opacity 0.7s cubic-bezier(.16,1,.3,1) ${delay}s, transform 0.7s cubic-bezier(.16,1,.3,1) ${delay}s`,
-    }}>{children}</div>
-  );
-};
+import { useEffect } from "react";
+import { ScrollProgress, Nav, Footer, COLORS, useScrollReveal } from "../../components/shared";
 
 export default function IntegrationsPage() {
+  const [refHero, isVisibleHero] = useScrollReveal(0.2);
+  const [refWorking, isVisibleWorking] = useScrollReveal(0.2);
+  const [refComing, isVisibleComing] = useScrollReveal(0.2);
+  const [refAPI, isVisibleAPI] = useScrollReveal(0.2);
+  const [refCTA, isVisibleCTA] = useScrollReveal(0.2);
+
+  useEffect(() => {
+    document.documentElement.style.scrollBehavior = "smooth";
+  }, []);
   const workingIntegrations = [
     {
       name: "Slack", color: "#E01E5A", status: "working",
@@ -100,36 +68,46 @@ export default function IntegrationsPage() {
   ];
 
   return (
-    <div style={{ background: COLORS.bg, minHeight: "100vh", color: COLORS.text, padding: "80px 24px" }}>
-      <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-        {/* Hero */}
-        <div style={{ textAlign: "center", padding: "60px 0 80px", maxWidth: 800, margin: "0 auto" }}>
-          <FadeIn>
-            <h1 style={{ fontSize: "clamp(36px, 5vw, 56px)", fontWeight: 800, lineHeight: 1.1, marginBottom: 24, letterSpacing: "-0.035em" }}>
-              Integrations that<br />
-              <span style={{ background: `linear-gradient(135deg, ${COLORS.gradient1}, ${COLORS.gradient2})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-                plug into your stack
-              </span>
-            </h1>
-          </FadeIn>
-          <FadeIn delay={0.1}>
-            <p style={{ fontSize: 19, color: COLORS.textMuted, lineHeight: 1.7 }}>
-              Slack for requests. QuickBooks or Xero for accounting. Resend for emails. If the API hiccups, a perfect CSV fallback is always ready.
-            </p>
-          </FadeIn>
-        </div>
+    <div style={{
+      background: COLORS.bg, minHeight: "100vh", color: COLORS.text,
+      fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif",
+    }}>
+      <ScrollProgress />
+      <Nav />
+
+      {/* Hero */}
+      <section ref={refHero} style={{
+        textAlign: "center", padding: "140px 32px 80px", maxWidth: 800, margin: "0 auto",
+        opacity: isVisibleHero ? 1 : 0,
+        transform: isVisibleHero ? "translateY(0)" : "translateY(40px)",
+        transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
+      }}>
+        <h1 style={{ fontSize: "clamp(36px, 5vw, 56px)", fontWeight: 800, lineHeight: 1.1, marginBottom: 24, letterSpacing: "-0.035em" }}>
+          Integrations that<br />
+          <span style={{ background: `linear-gradient(135deg, ${COLORS.gradient1}, ${COLORS.gradient2})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+            plug into your stack
+          </span>
+        </h1>
+        <p style={{ fontSize: 19, color: COLORS.textMuted, lineHeight: 1.7 }}>
+          Slack for requests. QuickBooks or Xero for accounting. Resend for emails. If the API hiccups, a perfect CSV fallback is always ready.
+        </p>
+      </section>
+
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 32px" }}>
 
         {/* Working Integrations */}
-        <section style={{ marginBottom: 80 }}>
-          <FadeIn>
-            <h2 style={{ fontSize: 32, fontWeight: 800, marginBottom: 40, textAlign: "center", color: COLORS.success }}>
-              ✓ Working Today
-            </h2>
-          </FadeIn>
+        <section ref={refWorking} style={{
+          marginBottom: 80,
+          opacity: isVisibleWorking ? 1 : 0,
+          transform: isVisibleWorking ? "translateY(0)" : "translateY(40px)",
+          transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
+        }}>
+          <h2 style={{ fontSize: 32, fontWeight: 800, marginBottom: 40, textAlign: "center", color: COLORS.success }}>
+            ✓ Working Today
+          </h2>
           <div style={{ display: "grid", gap: 20 }}>
             {workingIntegrations.map((integration, i) => (
-              <FadeIn key={i} delay={i * 0.08}>
-                <div style={{
+              <div key={i} style={{
                   background: COLORS.surface, border: `1px solid ${COLORS.border}`,
                   borderRadius: 16, padding: 40, display: "flex", gap: 32, alignItems: "flex-start", flexWrap: "wrap",
                 }}>
@@ -167,22 +145,23 @@ export default function IntegrationsPage() {
                     </div>
                   </div>
                 </div>
-              </FadeIn>
             ))}
           </div>
         </section>
 
         {/* Coming Soon */}
-        <section style={{ marginBottom: 80 }}>
-          <FadeIn>
-            <h2 style={{ fontSize: 32, fontWeight: 800, marginBottom: 40, textAlign: "center", color: COLORS.warning }}>
-              ⏳ Coming Post-Beta
-            </h2>
-          </FadeIn>
+        <section ref={refComing} style={{
+          marginBottom: 80,
+          opacity: isVisibleComing ? 1 : 0,
+          transform: isVisibleComing ? "translateY(0)" : "translateY(40px)",
+          transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
+        }}>
+          <h2 style={{ fontSize: 32, fontWeight: 800, marginBottom: 40, textAlign: "center", color: COLORS.warning }}>
+            ⏳ Coming Post-Beta
+          </h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 20 }}>
             {comingIntegrations.map((integration, i) => (
-              <FadeIn key={i} delay={i * 0.08}>
-                <div style={{
+              <div key={i} style={{
                   background: COLORS.surface, border: `1px solid ${COLORS.border}`,
                   borderRadius: 16, padding: 32, opacity: 0.8,
                 }}>
@@ -213,13 +192,16 @@ export default function IntegrationsPage() {
                     ))}
                   </div>
                 </div>
-              </FadeIn>
             ))}
           </div>
         </section>
 
         {/* API Access */}
-        <FadeIn>
+        <div ref={refAPI} style={{
+          opacity: isVisibleAPI ? 1 : 0,
+          transform: isVisibleAPI ? "translateY(0)" : "translateY(40px)",
+          transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
+        }}>
           <div style={{
             background: COLORS.surface, border: `1px solid ${COLORS.border}`,
             borderRadius: 20, padding: 48, marginBottom: 80,
@@ -232,10 +214,14 @@ export default function IntegrationsPage() {
               During beta, if you need a specific integration, let us know. We'll prioritize based on customer demand.
             </p>
           </div>
-        </FadeIn>
+        </div>
 
         {/* CTA */}
-        <FadeIn>
+        <div ref={refCTA} style={{
+          opacity: isVisibleCTA ? 1 : 0,
+          transform: isVisibleCTA ? "translateY(0)" : "translateY(40px)",
+          transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
+        }}>
           <div style={{
             maxWidth: 700, margin: "0 auto", textAlign: "center",
             background: `radial-gradient(ellipse at center, rgba(245,158,11,0.08) 0%, transparent 70%)`,
@@ -251,22 +237,13 @@ export default function IntegrationsPage() {
               display: "inline-block",
               background: `linear-gradient(135deg, ${COLORS.gradient1}, ${COLORS.gradient2})`,
               color: COLORS.bg, padding: "16px 40px", borderRadius: 12, fontSize: 16, fontWeight: 700,
-              textDecoration: "none", boxShadow: "0 0 40px rgba(34,211,238,0.15)",
+              textDecoration: "none", boxShadow: `0 0 40px ${COLORS.accentGlow}`,
             }}>Apply for beta →</a>
           </div>
-        </FadeIn>
-
-        {/* Footer */}
-        <div style={{ borderTop: `1px solid ${COLORS.border}`, paddingTop: 24, marginTop: 80 }}>
-          <p style={{ fontSize: 14, color: COLORS.textDim, textAlign: "center" }}>
-            <a href="/" style={{ color: COLORS.textDim, textDecoration: "none" }}>← Back to home</a>
-            {" · "}
-            <a href="/product" style={{ color: COLORS.textDim, textDecoration: "none" }}>Product</a>
-            {" · "}
-            <a href="/features" style={{ color: COLORS.textDim, textDecoration: "none" }}>Features</a>
-          </p>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 }
