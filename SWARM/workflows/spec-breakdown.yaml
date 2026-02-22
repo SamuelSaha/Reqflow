@@ -1,0 +1,256 @@
+---
+name: Spec Breakdown
+version: "3.0.0-EXTREME"
+description: Decompose complex specs into atomic, implementable sub-specs
+---
+
+# Workflow: Spec Breakdown
+
+## Trigger
+Spec is too large/complex for single implementation
+
+## Input
+Complex SPEC-XXX.md
+
+## Output
+3-5 atomic sub-specs (SPEC-XXX-A, SPEC-XXX-B, etc.)
+
+## When to Break Down
+
+**Break if ANY true:**
+- >20 acceptance criteria
+- >2 week implementation time
+- Spans >3 domains (UI, API, DB, etc.)
+- Can deliver value incrementally
+- Has natural boundaries
+
+**Don't break if:**
+- Tightly coupled (can't ship independently)
+- Creates integration nightmare
+- No incremental value
+
+---
+
+## Process
+
+### Phase 1: Boundary Identification (5 min)
+**Agent:** @swarm-arch
+
+**Find natural seams:**
+1. **By domain:** UI vs API vs Database
+2. **By user flow:** Step 1 vs Step 2 vs Step 3
+3. **By value:** Core vs Enhancement vs Polish
+4. **By risk:** High-risk vs Low-risk
+5. **By dependency:** Foundation vs Build-on-top
+
+**Map dependencies:**
+```
+SPEC-XXX-A (Foundation)
+  ↓
+SPEC-XXX-B (Core UI)
+  ↓
+SPEC-XXX-C (API)
+  ↓
+SPEC-XXX-D (Integration)
+```
+
+---
+
+### Phase 2: Value-Based Slicing (5 min)
+**Agent:** @swarm-growth
+
+**Prioritize by value delivery:**
+1. **MVP Slice:** Minimum viable (ship first)
+2. **Core Slice:** Main functionality
+3. **Enhancement Slice:** Nice-to-have
+4. **Polish Slice:** Perfection
+
+**Each slice must:**
+- Deliver standalone value
+- Be shippable independently
+- Have clear success metrics
+
+---
+
+### Phase 3: Spec Creation (10 min)
+**Agent:** @swarm-specifier
+
+**Create sub-specs:**
+
+**Template per sub-spec:**
+```yaml
+spec:
+  id: "SPEC-XXX-A"
+  parent: "SPEC-XXX"
+  title: "[Clear title]"
+  
+  goal: "[Specific objective]"
+  
+  non_goals: ["What this spec does NOT cover"]
+  
+  acceptance_criteria: [5-8 ACs]
+  
+  dependencies:
+    requires: ["SPEC-XXX-A requires nothing"]
+    enables: ["SPEC-XXX-B depends on this"]
+  
+  value:
+    user_benefit: "[Specific benefit]"
+    business_impact: "[Metric]"
+  
+  boundaries:
+    in_scope: ["Specific items"]
+    out_of_scope: ["Parent spec handles this"]
+```
+
+---
+
+### Phase 4: Dependency Validation (3 min)
+**Agent:** @swarm-orch
+
+**Verify dependency graph:**
+- No circular dependencies
+- Clear execution order
+- Parallel opportunities marked
+- Integration points documented
+
+---
+
+### Phase 5: Ticket Generation (5 min)
+**Agent:** @swarm-ticketizer
+
+**Break each sub-spec into tickets:**
+- SPEC-XXX-A → T-001, T-002, T-003
+- SPEC-XXX-B → T-004, T-005, T-006
+- etc.
+
+**Total:** 5-8 tickets per sub-spec
+
+---
+
+## Breakdown Patterns
+
+### Pattern 1: Horizontal (By Layer)
+```
+SPEC-001-UI:    Frontend components
+SPEC-001-API:   Backend endpoints  
+SPEC-001-DB:    Database changes
+SPEC-001-INT:   Integration layer
+```
+
+### Pattern 2: Vertical (By Flow)
+```
+SPEC-001-ONBOARD: User onboarding
+SPEC-001-CORE:    Core functionality
+SPEC-001-REPORT:  Reporting features
+```
+
+### Pattern 3: Risk-Based
+```
+SPEC-001-POC:     Proof of concept
+SPEC-001-MVP:     Minimum viable product
+SPEC-001-SCALE:   Scale & optimization
+```
+
+### Pattern 4: Value-Based
+```
+SPEC-001-MUST:    Must-have (P0)
+SPEC-001-SHOULD:  Should-have (P1)
+SPEC-001-NICE:    Nice-to-have (P2)
+```
+
+---
+
+## Sub-Spec Requirements
+
+Each sub-spec MUST:
+- [ ] Stand alone (shippable independently)
+- [ ] Deliver value (not just infrastructure)
+- [ ] Have clear boundaries
+- [ ] Link to parent
+- [ ] Define dependencies
+- [ ] Be estimable (<1 week)
+
+---
+
+## Zero-Defect Checklist
+- [ ] Parent spec referenced
+- [ ] Boundaries clear
+- [ ] Dependencies mapped
+- [ ] Value defined
+- [ ] Estimates reasonable
+- [ ] Integration points documented
+- [ ] Acceptance criteria binary
+
+## Output Format
+
+```markdown
+# SPEC BREAKDOWN: SPEC-XXX
+
+## Parent Spec
+**Original:** SPEC-XXX - [Title]
+**Complexity:** Too large (X ACs, Y weeks)
+**Strategy:** [Horizontal/Vertical/Risk/Value]
+
+---
+
+## Sub-Spec 1: SPEC-XXX-A (Foundation)
+**Title:** [Clear name]
+**Goal:** [One sentence]
+
+**Acceptance Criteria:**
+- [ ] AC-001: [Criterion]
+- [ ] AC-002: [Criterion]
+- (5-8 ACs total)
+
+**Value:**
+- User: [Benefit]
+- Business: [Impact]
+
+**Dependencies:**
+- Requires: None (first)
+- Enables: SPEC-XXX-B
+
+**Estimates:**
+- Tickets: 5
+- Effort: 3 days
+- Dependencies: 0
+
+---
+
+## Sub-Spec 2: SPEC-XXX-B (Core)
+[Same format...]
+
+---
+
+## Dependency Graph
+```
+SPEC-XXX-A → SPEC-XXX-B → SPEC-XXX-C
+     ↓              ↓
+SPEC-XXX-D (parallel to B)
+```
+
+## Execution Order
+1. SPEC-XXX-A (Foundation) - 3 days
+2. SPEC-XXX-B (Core) - 4 days
+3. SPEC-XXX-C (Integration) - 2 days
+4. SPEC-XXX-D (Enhancement) - 3 days
+
+**Total:** 12 days vs original 6 weeks
+**Risk:** Reduced by 70%
+**Confidence:** X%
+
+---
+
+## Migration
+**Parent spec status:** Deprecated → Broken down
+**New specs:** Active
+**Tickets:** Reassigned to sub-specs
+```
+
+## Success Metrics
+- Sub-specs: 3-5 per complex spec
+- ACs per sub-spec: 5-8
+- Estimates: <1 week each
+- Dependencies: Clear graph
+- Value: Each shippable independently

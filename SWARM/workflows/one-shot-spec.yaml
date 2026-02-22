@@ -1,0 +1,92 @@
+---
+name: One-Shot Spec
+version: "1.0.0"
+description: Build-ready specification in one pass from minimal input (minimum questions, maximum impact)
+---
+
+# Workflow: One-Shot Spec
+
+## Trigger
+- User provides a goal and wants a spec fast (e.g., “/specify …” or “write the PRD”)
+- User is tired of re-explaining and wants a one-shot draft
+
+## Input (Minimum)
+- A single sentence goal OR a short paragraph
+- Optional: a small seed block (goal/user/must-have/constraints/non-goals)
+
+## Output
+- One spec file: `specifications/active/SPEC-YYYYMMDD-NNN-<slug>.md`
+- A delegation-ready `spec_packet`
+- 3–7 initial tickets (P0/P1) with embedded `spec_packet`
+
+## Rules (Sovereign Execution)
+- Proceed with defaults via **Assumptions Ledger (E0)**.
+- Ask **one** precise question only if execution is blocked by a missing external constraint.
+- No “approve/modify/cancel” checkpoints.
+- No decision dumping (“choose between A/B”) — recommend and proceed.
+
+---
+
+## Process
+
+### Step 1: Seed Extraction (2–3 min)
+**Agent:** @swarm-lead  
+**CT level:** CT1 by default, CT2 if ambiguous/high-stakes
+
+Produce a **Spec Seed**:
+- Goal (one sentence)
+- Primary user + benefit
+- 1–3 must-haves
+- 1–3 non-goals
+- 1–5 constraints (default E0 allowed)
+
+If blocked, ask one question (max) and continue immediately after answer.
+
+---
+
+### Step 2: ACs + Metrics (4–6 min)
+**Agent:** @swarm-pm  
+**CT level:** CT2 if outcomes are hard to measure
+
+Write **5–12 binary ACs** (P0/P1) and:
+- Success metric + guardrail metric (even if E0 defaults)
+- Assumptions Ledger (3–8 items, with falsifiers)
+
+---
+
+### Step 3: UX Contract (3–5 min)
+**Agent:** @swarm-ux  
+**CT level:** CT1
+
+Define:
+- Golden path (≤ 5 steps)
+- Required UI states: default/loading/empty/error/success
+- Recovery paths for the top 3 failure modes
+
+---
+
+### Step 4: Technical Boundaries (3–5 min)
+**Agent:** @swarm-arch  
+**CT level:** CT2 if architecture/data model changes are implied
+
+Define:
+- In-scope/out-of-scope boundaries (files/APIs if known)
+- Data invariants (if any)
+- Performance/security constraints that must be enforced
+
+---
+
+### Step 5: Compile + Ticketize (4–8 min)
+**Agent:** @swarm-lead  
+
+Compile into:
+- One-shot spec (use `specifications/templates/02-one-shot-spec-template.md`)
+- Extract a compact `spec_packet`
+- Generate 3–7 tickets using `templates/03-tickets.tmpl.md`
+
+**Verification (binary):**
+- ACs are binary + testable
+- Non-goals explicit
+- Constraints listed (E0 allowed but must be in assumptions ledger)
+- Spec packet present and consistent
+

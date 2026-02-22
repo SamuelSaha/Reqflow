@@ -1,0 +1,192 @@
+---
+name: Next Tickets
+version: "3.0.0-EXTREME"
+description: AI-prioritized next 5 tickets based on impact, dependencies, and strategy
+---
+
+# Workflow: Next Tickets
+
+## Trigger
+User asks "What should I work on next?"
+
+## Input
+Current project state, specs, backlog
+
+## Output
+5 prioritized tickets with rationale
+
+## Process
+
+### Step 1: Context Gathering (2 min)
+**Agent:** @swarm-orch
+
+**Analyze current state:**
+- Open tickets/status
+- Recent completions
+- Blocked items
+- Dependencies
+- Strategic goals
+
+**Input sources:**
+- Plane tickets
+- Swarm specs
+- Git commits
+- User priorities
+
+---
+
+### Step 2: Impact Analysis (3 min)
+**Agent:** @swarm-growth + @swarm-arch
+
+**Score each potential ticket:**
+
+**Business Impact (1-10):**
+- Revenue potential
+- User value
+- Strategic alignment
+- Time sensitivity
+
+**Technical Impact (1-10):**
+- Architecture improvement
+- Debt reduction
+- Performance gain
+- Security improvement
+
+**Risk (1-10, lower is better):**
+- Implementation complexity
+- Uncertainty
+- Dependencies
+- Breaking changes
+
+---
+
+### Step 3: Dependency Resolution (2 min)
+**Agent:** @swarm-orch
+
+**Map prerequisites:**
+- What blocks what?
+- What enables what?
+- Critical path analysis
+
+**Optimize for flow:**
+- Unblock others first
+- Parallel opportunities
+- Quick wins interspersed
+
+---
+
+### Step 4: Strategic Alignment (2 min)
+**Agent:** @swarm-arch
+
+**Check against roadmap:**
+- Quarter goals
+- Technical vision
+- User needs
+- Market timing
+
+**Prioritize by:**
+1. Critical path items
+2. High impact, low risk
+3. Strategic enablers
+4. Quick wins (momentum)
+
+---
+
+### Step 5: Recommendation (1 min)
+**Agent:** @swarm-orch
+
+**Present top 5:**
+```
+Rank | Ticket | Impact | Effort | Why Now?
+-----|--------|--------|--------|----------
+1    | T-XXX  | 9/10   | 2h     | Unblocks 3 other tickets
+2    | T-YYY  | 8/10   | 4h     | High user value
+3    | T-ZZZ  | 7/10   | 1h     | Quick win
+4    | T-AAA  | 8/10   | 6h     | Strategic enablement
+5    | T-BBB  | 6/10   | 3h     | Debt reduction
+```
+
+---
+
+## Prioritization Algorithm
+
+```
+Score = (Business × 0.4) + (Technical × 0.3) - (Risk × 0.2) + (Strategic × 0.1)
+
+Adjustments:
++2 if unblocks others
++1 if quick win (<2h)
+-1 if blocked
+-2 if high uncertainty
+```
+
+## Output Format
+
+```markdown
+# NEXT 5 TICKETS - Prioritized
+
+## Context
+**Current Sprint:** Week X
+**Open Tickets:** Y
+**Strategic Goal:** [Goal]
+
+---
+
+## 🥇 TICKET #1: [Title]
+**ID:** T-XXX | **Effort:** X hours
+**Impact:** 9/10 | **Risk:** Low
+
+**Why this first:**
+- [Reason 1]
+- [Reason 2]
+
+**Dependencies:** None / [List]
+**Unblocks:** [List]
+**Skills needed:** [skills]
+
+**Acceptance Criteria:**
+- [AC-001]
+- [AC-002]
+
+---
+
+## 🥈 TICKET #2: [Title]
+**ID:** T-YYY | **Effort:** X hours
+**Impact:** 8/10 | **Risk:** Low
+
+**Why this second:**
+- [Reason 1]
+- [Reason 2]
+
+---
+
+## 🥉 TICKETS #3-5
+[Same format...]
+
+---
+
+## Alternative Sequences
+
+**Quick-win sequence (momentum first):**
+1. T-ZZZ (1h) - Immediate value
+2. T-XXX (2h) - High impact
+...
+
+**Strategic sequence (foundation first):**
+1. T-AAA (6h) - Foundation
+2. T-XXX (2h) - Build on it
+...
+
+**Confidence:** X%
+**Last Updated:** [timestamp]
+```
+
+## Update Frequency
+- Daily: Auto-refresh if status changes
+- Weekly: Full re-prioritization
+- On-demand: When asked
+
+## Success Metrics
+- User satisfaction: >90% agree with priority
+- Flow efficiency: Minimal blockers
+- Strategic alignment: 100% of top 5 align with goals

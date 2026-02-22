@@ -1,0 +1,202 @@
+---
+name: Safe Removal
+version: "3.0.0-EXTREME"
+description: Remove feature safely without breaking anything else
+---
+
+# Workflow: Safe Removal
+
+## Trigger
+Feature needs to be removed (deprecated, unused, replaced)
+
+## Input
+Feature to remove
+
+## Output
+Clean removal + verification nothing broken
+
+## Process
+
+### Phase 1: Impact Analysis (5 min)
+**Agent:** @swarm-analyst
+
+Map all dependencies:
+```
+FEATURE TO REMOVE: [Feature Name]
+
+DEPENDENCIES FOUND:
+- File A: imports [feature]
+- File B: calls [feature.method]
+- Test C: tests [feature]
+- Route D: references [feature]
+- Database E: [feature] table
+- API F: [feature] endpoint
+- UI G: [feature] button
+
+TOTAL IMPACT: X files, Y tests, Z users
+```
+
+**Search for:**
+- Direct imports
+- Function calls
+- Type references
+- CSS classes
+- Database references
+- API endpoints
+- Tests
+- Documentation
+
+---
+
+### Phase 2: Deprecation Warning (If time permits)
+**Agent:** @swarm-dev
+
+If removal needs gradual rollout:
+1. Add deprecation notice
+2. Mark as @deprecated in code
+3. Add runtime warning
+4. Set removal date
+
+**Skip if:** Immediate removal required
+
+---
+
+### Phase 3: Safe Removal (10 min)
+**Agent:** @swarm-dev
+
+**Removal sequence:**
+1. **Tests first** - Remove or update tests
+2. **UI components** - Remove from interface
+3. **API endpoints** - Remove routes
+4. **Business logic** - Remove functions
+5. **Database** - Remove tables/columns
+6. **Dependencies** - Remove imports
+7. **Documentation** - Remove references
+
+**Safety rules:**
+- Remove in reverse dependency order (top-down)
+- One component at a time
+- Build after each removal
+- Test after each removal
+- Git commit after each step
+
+---
+
+### Phase 4: Verification (5 min)
+**Agent:** @swarm-verifier
+
+Verify nothing broken:
+```
+✅ Build passes
+✅ All tests pass
+✅ No orphaned code
+✅ No broken imports
+✅ No UI errors
+✅ No console errors
+✅ Application starts
+✅ Critical paths work
+```
+
+**Specific checks:**
+- Search for remaining references
+- Check for broken links
+- Verify no 404s
+- Check database integrity
+- Verify no data loss
+
+---
+
+### Phase 5: Cleanup (3 min)
+**Agent:** @swarm-dev
+
+Remove remnants:
+- Unused imports
+- Dead code
+- Orphaned files
+- Empty directories
+- Obsolete config
+
+---
+
+### Phase 6: Ship (2 min)
+**Agent:** @swarm-ops
+
+Deploy:
+- Staging verification
+- Production deploy
+- Monitor for errors
+
+## Safety Guardrails
+
+### Pre-removal
+- [ ] Full dependency mapping
+- [ ] Backup created
+- [ ] Rollback plan ready
+
+### During removal
+- [ ] Build passes after each step
+- [ ] Tests pass after each step
+- [ ] Git commit after each step
+
+### Post-removal
+- [ ] Zero broken imports
+- [ ] Zero test failures
+- [ ] Zero runtime errors
+- [ ] Zero data loss
+
+## Rollback Plan
+
+If something breaks:
+1. Identify breaking change
+2. Revert specific commit
+3. Verify fix
+4. Redo removal with fix
+
+## Success Criteria
+- Feature completely removed
+- Zero broken functionality
+- Zero test failures
+- Zero console errors
+- Codebase smaller
+- No orphaned code
+
+## Output Format
+
+```markdown
+# SAFE REMOVAL COMPLETE
+
+## Feature Removed
+**Name:** [Feature]
+**Reason:** [Why removed]
+
+## Dependencies Mapped
+- Files: X
+- Tests: Y
+- Database tables: Z
+- API endpoints: W
+
+## Removal Steps
+1. ✅ Tests removed
+2. ✅ UI components removed
+3. ✅ API endpoints removed
+4. ✅ Business logic removed
+5. ✅ Database cleaned
+6. ✅ Dependencies cleaned
+
+## Verification
+- Build: ✅ Pass
+- Tests: ✅ Pass (X/Y)
+- No broken imports: ✅
+- No runtime errors: ✅
+- Data integrity: ✅
+
+## Impact
+- Lines removed: +X, -Y
+- Files removed: N
+- Bundle size: -Z kb
+
+## Deployment
+- Staging: ✅
+- Production: ✅
+- Monitoring: ✅ Clean
+```

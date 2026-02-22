@@ -1,0 +1,40 @@
+[project]
+name = "swarm-langgraph"
+version = "1.0.0"
+description = "Hierarchical multi-agent swarm system powered by LangGraph"
+requires-python = ">=3.11"
+dependencies = [
+    "langgraph>=0.2.0",
+    "langchain-core>=0.3.0",
+    "langchain-openai>=0.2.0",
+    "langchain-anthropic>=0.3.0",
+    "langchain-community>=0.3.0",
+    "litellm>=1.50.0",
+    "pydantic>=2.0",
+    "pydantic-settings>=2.0",
+    "pyyaml>=6.0",
+    "python-dotenv>=1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "ruff>=0.5.0",
+]
+postgres = [
+    "psycopg[binary]>=3.0",
+    "langgraph-checkpoint-postgres>=2.0",
+]
+
+[project.scripts]
+swarm = "scripts.run:main"
+swarm-viz = "scripts.visualize:main"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
