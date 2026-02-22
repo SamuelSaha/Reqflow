@@ -176,11 +176,29 @@ const GlobalStyles = () => (
   `}</style>
 );
 
+/* ───── BETA BANNER ───── */
+const BetaBanner = () => (
+  <div style={{
+    position: "fixed", top: 72, left: 0, right: 0, zIndex: 90,
+    background: "rgba(245,158,11,0.12)", backdropFilter: "blur(10px)",
+    borderBottom: `1px solid rgba(245,158,11,0.3)`, padding: "10px 24px",
+  }}>
+    <div style={{ maxWidth: 1200, margin: "0 auto", textAlign: "center" }}>
+      <span style={{ fontSize: 13, fontWeight: 600, color: COLORS.warning }}>
+        ⚡ Early Beta — Helping first 10 companies shape the product
+      </span>
+      <span style={{ fontSize: 13, color: COLORS.textMuted, marginLeft: 12 }}>
+        · Basic features working · Missing features listed honestly
+      </span>
+    </div>
+  </div>
+);
+
 /* ───── HERO (Slack-First) ───── */
 const Hero = () => (
   <section style={{
     minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-    padding: "120px 32px 80px", position: "relative", overflow: "hidden",
+    padding: "160px 32px 80px", position: "relative", overflow: "hidden",
   }}>
     <div style={{ position: "absolute", top: "-20%", left: "30%", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle, rgba(34,211,238,0.07) 0%, transparent 70%)", pointerEvents: "none" }} />
     <div style={{ position: "absolute", top: "10%", right: "20%", width: 500, height: 500, borderRadius: "50%", background: "radial-gradient(circle, rgba(129,140,248,0.05) 0%, transparent 70%)", pointerEvents: "none" }} />
@@ -188,10 +206,10 @@ const Hero = () => (
     <FadeIn>
       <div style={{
         display: "inline-flex", alignItems: "center", gap: 8,
-        background: COLORS.accentSoft, border: `1px solid rgba(34,211,238,0.2)`,
+        background: "rgba(245,158,11,0.12)", border: `1px solid rgba(245,158,11,0.3)`,
         borderRadius: 100, padding: "8px 20px", marginBottom: 32,
       }}>
-        <span style={{ color: COLORS.accent, fontSize: 13, fontWeight: 600, letterSpacing: "0.02em" }}>Early Access — Founding member pricing available</span>
+        <span style={{ color: COLORS.warning, fontSize: 13, fontWeight: 600, letterSpacing: "0.02em" }}>Early Beta — First 10 Companies (€99/mo locked forever)</span>
       </div>
     </FadeIn>
 
@@ -220,7 +238,7 @@ const Hero = () => (
 
     <FadeIn delay={0.24}>
       <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
-        <a href="#" style={{
+        <a href="/beta" style={{
           background: `linear-gradient(135deg, ${COLORS.gradient1}, ${COLORS.gradient2})`,
           color: COLORS.bg, padding: "16px 36px", borderRadius: 10, fontSize: 16, fontWeight: 700,
           textDecoration: "none", transition: "all 0.2s",
@@ -234,8 +252,8 @@ const Hero = () => (
             e.currentTarget.style.transform = "translateY(0) scale(1)";
             e.currentTarget.style.boxShadow = `0 4px 20px ${COLORS.accentGlow}`;
           }}
-        >Start 14-day free trial</a>
-        <a href="#" style={{
+        >Apply for beta (10 spots left)</a>
+        <a href="/about" style={{
           background: "transparent", color: COLORS.textMuted, padding: "16px 32px", borderRadius: 10,
           fontSize: 15, fontWeight: 600, textDecoration: "none", border: `1px solid ${COLORS.border}`,
           transition: "all 0.2s",
@@ -250,13 +268,13 @@ const Hero = () => (
             e.currentTarget.style.color = COLORS.textMuted;
             e.currentTarget.style.background = "transparent";
           }}
-        >View pricing</a>
+        >Learn about our beta</a>
       </div>
     </FadeIn>
 
     <FadeIn delay={0.35}>
       <p style={{ fontSize: 13, color: COLORS.textDim, marginTop: 20, textAlign: "center" }}>
-        No credit card required · GDPR native · EU hosted (Paris) · Founding member rate: €99/mo
+        Beta program · GDPR native · EU hosted (Paris) · €99/mo founding rate (locked forever)
       </p>
     </FadeIn>
 
@@ -494,37 +512,24 @@ const Hero = () => (
 const Problem = () => (
   <section style={{ padding: "100px 32px", maxWidth: 1200, margin: "0 auto" }}>
     <FadeIn>
-      <div style={{ textAlign: "center", maxWidth: 700, margin: "0 auto 72px" }}>
+      <div style={{ textAlign: "center", maxWidth: 700, margin: "0 auto 48px" }}>
         <p style={{ fontSize: 13, fontWeight: 600, color: COLORS.accent, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 16 }}>The problem</p>
         <h2 style={{ fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 800, color: COLORS.text, lineHeight: 1.15, letterSpacing: "-0.03em", marginBottom: 20 }}>
           Your &quot;procurement process&quot; is a Slack thread and a prayer
         </h2>
-        <p style={{ fontSize: 17, color: COLORS.textMuted, lineHeight: 1.65 }}>
+        <p style={{ fontSize: 17, color: COLORS.textMuted, lineHeight: 1.65, marginBottom: 32 }}>
           Someone asks on Slack. Waits 3 days. Gets a vague &quot;sure.&quot; Signs up with a card. Finance finds out on the statement. Sound familiar?
         </p>
+        <div style={{
+          background: COLORS.surface, border: `1px solid ${COLORS.border}`, borderRadius: 12,
+          padding: "24px 32px", maxWidth: 600, margin: "0 auto",
+        }}>
+          <p style={{ fontSize: 15, color: COLORS.textMuted, lineHeight: 1.7, marginBottom: 0 }}>
+            <strong style={{ color: COLORS.text }}>You're not alone.</strong> Companies with 50-250 employees hit this wall: procurement is chaos, but hiring a procurement team doesn't make sense yet.
+          </p>
+        </div>
       </div>
     </FadeIn>
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 20 }}>
-      {[
-        { metric: "40–60%", label: "of purchases have zero approval trail", icon: "⚡" },
-        { metric: "11.4 days", label: "average time to buy a $500/mo tool", icon: "⏱" },
-        { metric: "29%", label: "of SaaS tools are duplicates across teams", icon: "♻" },
-      ].map((s, i) => (
-        <FadeIn key={i} delay={i * 0.1}>
-          <div style={{
-            background: COLORS.surface, borderRadius: 16, border: `1px solid ${COLORS.border}`,
-            padding: 36, textAlign: "center", transition: "border-color 0.3s",
-          }}
-            onMouseEnter={(e) => (e.currentTarget.style.borderColor = COLORS.borderLight)}
-            onMouseLeave={(e) => (e.currentTarget.style.borderColor = COLORS.border)}
-          >
-            <div style={{ fontSize: 36, marginBottom: 16 }}>{s.icon}</div>
-            <div style={{ fontSize: 36, fontWeight: 800, color: COLORS.text, letterSpacing: "-0.03em", marginBottom: 8 }}>{s.metric}</div>
-            <div style={{ fontSize: 15, color: COLORS.textMuted, lineHeight: 1.5 }}>{s.label}</div>
-          </div>
-        </FadeIn>
-      ))}
-    </div>
   </section>
 );
 
@@ -545,18 +550,18 @@ const HowItWorks = () => (
         {[
           {
             step: "01", title: "Request from Slack",
-            desc: "Type /reqflow buy in Slack. AI auto-fills the category, budget code, cost estimate, and checks for duplicates. Submit in under 30 seconds.",
-            visual: "/reqflow buy → Auto-detected: Dev Tools, €2,736/yr",
+            desc: "Type /reqflow buy in Slack. Fill out a simple form (tool name, cost, justification). Submit in under 30 seconds. Beta: No AI auto-fill yet.",
+            visual: "/reqflow buy → Form opens → Fill details → Submit",
           },
           {
-            step: "02", title: "Approved in minutes",
-            desc: "The right people get notified with full context — budget impact, AI insights, prior approvals. One-tap approve from Slack, email, or phone.",
-            visual: "Sarah ✓ (12min) → Claire ✓ (47min) → Done",
+            step: "02", title: "Approved via email",
+            desc: "Approvers get email notifications with request details. They review and approve. Beta: Manual routing setup, no mobile app yet.",
+            visual: "Email to Sarah → Approve ✓ → Email to CFO → Done",
           },
           {
-            step: "03", title: "Synced to your books",
-            desc: "Approved purchases sync directly to QuickBooks or Xero. Full audit trail. No re-entry. No reconciliation spreadsheets.",
-            visual: "Approved → QuickBooks synced → Audit trail ✓",
+            step: "03", title: "Manual sync to books",
+            desc: "Approved purchases are logged. You trigger sync to QuickBooks/Xero manually. Full audit trail. Beta: No auto-sync yet.",
+            visual: "Approved → Manual sync → QuickBooks updated ✓",
           },
         ].map((s, i) => (
           <FadeIn key={i} delay={i * 0.12}>
@@ -588,40 +593,38 @@ const HowItWorks = () => (
 const Features = () => {
   const features = [
     {
-      tag: "Intake", title: "One front door for every purchase",
-      desc: "Slack, Teams, email, or web — every request enters one system. AI classifies, detects duplicates, and checks existing subscriptions before you finish typing.",
-      details: ["Adaptive smart forms", "Duplicate detection", "Slack & Teams native", "Email forwarding intake"],
+      tag: "✓ Working", title: "Slack-based request intake",
+      desc: "Submit purchase requests via /reqflow buy in Slack. Simple form with tool name, cost, justification. Beta: Manual form fill, no AI auto-complete yet.",
+      details: ["Slack integration", "Simple intake form", "Coming: AI classification", "Coming: Duplicate detection"],
     },
     {
-      tag: "Approvals", title: "Approved in minutes, not days",
-      desc: "Visual workflow builder routes requests based on amount, department, and category. Auto-delegates when approvers are OOO. Escalates when things stall.",
-      details: ["Conditional routing", "One-tap mobile approve", "Escalation timers", "OOO auto-delegation"],
+      tag: "✓ Working", title: "Basic approval routing",
+      desc: "Email notifications to approvers with request context. Manual approval workflow setup. Beta: No visual workflow builder or auto-escalation yet.",
+      details: ["Email notifications", "Manual routing setup", "Coming: Workflow builder", "Coming: Auto-escalation"],
     },
     {
-      tag: "Budgets", title: "Guardrails that prevent overspend",
-      desc: "Real-time budget tracking by department. Soft warnings at 80%. Hard stops at 100%. Every request shows the budget impact before it's submitted.",
-      details: ["Department budgets", "Real-time burn rate", "Threshold alerts", "Upload from spreadsheet"],
+      tag: "✓ Working", title: "QuickBooks & Xero sync",
+      desc: "Export approved purchases to QuickBooks or Xero. Manual trigger for now. Beta: No real-time auto-sync or budget enforcement yet.",
+      details: ["QB/Xero integration", "Manual sync trigger", "Coming: Auto-sync", "Coming: Real-time budgets"],
     },
     {
-      tag: "Sync", title: "Synced to QuickBooks & Xero from day one",
-      desc: "Approved purchases push directly to your general ledger. No re-entry. No reconciliation. If the API hiccups, a perfect CSV export is always ready.",
-      details: ["QuickBooks Online sync", "Xero sync", "Fallback CSV export", "Cost center mapping"],
-    },
-    {
-      tag: "Compliance", title: "Audit trail without the work",
-      desc: "Every request, approval, and decision is logged with timestamps, approvers, and context. Vendors submit invoices via PDF email — no portal required.",
-      details: ["Full audit trail", "Configurable policies", "PDF invoice intake", "One-click export"],
+      tag: "✓ Working", title: "Full audit trail",
+      desc: "Every request, approval, and action is logged with timestamps and context. Export anytime. This works today.",
+      details: ["Complete audit log", "Timestamp tracking", "One-click export", "GDPR compliant"],
     },
   ];
 
   return (
     <section style={{ padding: "100px 32px", maxWidth: 1200, margin: "0 auto" }}>
       <FadeIn>
-        <div style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 72px" }}>
-          <p style={{ fontSize: 13, fontWeight: 600, color: COLORS.accent, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 16 }}>What you get today</p>
-          <h2 style={{ fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 800, color: COLORS.text, lineHeight: 1.15, letterSpacing: "-0.03em" }}>
-            Intake. Approvals. Budgets. Accounting sync.
+        <div style={{ textAlign: "center", maxWidth: 720, margin: "0 auto 72px" }}>
+          <p style={{ fontSize: 13, fontWeight: 600, color: COLORS.warning, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 16 }}>Beta — What works today</p>
+          <h2 style={{ fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 800, color: COLORS.text, lineHeight: 1.15, letterSpacing: "-0.03em", marginBottom: 16 }}>
+            The basics work. The smart stuff is coming.
           </h2>
+          <p style={{ fontSize: 15, color: COLORS.textMuted, lineHeight: 1.65 }}>
+            We're honest about what's ready and what's not. Check marks (✓) mean it works today. "Coming" means we're building it with beta feedback.
+          </p>
         </div>
       </FadeIn>
       <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
@@ -663,39 +666,44 @@ const Features = () => {
   );
 };
 
-/* ───── SOCIAL PROOF ───── */
-const SocialProof = () => (
+/* ───── BETA EXPECTATIONS ───── */
+const BetaExpectations = () => (
   <section style={{ padding: "100px 32px" }}>
-    <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+    <div style={{ maxWidth: 900, margin: "0 auto" }}>
       <FadeIn>
-        <div style={{ textAlign: "center", marginBottom: 64 }}>
-          <p style={{ fontSize: 13, fontWeight: 600, color: COLORS.accent, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 16 }}>Why it matters</p>
-          <h2 style={{ fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 800, color: COLORS.text, lineHeight: 1.15, letterSpacing: "-0.03em" }}>
-            What changes when you have a front door
+        <div style={{ textAlign: "center", marginBottom: 48 }}>
+          <p style={{ fontSize: 13, fontWeight: 600, color: COLORS.warning, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 16 }}>Beta program</p>
+          <h2 style={{ fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 800, color: COLORS.text, lineHeight: 1.15, letterSpacing: "-0.03em", marginBottom: 20 }}>
+            Help us build the right product
           </h2>
+          <p style={{ fontSize: 17, color: COLORS.textMuted, lineHeight: 1.65 }}>
+            We're looking for 10 companies to shape Reqflow. You get founding member pricing (€99/mo locked forever). We get your feedback and real-world usage.
+          </p>
         </div>
       </FadeIn>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 16, maxWidth: 800, margin: "0 auto" }}>
-        {[
-          { before: "2.3 days", after: "<4 hrs", label: "Approval time" },
-          { before: "40–60%", after: "<10%", label: "Maverick spend" },
-          { before: "8+ hrs/wk", after: "<2 hrs", label: "Finance time on procurement" },
-          { before: "Spreadsheets", after: "1-click", label: "Audit export" },
-        ].map((m, i) => (
-          <FadeIn key={i} delay={i * 0.08}>
-            <div style={{
-              background: COLORS.surface, borderRadius: 16, border: `1px solid ${COLORS.border}`, padding: 32, textAlign: "center",
-            }}>
-              <div style={{ fontSize: 13, color: COLORS.danger, textDecoration: "line-through", marginBottom: 8, fontWeight: 500 }}>{m.before}</div>
-              <div style={{
-                fontSize: 28, fontWeight: 800, letterSpacing: "-0.03em", marginBottom: 8,
-                background: `linear-gradient(135deg, ${COLORS.gradient1}, ${COLORS.gradient2})`,
-                WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-              }}>{m.after}</div>
-              <div style={{ fontSize: 14, color: COLORS.textMuted }}>{m.label}</div>
-            </div>
-          </FadeIn>
-        ))}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
+        <FadeIn delay={0.1}>
+          <div style={{ background: COLORS.surface, borderRadius: 16, border: `1px solid ${COLORS.border}`, padding: 32 }}>
+            <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 16, color: COLORS.success }}>✓ What Works Today</h3>
+            <ul style={{ fontSize: 15, color: COLORS.textMuted, lineHeight: 1.8, paddingLeft: 20, margin: 0 }}>
+              <li>Slack-based request intake</li>
+              <li>Email approval notifications</li>
+              <li>QB/Xero sync (manual trigger)</li>
+              <li>Full audit trail & export</li>
+            </ul>
+          </div>
+        </FadeIn>
+        <FadeIn delay={0.15}>
+          <div style={{ background: COLORS.surface, borderRadius: 16, border: `1px solid ${COLORS.border}`, padding: 32 }}>
+            <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 16, color: COLORS.warning }}>⚠ What's Coming</h3>
+            <ul style={{ fontSize: 15, color: COLORS.textMuted, lineHeight: 1.8, paddingLeft: 20, margin: 0 }}>
+              <li>AI-powered categorization</li>
+              <li>Duplicate detection</li>
+              <li>Real-time budget enforcement</li>
+              <li>Mobile push notifications</li>
+            </ul>
+          </div>
+        </FadeIn>
       </div>
     </div>
   </section>
@@ -705,37 +713,37 @@ const SocialProof = () => (
 const Pricing = () => {
   const plans = [
     {
-      name: "Founding", price: "99", target: "< 20 employees",
-      features: ["Unlimited users", "50 requests/month", "Core approval workflows", "1 accounting integration", "Slack integration", "Early adopter support", "Shape the roadmap"],
-      cta: "Join early access", highlighted: false, badge: "Limited spots",
+      name: "Beta", price: "99", target: "First 10 companies",
+      features: ["Unlimited users", "Unlimited requests", "Slack intake (working)", "Email approvals (working)", "QB/Xero sync (working)", "Beta bugs & missing features", "Direct founder access", "Shape the product"],
+      cta: "Apply for beta", highlighted: true, badge: "10 spots only",
     },
     {
-      name: "Starter", price: "399", target: "20–75 employees",
-      features: ["Unlimited users", "100 requests/month", "3 approval workflows", "Slack + 1 accounting", "Department budgets", "Email support"],
-      cta: "Start free trial", highlighted: false, badge: null,
+      name: "Starter", price: "399", target: "Post-beta launch",
+      features: ["Unlimited users", "100 requests/month", "All beta features", "+ AI categorization", "+ Duplicate detection", "+ Workflow builder", "Email support"],
+      cta: "Coming soon", highlighted: false, badge: "After beta",
     },
     {
-      name: "Growth", price: "899", target: "75–250 employees",
-      features: ["Unlimited users", "500 requests/month", "Unlimited workflows", "All integrations", "Full budget hierarchy", "Invoice processing (250/mo)", "Mobile approvals", "Email + chat support"],
-      cta: "Start free trial", highlighted: true, badge: "Most popular",
+      name: "Growth", price: "899", target: "Post-beta launch",
+      features: ["Unlimited users", "500 requests/month", "+ Real-time budgets", "+ Mobile approvals", "+ Auto-escalation", "+ Invoice processing", "Priority support"],
+      cta: "Coming soon", highlighted: false, badge: "After beta",
     },
     {
-      name: "Scale", price: "1,799", target: "250–500 employees",
-      features: ["Unlimited everything", "AI copilot + forecasting", "API access", "SSO / SAML", "Custom reports", "Dedicated CSM"],
-      cta: "Talk to sales", highlighted: false, badge: null,
+      name: "Scale", price: "1,799", target: "Post-beta launch",
+      features: ["Unlimited everything", "+ AI forecasting", "+ API access", "+ SSO / SAML", "+ Custom reports", "Dedicated CSM"],
+      cta: "Coming soon", highlighted: false, badge: "After beta",
     },
   ];
 
   return (
     <section style={{ padding: "100px 32px", maxWidth: 1280, margin: "0 auto" }}>
       <FadeIn>
-        <div style={{ textAlign: "center", maxWidth: 600, margin: "0 auto 64px" }}>
-          <p style={{ fontSize: 13, fontWeight: 600, color: COLORS.accent, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 16 }}>Pricing</p>
+        <div style={{ textAlign: "center", maxWidth: 680, margin: "0 auto 64px" }}>
+          <p style={{ fontSize: 13, fontWeight: 600, color: COLORS.warning, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 16 }}>Beta Pricing</p>
           <h2 style={{ fontSize: "clamp(28px, 4vw, 44px)", fontWeight: 800, color: COLORS.text, lineHeight: 1.15, letterSpacing: "-0.03em", marginBottom: 16 }}>
-            Unlimited users. Always.
+            €99/mo for beta. Locked forever.
           </h2>
           <p style={{ fontSize: 17, color: COLORS.textMuted, lineHeight: 1.6 }}>
-            If only 3 people can submit, you don&apos;t have a front door — you have a side entrance. Everyone submits. That&apos;s the point.
+            First 10 companies get founding member pricing that never expires. Future tiers shown for context — they'll launch after beta.
           </p>
         </div>
       </FadeIn>
@@ -846,17 +854,17 @@ const CTAFooter = () => (
     <FadeIn>
       <div style={{
         maxWidth: 800, margin: "0 auto", textAlign: "center",
-        background: `radial-gradient(ellipse at center, ${COLORS.accentSoft} 0%, transparent 70%)`,
+        background: `radial-gradient(ellipse at center, rgba(245,158,11,0.08) 0%, transparent 70%)`,
         padding: "80px 40px", borderRadius: 24,
       }}>
         <h2 style={{ fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 800, color: COLORS.text, lineHeight: 1.15, letterSpacing: "-0.03em", marginBottom: 20 }}>
-          Setup in minutes.<br />First request, same day.
+          Ready to help us build this?
         </h2>
         <p style={{ fontSize: 17, color: COLORS.textMuted, marginBottom: 36, lineHeight: 1.6 }}>
-          14-day free trial. No credit card required.<br />Connect Slack, set your approval rules, and go.
+          Join the beta program. €99/mo locked forever.<br />Work directly with founders to shape the product.
         </p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-          <a href="#" style={{
+          <a href="/beta" style={{
             display: "inline-block",
             background: `linear-gradient(135deg, ${COLORS.gradient1}, ${COLORS.gradient2})`,
             color: COLORS.bg, padding: "16px 40px", borderRadius: 12, fontSize: 16, fontWeight: 700,
@@ -865,15 +873,15 @@ const CTAFooter = () => (
           }}
             onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = `0 0 60px rgba(34,211,238,0.3)`; }}
             onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = `0 0 40px ${COLORS.accentGlow}`; }}
-          >Start free trial →</a>
-          <a href="#" style={{
+          >Apply for beta (10 spots left) →</a>
+          <a href="/about" style={{
             display: "inline-block", background: "transparent",
             color: COLORS.textMuted, padding: "16px 32px", borderRadius: 12, fontSize: 16, fontWeight: 600,
             textDecoration: "none", border: `1px solid ${COLORS.border}`, transition: "all 0.2s",
           }}
             onMouseEnter={(e) => { e.currentTarget.style.borderColor = COLORS.borderLight; e.currentTarget.style.color = COLORS.text; }}
             onMouseLeave={(e) => { e.currentTarget.style.borderColor = COLORS.border; e.currentTarget.style.color = COLORS.textMuted; }}
-          >Join as founding member — €99/mo</a>
+          >Learn about our beta</a>
         </div>
       </div>
     </FadeIn>
@@ -911,11 +919,15 @@ const CTAFooter = () => (
         <div>
           <h4 style={{ fontSize: 13, fontWeight: 700, color: COLORS.text, marginBottom: 12, textTransform: "uppercase", letterSpacing: "0.05em" }}>Company</h4>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {["About", "Contact", "Careers", "Blog"].map(l => (
-              <a key={l} href="#" style={{ color: COLORS.textDim, fontSize: 13, textDecoration: "none", transition: "color 0.2s" }}
+            {[
+              { label: "About", href: "/about" },
+              { label: "Contact", href: "/contact" },
+              { label: "Beta Program", href: "/beta" },
+            ].map(({ label, href }) => (
+              <a key={label} href={href} style={{ color: COLORS.textDim, fontSize: 13, textDecoration: "none", transition: "color 0.2s" }}
                 onMouseEnter={(e) => (e.currentTarget.style.color = COLORS.text)}
                 onMouseLeave={(e) => (e.currentTarget.style.color = COLORS.textDim)}
-              >{l}</a>
+              >{label}</a>
             ))}
           </div>
         </div>
@@ -923,11 +935,16 @@ const CTAFooter = () => (
         <div>
           <h4 style={{ fontSize: 13, fontWeight: 700, color: COLORS.text, marginBottom: 12, textTransform: "uppercase", letterSpacing: "0.05em" }}>Legal</h4>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {["Privacy", "Terms", "Security", "Status"].map(l => (
-              <a key={l} href="#" style={{ color: COLORS.textDim, fontSize: 13, textDecoration: "none", transition: "color 0.2s" }}
+            {[
+              { label: "Privacy", href: "/privacy" },
+              { label: "Terms", href: "/terms" },
+              { label: "Security", href: "/security" },
+              { label: "Status", href: "/status" },
+            ].map(({ label, href }) => (
+              <a key={label} href={href} style={{ color: COLORS.textDim, fontSize: 13, textDecoration: "none", transition: "color 0.2s" }}
                 onMouseEnter={(e) => (e.currentTarget.style.color = COLORS.text)}
                 onMouseLeave={(e) => (e.currentTarget.style.color = COLORS.textDim)}
-              >{l}</a>
+              >{label}</a>
             ))}
           </div>
         </div>
@@ -964,11 +981,12 @@ export default function HomePage() {
     }}>
       <GlobalStyles />
       <Nav />
+      <BetaBanner />
       <Hero />
       <Problem />
       <HowItWorks />
       <Features />
-      <SocialProof />
+      <BetaExpectations />
       <Pricing />
       <Integrations />
       <CTAFooter />
