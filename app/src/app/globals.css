@@ -1,26 +1,164 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap');
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Art Deco + Financial Terminal Color Palette */
+  --navy-900: #0a1628;
+  --navy-800: #1a2942;
+  --navy-700: #2a3f5f;
+  --charcoal: #1c1c1e;
+  --gold: #d4af37;
+  --gold-light: #f4d03f;
+  --brass: #b87333;
+  --mint: #7fffd4;
+  --mint-dark: #3fbf9f;
+  --cream: #faf6f0;
+  --silver: #c0c0c0;
+
+  /* Semantic colors */
+  --background: var(--cream);
+  --foreground: var(--navy-900);
+  --accent: var(--gold);
+  --accent-secondary: var(--mint);
+
+  /* Spacing */
+  --section-padding: 8rem;
+  --container-max: 1400px;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'IBM Plex Mono', 'Space Mono', monospace;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Art Deco Typography */
+.display-font {
+  font-family: 'Playfair Display', serif;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.mono-font {
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* Geometric patterns and textures */
+.noise-texture {
+  position: relative;
+}
+
+.noise-texture::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Art Deco divider */
+.deco-divider {
+  position: relative;
+  height: 2px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--gold) 20%,
+    var(--gold) 80%,
+    transparent 100%
+  );
+}
+
+.deco-divider::before,
+.deco-divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  background: var(--gold);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+.deco-divider::before {
+  left: 20%;
+}
+
+.deco-divider::after {
+  right: 20%;
+}
+
+/* Terminal-style animations */
+@keyframes terminal-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+.terminal-cursor {
+  animation: terminal-blink 1s infinite;
+}
+
+/* Metallic button effect */
+.metallic-button {
+  position: relative;
+  background: linear-gradient(135deg, var(--gold) 0%, var(--brass) 100%);
+  box-shadow:
+    0 4px 15px rgba(212, 175, 55, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.metallic-button:hover {
+  box-shadow:
+    0 6px 20px rgba(212, 175, 55, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Diagonal sections */
+.diagonal-section {
+  position: relative;
+  clip-path: polygon(0 5%, 100% 0, 100% 95%, 0 100%);
+  padding-top: calc(var(--section-padding) + 5rem);
+  padding-bottom: calc(var(--section-padding) + 5rem);
+}
+
+/* Geometric borders */
+.geo-border {
+  position: relative;
+  padding: 2rem;
+}
+
+.geo-border::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 2px solid var(--gold);
+  clip-path: polygon(
+    0 0, 20px 0, 20px 2px, 2px 2px, 2px 20px, 0 20px, 0 0,
+    100% 0, 100% 20px, calc(100% - 2px) 20px, calc(100% - 2px) 2px, calc(100% - 20px) 2px, calc(100% - 20px) 0, 100% 0,
+    100% 100%, calc(100% - 20px) 100%, calc(100% - 20px) calc(100% - 2px), calc(100% - 2px) calc(100% - 2px), calc(100% - 2px) calc(100% - 20px), 100% calc(100% - 20px), 100% 100%,
+    0 100%, 0 calc(100% - 20px), 2px calc(100% - 20px), 2px calc(100% - 2px), 20px calc(100% - 2px), 20px 100%, 0 100%
+  );
+  pointer-events: none;
 }
