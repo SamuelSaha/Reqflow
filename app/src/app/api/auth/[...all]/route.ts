@@ -5,4 +5,7 @@
 
 import { auth } from "@/lib/auth/config";
 
-export const { GET, POST } = auth.handler;
+const handler = auth.handler;
+
+export const GET = handler;
+export const POST = handler;
