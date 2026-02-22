@@ -153,6 +153,29 @@ const Nav = () => {
   );
 };
 
+/* ───── Responsive Styles ───── */
+const GlobalStyles = () => (
+  <style jsx global>{`
+    @media (max-width: 1199px) {
+      .pricing-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+    }
+
+    @media (max-width: 899px) {
+      .steps-grid {
+        grid-template-columns: 1fr !important;
+      }
+    }
+
+    @media (max-width: 767px) {
+      .pricing-grid {
+        grid-template-columns: 1fr !important;
+      }
+    }
+  `}</style>
+);
+
 /* ───── HERO (Slack-First) ───── */
 const Hero = () => (
   <section style={{
@@ -518,7 +541,7 @@ const HowItWorks = () => (
           </h2>
         </div>
       </FadeIn>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 2 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }} className="steps-grid">
         {[
           {
             step: "01", title: "Request from Slack",
@@ -939,6 +962,7 @@ export default function HomePage() {
       fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
       WebkitFontSmoothing: "antialiased",
     }}>
+      <GlobalStyles />
       <Nav />
       <Hero />
       <Problem />
