@@ -15,5 +15,4 @@ export const {
   signOut,
   useSession,
   getSession,
-  twoFactor,
 } = authClient;

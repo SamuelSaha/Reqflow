@@ -4,17 +4,18 @@
  */
 
 import { Queue, Worker, QueueEvents } from "bullmq";
-import Redis from "ioredis";
 import { env } from "../env";
 
 /**
- * Create Redis connection
- * Shared across all queues
+ * Redis connection options
+ * BullMQ creates its own connection from this config
  */
-export const redisConnection = new Redis(env.REDIS_URL, {
+export const redisConnection = {
+  host: new URL(env.REDIS_URL).hostname,
+  port: parseInt(new URL(env.REDIS_URL).port || "6379"),
   maxRetriesPerRequest: null,
   enableReadyCheck: false,
-});
+};
 
 /**
  * Default queue options

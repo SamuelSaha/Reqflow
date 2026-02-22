@@ -17,17 +17,12 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
-    sendVerificationEmail: async ({ user, url }) => {
-      // TODO: Integrate with Resend
-      console.log("Send verification email to:", user.email, url);
-    },
   },
 
   // Session configuration
   session: {
     expiresIn: 60 * 60 * 24 * 7, // 7 days
     updateAge: 60 * 60 * 24, // Update session every 24 hours
-    cookieName: "reqflow_session",
   },
 
   // Social providers (optional, can add later)
@@ -44,11 +39,6 @@ export const auth = betterAuth({
     },
   },
 
-  // Multi-factor authentication
-  twoFactor: {
-    enabled: true,
-    issuer: "Reqflow",
-  },
 
   // Account management
   account: {
@@ -67,24 +57,6 @@ export const auth = betterAuth({
     },
   },
 
-  // Hooks for audit logging
-  hooks: {
-    after: [
-      {
-        matcher: () => true, // Match all auth events
-        handler: async (context) => {
-          // Log to auth_events table
-          await logAuthEvent({
-            event: context.type,
-            userId: context.user?.id,
-            userEmail: context.user?.email,
-            success: context.success,
-            metadata: context.metadata,
-          });
-        },
-      },
-    ],
-  },
 });
 
 /**
