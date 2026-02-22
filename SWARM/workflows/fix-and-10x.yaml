@@ -1,0 +1,178 @@
+---
+name: Fix and 10X
+version: "3.0.0-EXTREME"
+description: Fix bugs without adding new ones, then improve the feature 10x
+---
+
+# Workflow: Fix and 10X
+
+## Trigger
+Bug reported or feature needs improvement
+
+## Input
+Bug description or feature to enhance
+
+## Output
+Fixed + 10x improved feature
+
+## Process
+
+### Phase 1: Root Cause Analysis (5 min)
+**Agent:** @swarm-analyst
+
+**Do NOT fix yet. Analyze first.**
+
+5 Whys analysis:
+1. What is the symptom? [Evidence]
+2. Why? [Evidence]
+3. Why? [Evidence]
+4. Why? [Evidence]
+5. Why? [ROOT CAUSE + Evidence]
+
+**Output:** Root cause identified with evidence
+
+---
+
+### Phase 2: Minimal Fix (10 min)
+**Agent:** @swarm-dev
+
+**Fix ONLY the root cause:**
+1. Create git branch
+2. Write minimal fix
+3. Add regression test
+4. Verify fix resolves issue
+5. Ensure no side effects
+
+**Constraints:**
+- Maximum 10 lines changed
+- One file preferred
+- No refactoring (yet)
+- No feature additions (yet)
+
+**Verification:**
+- Original bug: Fixed
+- Regression test: Passes
+- Existing tests: Still pass
+- No new warnings
+
+---
+
+### Phase 3: Safety Check (3 min)
+**Agent:** @swarm-verifier
+
+Verify fix is safe:
+```
+✅ Bug fixed (reproduction test)
+✅ No new bugs (full test suite)
+✅ No performance regression
+✅ No security issues
+```
+
+**If ANY fail:**
+- Revert to Phase 1
+- Re-analyze
+- Refix
+
+---
+
+### Phase 4: 10X Improvement (20 min)
+**Agents:** @swarm-ux + @swarm-growth + @swarm-dev
+
+**Now improve 10x:**
+
+**What 10X means:**
+- 10x faster (performance)
+- 10x easier (UX)
+- 10x more valuable (business)
+- 10x more reliable (quality)
+
+**Choose ONE dimension to 10X:**
+
+**Option A: Performance 10X**
+- Profile current implementation
+- Identify bottleneck
+- Optimize critical path
+- Verify 10x improvement
+
+**Option B: UX 10X**
+- Map current friction points
+- Redesign interactions
+- Reduce steps by 90%
+- Verify usability improvement
+
+**Option C: Value 10X**
+- Identify user value gaps
+- Add high-value features
+- Remove low-value complexity
+- Verify engagement lift
+
+**Option D: Reliability 10X**
+- Add comprehensive tests
+- Add error handling
+- Add monitoring
+- Verify stability
+
+---
+
+### Phase 5: Integration (5 min)
+**Agent:** @swarm-orch
+
+Merge fix + improvement:
+- Combine branches
+- Full test suite
+- Integration tests
+- Performance baseline
+
+---
+
+### Phase 6: Ship (3 min)
+**Agent:** @swarm-ops
+
+Deploy with monitoring:
+- Staging
+- Production
+- Watch metrics
+- Alert on anomalies
+
+## Success Criteria
+- Original bug: Fixed permanently
+- Regression test: Added and passing
+- 10X improvement: Measurable
+- Zero new bugs
+- Metrics improved
+
+## Output Format
+
+```markdown
+# FIX + 10X COMPLETE
+
+## Original Bug
+**Root Cause:** [5 Whys conclusion]
+**Fix:** [Minimal change]
+**Lines Changed:** +X, -Y
+
+## Regression Prevention
+- [Test added to prevent recurrence]
+
+## 10X Improvement
+**Dimension:** [Performance/UX/Value/Reliability]
+**Before:** [Metric]
+**After:** [Metric]
+**Improvement:** X% (target: 1000%)
+
+## Changes
+- [File 1]: [What changed]
+- [File 2]: [What changed]
+
+## Verification
+- Original bug: ✅ Fixed
+- Regression test: ✅ Pass
+- All tests: ✅ Pass
+- Performance: ✅ Improved
+- No new bugs: ✅ Verified
+
+## Deployment
+- Staging: ✅
+- Production: ✅
+- Monitoring: ✅
+```

@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "workspace": {
+    "name": "SWARM",
+    "createdAt": 1769995532563,
+    "preset": "minimal"
+  },
+  "authorizedRoots": [
+    "/Users/samuelsaha/Desktop/SWARM"
+  ]
+}

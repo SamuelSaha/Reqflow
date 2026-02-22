@@ -1,0 +1,309 @@
+---
+name: Ideate Specification
+version: "3.0.2-EXTREME"
+description: Multi-dimensional ideation on UI, UX, business value, and technical feasibility with full transparency
+---
+
+# Workflow: Ideate Specification
+
+> **TRIGGER:** User wants to explore an idea before committing to spec
+> **INPUT:** Vague concept or problem statement
+> **OUTPUT:** Explored dimensions with recommendations + agent visibility report
+> **TIME:** 15 minutes max
+
+---
+
+## 🤖 ACTIVE AGENT ROSTER
+
+Before starting, the following agents will be activated:
+
+| Step | Agent | Role | Skills Loaded | Task | Est. Time |
+|------|-------|------|---------------|------|-----------|
+| 1 | @swarm-analyst | Problem Analyst | execution-discipline | Frame the problem | 3 min |
+| 2 | @swarm-ux | UX Designer | accessibility-wcag, next15-patterns | Explore UX solutions | 3 min |
+| 3 | @swarm-growth | Growth Strategist | saas-workflows | Calculate business value | 3 min |
+| 4 | @swarm-arch | System Architect | system-design, api-design | Assess technical feasibility | 3 min |
+| 5 | @swarm-orch | Director | execution-discipline, token-optimization | Consolidate & decide | 3 min |
+
+**Summary:**
+- **Total Agents:** 5
+- **Total Skills:** 9
+- **Estimated Tokens:** 6-8k
+- **Estimated Time:** 15 min
+- **Mode:** Sequential (agents work one after another)
+
+---
+
+## ⚠️ ASSUMPTIONS LEDGER (AUTO)
+
+Assumptions for this ideation (we proceed with defaults unless constraints change):
+
+### For This Ideation, I'm Assuming:
+
+1. **Problem Severity:** Medium-to-high impact user pain
+   - Default: prioritize the highest-impact pain first
+
+2. **UX Complexity:** Standard web patterns (not novel interactions)
+   - Default: minimal, familiar patterns; novelty only if it improves outcomes
+
+3. **Business Priority:** Revenue or retention focused
+   - Default: optimize for measurable outcome (retention/revenue), not vanity
+
+4. **Technical Constraint:** Existing stack (Next.js + Supabase)
+   - Default: assume existing stack; avoid tech churn
+
+5. **Output Depth:** Quick exploration (not detailed spec)
+   - Default: 15-minute exploration with a clear recommendation + next move
+
+**Blocking question rule:** Only ask the user if an external constraint is missing and work cannot proceed.
+
+---
+
+## 🛤️ REAL-TIME PROGRESS TRACKER
+
+Track workflow execution:
+
+```
+Progress: 0% | Tokens: 0k | Time: 0 min
+
+Step 1: Problem Framing ⏳ [Current: @swarm-analyst]
+Step 2: UX Exploration ⏸️ [Pending]
+Step 3: Business Value ⏸️ [Pending]
+Step 4: Technical Feasibility ⏸️ [Pending]
+Step 5: Decision Matrix ⏸️ [Pending]
+```
+
+---
+
+## Process Details
+
+### Step 1: Problem Framing (3 min)
+
+**Agent:** @swarm-analyst  
+**Skills:** execution-discipline (context analysis)
+
+**Questions to answer:**
+- What pain are we solving?
+- Who has this pain? (User personas)
+- How severe is it? (Frequency × Impact)
+- Current workarounds?
+
+**Output:** Problem statement with evidence
+
+**Progress Update:**
+```
+✅ Step 1: Problem Framing (2.5 min, 1.2k tokens)
+📝 Found: [Key finding summary]
+⏳ Step 2: Starting UX Exploration...
+```
+
+---
+
+### Step 2: UX Exploration (3 min)
+
+**Agent:** @swarm-ux  
+**Skills:** accessibility-wcag, next15-patterns
+
+**Explore:**
+- User journey (3-step max)
+- Mental models
+- Interaction patterns
+- Error/edge cases
+- Accessibility needs
+
+**Output:** UX concept + wireframe ideas
+
+**Assumptions to Validate:**
+- Animation level: [subtle/none/dynamic]?
+- Mobile-first or desktop-first?
+- Brand voice: [professional/friendly/minimal]?
+
+**Progress Update:**
+```
+✅ Step 2: UX Exploration (2.8 min, 1.5k tokens)
+🎨 Concept: [1-sentence summary]
+⏳ Step 3: Starting Business Value analysis...
+```
+
+---
+
+### Step 3: Business Value (3 min)
+
+**Agent:** @swarm-growth  
+**Skills:** saas-workflows
+
+**Calculate:**
+- Revenue impact (if applicable)
+- User retention effect
+- Acquisition boost
+- Cost savings
+- Competitive advantage
+
+**Output:** Business case with metrics
+
+**Progress Update:**
+```
+✅ Step 3: Business Value (2.2 min, 1.0k tokens)
+💰 Value: [High/Medium/Low] - [key metric]
+⏳ Step 4: Starting Technical Feasibility...
+```
+
+---
+
+### Step 4: Technical Feasibility (3 min)
+
+**Agent:** @swarm-arch  
+**Skills:** system-design, api-design
+
+**Assess:**
+- Implementation complexity (1-10)
+- Tech stack fit
+- Integration points
+- Scalability concerns
+- Maintenance burden
+
+**Output:** Technical assessment
+
+**Progress Update:**
+```
+✅ Step 4: Technical Feasibility (2.9 min, 1.8k tokens)
+⚙️ Complexity: [X/10] - [key technical concern]
+⏳ Step 5: Starting Decision Matrix...
+```
+
+---
+
+### Step 5: Decision Matrix (3 min)
+
+**Agent:** @swarm-orch  
+**Skills:** execution-discipline, token-optimization
+
+**Consolidate:**
+
+```
+DIMENSION          | SCORE | CONFIDENCE
+-------------------|-------|-------------
+User Value         | 1-10  | %
+Business Value     | 1-10  | %
+Technical Feasibility| 1-10| %
+UX Complexity      | 1-10  | %
+Maintenance Cost   | 1-10  | %
+
+RECOMMENDATION: [Proceed / Refine / Reject]
+NEXT STEP: [Create spec / More research / Abandon]
+```
+
+**Progress Update:**
+```
+✅ Step 5: Decision Matrix (1.5 min, 0.8k tokens)
+📊 RECOMMENDATION: [Proceed/Refine/Reject]
+🎯 Confidence: [X]%
+```
+
+---
+
+## 📊 EXECUTION SUMMARY
+
+```
+╔════════════════════════════════════════════════════════════╗
+║           IDEATION COMPLETE                                ║
+╠════════════════════════════════════════════════════════════╣
+║  Total Time: [X] min (Budget: 15 min)                      ║
+║  Total Tokens: [X]k (Budget: 8k)                           ║
+║  Agents Used: 5                                            ║
+║  Skills Loaded: 9                                          ║
+╚════════════════════════════════════════════════════════════╝
+```
+
+**Agent Performance:**
+
+| Agent | Time | Tokens | Quality |
+|-------|------|--------|---------|
+| @swarm-analyst | [X] min | [X]k | [Score] |
+| @swarm-ux | [X] min | [X]k | [Score] |
+| @swarm-growth | [X] min | [X]k | [Score] |
+| @swarm-arch | [X] min | [X]k | [Score] |
+| @swarm-orch | [X] min | [X]k | [Score] |
+
+---
+
+## 📄 GENERATED ARTIFACTS
+
+**1. Ideation.md** ← Current Document
+   - Problem framing
+   - UX concept
+   - Business case
+   - Technical assessment
+   - Decision matrix
+
+**2. Implementation Plan** (if Proceed recommended)
+   - Specific steps to build
+   - File changes needed
+   - Risk assessment
+
+**3. Specification** (if you choose to proceed)
+   - Detailed PRD
+   - Acceptance criteria
+   - Technical design
+
+**Navigation:** [View Implementation Plan →] [Create Full Spec] [Modify Ideation]
+
+---
+
+## Success Criteria
+
+- [x] All 4 dimensions explored
+- [x] Decision made in 15 min
+- [x] Clear next step defined
+- [x] No scope creep introduced
+- [x] User validated assumptions
+- [x] Agent transparency provided
+
+---
+
+## Output Format
+
+```markdown
+# IDEATION: [Feature Name]
+
+## 🤖 Agent Roster
+[List agents used with skills]
+
+## ✅ Assumptions Validated
+[List validated assumptions]
+
+## 📊 Execution Metrics
+[Time, tokens, efficiency]
+
+## Problem
+[Clear problem statement]
+
+## UX Concept
+[Journey + key interactions]
+
+## Business Case
+[Metrics + value calculation]
+
+## Technical Assessment
+[Complexity: X/10]
+[Key concerns]
+
+## Decision
+RECOMMENDATION: [Proceed/Refine/Reject]
+
+REASONING:
+- [Key factor 1]
+- [Key factor 2]
+
+NEXT STEP:
+[Specific action]
+
+CONFIDENCE: X%
+```
+
+---
+
+## Version History
+
+- **3.0.0:** Initial workflow
+- **3.0.1:** Added agent visibility, assumption validation, progress tracking

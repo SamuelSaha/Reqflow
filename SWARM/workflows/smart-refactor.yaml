@@ -1,0 +1,186 @@
+---
+name: Smart Refactor
+version: "3.0.0-EXTREME"
+description: Accurate, intelligent refactoring with zero regression guarantee
+---
+
+# Workflow: Smart Refactor
+
+## Trigger
+Feature needs refactoring (tech debt, performance, clarity)
+
+## Input
+Code to refactor + goal (why refactoring)
+
+## Output
+Refactored code + verification of zero regression
+
+## Process
+
+### Phase 1: Pre-Refactor Analysis (5 min)
+**Agent:** @swarm-analyst + @swarm-arch
+
+**Document current state:**
+1. What does this code do? (Behavior documentation)
+2. How is it used? (Dependency mapping)
+3. What are the edge cases? (Boundary identification)
+4. What tests cover it? (Test coverage check)
+
+**Create safety net:**
+- Run all existing tests (must pass before refactor)
+- Identify uncovered paths (add tests first)
+- Document current behavior (for comparison)
+
+---
+
+### Phase 2: Refactor Strategy (3 min)
+**Agent:** @swarm-arch
+
+**Choose refactor type:**
+- **Extract:** Pull out function/class/module
+- **Rename:** Better naming (variables, functions, classes)
+- **Simplify:** Reduce complexity (cyclomatic)
+- **Optimize:** Performance improvement
+- **Restructure:** Better architecture
+
+**Define success criteria:**
+- Behavior unchanged (100%)
+- Tests still pass (100%)
+- Code cleaner (measurable)
+- Performance same or better
+
+---
+
+### Phase 3: Incremental Refactor (Variable)
+**Agent:** @swarm-dev
+
+**One change at a time:**
+1. Make small refactor
+2. Run tests (must pass)
+3. Commit
+4. Repeat
+
+**Refactoring sequence:**
+1. Add missing tests first
+2. Extract functions
+3. Rename for clarity
+4. Simplify logic
+5. Optimize if needed
+
+---
+
+### Phase 4: Behavior Verification (5 min)
+**Agent:** @swarm-verifier
+
+**Verify zero regression:**
+```
+✅ All existing tests pass
+✅ New tests added for uncovered paths
+✅ Manual verification (if needed)
+✅ Edge cases still work
+✅ Integration tests pass
+✅ Performance same or better
+```
+
+**Compare behavior:**
+- Before: [Documented behavior]
+- After: [Verified same behavior]
+- Change: None (intended)
+
+---
+
+### Phase 5: Code Review (3 min)
+**Agent:** @swarm-orch
+
+**Check refactor quality:**
+- Simpler? (cyclomatic complexity reduced)
+- Clearer? (naming improved)
+- Better structured? (architecture improved)
+- No over-engineering? (YAGNI check)
+
+---
+
+### Phase 6: Ship (2 min)
+**Agent:** @swarm-ops
+
+Deploy with monitoring:
+- Staging verification
+- Production deploy
+- Monitor for errors (30 min)
+
+## Refactoring Rules
+
+### Safety First
+- [ ] Tests pass before starting
+- [ ] Tests pass after each change
+- [ ] Small incremental changes
+- [ ] Commit after each step
+
+### Behavior Preservation
+- [ ] Zero functional changes
+- [ ] Same inputs → Same outputs
+- [ ] Edge cases preserved
+- [ ] Error handling unchanged
+
+### Quality Improvement
+- [ ] Cyclomatic complexity reduced
+- [ ] Function length < 50 lines
+- [ ] Clear naming
+- [ ] No code duplication
+
+## Zero-Regression Checklist
+- [ ] All tests pass (before and after)
+- [ ] New tests added for gaps
+- [ ] Manual verification complete
+- [ ] Edge cases tested
+- [ ] Integration verified
+- [ ] Performance measured (same or better)
+- [ ] Monitoring shows no errors
+
+## Output Format
+
+```markdown
+# SMART REFACTOR COMPLETE
+
+## Target
+**File:** `path/to/file.ts`
+**Goal:** [Why refactoring]
+
+## Analysis
+**Original Complexity:** X
+**Dependencies:** Y files
+**Test Coverage:** Z%
+**Gaps Found:** N uncovered paths
+
+## Refactor Strategy
+**Type:** [Extract/Rename/Simplify/Optimize/Restructure]
+**Steps:** X incremental changes
+
+## Changes Made
+1. ✅ Added tests for uncovered paths
+2. ✅ Extracted [function/class]
+3. ✅ Renamed [variables/functions]
+4. ✅ Simplified [complex logic]
+5. ✅ Optimized [performance bottleneck]
+
+## Verification
+**Tests:** Before: X passed → After: X passed (100%)
+**Behavior:** ✅ Zero changes verified
+**Complexity:** Before: X → After: Y (reduced)
+**Performance:** Before: Xms → After: Yms (same or better)
+
+## Safety
+- [x] All tests pass
+- [x] New tests added
+- [x] Edge cases verified
+- [x] Integration tested
+- [x] Monitoring clean (30 min)
+
+**Status:** ✅ Refactored safely
+```
+
+## Success Metrics
+- Zero regressions: 100%
+- Tests passing: 100%
+- Complexity reduced: Measurable
+- Time to refactor: <1 hour (typical)

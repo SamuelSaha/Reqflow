@@ -1,0 +1,173 @@
+---
+name: Implement End-to-End
+version: "3.0.0-EXTREME"
+description: Complete spec implementation with insane guardrails and zero-defect code
+---
+
+# Workflow: Implement End-to-End
+
+## Trigger
+Spec approved, ready for full implementation
+
+## Input
+SPEC-XXX.md (frozen)
+
+## Output
+Working implementation + verification
+
+## Process
+
+### Phase 1: Pre-Flight Check (2 min)
+**Agent:** @swarm-orch
+
+Verify:
+- [ ] Spec is frozen
+- [ ] All ACs are binary
+- [ ] Tickets decomposed
+- [ ] No blockers
+
+If fail → Route back to specifier
+
+---
+
+### Phase 2: Guardrail Setup (3 min)
+**Agent:** @swarm-orch
+
+Create safety net:
+1. **Backup current state** (git branch or backup)
+2. **Define rollback point**
+3. **Set up monitoring** (build, lint, test)
+4. **Create verification checklist**
+
+---
+
+### Phase 3: Parallel Execution (Variable)
+**Agents:** @swarm-dev, @swarm-ux, @swarm-qa
+
+Execute tickets in parallel where possible:
+
+```
+T-001 (API)     → @swarm-dev
+T-002 (UI)      → @swarm-ux
+T-003 (Tests)   → @swarm-qa
+T-004 (Auth)    → @swarm-sec
+```
+
+**Guardrails per ticket:**
+1. Load spec reference
+2. Verify constraints
+3. Implement
+4. Self-verify (build + lint + test)
+5. Report completion
+
+---
+
+### Phase 4: Integration Check (5 min)
+**Agent:** @swarm-orch
+
+Verify integration:
+- Components connect properly
+- APIs return correct data
+- UI displays correctly
+- Tests pass
+
+**If fail:**
+- Rollback to Phase 2 state
+- Fix integration issues
+- Re-verify
+
+---
+
+### Phase 5: QA Gate (5 min)
+**Agent:** @swarm-verifier
+
+Binary verification:
+```
+AC-001: PASS/FAIL (evidence)
+AC-002: PASS/FAIL (evidence)
+...
+```
+
+**If ANY fail:**
+- Document failure
+- Route to fix
+- Re-verify
+
+**If ALL pass:**
+- Mark complete
+- Ship
+
+---
+
+### Phase 6: Ship (2 min)
+**Agent:** @swarm-ops
+
+Deploy:
+- Staging first
+- Smoke tests
+- Production
+- Monitor for 30 min
+
+## Guardrails (Ruthless)
+
+### Code Quality
+- Build must pass (0 errors)
+- Lint must pass (0 warnings)
+- Tests must pass (100%)
+- Types must pass (strict mode)
+- No console.logs
+- No unused imports
+
+### Verification
+- All ACs binary validated
+- Evidence required for each
+- No subjective approval
+- <90% pass rate triggers spec rewrite
+
+### Rollback
+- Every 30 min checkpoint
+- One command rollback
+- No data loss
+- Immediate recovery
+
+## Success Criteria
+- All ACs pass
+- Zero build/lint/test errors
+- Deployed to production
+- Monitoring green for 30 min
+- Zero post-deploy bugs
+
+## Output Format
+
+```markdown
+# IMPLEMENTATION COMPLETE
+
+**Spec:** SPEC-XXX
+**Duration:** X minutes
+**Status:** ✅ SHIPPED
+
+## Tickets Completed
+- T-001: ✅ [Description]
+- T-002: ✅ [Description]
+- ...
+
+## Verification
+| AC | Status | Evidence |
+|----|--------|----------|
+| AC-001 | PASS | [Evidence] |
+| ... | ... | ... |
+
+## Quality Gates
+- Build: ✅ Pass
+- Lint: ✅ Pass
+- Tests: ✅ Pass (X/Y)
+- Types: ✅ Pass
+
+## Deployment
+- Staging: ✅
+- Production: ✅
+- Monitoring: ✅ Green (30 min)
+
+## Issues Found
+- [None | List with fixes]
+```
