@@ -86,20 +86,23 @@ const Nav = () => {
 
           {/* Desktop Nav */}
           <div style={{ display: "flex", alignItems: "center", gap: 32 }} className="desktop-nav">
-            {["Product", "Pricing", "Docs"].map(l => (
-              <a key={l} href="#" style={{ color: COLORS.textMuted, textDecoration: "none", fontSize: 14, fontWeight: 500, transition: "color 0.2s" }}
+            {[
+              { label: "Product", href: "/product" },
+              { label: "Pricing", href: "/pricing" },
+              { label: "Features", href: "/features" },
+            ].map(({ label, href }) => (
+              <a key={label} href={href} style={{ color: COLORS.textMuted, textDecoration: "none", fontSize: 14, fontWeight: 500, transition: "color 0.2s" }}
                 onMouseEnter={(e) => (e.currentTarget.style.color = COLORS.text)}
                 onMouseLeave={(e) => (e.currentTarget.style.color = COLORS.textMuted)}
-              >{l}</a>
+              >{label}</a>
             ))}
-            <a href="#" style={{ color: COLORS.textMuted, textDecoration: "none", fontSize: 14, fontWeight: 500 }}>Log in</a>
-            <a href="#" style={{
+            <a href="/beta" style={{
               background: COLORS.text, color: COLORS.bg, padding: "9px 20px", borderRadius: 8,
               fontSize: 14, fontWeight: 600, textDecoration: "none", transition: "all 0.2s",
             }}
               onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.88"; e.currentTarget.style.transform = "scale(1.02)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.transform = "scale(1)"; }}
-            >Get early access</a>
+            >Apply for beta</a>
           </div>
 
           {/* Mobile Hamburger */}
@@ -128,17 +131,22 @@ const Nav = () => {
         }}
           onClick={() => setMobileMenuOpen(false)}
         >
-          {["Product", "Pricing", "Docs", "Log in"].map(l => (
-            <a key={l} href="#" style={{
+          {[
+            { label: "Product", href: "/product" },
+            { label: "Pricing", href: "/pricing" },
+            { label: "Features", href: "/features" },
+            { label: "About", href: "/about" },
+          ].map(({ label, href }) => (
+            <a key={label} href={href} style={{
               color: COLORS.text, textDecoration: "none", fontSize: 24, fontWeight: 600,
               padding: "12px 0", borderBottom: `1px solid ${COLORS.border}`,
-            }}>{l}</a>
+            }}>{label}</a>
           ))}
-          <a href="#" style={{
+          <a href="/beta" style={{
             background: `linear-gradient(135deg, ${COLORS.gradient1}, ${COLORS.gradient2})`,
             color: COLORS.bg, padding: "16px", borderRadius: 12, fontSize: 18, fontWeight: 700,
             textDecoration: "none", textAlign: "center", marginTop: "auto",
-          }}>Get early access</a>
+          }}>Apply for beta</a>
         </div>
       )}
 
@@ -907,11 +915,16 @@ const CTAFooter = () => (
         <div>
           <h4 style={{ fontSize: 13, fontWeight: 700, color: COLORS.text, marginBottom: 12, textTransform: "uppercase", letterSpacing: "0.05em" }}>Product</h4>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {["Features", "Pricing", "Integrations", "Changelog"].map(l => (
-              <a key={l} href="#" style={{ color: COLORS.textDim, fontSize: 13, textDecoration: "none", transition: "color 0.2s" }}
+            {[
+              { label: "Features", href: "/features" },
+              { label: "Pricing", href: "/pricing" },
+              { label: "Integrations", href: "/integrations" },
+              { label: "Product", href: "/product" },
+            ].map(({ label, href }) => (
+              <a key={label} href={href} style={{ color: COLORS.textDim, fontSize: 13, textDecoration: "none", transition: "color 0.2s" }}
                 onMouseEnter={(e) => (e.currentTarget.style.color = COLORS.text)}
                 onMouseLeave={(e) => (e.currentTarget.style.color = COLORS.textDim)}
-              >{l}</a>
+              >{label}</a>
             ))}
           </div>
         </div>
