@@ -28,7 +28,7 @@ export const budgets = pgTable(
     // Budget hierarchy
     name: text("name").notNull(), // e.g., "Q1 2026 Engineering SaaS Budget"
     type: text("type").notNull(), // "company", "department", "category", "project"
-    parentId: uuid("parent_id").references(() => budgets.id, { onDelete: "set null" }),
+    parentId: uuid("parent_id"), // Self-reference added after table definition
 
     // Scope
     departmentId: uuid("department_id").references(() => departments.id, {
@@ -72,11 +72,6 @@ export const budgetsRelations = relations(budgets, ({ one, many }) => ({
     fields: [budgets.departmentId],
     references: [departments.id],
   }),
-  parent: one(budgets, {
-    fields: [budgets.parentId],
-    references: [budgets.id],
-  }),
-  children: many(budgets),
 }));
 
 // Zod schemas

@@ -3,11 +3,6 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
 
-  // Server actions configuration
-  serverActions: {
-    bodySizeLimit: "10mb",
-  },
-
   // Logging for debugging
   logging: {
     fetches: {

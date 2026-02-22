@@ -31,6 +31,7 @@
     "date-fns": "^4.1.0",
     "drizzle-kit": "^0.31.9",
     "drizzle-orm": "^0.45.1",
+    "drizzle-zod": "^0.8.3",
     "ioredis": "^5.9.3",
     "next": "16.1.6",
     "postgres": "^3.4.8",
