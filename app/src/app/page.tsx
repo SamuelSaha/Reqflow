@@ -56,47 +56,100 @@ const FadeIn = ({ children, delay = 0, className = "" }: { children: React.React
 /* ───── NAV ───── */
 const Nav = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 40);
     window.addEventListener("scroll", h);
     return () => window.removeEventListener("scroll", h);
   }, []);
+
   return (
-    <nav style={{
-      position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
-      background: scrolled ? "rgba(9,9,11,0.85)" : "transparent",
-      backdropFilter: scrolled ? "blur(20px) saturate(1.4)" : "none",
-      borderBottom: scrolled ? `1px solid ${COLORS.border}` : "1px solid transparent",
-      transition: "all 0.35s ease",
-    }}>
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 32px", display: "flex", alignItems: "center", justifyContent: "space-between", height: 72 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div style={{
-            width: 32, height: 32, borderRadius: 8,
-            background: `linear-gradient(135deg, ${COLORS.gradient1}, ${COLORS.gradient2})`,
-            display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: 16, fontWeight: 800, color: COLORS.bg,
-          }}>R</div>
-          <span style={{ fontSize: 20, fontWeight: 700, color: COLORS.text, letterSpacing: "-0.03em" }}>Reqflow</span>
+    <>
+      <nav style={{
+        position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
+        background: scrolled ? "rgba(9,9,11,0.85)" : "transparent",
+        backdropFilter: scrolled ? "blur(20px) saturate(1.4)" : "none",
+        borderBottom: scrolled ? `1px solid ${COLORS.border}` : "1px solid transparent",
+        transition: "all 0.35s ease",
+      }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", display: "flex", alignItems: "center", justifyContent: "space-between", height: 72 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <div style={{
+              width: 32, height: 32, borderRadius: 8,
+              background: `linear-gradient(135deg, ${COLORS.gradient1}, ${COLORS.gradient2})`,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 16, fontWeight: 800, color: COLORS.bg,
+            }}>R</div>
+            <span style={{ fontSize: 20, fontWeight: 700, color: COLORS.text, letterSpacing: "-0.03em" }}>Reqflow</span>
+          </div>
+
+          {/* Desktop Nav */}
+          <div style={{ display: "flex", alignItems: "center", gap: 32 }} className="desktop-nav">
+            {["Product", "Pricing", "Docs"].map(l => (
+              <a key={l} href="#" style={{ color: COLORS.textMuted, textDecoration: "none", fontSize: 14, fontWeight: 500, transition: "color 0.2s" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = COLORS.text)}
+                onMouseLeave={(e) => (e.currentTarget.style.color = COLORS.textMuted)}
+              >{l}</a>
+            ))}
+            <a href="#" style={{ color: COLORS.textMuted, textDecoration: "none", fontSize: 14, fontWeight: 500 }}>Log in</a>
+            <a href="#" style={{
+              background: COLORS.text, color: COLORS.bg, padding: "9px 20px", borderRadius: 8,
+              fontSize: 14, fontWeight: 600, textDecoration: "none", transition: "all 0.2s",
+            }}
+              onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.88"; e.currentTarget.style.transform = "scale(1.02)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.transform = "scale(1)"; }}
+            >Get early access</a>
+          </div>
+
+          {/* Mobile Hamburger */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            style={{
+              display: "none", background: "none", border: "none", cursor: "pointer",
+              width: 40, height: 40, flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 6,
+            }}
+            className="mobile-menu-btn"
+            aria-label="Menu"
+          >
+            <span style={{ width: 24, height: 2, background: COLORS.text, borderRadius: 2, transition: "all 0.3s" }} />
+            <span style={{ width: 24, height: 2, background: COLORS.text, borderRadius: 2, transition: "all 0.3s" }} />
+            <span style={{ width: 24, height: 2, background: COLORS.text, borderRadius: 2, transition: "all 0.3s" }} />
+          </button>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 32 }}>
-          {["Product", "Pricing", "Docs"].map(l => (
-            <a key={l} href="#" style={{ color: COLORS.textMuted, textDecoration: "none", fontSize: 14, fontWeight: 500, transition: "color 0.2s" }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = COLORS.text)}
-              onMouseLeave={(e) => (e.currentTarget.style.color = COLORS.textMuted)}
-            >{l}</a>
+      </nav>
+
+      {/* Mobile Menu Overlay */}
+      {mobileMenuOpen && (
+        <div style={{
+          position: "fixed", top: 72, left: 0, right: 0, bottom: 0, zIndex: 99,
+          background: "rgba(9,9,11,0.98)", backdropFilter: "blur(20px)",
+          padding: "32px 24px", display: "flex", flexDirection: "column", gap: 24,
+        }}
+          onClick={() => setMobileMenuOpen(false)}
+        >
+          {["Product", "Pricing", "Docs", "Log in"].map(l => (
+            <a key={l} href="#" style={{
+              color: COLORS.text, textDecoration: "none", fontSize: 24, fontWeight: 600,
+              padding: "12px 0", borderBottom: `1px solid ${COLORS.border}`,
+            }}>{l}</a>
           ))}
-          <a href="#" style={{ color: COLORS.textMuted, textDecoration: "none", fontSize: 14, fontWeight: 500 }}>Log in</a>
           <a href="#" style={{
-            background: COLORS.text, color: COLORS.bg, padding: "9px 20px", borderRadius: 8,
-            fontSize: 14, fontWeight: 600, textDecoration: "none", transition: "opacity 0.2s",
-          }}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.88")}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
-          >Get early access</a>
+            background: `linear-gradient(135deg, ${COLORS.gradient1}, ${COLORS.gradient2})`,
+            color: COLORS.bg, padding: "16px", borderRadius: 12, fontSize: 18, fontWeight: 700,
+            textDecoration: "none", textAlign: "center", marginTop: "auto",
+          }}>Get early access</a>
         </div>
-      </div>
-    </nav>
+      )}
+
+      {/* Responsive CSS */}
+      <style jsx>{`
+        @media (max-width: 1023px) {
+          .desktop-nav { display: none !important; }
+          .mobile-menu-btn { display: flex !important; }
+        }
+      `}</style>
+    </>
   );
 };
 
@@ -113,10 +166,9 @@ const Hero = () => (
       <div style={{
         display: "inline-flex", alignItems: "center", gap: 8,
         background: COLORS.accentSoft, border: `1px solid rgba(34,211,238,0.2)`,
-        borderRadius: 100, padding: "6px 16px 6px 8px", marginBottom: 32,
+        borderRadius: 100, padding: "8px 20px", marginBottom: 32,
       }}>
-        <span style={{ background: COLORS.accent, color: COLORS.bg, fontSize: 11, fontWeight: 700, padding: "2px 8px", borderRadius: 100, textTransform: "uppercase", letterSpacing: "0.05em" }}>Live</span>
-        <span style={{ color: COLORS.accent, fontSize: 13, fontWeight: 500 }}>Now accepting founding members — GDPR native · EU hosted</span>
+        <span style={{ color: COLORS.accent, fontSize: 13, fontWeight: 600, letterSpacing: "0.02em" }}>Early Access — Founding member pricing available</span>
       </div>
     </FadeIn>
 
@@ -147,27 +199,41 @@ const Hero = () => (
       <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap", justifyContent: "center" }}>
         <a href="#" style={{
           background: `linear-gradient(135deg, ${COLORS.gradient1}, ${COLORS.gradient2})`,
-          color: COLORS.bg, padding: "14px 32px", borderRadius: 10, fontSize: 15, fontWeight: 700,
-          textDecoration: "none", transition: "transform 0.2s, box-shadow 0.2s",
-          boxShadow: `0 0 30px ${COLORS.accentGlow}`,
+          color: COLORS.bg, padding: "16px 36px", borderRadius: 10, fontSize: 16, fontWeight: 700,
+          textDecoration: "none", transition: "all 0.2s",
+          boxShadow: `0 4px 20px ${COLORS.accentGlow}`,
         }}
-          onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = `0 0 50px rgba(34,211,238,0.25)`; }}
-          onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = `0 0 30px ${COLORS.accentGlow}`; }}
-        >Join as founding member — €99/mo</a>
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-2px) scale(1.02)";
+            e.currentTarget.style.boxShadow = `0 6px 30px rgba(34,211,238,0.3)`;
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "translateY(0) scale(1)";
+            e.currentTarget.style.boxShadow = `0 4px 20px ${COLORS.accentGlow}`;
+          }}
+        >Start 14-day free trial</a>
         <a href="#" style={{
-          background: "transparent", color: COLORS.textMuted, padding: "14px 28px", borderRadius: 10,
+          background: "transparent", color: COLORS.textMuted, padding: "16px 32px", borderRadius: 10,
           fontSize: 15, fontWeight: 600, textDecoration: "none", border: `1px solid ${COLORS.border}`,
-          transition: "border-color 0.2s, color 0.2s",
+          transition: "all 0.2s",
         }}
-          onMouseEnter={(e) => { e.currentTarget.style.borderColor = COLORS.borderLight; e.currentTarget.style.color = COLORS.text; }}
-          onMouseLeave={(e) => { e.currentTarget.style.borderColor = COLORS.border; e.currentTarget.style.color = COLORS.textMuted; }}
-        >Watch 2-min demo →</a>
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = COLORS.accent;
+            e.currentTarget.style.color = COLORS.text;
+            e.currentTarget.style.background = COLORS.accentSoft;
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = COLORS.border;
+            e.currentTarget.style.color = COLORS.textMuted;
+            e.currentTarget.style.background = "transparent";
+          }}
+        >View pricing</a>
       </div>
     </FadeIn>
 
     <FadeIn delay={0.35}>
       <p style={{ fontSize: 13, color: COLORS.textDim, marginTop: 20, textAlign: "center" }}>
-        14-day free trial · No credit card · GDPR native · EU hosted (Paris)
+        No credit card required · GDPR native · EU hosted (Paris) · Founding member rate: €99/mo
       </p>
     </FadeIn>
 
@@ -403,7 +469,7 @@ const Hero = () => (
 
 /* ───── PROBLEM ───── */
 const Problem = () => (
-  <section style={{ padding: "160px 32px", maxWidth: 1200, margin: "0 auto" }}>
+  <section style={{ padding: "100px 32px", maxWidth: 1200, margin: "0 auto" }}>
     <FadeIn>
       <div style={{ textAlign: "center", maxWidth: 700, margin: "0 auto 72px" }}>
         <p style={{ fontSize: 13, fontWeight: 600, color: COLORS.accent, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 16 }}>The problem</p>
@@ -441,7 +507,7 @@ const Problem = () => (
 
 /* ───── HOW IT WORKS ───── */
 const HowItWorks = () => (
-  <section style={{ padding: "160px 32px", position: "relative" }}>
+  <section style={{ padding: "100px 32px", position: "relative" }}>
     <div style={{ position: "absolute", inset: 0, background: `linear-gradient(180deg, transparent, ${COLORS.accentSoft}, transparent)`, pointerEvents: "none" }} />
     <div style={{ maxWidth: 1200, margin: "0 auto", position: "relative" }}>
       <FadeIn>
@@ -526,7 +592,7 @@ const Features = () => {
   ];
 
   return (
-    <section style={{ padding: "160px 32px", maxWidth: 1200, margin: "0 auto" }}>
+    <section style={{ padding: "100px 32px", maxWidth: 1200, margin: "0 auto" }}>
       <FadeIn>
         <div style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 72px" }}>
           <p style={{ fontSize: 13, fontWeight: 600, color: COLORS.accent, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 16 }}>What you get today</p>
@@ -576,7 +642,7 @@ const Features = () => {
 
 /* ───── SOCIAL PROOF ───── */
 const SocialProof = () => (
-  <section style={{ padding: "140px 32px" }}>
+  <section style={{ padding: "100px 32px" }}>
     <div style={{ maxWidth: 1200, margin: "0 auto" }}>
       <FadeIn>
         <div style={{ textAlign: "center", marginBottom: 64 }}>
@@ -586,7 +652,7 @@ const SocialProof = () => (
           </h2>
         </div>
       </FadeIn>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 2 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 16, maxWidth: 800, margin: "0 auto" }}>
         {[
           { before: "2.3 days", after: "<4 hrs", label: "Approval time" },
           { before: "40–60%", after: "<10%", label: "Maverick spend" },
@@ -608,30 +674,6 @@ const SocialProof = () => (
           </FadeIn>
         ))}
       </div>
-
-      <FadeIn delay={0.3}>
-        <div style={{
-          marginTop: 48, background: COLORS.surface, borderRadius: 16, border: `1px solid ${COLORS.border}`,
-          padding: "48px 56px", maxWidth: 800, margin: "48px auto 0", position: "relative",
-        }}>
-          <div style={{ fontSize: 64, color: COLORS.accent, opacity: 0.2, position: "absolute", top: 16, left: 32, fontFamily: "Georgia, serif" }}>&quot;</div>
-          <p style={{ fontSize: 19, color: COLORS.text, lineHeight: 1.7, fontStyle: "italic", marginBottom: 20, position: "relative", fontWeight: 400 }}>
-            We went from zero process to full visibility in a week. The Slack integration meant our engineers actually used it — that never happened with any tool before.
-          </p>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <div style={{
-              width: 40, height: 40, borderRadius: "50%",
-              background: `linear-gradient(135deg, ${COLORS.gradient1}, ${COLORS.gradient2})`,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: 16, fontWeight: 700, color: COLORS.bg,
-            }}>L</div>
-            <div>
-              <div style={{ fontSize: 14, fontWeight: 600, color: COLORS.text }}>Founding member, beta</div>
-              <div style={{ fontSize: 13, color: COLORS.textDim }}>Head of Finance · 120-person B2B SaaS, Paris</div>
-            </div>
-          </div>
-        </div>
-      </FadeIn>
     </div>
   </section>
 );
@@ -662,7 +704,7 @@ const Pricing = () => {
   ];
 
   return (
-    <section style={{ padding: "160px 32px", maxWidth: 1280, margin: "0 auto" }}>
+    <section style={{ padding: "100px 32px", maxWidth: 1280, margin: "0 auto" }}>
       <FadeIn>
         <div style={{ textAlign: "center", maxWidth: 600, margin: "0 auto 64px" }}>
           <p style={{ fontSize: 13, fontWeight: 600, color: COLORS.accent, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 16 }}>Pricing</p>
@@ -674,7 +716,7 @@ const Pricing = () => {
           </p>
         </div>
       </FadeIn>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 16, alignItems: "stretch" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, alignItems: "stretch" }} className="pricing-grid">
         {plans.map((p, i) => (
           <FadeIn key={i} delay={i * 0.08}>
             <div style={{
@@ -739,7 +781,7 @@ const Integrations = () => (
             Slack for requests. QuickBooks or Xero for accounting. Google or Microsoft for SSO. If the API hiccups, a perfect CSV fallback is always ready.
           </p>
         </div>
-        <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+        <div style={{ display: "flex", gap: 24, flexWrap: "wrap", justifyContent: "center" }}>
           {[
             { name: "Slack", color: "#E01E5A", logo: <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/></svg> },
             { name: "QuickBooks", color: "#2CA01C", logo: <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" opacity="0.2"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3-13h-2v2h2V7zm-4 0H9v2h2V7zm4 4h-2v2h2v-2zm-4 0H9v2h2v-2z"/></svg> },
@@ -747,22 +789,26 @@ const Integrations = () => (
             { name: "Google", color: "#4285F4", logo: <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg> },
             { name: "Microsoft", color: "#00A4EF", logo: <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M11.4 24H0V12.6h11.4V24zM24 24H12.6V12.6H24V24zM11.4 11.4H0V0h11.4v11.4zm12.6 0H12.6V0H24v11.4z"/></svg> },
           ].map(({ name, color, logo }) => (
-            <div key={name} style={{
-              width: 72, height: 72, borderRadius: 14, background: COLORS.bg,
-              border: `1px solid ${COLORS.border}`, display: "flex", alignItems: "center",
-              justifyContent: "center", color: color, transition: "all 0.2s",
-              position: "relative", overflow: "hidden",
-            }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = color;
-                e.currentTarget.style.background = `${color}15`;
+            <div key={name} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+              <div style={{
+                width: 72, height: 72, borderRadius: 14, background: COLORS.bg,
+                border: `1px solid ${COLORS.border}`, display: "flex", alignItems: "center",
+                justifyContent: "center", color: color, transition: "all 0.2s",
               }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = COLORS.border;
-                e.currentTarget.style.background = COLORS.bg;
-              }}
-            >
-              {logo}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = color;
+                  e.currentTarget.style.background = `${color}15`;
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = COLORS.border;
+                  e.currentTarget.style.background = COLORS.bg;
+                  e.currentTarget.style.transform = "translateY(0)";
+                }}
+              >
+                {logo}
+              </div>
+              <span style={{ fontSize: 13, fontWeight: 600, color: COLORS.textMuted }}>{name}</span>
             </div>
           ))}
         </div>
@@ -810,23 +856,76 @@ const CTAFooter = () => (
     </FadeIn>
 
     {/* Footer */}
-    <div style={{ maxWidth: 1200, margin: "80px auto 0", padding: "32px 0 0", borderTop: `1px solid ${COLORS.border}`, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16 }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-        <div style={{
-          width: 24, height: 24, borderRadius: 6,
-          background: `linear-gradient(135deg, ${COLORS.gradient1}, ${COLORS.gradient2})`,
-          display: "flex", alignItems: "center", justifyContent: "center",
-          fontSize: 12, fontWeight: 800, color: COLORS.bg,
-        }}>R</div>
-        <span style={{ fontSize: 14, fontWeight: 600, color: COLORS.textDim }}>Reqflow</span>
+    <div style={{ maxWidth: 1200, margin: "80px auto 0", padding: "32px 24px", borderTop: `1px solid ${COLORS.border}` }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 32, marginBottom: 32 }}>
+        <div>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+            <div style={{
+              width: 24, height: 24, borderRadius: 6,
+              background: `linear-gradient(135deg, ${COLORS.gradient1}, ${COLORS.gradient2})`,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 12, fontWeight: 800, color: COLORS.bg,
+            }}>R</div>
+            <span style={{ fontSize: 16, fontWeight: 700, color: COLORS.text }}>Reqflow</span>
+          </div>
+          <p style={{ fontSize: 13, color: COLORS.textDim, lineHeight: 1.6 }}>
+            AI-powered procurement for companies without procurement teams.
+          </p>
+        </div>
+
+        <div>
+          <h4 style={{ fontSize: 13, fontWeight: 700, color: COLORS.text, marginBottom: 12, textTransform: "uppercase", letterSpacing: "0.05em" }}>Product</h4>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {["Features", "Pricing", "Integrations", "Changelog"].map(l => (
+              <a key={l} href="#" style={{ color: COLORS.textDim, fontSize: 13, textDecoration: "none", transition: "color 0.2s" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = COLORS.text)}
+                onMouseLeave={(e) => (e.currentTarget.style.color = COLORS.textDim)}
+              >{l}</a>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <h4 style={{ fontSize: 13, fontWeight: 700, color: COLORS.text, marginBottom: 12, textTransform: "uppercase", letterSpacing: "0.05em" }}>Company</h4>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {["About", "Contact", "Careers", "Blog"].map(l => (
+              <a key={l} href="#" style={{ color: COLORS.textDim, fontSize: 13, textDecoration: "none", transition: "color 0.2s" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = COLORS.text)}
+                onMouseLeave={(e) => (e.currentTarget.style.color = COLORS.textDim)}
+              >{l}</a>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <h4 style={{ fontSize: 13, fontWeight: 700, color: COLORS.text, marginBottom: 12, textTransform: "uppercase", letterSpacing: "0.05em" }}>Legal</h4>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {["Privacy", "Terms", "Security", "Status"].map(l => (
+              <a key={l} href="#" style={{ color: COLORS.textDim, fontSize: 13, textDecoration: "none", transition: "color 0.2s" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = COLORS.text)}
+                onMouseLeave={(e) => (e.currentTarget.style.color = COLORS.textDim)}
+              >{l}</a>
+            ))}
+          </div>
+        </div>
       </div>
-      <div style={{ display: "flex", gap: 24 }}>
-        {["Privacy", "Terms", "Security", "Status"].map(l => (
-          <a key={l} href="#" style={{ color: COLORS.textDim, fontSize: 13, textDecoration: "none" }}>{l}</a>
-        ))}
-      </div>
-      <div style={{ fontSize: 13, color: COLORS.textDim }}>
-        🇪🇺 Hosted in Paris · GDPR native · SOC 2 Type 1 in progress
+
+      <div style={{ paddingTop: 24, borderTop: `1px solid ${COLORS.border}`, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16 }}>
+        <div style={{ fontSize: 13, color: COLORS.textDim }}>
+          © 2026 Reqflow · 🇪🇺 Hosted in Paris · GDPR native
+        </div>
+        <div style={{ display: "flex", gap: 16 }}>
+          {[
+            { name: "GitHub", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg> },
+            { name: "Twitter", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> },
+            { name: "LinkedIn", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/></svg> },
+          ].map(({ name, icon }) => (
+            <a key={name} href="#" aria-label={name} style={{ color: COLORS.textDim, transition: "color 0.2s" }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = COLORS.accent)}
+              onMouseLeave={(e) => (e.currentTarget.style.color = COLORS.textDim)}
+            >{icon}</a>
+          ))}
+        </div>
       </div>
     </div>
   </section>
