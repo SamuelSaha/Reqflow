@@ -3,17 +3,18 @@
 import { useState, useEffect } from "react";
 
 const COLORS = {
-  bg: "#09090b",
-  bgLight: "#131316",
-  surface: "#1a1a1f",
-  border: "#27272a",
-  text: "#fafafa",
-  textMuted: "#a1a1aa",
-  textDim: "#71717a",
-  accent: "#22d3ee",
-  accentGlow: "rgba(34, 211, 238, 0.15)",
-  gradient1: "#22d3ee",
-  gradient2: "#818cf8",
+  bg: "#ffffff",
+  bgLight: "#f8fafc",
+  surface: "#ffffff",
+  border: "#e2e8f0",
+  text: "#0f172a",
+  textMuted: "#475569",
+  textDim: "#94a3b8",
+  accent: "#3b82f6",
+  accentDark: "#2563eb",
+  accentLight: "#dbeafe",
+  success: "#10b981",
+  warning: "#f59e0b",
 };
 
 const ScrollProgress = () => {
