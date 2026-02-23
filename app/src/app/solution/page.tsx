@@ -196,7 +196,6 @@ export default function SolutionPage() {
       background: COLORS.bg, minHeight: "100vh", color: COLORS.text,
       fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif",
     }}>
-      <ScrollProgress />
       <Nav />
 
       {/* THE SOLUTION */}
@@ -257,16 +256,35 @@ export default function SolutionPage() {
           <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
             <a href="/features" style={{
               display: "inline-block",
-              background: `linear-gradient(135deg, ${COLORS.gradient1}, ${COLORS.gradient2})`,
-              color: COLORS.bg, padding: "16px 32px", borderRadius: 12, fontSize: 16, fontWeight: 700,
-              textDecoration: "none", boxShadow: `0 4px 20px ${COLORS.accentGlow}`,
-            }}>See all features →</a>
+              background: COLORS.accent,
+              color: "#ffffff", padding: "16px 32px", borderRadius: 8, fontSize: 16, fontWeight: 600,
+              textDecoration: "none", boxShadow: "0 4px 12px rgba(59,130,246,0.2)",
+              transition: "all 0.2s ease",
+            }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = COLORS.accentDark;
+                e.currentTarget.style.transform = "translateY(-2px)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = COLORS.accent;
+                e.currentTarget.style.transform = "translateY(0)";
+              }}
+            >See all features →</a>
             <a href="/beta" style={{
               display: "inline-block",
-              background: "transparent", border: `1px solid ${COLORS.border}`,
-              color: COLORS.text, padding: "16px 32px", borderRadius: 12, fontSize: 16, fontWeight: 600,
-              textDecoration: "none",
-            }}>Apply for beta</a>
+              background: "transparent", border: `2px solid ${COLORS.border}`,
+              color: COLORS.text, padding: "14px 32px", borderRadius: 8, fontSize: 16, fontWeight: 600,
+              textDecoration: "none", transition: "all 0.2s ease",
+            }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = COLORS.accent;
+                e.currentTarget.style.color = COLORS.accent;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = COLORS.border;
+                e.currentTarget.style.color = COLORS.text;
+              }}
+            >Apply for beta</a>
           </div>
         </div>
       </section>
