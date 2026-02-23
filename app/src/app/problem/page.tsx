@@ -3,17 +3,16 @@
 import { useState, useEffect, useRef } from "react";
 
 const COLORS = {
-  bg: "#09090b",
-  bgLight: "#131316",
-  surface: "#1a1a1f",
-  border: "#27272a",
-  text: "#fafafa",
-  textMuted: "#a1a1aa",
-  textDim: "#71717a",
-  accent: "#22d3ee",
-  accentGlow: "rgba(34, 211, 238, 0.15)",
-  gradient1: "#22d3ee",
-  gradient2: "#818cf8",
+  bg: "#ffffff",
+  bgLight: "#f8fafc",
+  surface: "#ffffff",
+  border: "#e2e8f0",
+  text: "#0f172a",
+  textMuted: "#475569",
+  textDim: "#94a3b8",
+  accent: "#3b82f6",
+  accentDark: "#2563eb",
+  accentLight: "#dbeafe",
 };
 
 function useScrollReveal(threshold = 0.2) {
@@ -78,7 +77,7 @@ const Nav = () => {
   return (
     <nav style={{
       position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
-      background: scrolled ? "rgba(9,9,11,0.9)" : "transparent",
+      background: scrolled ? "rgba(255,255,255,0.95)" : "transparent",
       backdropFilter: scrolled ? "blur(20px)" : "none",
       borderBottom: scrolled ? `1px solid ${COLORS.border}` : "1px solid transparent",
       transition: "all 0.3s ease",
@@ -87,22 +86,40 @@ const Nav = () => {
         <a href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
           <div style={{
             width: 32, height: 32, borderRadius: 8,
-            background: `linear-gradient(135deg, ${COLORS.gradient1}, ${COLORS.gradient2})`,
+            background: COLORS.accent,
             display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: 16, fontWeight: 800, color: COLORS.bg,
+            fontSize: 16, fontWeight: 800, color: "#ffffff",
           }}>R</div>
           <span style={{ fontSize: 20, fontWeight: 700, letterSpacing: "-0.03em", color: COLORS.text }}>Reqflow</span>
         </a>
 
         <div style={{ display: "flex", alignItems: "center", gap: 32 }}>
-          <a href="/problem" style={{ color: COLORS.textMuted, fontSize: 14, fontWeight: 500, textDecoration: "none" }}>Why</a>
-          <a href="/solution" style={{ color: COLORS.textMuted, fontSize: 14, fontWeight: 500, textDecoration: "none" }}>How</a>
-          <a href="/pricing" style={{ color: COLORS.textMuted, fontSize: 14, fontWeight: 500, textDecoration: "none" }}>Pricing</a>
+          <a href="/problem" style={{ color: COLORS.textMuted, fontSize: 14, fontWeight: 500, textDecoration: "none", transition: "color 0.2s" }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = COLORS.text)}
+            onMouseLeave={(e) => (e.currentTarget.style.color = COLORS.textMuted)}
+          >Why</a>
+          <a href="/solution" style={{ color: COLORS.textMuted, fontSize: 14, fontWeight: 500, textDecoration: "none", transition: "color 0.2s" }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = COLORS.text)}
+            onMouseLeave={(e) => (e.currentTarget.style.color = COLORS.textMuted)}
+          >How</a>
+          <a href="/pricing" style={{ color: COLORS.textMuted, fontSize: 14, fontWeight: 500, textDecoration: "none", transition: "color 0.2s" }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = COLORS.text)}
+            onMouseLeave={(e) => (e.currentTarget.style.color = COLORS.textMuted)}
+          >Pricing</a>
           <a href="/beta" style={{
-            background: `linear-gradient(135deg, ${COLORS.gradient1}, ${COLORS.gradient2})`,
-            color: COLORS.bg, padding: "10px 24px", borderRadius: 8,
-            fontSize: 14, fontWeight: 600, textDecoration: "none",
-          }}>Apply for Beta</a>
+            background: COLORS.accent,
+            color: "#ffffff", padding: "10px 24px", borderRadius: 8,
+            fontSize: 14, fontWeight: 600, textDecoration: "none", transition: "all 0.2s",
+          }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = COLORS.accentDark;
+              e.currentTarget.style.transform = "scale(1.05)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = COLORS.accent;
+              e.currentTarget.style.transform = "scale(1)";
+            }}
+          >Apply for Beta</a>
         </div>
       </div>
     </nav>

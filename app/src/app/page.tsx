@@ -17,35 +17,6 @@ const COLORS = {
   warning: "#f59e0b",
 };
 
-const ScrollProgress = () => {
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    const updateProgress = () => {
-      const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const scrolled = (scrollTop / docHeight) * 100;
-      setProgress(scrolled);
-    };
-
-    window.addEventListener("scroll", updateProgress);
-    return () => window.removeEventListener("scroll", updateProgress);
-  }, []);
-
-  return (
-    <div style={{
-      position: "fixed", top: 0, left: 0, right: 0, height: 3, zIndex: 999,
-      background: "rgba(39, 39, 42, 0.3)",
-    }}>
-      <div style={{
-        height: "100%", width: `${progress}%`,
-        background: `linear-gradient(90deg, ${COLORS.gradient1}, ${COLORS.gradient2})`,
-        transition: "width 0.1s ease-out",
-      }} />
-    </div>
-  );
-};
-
 const Nav = () => {
   const [scrolled, setScrolled] = useState(false);
 
@@ -58,7 +29,7 @@ const Nav = () => {
   return (
     <nav style={{
       position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
-      background: scrolled ? "rgba(9,9,11,0.9)" : "transparent",
+      background: scrolled ? "rgba(255,255,255,0.95)" : "transparent",
       backdropFilter: scrolled ? "blur(20px)" : "none",
       borderBottom: scrolled ? `1px solid ${COLORS.border}` : "1px solid transparent",
       transition: "all 0.3s ease",
@@ -67,24 +38,39 @@ const Nav = () => {
         <a href="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
           <div style={{
             width: 32, height: 32, borderRadius: 8,
-            background: `linear-gradient(135deg, ${COLORS.gradient1}, ${COLORS.gradient2})`,
+            background: COLORS.accent,
             display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: 16, fontWeight: 800, color: COLORS.bg,
+            fontSize: 16, fontWeight: 800, color: "#ffffff",
           }}>R</div>
           <span style={{ fontSize: 20, fontWeight: 700, letterSpacing: "-0.03em", color: COLORS.text }}>Reqflow</span>
         </a>
 
         <div style={{ display: "flex", alignItems: "center", gap: 32 }}>
-          <a href="/problem" style={{ color: COLORS.textMuted, fontSize: 14, fontWeight: 500, textDecoration: "none" }}>Why</a>
-          <a href="/solution" style={{ color: COLORS.textMuted, fontSize: 14, fontWeight: 500, textDecoration: "none" }}>How</a>
-          <a href="/pricing" style={{ color: COLORS.textMuted, fontSize: 14, fontWeight: 500, textDecoration: "none" }}>Pricing</a>
+          <a href="/problem" style={{ color: COLORS.textMuted, fontSize: 14, fontWeight: 500, textDecoration: "none", transition: "color 0.2s" }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = COLORS.text)}
+            onMouseLeave={(e) => (e.currentTarget.style.color = COLORS.textMuted)}
+          >Why</a>
+          <a href="/solution" style={{ color: COLORS.textMuted, fontSize: 14, fontWeight: 500, textDecoration: "none", transition: "color 0.2s" }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = COLORS.text)}
+            onMouseLeave={(e) => (e.currentTarget.style.color = COLORS.textMuted)}
+          >How</a>
+          <a href="/pricing" style={{ color: COLORS.textMuted, fontSize: 14, fontWeight: 500, textDecoration: "none", transition: "color 0.2s" }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = COLORS.text)}
+            onMouseLeave={(e) => (e.currentTarget.style.color = COLORS.textMuted)}
+          >Pricing</a>
           <a href="/beta" style={{
-            background: `linear-gradient(135deg, ${COLORS.gradient1}, ${COLORS.gradient2})`,
-            color: COLORS.bg, padding: "10px 24px", borderRadius: 8,
-            fontSize: 14, fontWeight: 600, textDecoration: "none", transition: "transform 0.2s",
+            background: COLORS.accent,
+            color: "#ffffff", padding: "10px 24px", borderRadius: 8,
+            fontSize: 14, fontWeight: 600, textDecoration: "none", transition: "all 0.2s",
           }}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = COLORS.accentDark;
+              e.currentTarget.style.transform = "scale(1.05)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = COLORS.accent;
+              e.currentTarget.style.transform = "scale(1)";
+            }}
           >Apply for Beta</a>
         </div>
       </div>
@@ -95,173 +81,249 @@ const Nav = () => {
 const Hero = () => {
   return (
     <section style={{
-      minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-      padding: "0 32px", position: "relative", overflow: "hidden",
+      minHeight: "90vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+      padding: "120px 32px 80px", position: "relative", overflow: "hidden",
       background: COLORS.bg,
     }}>
-      {/* Ambient gradient orbs */}
-      <div style={{ position: "absolute", top: "-20%", left: "30%", width: 800, height: 800, borderRadius: "50%", background: "radial-gradient(circle, rgba(34,211,238,0.05) 0%, transparent 70%)", pointerEvents: "none", filter: "blur(60px)" }} />
-      <div style={{ position: "absolute", bottom: "-10%", right: "20%", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle, rgba(129,140,248,0.04) 0%, transparent 70%)", pointerEvents: "none", filter: "blur(60px)" }} />
-
-      <div style={{ maxWidth: 900, textAlign: "center", position: "relative", zIndex: 1 }}>
-        {/* Beta badge */}
-        <div style={{
-          display: "inline-flex", alignItems: "center", gap: 8,
-          background: "rgba(245,158,11,0.12)", border: `1px solid rgba(245,158,11,0.3)`,
-          borderRadius: 100, padding: "8px 20px", marginBottom: 32,
-          animation: "fadeSlideDown 0.6s ease-out",
-        }}>
-          <span style={{ color: "#f59e0b", fontSize: 13, fontWeight: 600 }}>Early Beta — First 10 Companies</span>
-        </div>
-
+      <div style={{ maxWidth: 1200, textAlign: "center", position: "relative", zIndex: 1, width: "100%" }}>
         {/* H1 */}
         <h1 style={{
-          fontSize: "clamp(48px, 7vw, 72px)", fontWeight: 800, lineHeight: 1, marginBottom: 32,
-          letterSpacing: "-0.04em", animation: "fadeSlideUp 0.8s ease-out 0.1s backwards",
+          fontSize: "clamp(40px, 6vw, 64px)", fontWeight: 800, lineHeight: 1.1, marginBottom: 24,
+          letterSpacing: "-0.02em", color: COLORS.text,
         }}>
-          Stop chasing approvals.<br />
-          <span style={{
-            background: `linear-gradient(135deg, ${COLORS.gradient1}, ${COLORS.gradient2})`,
-            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
-          }}>Start buying.</span>
+          Every purchase.<br />
+          One front door.
         </h1>
 
         {/* Sub-headline */}
         <p style={{
           fontSize: 20, color: COLORS.textMuted, lineHeight: 1.6, marginBottom: 48,
-          maxWidth: 700, margin: "0 auto 48px",
-          animation: "fadeSlideUp 0.8s ease-out 0.2s backwards",
+          maxWidth: 680, margin: "0 auto 48px",
         }}>
           Request from Slack. Approve from email. Synced to your accounting system.<br />
           The procurement front door for companies without a procurement team.
         </p>
 
-        {/* Primary CTA */}
-        <div style={{ animation: "fadeSlideUp 0.8s ease-out 0.3s backwards", marginBottom: 48 }}>
+        {/* CTA Buttons */}
+        <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap", marginBottom: 80 }}>
           <a href="/beta" style={{
             display: "inline-block",
-            background: `linear-gradient(135deg, ${COLORS.gradient1}, ${COLORS.gradient2})`,
-            color: COLORS.bg, padding: "18px 48px", borderRadius: 12, fontSize: 18, fontWeight: 700,
-            textDecoration: "none", boxShadow: `0 8px 30px ${COLORS.accentGlow}`,
-            transition: "all 0.3s ease",
+            background: COLORS.accent,
+            color: "#ffffff", padding: "16px 32px", borderRadius: 8, fontSize: 16, fontWeight: 600,
+            textDecoration: "none", boxShadow: "0 4px 12px rgba(59,130,246,0.2)",
+            transition: "all 0.2s ease",
           }}
             onMouseEnter={(e) => {
+              e.currentTarget.style.background = COLORS.accentDark;
               e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.boxShadow = `0 12px 40px rgba(34,211,238,0.25)`;
             }}
             onMouseLeave={(e) => {
+              e.currentTarget.style.background = COLORS.accent;
               e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow = `0 8px 30px ${COLORS.accentGlow}`;
             }}
-          >Apply for Beta (10 Spots Left) →</a>
-        </div>
-
-        {/* Quick links */}
-        <div style={{
-          display: "flex", gap: 24, justifyContent: "center", flexWrap: "wrap",
-          animation: "fadeIn 1s ease-out 0.4s backwards",
-        }}>
-          <a href="/problem" style={{
-            fontSize: 15, color: COLORS.textMuted, textDecoration: "none",
-            borderBottom: `1px solid ${COLORS.border}`, paddingBottom: 2,
-          }}>Why Reqflow?</a>
+          >Get started</a>
           <a href="/solution" style={{
-            fontSize: 15, color: COLORS.textMuted, textDecoration: "none",
-            borderBottom: `1px solid ${COLORS.border}`, paddingBottom: 2,
-          }}>How it works</a>
-          <a href="/features" style={{
-            fontSize: 15, color: COLORS.textMuted, textDecoration: "none",
-            borderBottom: `1px solid ${COLORS.border}`, paddingBottom: 2,
-          }}>Features</a>
+            display: "inline-block",
+            background: "transparent", border: `2px solid ${COLORS.border}`,
+            color: COLORS.text, padding: "14px 32px", borderRadius: 8, fontSize: 16, fontWeight: 600,
+            textDecoration: "none", transition: "all 0.2s ease",
+          }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = COLORS.accent;
+              e.currentTarget.style.color = COLORS.accent;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = COLORS.border;
+              e.currentTarget.style.color = COLORS.text;
+            }}
+          >See how it works</a>
         </div>
 
-        {/* Trust anchor */}
-        <p style={{
-          fontSize: 14, color: COLORS.textDim, marginTop: 32,
-          animation: "fadeIn 1s ease-out 0.5s backwards",
+        {/* Product Screenshot Placeholder */}
+        <div style={{
+          maxWidth: 1000, margin: "0 auto",
+          background: COLORS.bgLight,
+          borderRadius: 16, padding: 40,
+          boxShadow: "0 20px 60px rgba(0,0,0,0.08)",
+          border: `1px solid ${COLORS.border}`,
         }}>
-          €99/mo locked forever · GDPR native · EU hosted (Paris)
-        </p>
+          <div style={{
+            background: "#ffffff",
+            borderRadius: 12,
+            padding: 32,
+            border: `1px solid ${COLORS.border}`,
+            minHeight: 400,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: COLORS.textDim,
+            fontSize: 18,
+          }}>
+            Product Dashboard Preview
+          </div>
+        </div>
       </div>
+    </section>
+  );
+};
 
-      <style jsx>{`
-        @keyframes fadeSlideUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        @keyframes fadeSlideDown {
-          from {
-            opacity: 0;
-            transform: translateY(-20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-      `}</style>
+const FeaturesSection = () => {
+  const features = [
+    {
+      icon: "💬",
+      title: "Request from Slack",
+      description: "Type /reqflow buy in any Slack channel. Fill a simple form in 30 seconds. No more hunting for approval forms."
+    },
+    {
+      icon: "✉️",
+      title: "Approve via email",
+      description: "Approvers get email with full context. One-click approve. No login required. Works on mobile."
+    },
+    {
+      icon: "📊",
+      title: "Synced to books",
+      description: "Approved purchases automatically log to QuickBooks or Xero. Complete audit trail built in."
+    },
+    {
+      icon: "🔒",
+      title: "GDPR native",
+      description: "EU-hosted in Paris. Full GDPR compliance out of the box. Your data never leaves Europe."
+    },
+  ];
+
+  return (
+    <section style={{
+      padding: "100px 32px",
+      background: COLORS.bgLight,
+    }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+        <div style={{ textAlign: "center", marginBottom: 64 }}>
+          <h2 style={{ fontSize: "clamp(32px, 4vw, 48px)", fontWeight: 800, marginBottom: 16, color: COLORS.text }}>
+            Your team buys like a FAANG
+          </h2>
+          <p style={{ fontSize: 20, color: COLORS.textMuted, maxWidth: 600, margin: "0 auto" }}>
+            Without hiring a procurement team or learning new software
+          </p>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 32 }}>
+          {features.map((feature, i) => (
+            <div key={i} style={{
+              background: COLORS.surface,
+              border: `1px solid ${COLORS.border}`,
+              borderRadius: 12,
+              padding: 32,
+              transition: "all 0.3s ease",
+            }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = COLORS.accent;
+                e.currentTarget.style.boxShadow = "0 8px 24px rgba(59,130,246,0.1)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = COLORS.border;
+                e.currentTarget.style.boxShadow = "none";
+              }}
+            >
+              <div style={{ fontSize: 40, marginBottom: 16 }}>{feature.icon}</div>
+              <h3 style={{ fontSize: 20, fontWeight: 700, marginBottom: 12, color: COLORS.text }}>{feature.title}</h3>
+              <p style={{ fontSize: 16, color: COLORS.textMuted, lineHeight: 1.6, margin: 0 }}>{feature.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const PricingPreview = () => {
+  return (
+    <section style={{ padding: "100px 32px", background: COLORS.bg }}>
+      <div style={{ maxWidth: 900, margin: "0 auto", textAlign: "center" }}>
+        <h2 style={{ fontSize: "clamp(32px, 4vw, 48px)", fontWeight: 800, marginBottom: 16, color: COLORS.text }}>
+          From €99/mo.<br />
+          Unlimited users. <span style={{ color: COLORS.accent }}>Forever.</span>
+        </h2>
+        <p style={{ fontSize: 20, color: COLORS.textMuted, marginBottom: 48, lineHeight: 1.6 }}>
+          First 10 companies lock in founding member pricing that never expires.<br />
+          Everyone submits. That's the point.
+        </p>
+        <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
+          <a href="/pricing" style={{
+            display: "inline-block",
+            background: COLORS.accent,
+            color: "#ffffff", padding: "16px 32px", borderRadius: 8, fontSize: 16, fontWeight: 600,
+            textDecoration: "none",
+          }}>View pricing</a>
+          <a href="/beta" style={{
+            display: "inline-block",
+            background: "transparent", border: `2px solid ${COLORS.accent}`,
+            color: COLORS.accent, padding: "14px 32px", borderRadius: 8, fontSize: 16, fontWeight: 600,
+            textDecoration: "none",
+          }}>Apply for beta</a>
+        </div>
+      </div>
     </section>
   );
 };
 
 const Footer = () => {
+  const footerBg = "#0f172a";
+  const footerText = "#cbd5e1";
+  const footerTextMuted = "#64748b";
+
   return (
-    <footer style={{ background: COLORS.bgLight, borderTop: `1px solid ${COLORS.border}`, padding: "80px 32px 40px" }}>
+    <footer style={{ background: footerBg, borderTop: "none", padding: "80px 32px 40px" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 48, marginBottom: 64 }}>
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
               <div style={{
                 width: 28, height: 28, borderRadius: 6,
-                background: `linear-gradient(135deg, ${COLORS.gradient1}, ${COLORS.gradient2})`,
+                background: COLORS.accent,
                 display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 14, fontWeight: 800, color: COLORS.bg,
+                fontSize: 14, fontWeight: 800, color: "#ffffff",
               }}>R</div>
-              <span style={{ fontSize: 18, fontWeight: 700 }}>Reqflow</span>
+              <span style={{ fontSize: 18, fontWeight: 700, color: footerText }}>Reqflow</span>
             </div>
-            <p style={{ fontSize: 14, color: COLORS.textDim, lineHeight: 1.6 }}>
+            <p style={{ fontSize: 14, color: footerTextMuted, lineHeight: 1.6 }}>
               Procurement for companies without procurement teams.
             </p>
           </div>
 
           <div>
-            <h4 style={{ fontSize: 13, fontWeight: 700, marginBottom: 16, textTransform: "uppercase", letterSpacing: "0.05em" }}>Product</h4>
+            <h4 style={{ fontSize: 13, fontWeight: 700, marginBottom: 16, textTransform: "uppercase", letterSpacing: "0.05em", color: footerText }}>Product</h4>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               {[
                 { label: "Features", href: "/features" },
                 { label: "Pricing", href: "/pricing" },
                 { label: "Integrations", href: "/integrations" },
               ].map(({ label, href }) => (
-                <a key={label} href={href} style={{ color: COLORS.textDim, fontSize: 14, textDecoration: "none" }}>{label}</a>
+                <a key={label} href={href} style={{ color: footerTextMuted, fontSize: 14, textDecoration: "none", transition: "color 0.2s" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = footerText)}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = footerTextMuted)}
+                >{label}</a>
               ))}
             </div>
           </div>
 
           <div>
-            <h4 style={{ fontSize: 13, fontWeight: 700, marginBottom: 16, textTransform: "uppercase", letterSpacing: "0.05em" }}>Company</h4>
+            <h4 style={{ fontSize: 13, fontWeight: 700, marginBottom: 16, textTransform: "uppercase", letterSpacing: "0.05em", color: footerText }}>Company</h4>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               {[
                 { label: "About", href: "/about" },
                 { label: "Contact", href: "/contact" },
                 { label: "Beta Program", href: "/beta" },
               ].map(({ label, href }) => (
-                <a key={label} href={href} style={{ color: COLORS.textDim, fontSize: 14, textDecoration: "none" }}>{label}</a>
+                <a key={label} href={href} style={{ color: footerTextMuted, fontSize: 14, textDecoration: "none", transition: "color 0.2s" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = footerText)}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = footerTextMuted)}
+                >{label}</a>
               ))}
             </div>
           </div>
 
           <div>
-            <h4 style={{ fontSize: 13, fontWeight: 700, marginBottom: 16, textTransform: "uppercase", letterSpacing: "0.05em" }}>Legal</h4>
+            <h4 style={{ fontSize: 13, fontWeight: 700, marginBottom: 16, textTransform: "uppercase", letterSpacing: "0.05em", color: footerText }}>Legal</h4>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               {[
                 { label: "Privacy", href: "/privacy" },
@@ -269,14 +331,17 @@ const Footer = () => {
                 { label: "Security", href: "/security" },
                 { label: "Status", href: "/status" },
               ].map(({ label, href }) => (
-                <a key={label} href={href} style={{ color: COLORS.textDim, fontSize: 14, textDecoration: "none" }}>{label}</a>
+                <a key={label} href={href} style={{ color: footerTextMuted, fontSize: 14, textDecoration: "none", transition: "color 0.2s" }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = footerText)}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = footerTextMuted)}
+                >{label}</a>
               ))}
             </div>
           </div>
         </div>
 
-        <div style={{ borderTop: `1px solid ${COLORS.border}`, paddingTop: 32, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16 }}>
-          <div style={{ fontSize: 14, color: COLORS.textDim }}>
+        <div style={{ borderTop: "1px solid rgba(100,116,139,0.2)", paddingTop: 32, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16 }}>
+          <div style={{ fontSize: 14, color: footerTextMuted }}>
             © 2026 Reqflow · 🇪🇺 Hosted in Paris · GDPR native
           </div>
         </div>
@@ -295,9 +360,10 @@ export default function HomePage() {
       background: COLORS.bg, minHeight: "100vh", color: COLORS.text,
       fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif",
     }}>
-      <ScrollProgress />
       <Nav />
       <Hero />
+      <FeaturesSection />
+      <PricingPreview />
       <Footer />
     </div>
   );
