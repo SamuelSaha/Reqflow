@@ -142,7 +142,7 @@ export function SocialProof() {
           </span>
         </span>
 
-        <h2 className="text-[44px] font-bold leading-[1.15] tracking-tight text-gray-900 whitespace-pre-line">
+        <h2 className="text-[44px] font-bold leading-[1.15] tracking-tight text-slate-900 whitespace-pre-line">
           {"What happens when buying\nstops being a mess."}
         </h2>
       </div>
@@ -151,15 +151,15 @@ export function SocialProof() {
         {outcomes.map(({ value, label, sub }) => (
           <div
             key={value}
-            className="bg-gray-50 rounded-2xl p-8 border border-gray-200 flex flex-col items-center gap-3"
+            className="bg-slate-50 rounded-2xl p-8 border border-slate-200 flex flex-col items-center gap-3"
           >
             <span className="text-[40px] font-bold text-blue-600 tracking-tight">
               {value}
             </span>
-            <span className="text-[15px] font-medium text-gray-600 text-center">
+            <span className="text-[15px] font-medium text-slate-600 text-center">
               {label}
             </span>
-            <span className="text-[13px] font-medium text-gray-400">
+            <span className="text-[13px] font-medium text-slate-400">
               {sub}
             </span>
           </div>
@@ -192,11 +192,11 @@ export function Integrations() {
           </span>
         </span>
 
-        <h2 className="text-[44px] font-bold leading-[1.15] tracking-tight text-gray-900 whitespace-pre-line">
+        <h2 className="text-[44px] font-bold leading-[1.15] tracking-tight text-slate-900 whitespace-pre-line">
           {"Plugs into the tools\nyour team already uses."}
         </h2>
 
-        <p className="text-[18px] leading-relaxed text-gray-600 max-w-[620px]">
+        <p className="text-[18px] leading-relaxed text-slate-600 max-w-[620px]">
           One-click integrations with your accounting, chat, and identity tools.
           Data flows both ways, so nothing needs manual entry.
         </p>
@@ -206,7 +206,7 @@ export function Integrations() {
         {integrations.map(({ letter, bg, name }) => (
           <div
             key={name}
-            className="w-[148px] h-[120px] bg-white rounded-2xl border border-gray-200 p-5 flex flex-col items-center justify-center gap-3"
+            className="w-[148px] h-[120px] bg-white rounded-2xl border border-slate-200 p-5 flex flex-col items-center justify-center gap-3"
           >
             <div
               className="w-[40px] h-[40px] rounded-[10px] flex items-center justify-center"
@@ -216,7 +216,7 @@ export function Integrations() {
                 {letter}
               </span>
             </div>
-            <span className="text-[14px] font-semibold text-gray-900">
+            <span className="text-[14px] font-semibold text-slate-900">
               {name}
             </span>
           </div>
