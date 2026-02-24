@@ -1,10 +1,81 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
+
 export const COLORS = {
   bg: "#ffffff",
   text: "#0a0a0a",
   textMuted: "#737373",
   border: "#e5e5e5",
+  surface: "#f9f9f9",
+  accent: "#2563EB",
+  gradient1: "#2563EB",
+  gradient2: "#1D4ED8",
+  accentGlow: "rgba(37, 99, 235, 0.2)",
+};
+
+/* ───── SCROLL PROGRESS ───── */
+export const ScrollProgress = () => {
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (window.scrollY / totalHeight) * 100;
+      setScrollProgress(progress);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <div style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      right: 0,
+      height: 3,
+      background: COLORS.border,
+      zIndex: 1000,
+    }}>
+      <div style={{
+        height: "100%",
+        background: COLORS.text,
+        width: `${scrollProgress}%`,
+        transition: "width 0.1s ease",
+      }} />
+    </div>
+  );
+};
+
+/* ───── SCROLL REVEAL HOOK ───── */
+export const useScrollReveal = (threshold = 0.1) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
+  }, [threshold]);
+
+  return [ref, isVisible] as const;
 };
 
 /* ───── NAV ───── */
