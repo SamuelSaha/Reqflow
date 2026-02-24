@@ -16,48 +16,6 @@ import {
 } from "lucide-react";
 
 /* ------------------------------------------------------------------ */
-/*  Header                                                             */
-/* ------------------------------------------------------------------ */
-export function Header() {
-  return (
-    <header className="h-[72px] bg-white border-b border-slate-200 px-20 flex items-center justify-between">
-      <div className="flex items-center gap-3">
-        <div className="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center">
-          <ArrowRight className="w-5 h-5 text-white" />
-        </div>
-        <span className="text-[20px] font-bold text-slate-900">
-          Reqflow
-        </span>
-      </div>
-
-      <nav className="flex items-center gap-9">
-        <span className="text-[15px] font-medium text-slate-600 cursor-pointer hover:text-slate-900 transition-colors">
-          Features
-        </span>
-        <span className="text-[15px] font-medium text-slate-600 cursor-pointer hover:text-slate-900 transition-colors">
-          Pricing
-        </span>
-        <span className="text-[15px] font-medium text-slate-600 cursor-pointer hover:text-slate-900 transition-colors">
-          Integrations
-        </span>
-        <span className="text-[15px] font-medium text-slate-600 cursor-pointer hover:text-slate-900 transition-colors">
-          About
-        </span>
-      </nav>
-
-      <div className="flex items-center gap-5">
-        <span className="text-[15px] font-medium text-slate-600 cursor-pointer hover:text-slate-900 transition-colors">
-          Log in
-        </span>
-        <button className="bg-blue-600 text-white px-6 py-2.5 rounded-lg text-[15px] font-semibold hover:bg-blue-700 transition-colors">
-          Get Started Free
-        </button>
-      </div>
-    </header>
-  );
-}
-
-/* ------------------------------------------------------------------ */
 /*  Hero Section                                                       */
 /* ------------------------------------------------------------------ */
 export function HeroSection() {
@@ -72,7 +30,7 @@ export function HeroSection() {
           </span>
         </div>
 
-        <h1 className="text-[64px] font-bold leading-[1.1] tracking-[-1.5px] text-slate-900">
+        <h1 className="text-[64px] font-extrabold leading-[1.1] tracking-[-2px] text-slate-900">
           Procurement for teams
           <br />
           that move too fast for spreadsheets.

@@ -1,26 +1,22 @@
 "use client";
 
-import { Header, HeroSection, TrustLogos, ProblemSection } from "@/components/landing/HeroSection";
-import { CoreFeatures, PersonaSection } from "@/components/landing/FeaturesSection";
-import { FeaturesGrid, SocialProof, Integrations } from "@/components/landing/GridSection";
-import { Pricing, FAQ, FinalCTA, Footer } from "@/components/landing/BottomSection";
+import { PageShell } from "@/components/layout";
+import {
+  HeroSection,
+  TrustLogos,
+  ProblemSection,
+} from "@/components/landing/HeroSection";
+import { SocialProof } from "@/components/landing/GridSection";
+import { FinalCTA } from "@/components/landing/BottomSection";
 
 export default function ReqflowLanding() {
   return (
-    <div className="min-h-screen bg-white">
-      <Header />
+    <PageShell>
       <HeroSection />
       <TrustLogos />
       <ProblemSection />
-      <CoreFeatures />
-      <PersonaSection />
-      <FeaturesGrid />
       <SocialProof />
-      <Integrations />
-      <Pricing />
-      <FAQ />
       <FinalCTA />
-      <Footer />
-    </div>
+    </PageShell>
   );
 }

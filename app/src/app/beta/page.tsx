@@ -1,14 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Nav, Footer, COLORS } from "../../components/shared";
+import { PageShell } from "@/components/layout";
 
 export default function BetaPage() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    company: "",
-  });
+  const [formData, setFormData] = useState({ name: "", email: "", company: "" });
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -19,148 +15,41 @@ export default function BetaPage() {
 
   if (submitted) {
     return (
-      <div style={{
-        background: COLORS.bg,
-        minHeight: "100vh",
-        color: COLORS.text,
-        fontFamily: "'Manrope', -apple-system, sans-serif",
-        display: "flex",
-        flexDirection: "column",
-      }}>
-        <Nav />
-        <main style={{
-          flex: 1,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "120px 24px 80px",
-        }}>
-          <div style={{ maxWidth: 640, textAlign: "center" }}>
-            <h1 style={{ fontSize: 32, fontWeight: 600, marginBottom: 16 }}>
-              Application received
-            </h1>
-            <p style={{ fontSize: 16, color: COLORS.textMuted, lineHeight: 1.6 }}>
+      <PageShell>
+        <section className="flex-1 flex items-center justify-center py-32 px-6">
+          <div className="max-w-[640px] text-center">
+            <h1 className="text-[32px] font-semibold text-slate-900 mb-4">Application received</h1>
+            <p className="text-[16px] text-slate-600 leading-relaxed">
               We'll review within 48 hours and email you at {formData.email}.
             </p>
           </div>
-        </main>
-        <Footer />
-      </div>
+        </section>
+      </PageShell>
     );
   }
 
   return (
-    <div style={{
-      background: COLORS.bg,
-      minHeight: "100vh",
-      color: COLORS.text,
-      fontFamily: "'Manrope', -apple-system, sans-serif",
-    }}>
-      <Nav />
-
-      <main style={{
-        maxWidth: 640,
-        margin: "0 auto",
-        padding: "120px 24px 80px",
-      }}>
-        {/* Max 6 lines of copy total */}
-        <div style={{ marginBottom: 64 }}>
-          <h1 style={{
-            fontSize: 32,
-            fontWeight: 600,
-            letterSpacing: "-0.02em",
-            marginBottom: 32,
-          }}>
-            Beta program
-          </h1>
-
-          <div style={{ fontSize: 16, lineHeight: 1.8, color: COLORS.text, marginBottom: 24 }}>
-            <p style={{ margin: 0, marginBottom: 16 }}>
-              You get: €99/mo locked forever, direct founder access, shape the roadmap.
-            </p>
-            <p style={{ margin: 0 }}>
-              We need: 30-min onboarding, monthly check-in, tolerance for bugs.
-            </p>
+    <PageShell>
+      <section className="max-w-[640px] mx-auto pt-20 pb-20 px-6">
+        <div className="mb-16">
+          <h1 className="text-[32px] font-semibold tracking-[-0.02em] text-slate-900 mb-8">Beta program</h1>
+          <div className="text-[16px] leading-[1.8] text-slate-900 space-y-4">
+            <p>You get: €99/mo locked forever, direct founder access, shape the roadmap.</p>
+            <p>We need: 30-min onboarding, monthly check-in, tolerance for bugs.</p>
           </div>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 24, marginBottom: 32 }}>
-            <input
-              type="text"
-              required
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              placeholder="Your name"
-              style={{
-                width: "100%",
-                padding: "12px 0",
-                fontSize: 16,
-                background: "transparent",
-                border: "none",
-                borderBottom: `1px solid ${COLORS.border}`,
-                color: COLORS.text,
-                outline: "none",
-              }}
-            />
-
-            <input
-              type="email"
-              required
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              placeholder="Work email"
-              style={{
-                width: "100%",
-                padding: "12px 0",
-                fontSize: 16,
-                background: "transparent",
-                border: "none",
-                borderBottom: `1px solid ${COLORS.border}`,
-                color: COLORS.text,
-                outline: "none",
-              }}
-            />
-
-            <input
-              type="text"
-              required
-              value={formData.company}
-              onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-              placeholder="Company"
-              style={{
-                width: "100%",
-                padding: "12px 0",
-                fontSize: 16,
-                background: "transparent",
-                border: "none",
-                borderBottom: `1px solid ${COLORS.border}`,
-                color: COLORS.text,
-                outline: "none",
-              }}
-            />
+          <div className="flex flex-col gap-6 mb-8">
+            <input type="text" required value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder="Your name" className="w-full py-3 text-[16px] bg-transparent border-b border-slate-200 text-slate-900 outline-none placeholder:text-slate-400 focus:border-blue-600 transition-colors" />
+            <input type="email" required value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} placeholder="Work email" className="w-full py-3 text-[16px] bg-transparent border-b border-slate-200 text-slate-900 outline-none placeholder:text-slate-400 focus:border-blue-600 transition-colors" />
+            <input type="text" required value={formData.company} onChange={(e) => setFormData({ ...formData, company: e.target.value })} placeholder="Company" className="w-full py-3 text-[16px] bg-transparent border-b border-slate-200 text-slate-900 outline-none placeholder:text-slate-400 focus:border-blue-600 transition-colors" />
           </div>
-
-          <button
-            type="submit"
-            style={{
-              width: "100%",
-              background: COLORS.text,
-              color: COLORS.bg,
-              padding: "14px 32px",
-              fontSize: 15,
-              fontWeight: 500,
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
+          <button type="submit" className="w-full bg-slate-900 text-white py-3.5 px-8 text-[15px] font-medium cursor-pointer rounded-lg hover:bg-slate-800 transition-colors">
             Submit application
           </button>
         </form>
-      </main>
-
-      <Footer />
-    </div>
+      </section>
+    </PageShell>
   );
 }
