@@ -200,6 +200,7 @@ export function FinalCTA() {
 export function Footer() {
   return (
     <footer className="bg-[#0F172A] pt-16 pb-8 px-20 flex flex-col gap-12">
+      {/* Exact footer background from Figma: #0F172A */}
       <div className="flex gap-16">
         {/* Brand column */}
         <div className="w-[320px] flex flex-col gap-4">

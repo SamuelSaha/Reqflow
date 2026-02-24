@@ -62,7 +62,7 @@ export function Header() {
 /* ------------------------------------------------------------------ */
 export function HeroSection() {
   return (
-    <section className="bg-gradient-to-b from-white via-[#F0F4FF] to-[#E5EDFF] pt-20 pb-[60px] px-20 flex flex-col items-center gap-12">
+    <section className="bg-gradient-to-b from-white via-[#F8FBFF] to-[#F0F6FF] pt-20 pb-[60px] px-20 flex flex-col items-center gap-12">
       {/* Hero Content - Clean & Minimal */}
       <div className="max-w-[900px] flex flex-col items-center gap-6 text-center">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-slate-200 bg-white shadow-sm">
