@@ -3,24 +3,29 @@
 @tailwind utilities;
 
 :root {
-  /* Art Deco + Financial Terminal Color Palette */
-  --navy-900: #0a1628;
-  --navy-800: #1a2942;
-  --navy-700: #2a3f5f;
-  --charcoal: #1c1c1e;
-  --gold: #d4af37;
-  --gold-light: #f4d03f;
-  --brass: #b87333;
-  --mint: #7fffd4;
-  --mint-dark: #3fbf9f;
-  --cream: #faf6f0;
-  --silver: #c0c0c0;
+  /* Modern Light Theme Color Palette */
+  --white: #ffffff;
+  --gray-50: #f8fafc;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --gray-300: #cbd5e1;
+  --gray-400: #94a3b8;
+  --gray-500: #64748b;
+  --gray-600: #475569;
+  --gray-700: #334155;
+  --gray-800: #1e293b;
+  --gray-900: #0f172a;
+
+  --blue-400: #60a5fa;
+  --blue-500: #3b82f6;
+  --blue-600: #2563eb;
+  --blue-700: #1d4ed8;
 
   /* Semantic colors */
-  --background: var(--cream);
-  --foreground: var(--navy-900);
-  --accent: var(--gold);
-  --accent-secondary: var(--mint);
+  --background: var(--white);
+  --foreground: var(--gray-900);
+  --accent: var(--blue-500);
+  --accent-dark: var(--blue-600);
 
   /* Spacing */
   --section-padding: 8rem;
@@ -36,7 +41,10 @@
   box-sizing: border-box;
 }
 
+html,
 body {
+  margin: 0;
+  padding: 0;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-ibm-plex), var(--font-space-mono), monospace;
