@@ -70,7 +70,7 @@ export function CoreFeatures() {
           </div>
         </div>
 
-        <div className="w-[520px] h-[380px] bg-white rounded-xl border border-slate-200 p-5 overflow-hidden flex flex-col gap-4">
+        <div className="w-[520px] h-[380px] bg-white rounded-xl border border-slate-200 shadow-lg p-5 overflow-hidden flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <span className="font-bold text-slate-900">
               New Purchase Request
@@ -139,7 +139,7 @@ export function CoreFeatures() {
 
       {/* Feature 2 - Approval Workflows (reversed layout) */}
       <div className="max-w-[1200px] flex gap-12 items-center">
-        <div className="w-[520px] h-[380px] bg-white rounded-xl border border-slate-200 p-5 overflow-hidden flex flex-col gap-4">
+        <div className="w-[520px] h-[380px] bg-white rounded-xl border border-slate-200 shadow-lg p-5 overflow-hidden flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <span className="font-bold text-slate-900">Approval Chain</span>
             <span className="bg-amber-50 text-amber-600 text-[11px] font-semibold px-2 py-0.5 rounded-full">
@@ -277,7 +277,7 @@ export function CoreFeatures() {
           </div>
         </div>
 
-        <div className="w-[520px] h-[380px] bg-white rounded-xl border border-slate-200 p-5 overflow-hidden flex flex-col gap-4">
+        <div className="w-[520px] h-[380px] bg-white rounded-xl border border-slate-200 shadow-lg p-5 overflow-hidden flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <span className="font-bold text-slate-900">Budget Overview</span>
             <span className="text-[11px] font-medium text-slate-500">
@@ -365,7 +365,7 @@ export function PersonaSection() {
 
       <div className="grid grid-cols-3 gap-6">
         {/* Claire */}
-        <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden flex flex-col">
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col">
           <div className="p-7 pb-5 flex flex-col gap-3">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white text-[14px] font-bold">
@@ -408,7 +408,7 @@ export function PersonaSection() {
         </div>
 
         {/* Marc */}
-        <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden flex flex-col">
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col">
           <div className="p-7 pb-5 flex flex-col gap-3">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center text-white text-[14px] font-bold">
@@ -451,7 +451,7 @@ export function PersonaSection() {
         </div>
 
         {/* Sophie */}
-        <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden flex flex-col">
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col">
           <div className="p-7 pb-5 flex flex-col gap-3">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-full bg-violet-500 flex items-center justify-center text-white text-[14px] font-bold">

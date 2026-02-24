@@ -206,7 +206,7 @@ export function Integrations() {
         {integrations.map(({ letter, bg, name }) => (
           <div
             key={name}
-            className="w-[148px] h-[120px] bg-white rounded-2xl border border-slate-200 p-5 flex flex-col items-center justify-center gap-3"
+            className="w-[148px] h-[120px] bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow p-5 flex flex-col items-center justify-center gap-3"
           >
             <div
               className="w-[40px] h-[40px] rounded-[10px] flex items-center justify-center"

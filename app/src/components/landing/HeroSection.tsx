@@ -20,17 +20,17 @@ import {
 /* ------------------------------------------------------------------ */
 export function Header() {
   return (
-    <header className="h-[69px] bg-white border-b border-slate-200 px-20 flex items-center justify-between">
-      <div className="flex items-center gap-2.5">
-        <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-          <ArrowRight className="w-[18px] h-[18px] text-white" />
+    <header className="h-[72px] bg-white border-b border-slate-200 px-20 flex items-center justify-between">
+      <div className="flex items-center gap-3">
+        <div className="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center">
+          <ArrowRight className="w-5 h-5 text-white" />
         </div>
-        <span className="text-[22px] font-bold tracking-tight text-slate-900">
+        <span className="text-[20px] font-bold text-slate-900">
           Reqflow
         </span>
       </div>
 
-      <nav className="flex items-center gap-8">
+      <nav className="flex items-center gap-9">
         <span className="text-[15px] font-medium text-slate-600 cursor-pointer hover:text-slate-900 transition-colors">
           Features
         </span>
@@ -45,7 +45,7 @@ export function Header() {
         </span>
       </nav>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-5">
         <span className="text-[15px] font-medium text-slate-600 cursor-pointer hover:text-slate-900 transition-colors">
           Log in
         </span>
@@ -62,11 +62,12 @@ export function Header() {
 /* ------------------------------------------------------------------ */
 export function HeroSection() {
   return (
-    <section className="bg-gradient-to-b from-white via-blue-50/60 to-blue-100 pt-20 pb-[60px] px-20 flex flex-col items-center gap-12">
+    <section className="bg-gradient-to-b from-white via-[#F0F4FF] to-[#E5EDFF] pt-20 pb-[60px] px-20 flex flex-col items-center gap-12">
+      {/* Hero Content - Clean & Minimal */}
       <div className="max-w-[900px] flex flex-col items-center gap-6 text-center">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border-[1.5px] border-slate-200">
-          <span className="w-2 h-2 bg-green-500 rounded-full" />
-          <span className="text-[13px] font-medium text-slate-600">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-slate-200 bg-white shadow-sm">
+          <span className="w-2 h-2 bg-emerald-500 rounded-full" />
+          <span className="text-[13px] font-medium text-slate-700">
             Free during early access. No card needed.
           </span>
         </div>
@@ -84,19 +85,19 @@ export function HeroSection() {
         </p>
 
         <div className="flex gap-4">
-          <button className="inline-flex items-center gap-2 bg-blue-600 text-white px-8 py-3.5 rounded-[10px] font-semibold hover:bg-blue-700 transition-colors">
+          <button className="inline-flex items-center gap-2 bg-blue-600 text-white px-7 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
             Get Started Free
             <ArrowRight className="w-[18px] h-[18px]" />
           </button>
-          <button className="inline-flex items-center gap-2 border-[1.5px] border-slate-200 px-8 py-3.5 rounded-[10px] font-semibold text-slate-900 hover:bg-slate-50 transition-colors">
+          <button className="inline-flex items-center gap-2 border border-slate-300 bg-white px-7 py-3 rounded-lg font-semibold text-slate-900 hover:bg-slate-50 transition-colors">
             Watch Demo
             <Play className="w-[18px] h-[18px]" />
           </button>
         </div>
       </div>
 
-      {/* Product Mockup */}
-      <div className="w-[1100px] h-[620px] rounded-xl shadow-[0_32px_64px_-12px_rgba(15,23,42,0.1),0_8px_24px_-4px_rgba(15,23,42,0.05)] overflow-hidden bg-slate-50 border border-slate-200/10">
+      {/* Product Mockup - Subtle Shadow */}
+      <div className="w-[1100px] h-[620px] rounded-xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.08)] overflow-hidden bg-white border border-slate-200">
         <div className="h-11 bg-white border-b border-slate-200 px-4 flex items-center justify-between">
           <div className="flex items-center gap-1.5">
             <span className="w-[10px] h-[10px] bg-red-500 rounded-full" />
@@ -318,7 +319,7 @@ const painStats = [
 
 export function ProblemSection() {
   return (
-    <section className="bg-gradient-to-b from-white via-gray-100 to-white p-20 flex flex-col items-center gap-16">
+    <section className="bg-gradient-to-b from-white via-slate-50 to-white p-20 flex flex-col items-center gap-16">
       <div className="max-w-[700px] flex flex-col items-center gap-6 text-center">
         <div className="inline-flex items-center gap-1.5 bg-red-50 rounded-full px-3.5 py-1.5">
           <TriangleAlert className="w-3.5 h-3.5 text-red-600" />
@@ -340,7 +341,7 @@ export function ProblemSection() {
 
       <div className="max-w-[1200px] w-full grid grid-cols-2 gap-8">
         {/* Before */}
-        <div className="bg-white rounded-2xl p-8 border border-red-200">
+        <div className="bg-white rounded-2xl p-8 border border-slate-200 shadow-md">
           <div className="inline-flex items-center gap-1.5 mb-4">
             <div className="w-5 h-5 rounded-full bg-red-100 flex items-center justify-center">
               <X className="w-3 h-3 text-red-600" />
@@ -369,7 +370,7 @@ export function ProblemSection() {
         </div>
 
         {/* After */}
-        <div className="bg-white rounded-2xl p-8 border border-green-200">
+        <div className="bg-white rounded-2xl p-8 border border-slate-200 shadow-md">
           <div className="inline-flex items-center gap-1.5 mb-4">
             <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center">
               <Check className="w-3 h-3 text-green-600" />
@@ -409,7 +410,7 @@ export function ProblemSection() {
         {painStats.map((stat) => (
           <div
             key={stat.value}
-            className="bg-white rounded-xl p-6 border border-slate-200 flex flex-col items-center gap-2"
+            className="bg-white rounded-xl p-6 border border-slate-200 shadow-md hover:shadow-lg transition-shadow flex flex-col items-center gap-2"
           >
             <span className="text-[28px] font-bold text-red-600 tracking-tight">
               {stat.value}
