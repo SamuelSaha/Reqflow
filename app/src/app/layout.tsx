@@ -1,28 +1,22 @@
 import type { Metadata } from "next";
-import { Playfair_Display, IBM_Plex_Mono, Space_Mono } from "next/font/google";
+import { Manrope, DM_Mono } from "next/font/google";
 import "./globals.css";
 
-const playfairDisplay = Playfair_Display({
-  variable: "--font-playfair",
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
+  weight: ["400", "500", "600"],
 });
 
-const ibmPlexMono = IBM_Plex_Mono({
-  variable: "--font-ibm-plex",
+const dmMono = DM_Mono({
+  variable: "--font-dm-mono",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const spaceMono = Space_Mono({
-  variable: "--font-space-mono",
-  subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["400", "500"],
 });
 
 export const metadata: Metadata = {
-  title: "REQFLOW - AI-Powered Procurement",
-  description: "The €0 infrastructure procurement platform for companies that don't have (and don't want) a procurement department.",
+  title: "Reqflow - Procurement for companies without procurement teams",
+  description: "Request from Slack. Approve from email. Synced to your books.",
 };
 
 export default function RootLayout({
@@ -32,9 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${playfairDisplay.variable} ${ibmPlexMono.variable} ${spaceMono.variable} antialiased`}
-      >
+      <body className={`${manrope.variable} ${dmMono.variable} antialiased`}>
         {children}
       </body>
     </html>
