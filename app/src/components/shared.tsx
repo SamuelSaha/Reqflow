@@ -4,13 +4,13 @@ import { useEffect, useRef, useState } from "react";
 
 export const COLORS = {
   bg: "#ffffff",
-  text: "#0a0a0a",
-  textMuted: "#737373",
-  border: "#e5e5e5",
-  surface: "#f9f9f9",
-  accent: "#2563EB",
-  gradient1: "#2563EB",
-  gradient2: "#1D4ED8",
+  text: "#0F172A", // slate-900 (Figma exact)
+  textMuted: "#475569", // slate-600 (Figma exact)
+  border: "#E2E8F0", // slate-200 (Figma exact)
+  surface: "#F8FAFC", // slate-50 (Figma exact)
+  accent: "#2563EB", // blue-600 (Figma exact)
+  gradient1: "#2563EB", // blue-600
+  gradient2: "#1D4ED8", // blue-700
   accentGlow: "rgba(37, 99, 235, 0.2)",
 };
 
