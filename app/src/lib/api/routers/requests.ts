@@ -177,18 +177,33 @@ export const requestsRouter = router({
         });
       }
 
+      // Route through approval workflow
+      const { buildRoutingContext, routeApproval, executeApprovalRouting } =
+        await import("../../workflows/approval-router");
+
+      const routingContext = await buildRoutingContext(ctx.tenantId, input.id);
+      const routingResult = await routeApproval(routingContext);
+
       // Update status
       await ctx.db
         .update(requests)
         .set({
-          status: "pending",
+          status: routingResult.flags.autoApproved ? "approved" : "pending",
           submittedAt: new Date(),
+          ...(routingResult.flags.autoApproved ? { approvedAt: new Date() } : {}),
         })
         .where(eq(requests.id, input.id));
 
-      // TODO: Trigger approval workflow routing
+      // Persist approval chain
+      await executeApprovalRouting(ctx.tenantId, input.id, routingResult);
+
       // TODO: Send notifications to approvers
 
-      return { success: true };
+      return {
+        success: true,
+        workflowName: routingResult.workflowName,
+        approvalSteps: routingResult.steps.length,
+        flags: routingResult.flags,
+      };
     }),
 });
