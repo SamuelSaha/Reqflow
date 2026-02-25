@@ -7,6 +7,7 @@ import { TRPCError } from "@trpc/server";
 import { router, protectedProcedure } from "../trpc";
 import { requests, approvals, insertRequestSchema } from "../../db/schema";
 import { eq, and, desc, count, sql } from "drizzle-orm";
+import { createAuditLog, AuditAction } from "../../monitoring/audit";
 
 export const requestsRouter = router({
   /**
@@ -202,6 +203,23 @@ export const requestsRouter = router({
       // TODO: Trigger AI classification
       // TODO: Check for duplicates
 
+      // Audit log
+      await createAuditLog({
+        tenantId: ctx.tenantId,
+        userId: ctx.user.id,
+        userEmail: ctx.user.email,
+        userName: ctx.user.name,
+        action: AuditAction.REQUEST_CREATED,
+        entityType: "request",
+        entityId: newRequest.id,
+        description: `Created request: ${input.title}`,
+        metadata: {
+          requestNumber: newRequest.requestNumber,
+          amount: input.amount,
+          category: input.category,
+        },
+      });
+
       return newRequest;
     }),
 
@@ -244,6 +262,32 @@ export const requestsRouter = router({
         .set(input.data)
         .where(eq(requests.id, input.id))
         .returning();
+
+      // Audit log
+      await createAuditLog({
+        tenantId: ctx.tenantId,
+        userId: ctx.user.id,
+        userEmail: ctx.user.email,
+        userName: ctx.user.name,
+        action: AuditAction.REQUEST_UPDATED,
+        entityType: "request",
+        entityId: input.id,
+        description: `Updated request: ${existing.title}`,
+        metadata: {
+          requestNumber: existing.requestNumber,
+          changes: Object.keys(input.data),
+        },
+        before: {
+          title: existing.title,
+          amount: existing.amount,
+          category: existing.category,
+        },
+        after: {
+          title: updated.title,
+          amount: updated.amount,
+          category: updated.category,
+        },
+      });
 
       return updated;
     }),
@@ -357,6 +401,24 @@ export const requestsRouter = router({
           });
         }
       }
+
+      // Audit log
+      await createAuditLog({
+        tenantId: ctx.tenantId,
+        userId: ctx.user.id,
+        userEmail: ctx.user.email,
+        userName: ctx.user.name,
+        action: AuditAction.REQUEST_SUBMITTED,
+        entityType: "request",
+        entityId: input.id,
+        description: `Submitted request: ${request.title}`,
+        metadata: {
+          requestNumber: request.requestNumber,
+          workflowName: routingResult.workflowName,
+          autoApproved: routingResult.flags.autoApproved,
+          approvalSteps: routingResult.steps.length,
+        },
+      });
 
       return {
         success: true,

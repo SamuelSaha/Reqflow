@@ -13,6 +13,7 @@ import {
 } from "@/lib/workflows/approval-router";
 import { eq } from "drizzle-orm";
 import type { z } from "zod";
+import { logger } from "@/lib/monitoring/logger";
 
 export interface RequestInput {
   title: string;
@@ -115,9 +116,13 @@ export async function createSlackRequest(
   // 6. Execute approval routing (create approval records)
   await executeApprovalRouting(tenantId, newRequest.id, routingResult);
 
-  console.log(
-    `[Slack] Created request ${requestNumber} for user ${userId}, routed via ${routingResult.workflowName}`
-  );
+  logger.info("Slack request created successfully", {
+    requestNumber: newRequest.requestNumber,
+    userId,
+    workflowName: routingResult.workflowName,
+    autoApproved: isAutoApproved,
+    source: "slack",
+  });
 
   // 7. Return result for confirmation message
   return {

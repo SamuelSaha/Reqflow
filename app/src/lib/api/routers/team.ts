@@ -9,6 +9,7 @@ import { TRPCError } from "@trpc/server";
 import { users, departments, invites, organizations } from "@/lib/db/schema";
 import { eq, and, or, desc, count as drizzleCount, sql } from "drizzle-orm";
 import { sendEmail, EmailTemplate } from "@/lib/queue/queues/email";
+import { createAuditLog, AuditAction } from "@/lib/monitoring/audit";
 
 export const teamRouter = router({
   /**
@@ -155,6 +156,23 @@ export const teamRouter = router({
           },
         });
 
+        // Audit log
+        await createAuditLog({
+          tenantId: ctx.tenantId,
+          userId: ctx.user.id,
+          userEmail: ctx.user.email,
+          userName: ctx.user.name,
+          action: AuditAction.USER_INVITED,
+          entityType: "invite",
+          entityId: null,
+          description: `Invited ${inv.email} as ${inv.role}`,
+          metadata: {
+            invitedEmail: inv.email,
+            role: inv.role,
+            departmentId: inv.departmentId,
+          },
+        });
+
         results.push({ email: inv.email, sent: true });
       }
 
@@ -230,6 +248,29 @@ export const teamRouter = router({
       if (!updatedUser) {
         throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
       }
+
+      // Audit log
+      const action = input.isActive === false
+        ? AuditAction.USER_DEACTIVATED
+        : input.isActive === true
+        ? AuditAction.USER_REACTIVATED
+        : AuditAction.USER_UPDATED;
+
+      await createAuditLog({
+        tenantId: ctx.tenantId,
+        userId: ctx.user.id,
+        userEmail: ctx.user.email,
+        userName: ctx.user.name,
+        action,
+        entityType: "user",
+        entityId: input.userId,
+        description: `Updated user: ${updatedUser.name}`,
+        metadata: {
+          changes: Object.keys(input).filter((k) => k !== "userId"),
+          role: input.role,
+          isActive: input.isActive,
+        },
+      });
 
       return { success: true, user: updatedUser };
     }),
@@ -537,6 +578,22 @@ export const teamRouter = router({
         },
       });
 
+      // Audit log
+      await createAuditLog({
+        tenantId: ctx.tenantId,
+        userId: ctx.user.id,
+        userEmail: ctx.user.email,
+        userName: ctx.user.name,
+        action: AuditAction.INVITE_RESENT,
+        entityType: "invite",
+        entityId: input.inviteId,
+        description: `Resent invite to ${invite.email}`,
+        metadata: {
+          invitedEmail: invite.email,
+          role: invite.role,
+        },
+      });
+
       return { success: true };
     }),
 
@@ -563,6 +620,22 @@ export const teamRouter = router({
           message: "Invite not found",
         });
       }
+
+      // Audit log
+      await createAuditLog({
+        tenantId: ctx.tenantId,
+        userId: ctx.user.id,
+        userEmail: ctx.user.email,
+        userName: ctx.user.name,
+        action: AuditAction.INVITE_REVOKED,
+        entityType: "invite",
+        entityId: input.inviteId,
+        description: `Revoked invite to ${updated.email}`,
+        metadata: {
+          invitedEmail: updated.email,
+          role: updated.role,
+        },
+      });
 
       return { success: true };
     }),

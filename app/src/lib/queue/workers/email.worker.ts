@@ -9,6 +9,8 @@ import { defaultQueueOptions, QueueName } from "../config";
 import type { EmailJobData } from "../queues/email";
 import { env } from "../../env";
 import { renderEmailTemplate } from "../../emails/render";
+import { logger } from "../../monitoring/logger";
+import { monitorWorker } from "../../monitoring/worker";
 
 const resend = new Resend(env.RESEND_API_KEY);
 
@@ -34,10 +36,19 @@ async function processEmail(job: Job<EmailJobData>) {
       throw new Error(`Resend error: ${result.error.message}`);
     }
 
-    console.log(`✅ Email sent: ${result.data?.id} (${template} to ${to})`);
+    logger.info("Email sent successfully", {
+      emailId: result.data?.id,
+      template,
+      recipient: to,
+      jobId: job.id,
+    });
     return result;
   } catch (error) {
-    console.error(`❌ Email failed (${template} to ${to}):`, error);
+    logger.error("Email send failed", error, {
+      template,
+      recipient: to,
+      jobId: job.id,
+    });
     throw error; // Will trigger retry
   }
 }
@@ -52,13 +63,8 @@ export function startEmailWorker() {
     defaultQueueOptions
   );
 
-  worker.on("completed", (job) => {
-    console.log(`✅ Email job ${job.id} completed`);
-  });
-
-  worker.on("failed", (job, err) => {
-    console.error(`❌ Email job ${job?.id} failed:`, err);
-  });
+  // Attach monitoring
+  monitorWorker(worker, QueueName.EMAIL);
 
   return worker;
 }

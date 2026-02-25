@@ -9,6 +9,8 @@ import { parseRequestCommand, validateParsedRequest } from "@/lib/integrations/s
 import { buildRequestModal, buildSuccessMessage, buildErrorMessage, buildValidationErrorMessage } from "@/lib/integrations/slack/modals";
 import { mapSlackUserToReqflow, getUserMappingErrorMessage } from "@/lib/integrations/slack/user-mapper";
 import { createSlackRequest } from "@/lib/integrations/slack/request-handler";
+import { logger } from "@/lib/monitoring/logger";
+import { captureError } from "@/lib/monitoring/sentry";
 
 export async function POST(request: Request) {
   try {
@@ -17,7 +19,9 @@ export async function POST(request: Request) {
     const isValid = await verifySlackRequest(request, body);
 
     if (!isValid) {
-      console.warn("[Slack Commands] Invalid signature");
+      logger.warn("Slack command request has invalid signature", {
+        route: "/api/webhooks/slack/commands",
+      });
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
@@ -49,12 +53,20 @@ export async function POST(request: Request) {
 
     // Process request asynchronously via response_url
     processQuickRequest(parsed, userId, teamId, responseUrl).catch((error) => {
-      console.error("[Slack Commands] Async processing error:", error);
+      logger.error("Slack command async processing failed", error as Error, {
+        route: "/api/webhooks/slack/commands",
+        userId,
+        teamId,
+      });
+      captureError(error as Error, { route: "/api/webhooks/slack/commands" });
     });
 
     return immediateResponse;
   } catch (error: unknown) {
-    console.error("[Slack Commands] Error:", error);
+    logger.error("Slack commands webhook failed", error as Error, {
+      route: "/api/webhooks/slack/commands",
+    });
+    captureError(error as Error, { route: "/api/webhooks/slack/commands" });
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
@@ -122,7 +134,10 @@ async function processQuickRequest(
       buildSuccessMessage(result.requestNumber, result.workflowName, result.approvalSteps)
     );
   } catch (error: unknown) {
-    console.error("[Slack Commands] Quick request error:", error);
+    logger.error("Slack quick request creation failed", error as Error, {
+      source: "slack_commands",
+    });
+    captureError(error as Error, { source: "slack_commands" });
     const message = error instanceof Error ? error.message : "Failed to create request";
     await sendToResponseUrl(
       responseUrl,
@@ -136,7 +151,9 @@ async function processQuickRequest(
  */
 async function sendToResponseUrl(responseUrl: string | null, payload: Record<string, unknown>) {
   if (!responseUrl) {
-    console.warn("[Slack Commands] No response_url provided");
+    logger.warn("No response_url provided for Slack command", {
+      source: "slack_commands",
+    });
     return;
   }
 
@@ -147,6 +164,8 @@ async function sendToResponseUrl(responseUrl: string | null, payload: Record<str
       body: JSON.stringify(payload),
     });
   } catch (error) {
-    console.error("[Slack Commands] Failed to send to response_url:", error);
+    logger.error("Failed to send to Slack response_url", error as Error, {
+      source: "slack_commands",
+    });
   }
 }

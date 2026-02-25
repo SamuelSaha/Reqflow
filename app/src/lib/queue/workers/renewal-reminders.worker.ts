@@ -10,6 +10,8 @@ import { db } from "@/lib/db";
 import { renewalEvents, users } from "@/lib/db/schema";
 import { emailQueue, EmailTemplate } from "../queues/email";
 import type { RenewalReminderJobData } from "../queues/renewal-reminders";
+import { logger } from "../../monitoring/logger";
+import { monitorWorker } from "../../monitoring/worker";
 
 async function processRenewalReminder(job: Job<RenewalReminderJobData>) {
   const {
@@ -25,9 +27,13 @@ async function processRenewalReminder(job: Job<RenewalReminderJobData>) {
     tenantId,
   } = job.data;
 
-  console.log(
-    `[RenewalReminders] Processing ${reminderType} reminder for renewal ${renewalId} (${daysBeforeDeadline}d before deadline)`
-  );
+  logger.info("Processing renewal reminder", {
+    renewalId,
+    reminderType,
+    daysBeforeDeadline,
+    toolName,
+    jobId: job.id,
+  });
 
   // Fetch renewal to check if still active
   const renewal = await db.query.renewalEvents.findFirst({
@@ -38,15 +44,20 @@ async function processRenewalReminder(job: Job<RenewalReminderJobData>) {
   });
 
   if (!renewal) {
-    console.log(`[RenewalReminders] Renewal ${renewalId} not found, skipping`);
+    logger.info("Renewal not found, skipping reminder", {
+      renewalId,
+      jobId: job.id,
+    });
     return;
   }
 
   // Skip if decision already made
   if (renewal.status === "decided") {
-    console.log(
-      `[RenewalReminders] Renewal ${renewalId} already decided, skipping`
-    );
+    logger.info("Renewal already decided, skipping reminder", {
+      renewalId,
+      status: renewal.status,
+      jobId: job.id,
+    });
     return;
   }
 
@@ -77,9 +88,11 @@ async function processRenewalReminder(job: Job<RenewalReminderJobData>) {
   recipientIds = Array.from(new Set(recipientIds));
 
   if (recipientIds.length === 0) {
-    console.warn(
-      `[RenewalReminders] No recipients found for renewal ${renewalId}`
-    );
+    logger.warn("No recipients found for renewal reminder", {
+      renewalId,
+      reminderType,
+      jobId: job.id,
+    });
     return;
   }
 
@@ -143,9 +156,14 @@ async function processRenewalReminder(job: Job<RenewalReminderJobData>) {
     })
     .where(eq(renewalEvents.id, renewalId));
 
-  console.log(
-    `[RenewalReminders] Sent ${reminderType} reminder to ${recipientEmails.length} recipients for renewal ${renewalId}`
-  );
+  logger.info("Renewal reminder sent successfully", {
+    renewalId,
+    reminderType,
+    recipientCount: recipientEmails.length,
+    toolName,
+    daysBeforeDeadline,
+    jobId: job.id,
+  });
 }
 
 export function startRenewalRemindersWorker() {
@@ -155,22 +173,12 @@ export function startRenewalRemindersWorker() {
     defaultQueueOptions
   );
 
-  worker.on("completed", (job) => {
-    console.log(`[RenewalReminders] Job ${job.id} completed`);
-  });
+  // Attach monitoring
+  monitorWorker(worker, QueueName.RENEWAL_REMINDERS);
 
-  worker.on("failed", (job, err) => {
-    console.error(
-      `[RenewalReminders] Job ${job?.id} failed:`,
-      err.message
-    );
+  logger.info("Renewal reminders worker started", {
+    queue: QueueName.RENEWAL_REMINDERS,
   });
-
-  worker.on("error", (err) => {
-    console.error("[RenewalReminders] Worker error:", err);
-  });
-
-  console.log("[RenewalReminders] Worker started");
 
   return worker;
 }

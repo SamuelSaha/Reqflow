@@ -16,6 +16,7 @@ import {
   getUrgencyColor,
   type RenewalCheckpoint,
 } from "@/lib/utils/renewal-readiness";
+import { logger } from "@/lib/monitoring/logger";
 
 export const renewalsRouter = router({
   /**
@@ -417,7 +418,10 @@ export const renewalsRouter = router({
     } catch (error) {
       // Return empty stats if table doesn't exist or query fails
       // This is graceful degradation for when renewals feature isn't set up yet
-      console.warn("[renewals.getDashboardStats] Query failed, returning empty stats:", error);
+      logger.warn("Renewals dashboard stats query failed, returning empty stats", {
+        error: error instanceof Error ? error.message : String(error),
+        procedure: "renewals.getDashboardStats",
+      });
       return {
         total: 0,
         green: 0,

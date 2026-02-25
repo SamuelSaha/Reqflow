@@ -9,8 +9,9 @@ import { startEmailWorker } from "./workers/email.worker";
 import { startApprovalTimersWorker } from "./workers/approval-timers.worker";
 import { startTrialRemindersWorker } from "./workers/trial-reminders.worker";
 import { startRenewalRemindersWorker } from "./workers/renewal-reminders.worker";
+import { logger } from "../monitoring/logger";
 
-console.log("🚀 Starting Reqflow workers...");
+logger.info("Starting Reqflow workers");
 
 // Start all workers
 const workers = [
@@ -21,11 +22,14 @@ const workers = [
   // Add more workers as needed
 ];
 
-console.log(`✅ Started ${workers.length} workers`);
+logger.info("All workers started successfully", {
+  workerCount: workers.length,
+});
 
 // Graceful shutdown
 process.on("SIGTERM", async () => {
-  console.log("📴 Shutting down workers...");
+  logger.info("Graceful shutdown initiated");
   await Promise.all(workers.map((w) => w.close()));
+  logger.info("All workers closed successfully");
   process.exit(0);
 });

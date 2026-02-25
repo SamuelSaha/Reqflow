@@ -8,6 +8,8 @@ import { defaultQueueOptions, QueueName } from "../config";
 import type { TrialReminderJobData } from "../queues/trial-reminders";
 import { sendEmail, EmailTemplate } from "../queues/email";
 import { sql, eq } from "drizzle-orm";
+import { logger } from "../../monitoring/logger";
+import { monitorWorker } from "../../monitoring/worker";
 
 /**
  * Process trial reminder job
@@ -31,7 +33,11 @@ async function processTrialReminder(job: Job<TrialReminderJobData>) {
   });
 
   if (!trial || (trial.status !== "active" && trial.status !== "extended")) {
-    console.log(`Trial ${trialId} no longer active, skipping reminder`);
+    logger.info("Trial no longer active, skipping reminder", {
+      trialId,
+      status: trial?.status,
+      jobId: job.id,
+    });
     return;
   }
 
@@ -41,7 +47,11 @@ async function processTrialReminder(job: Job<TrialReminderJobData>) {
   });
 
   if (!initiator) {
-    console.error(`Initiator ${initiatedById} not found for trial ${trialId}`);
+    logger.error("Trial initiator not found", new Error("Initiator not found"), {
+      initiatedById,
+      trialId,
+      jobId: job.id,
+    });
     return;
   }
 
@@ -89,9 +99,13 @@ async function processTrialReminder(job: Job<TrialReminderJobData>) {
     })
     .where(eq(trials.id, trialId));
 
-  console.log(
-    `📧 Sent ${daysUntilExpiry}d reminder for trial ${trialId} to ${recipientEmails.length} recipients`
-  );
+  logger.info("Trial reminder sent successfully", {
+    trialId,
+    toolName,
+    daysUntilExpiry,
+    recipientCount: recipientEmails.length,
+    jobId: job.id,
+  });
 }
 
 /**
@@ -104,13 +118,8 @@ export function startTrialRemindersWorker() {
     defaultQueueOptions
   );
 
-  worker.on("completed", (job) => {
-    console.log(`✅ Trial reminder ${job.id} completed`);
-  });
-
-  worker.on("failed", (job, err) => {
-    console.error(`❌ Trial reminder ${job?.id} failed:`, err);
-  });
+  // Attach monitoring
+  monitorWorker(worker, QueueName.TRIAL_REMINDERS);
 
   return worker;
 }

@@ -6,6 +6,7 @@
 import { Queue } from "bullmq";
 import { subDays, parseISO, differenceInMilliseconds } from "date-fns";
 import { QueueName, redisConnection } from "../config";
+import { logger } from "../../monitoring/logger";
 
 export interface RenewalReminderJobData {
   renewalId: string;
@@ -108,7 +109,10 @@ export async function cancelRenewalReminders(renewalId: string) {
         await job.remove();
       }
     } catch (error) {
-      console.error(`Failed to cancel reminder job ${jobId}:`, error);
+      logger.error("Failed to cancel renewal reminder job", error as Error, {
+        jobId,
+        source: "renewal_reminders_queue",
+      });
     }
   }
 }

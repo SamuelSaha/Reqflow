@@ -5,6 +5,7 @@
 
 import crypto from "crypto";
 import { env } from "@/lib/env";
+import { logger } from "@/lib/monitoring/logger";
 
 /**
  * Verify Slack request signature using HMAC-SHA256
@@ -20,7 +21,7 @@ export function verifySlackSignature(
 ): boolean {
   // Must have signing secret configured
   if (!env.SLACK_SIGNING_SECRET) {
-    console.error("[Slack] SLACK_SIGNING_SECRET not configured");
+    logger.error("Slack signing secret not configured", new Error("Missing SLACK_SIGNING_SECRET"));
     return false;
   }
 
@@ -31,7 +32,10 @@ export function verifySlackSignature(
 
   if (timeDiff > 300) {
     // More than 5 minutes old
-    console.warn(`[Slack] Request timestamp too old: ${timeDiff}s`);
+    logger.warn("Slack request timestamp too old", {
+      timeDiff,
+      source: "slack_signature",
+    });
     return false;
   }
 
@@ -55,7 +59,9 @@ export function verifySlackSignature(
 
     return crypto.timingSafeEqual(signatureBuffer, expectedBuffer);
   } catch (error) {
-    console.error("[Slack] Signature verification error:", error);
+    logger.error("Slack signature verification failed", error as Error, {
+      source: "slack_signature",
+    });
     return false;
   }
 }
@@ -74,7 +80,9 @@ export async function verifySlackRequest(
   const signature = request.headers.get("x-slack-signature");
 
   if (!timestamp || !signature) {
-    console.warn("[Slack] Missing signature headers");
+    logger.warn("Slack request missing signature headers", {
+      source: "slack_signature",
+    });
     return false;
   }
 

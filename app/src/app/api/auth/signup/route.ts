@@ -9,6 +9,8 @@ import {
 } from "@/lib/db/schema";
 import { eq, and } from "drizzle-orm";
 import { hashPassword, createSession } from "@/lib/auth/simple-auth";
+import { logger } from "@/lib/monitoring/logger";
+import { captureError } from "@/lib/monitoring/sentry";
 
 const COOKIE_NAME = "reqflow_session";
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
@@ -167,7 +169,8 @@ export async function POST(request: Request) {
       user: { id: user.id, email: user.email, name: user.name, role: user.role },
     });
   } catch (error: unknown) {
-    console.error("Signup error:", error);
+    logger.error("Signup failed", error as Error, { route: "/api/auth/signup" });
+    captureError(error as Error, { route: "/api/auth/signup" });
     return NextResponse.json(
       { error: "An error occurred during signup" },
       { status: 500 }

@@ -9,6 +9,7 @@ import { router, protectedProcedure } from "../trpc";
 import { approvals, requests } from "../../db/schema";
 import { eq, and, desc } from "drizzle-orm";
 import { analyzeRequest } from "../../ai/request-analyzer";
+import { createAuditLog, AuditAction } from "../../monitoring/audit";
 
 export const approvalsRouter = router({
   /**
@@ -205,6 +206,32 @@ export const approvalsRouter = router({
             });
           }
         }
+      }
+
+      // Audit log
+      const requestForAudit = await ctx.db.query.requests.findFirst({
+        where: eq(requests.id, approval.requestId),
+      });
+
+      if (requestForAudit) {
+        await createAuditLog({
+          tenantId: ctx.tenantId,
+          userId: ctx.user.id,
+          userEmail: ctx.user.email,
+          userName: ctx.user.name,
+          action: AuditAction.APPROVAL_DECIDED,
+          entityType: "approval",
+          entityId: input.approvalId,
+          description: `${input.decision === "approved" ? "Approved" : "Rejected"} request: ${requestForAudit.title}`,
+          metadata: {
+            requestId: approval.requestId,
+            requestNumber: requestForAudit.requestNumber,
+            decision: input.decision,
+            comments: input.comments,
+            step: approval.step,
+            allRequiredDecided,
+          },
+        });
       }
 
       return {

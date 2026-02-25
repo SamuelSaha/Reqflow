@@ -7,6 +7,8 @@ import { Worker, Job } from "bullmq";
 import { defaultQueueOptions, QueueName } from "../config";
 import type { ApprovalTimerJobData } from "../queues/approval-timers";
 import { sendEmail, EmailTemplate } from "../queues/email";
+import { logger } from "../../monitoring/logger";
+import { monitorWorker } from "../../monitoring/worker";
 
 /**
  * Process approval timer job
@@ -28,7 +30,11 @@ async function processApprovalTimer(job: Job<ApprovalTimerJobData>) {
   });
 
   if (!approval || approval.decision !== "pending") {
-    console.log(`Approval ${approvalId} already resolved, skipping timer`);
+    logger.info("Approval already resolved, skipping timer", {
+      approvalId,
+      decision: approval?.decision,
+      jobId: job.id,
+    });
     return;
   }
 
@@ -52,11 +58,21 @@ async function processApprovalTimer(job: Job<ApprovalTimerJobData>) {
       .set({ reminderSentAt: new Date() })
       .where(eq(approvals.id, approvalId));
 
-    console.log(`📧 Sent reminder for approval ${approvalId}`);
+    logger.info("Approval reminder sent successfully", {
+      approvalId,
+      requestTitle: approval.request.title,
+      approverEmail: approval.approver.email,
+      jobId: job.id,
+    });
   } else if (type === "escalate") {
     // TODO: Implement escalation logic
     // Find backup approver or escalate to admin
-    console.log(`⚠️ Escalating approval ${approvalId}`);
+    logger.warn("Approval escalation triggered", {
+      approvalId,
+      requestTitle: approval.request.title,
+      approverEmail: approval.approver.email,
+      jobId: job.id,
+    });
   }
 }
 
@@ -70,13 +86,8 @@ export function startApprovalTimersWorker() {
     defaultQueueOptions
   );
 
-  worker.on("completed", (job) => {
-    console.log(`✅ Approval timer ${job.id} completed`);
-  });
-
-  worker.on("failed", (job, err) => {
-    console.error(`❌ Approval timer ${job?.id} failed:`, err);
-  });
+  // Attach monitoring
+  monitorWorker(worker, QueueName.APPROVAL_TIMERS);
 
   return worker;
 }

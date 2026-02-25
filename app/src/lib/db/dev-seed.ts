@@ -7,6 +7,7 @@
 import { db } from "./index";
 import { organizations, departments, users, budgets } from "./schema";
 import { eq } from "drizzle-orm";
+import { logger } from "../monitoring/logger";
 
 // Fixed UUIDs for deterministic dev data
 export const DEV_ORG_ID = "00000000-0000-0000-0000-000000000001";
@@ -35,7 +36,7 @@ export async function ensureDevSeed() {
     return;
   }
 
-  console.log("[dev-seed] Seeding development data...");
+  logger.info("Seeding development data", { source: "dev-seed" });
 
   // Organization
   await db.insert(organizations).values({
@@ -151,5 +152,5 @@ export async function ensureDevSeed() {
   ]).onConflictDoNothing();
 
   seeded = true;
-  console.log("[dev-seed] Development data seeded successfully");
+  logger.info("Development data seeded successfully", { source: "dev-seed" });
 }

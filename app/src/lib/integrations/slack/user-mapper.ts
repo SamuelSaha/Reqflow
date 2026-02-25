@@ -7,6 +7,7 @@ import { WebClient } from "@slack/web-api";
 import { db } from "@/lib/db";
 import { users, slackUserMappings, slackWorkspaces } from "@/lib/db/schema";
 import { eq, and } from "drizzle-orm";
+import { logger } from "@/lib/monitoring/logger";
 
 export interface MappedUser {
   userId: string;
@@ -64,7 +65,10 @@ export async function mapSlackUserToReqflow(
   try {
     userInfo = await slackClient.users.info({ user: slackUserId });
   } catch (error: unknown) {
-    console.error("[Slack] Failed to fetch user info:", error);
+    logger.error("Failed to fetch Slack user info", error as Error, {
+      slackUserId,
+      source: "slack_user_mapper",
+    });
     throw new Error("Failed to fetch user information from Slack");
   }
 
@@ -100,7 +104,12 @@ export async function mapSlackUserToReqflow(
     slackEmail: email,
   });
 
-  console.log(`[Slack] Created user mapping: ${slackUserId} → ${reqflowUser.email}`);
+  logger.info("Created Slack user mapping", {
+    slackUserId,
+    reqflowEmail: reqflowUser.email,
+    tenantId: workspace.tenantId,
+    source: "slack_user_mapper",
+  });
 
   return {
     userId: reqflowUser.id,

@@ -8,6 +8,8 @@ import { verifySlackRequest } from "@/lib/integrations/slack/signature";
 import { buildSuccessMessage } from "@/lib/integrations/slack/modals";
 import { mapSlackUserToReqflow, getUserMappingErrorMessage } from "@/lib/integrations/slack/user-mapper";
 import { createSlackRequest, extractModalValues } from "@/lib/integrations/slack/request-handler";
+import { logger } from "@/lib/monitoring/logger";
+import { captureError } from "@/lib/monitoring/sentry";
 
 export async function POST(request: Request) {
   try {
@@ -16,7 +18,9 @@ export async function POST(request: Request) {
     const isValid = await verifySlackRequest(request, body);
 
     if (!isValid) {
-      console.warn("[Slack Interactivity] Invalid signature");
+      logger.warn("Slack interactivity request has invalid signature", {
+        route: "/api/webhooks/slack/interactivity",
+      });
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
@@ -43,7 +47,10 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ text: "Unknown interaction type" });
   } catch (error: unknown) {
-    console.error("[Slack Interactivity] Error:", error);
+    logger.error("Slack interactivity webhook failed", error as Error, {
+      route: "/api/webhooks/slack/interactivity",
+    });
+    captureError(error as Error, { route: "/api/webhooks/slack/interactivity" });
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
@@ -115,7 +122,10 @@ async function handleModalSubmission(
     // Return empty response to close modal
     return NextResponse.json({});
   } catch (error: unknown) {
-    console.error("[Slack Interactivity] Modal submission error:", error);
+    logger.error("Slack modal submission failed", error as Error, {
+      source: "slack_interactivity",
+    });
+    captureError(error as Error, { source: "slack_interactivity" });
 
     // Show error in modal
     const message = error instanceof Error ? error.message : "Failed to create request";
@@ -133,7 +143,9 @@ async function handleModalSubmission(
  */
 async function sendToResponseUrl(responseUrl: string | null, payload: Record<string, unknown>) {
   if (!responseUrl) {
-    console.warn("[Slack Interactivity] No response_url provided");
+    logger.warn("No response_url provided for Slack interactivity", {
+      source: "slack_interactivity",
+    });
     return;
   }
 
@@ -144,6 +156,8 @@ async function sendToResponseUrl(responseUrl: string | null, payload: Record<str
       body: JSON.stringify(payload),
     });
   } catch (error) {
-    console.error("[Slack Interactivity] Failed to send to response_url:", error);
+    logger.error("Failed to send to Slack response_url", error as Error, {
+      source: "slack_interactivity",
+    });
   }
 }
