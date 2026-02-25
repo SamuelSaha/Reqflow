@@ -7,7 +7,7 @@ import { z } from "zod";
 import { router, adminProcedure, protectedProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { users, departments, invites, organizations } from "@/lib/db/schema";
-import { eq, and, or, desc, count as drizzleCount } from "drizzle-orm";
+import { eq, and, or, desc, count as drizzleCount, sql } from "drizzle-orm";
 import { sendEmail, EmailTemplate } from "@/lib/queue/queues/email";
 
 export const teamRouter = router({
@@ -446,6 +446,7 @@ export const teamRouter = router({
       const where = conditions.length > 1 ? and(...conditions) : conditions[0];
 
       // Use manual join to avoid relation issues
+      // Note: Must use SQL aliases to avoid column name conflicts
       const inviteList = await ctx.db
         .select({
           id: invites.id,
@@ -454,11 +455,9 @@ export const teamRouter = router({
           status: invites.status,
           expiresAt: invites.expiresAt,
           createdAt: invites.createdAt,
-          inviter: {
-            id: users.id,
-            name: users.name,
-            email: users.email,
-          },
+          inviterId: sql<string | null>`${users.id}`.as('inviter_id'),
+          inviterName: sql<string | null>`${users.name}`.as('inviter_name'),
+          inviterEmail: sql<string | null>`${users.email}`.as('inviter_email'),
         })
         .from(invites)
         .leftJoin(users, eq(invites.invitedBy, users.id))
@@ -470,11 +469,11 @@ export const teamRouter = router({
         email: invite.email,
         role: invite.role,
         status: invite.status,
-        invitedBy: invite.inviter.id
+        invitedBy: invite.inviterId
           ? {
-              id: invite.inviter.id,
-              name: invite.inviter.name,
-              email: invite.inviter.email,
+              id: invite.inviterId,
+              name: invite.inviterName || "Unknown",
+              email: invite.inviterEmail || "",
             }
           : { id: "", name: "Unknown", email: "" },
         expiresAt: invite.expiresAt,

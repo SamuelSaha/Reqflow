@@ -229,6 +229,20 @@ export default function TeamPage() {
             </div>
           )}
 
+          {inviteList.error && (
+            <Card className="border-red-200 bg-red-50">
+              <CardContent className="flex flex-col items-center justify-center py-12">
+                <AlertCircle className="h-12 w-12 text-red-400 mb-4" />
+                <p className="text-lg font-medium text-slate-900 mb-2">
+                  Failed to load invites
+                </p>
+                <p className="text-slate-600 text-sm">
+                  {inviteList.error.message || "An error occurred while fetching invites"}
+                </p>
+              </CardContent>
+            </Card>
+          )}
+
           {inviteList.data && inviteList.data.length === 0 && (
             <Card>
               <CardContent className="flex flex-col items-center justify-center py-12">
