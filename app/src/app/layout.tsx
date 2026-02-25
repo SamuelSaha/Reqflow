@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Manrope, DM_Mono } from "next/font/google";
+import { TRPCProvider } from "@/lib/api/react";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -27,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${manrope.variable} ${dmMono.variable} antialiased`}>
-        {children}
+        <TRPCProvider>{children}</TRPCProvider>
       </body>
     </html>
   );
