@@ -9,8 +9,8 @@ export async function register() {
     // Import Sentry server config
     await import("./sentry.server.config");
 
-    // Initialize logger
-    const { logger } = await import("@/lib/monitoring/logger");
+    // Initialize logger (use relative path, @/ alias doesn't work in instrumentation)
+    const { logger } = await import("./src/lib/monitoring/logger");
     logger.info("Application instrumentation initialized", {
       environment: process.env.NODE_ENV,
       runtime: "nodejs",

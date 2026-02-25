@@ -4,11 +4,6 @@ import { withSentryConfig } from "@sentry/nextjs";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
 
-  // Enable instrumentation hook
-  experimental: {
-    instrumentationHook: true,
-  },
-
   // Logging for debugging
   logging: {
     fetches: {
