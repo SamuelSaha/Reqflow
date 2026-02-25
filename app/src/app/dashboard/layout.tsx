@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FileText, CheckSquare, LayoutDashboard, Wallet, FlaskConical, Calendar } from "lucide-react";
+import { FileText, CheckSquare, LayoutDashboard, Wallet, FlaskConical, Calendar, Settings } from "lucide-react";
 import { Toaster } from "sonner";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 
@@ -15,6 +15,7 @@ const navItems = [
   { href: "/dashboard/trials", label: "Trials", icon: FlaskConical, exact: false },
   { href: "/dashboard/renewals", label: "Renewals", icon: Calendar, exact: false },
   { href: "/dashboard/budgets", label: "Budgets", icon: Wallet, exact: false },
+  { href: "/dashboard/settings", label: "Settings", icon: Settings, exact: false },
 ];
 
 export default function DashboardLayout({
