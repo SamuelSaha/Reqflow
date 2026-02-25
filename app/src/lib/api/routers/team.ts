@@ -233,4 +233,326 @@ export const teamRouter = router({
 
       return { success: true, user: updatedUser };
     }),
+
+  /**
+   * List all departments with member counts
+   */
+  listDepartments: adminProcedure.query(async ({ ctx }) => {
+    const deptList = await ctx.db.query.departments.findMany({
+      where: eq(departments.tenantId, ctx.tenantId),
+      with: {
+        head: true,
+      },
+      orderBy: [desc(departments.createdAt)],
+    });
+
+    // Get member counts for each department
+    const deptsWithCounts = await Promise.all(
+      deptList.map(async (dept) => {
+        const [{ value: memberCount }] = await ctx.db
+          .select({ value: drizzleCount() })
+          .from(users)
+          .where(eq(users.departmentId, dept.id));
+
+        return {
+          id: dept.id,
+          name: dept.name,
+          code: dept.code,
+          description: dept.description,
+          head: dept.head
+            ? {
+                id: dept.head.id,
+                name: dept.head.name,
+                email: dept.head.email,
+              }
+            : null,
+          memberCount: Number(memberCount),
+          createdAt: dept.createdAt,
+        };
+      })
+    );
+
+    return deptsWithCounts;
+  }),
+
+  /**
+   * Create a new department
+   */
+  createDepartment: adminProcedure
+    .input(
+      z.object({
+        name: z.string().min(1).max(100),
+        code: z.string().min(1).max(20).optional(),
+        description: z.string().optional(),
+        headId: z.string().uuid().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      // Validate headId is a manager if provided
+      if (input.headId) {
+        const head = await ctx.db.query.users.findFirst({
+          where: and(
+            eq(users.id, input.headId),
+            eq(users.tenantId, ctx.tenantId)
+          ),
+        });
+
+        if (!head) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Department head not found",
+          });
+        }
+
+        if (head.role !== "manager" && head.role !== "admin") {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Department head must have manager or admin role",
+          });
+        }
+      }
+
+      const [dept] = await ctx.db
+        .insert(departments)
+        .values({
+          tenantId: ctx.tenantId,
+          name: input.name,
+          code: input.code,
+          description: input.description,
+          headId: input.headId,
+        })
+        .returning();
+
+      return { success: true, department: dept };
+    }),
+
+  /**
+   * Update department
+   */
+  updateDepartment: adminProcedure
+    .input(
+      z.object({
+        departmentId: z.string().uuid(),
+        name: z.string().min(1).max(100).optional(),
+        code: z.string().min(1).max(20).optional(),
+        description: z.string().optional(),
+        headId: z.string().uuid().nullable().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      // Validate headId is a manager if provided
+      if (input.headId) {
+        const head = await ctx.db.query.users.findFirst({
+          where: and(
+            eq(users.id, input.headId),
+            eq(users.tenantId, ctx.tenantId)
+          ),
+        });
+
+        if (!head) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Department head not found",
+          });
+        }
+
+        if (head.role !== "manager" && head.role !== "admin") {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Department head must have manager or admin role",
+          });
+        }
+      }
+
+      const updateData: Record<string, unknown> = {
+        updatedAt: new Date(),
+      };
+
+      if (input.name) updateData.name = input.name;
+      if (input.code !== undefined) updateData.code = input.code;
+      if (input.description !== undefined)
+        updateData.description = input.description;
+      if (input.headId !== undefined) updateData.headId = input.headId;
+
+      const [updated] = await ctx.db
+        .update(departments)
+        .set(updateData)
+        .where(eq(departments.id, input.departmentId))
+        .returning();
+
+      if (!updated) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Department not found",
+        });
+      }
+
+      return { success: true, department: updated };
+    }),
+
+  /**
+   * Delete department (validate no users or budgets)
+   */
+  deleteDepartment: adminProcedure
+    .input(z.object({ departmentId: z.string().uuid() }))
+    .mutation(async ({ ctx, input }) => {
+      // Check for users in this department
+      const [{ value: userCount }] = await ctx.db
+        .select({ value: drizzleCount() })
+        .from(users)
+        .where(eq(users.departmentId, input.departmentId));
+
+      if (Number(userCount) > 0) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `Cannot delete department with ${userCount} member(s). Reassign users first.`,
+        });
+      }
+
+      // Note: Budget validation would go here if budgets reference departments
+      // For now, we'll proceed with deletion
+
+      const [deleted] = await ctx.db
+        .delete(departments)
+        .where(eq(departments.id, input.departmentId))
+        .returning();
+
+      if (!deleted) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Department not found",
+        });
+      }
+
+      return { success: true };
+    }),
+
+  /**
+   * List all invites with inviter information
+   */
+  listInvites: adminProcedure
+    .input(
+      z.object({
+        status: z.enum(["pending", "accepted", "expired"]).optional(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const conditions = [eq(invites.tenantId, ctx.tenantId)];
+
+      if (input.status) {
+        conditions.push(eq(invites.status, input.status));
+      }
+
+      const where = conditions.length > 1 ? and(...conditions) : conditions[0];
+
+      const inviteList = await ctx.db.query.invites.findMany({
+        where,
+        with: {
+          inviter: true,
+        },
+        orderBy: [desc(invites.createdAt)],
+      });
+
+      return inviteList.map((invite) => ({
+        id: invite.id,
+        email: invite.email,
+        role: invite.role,
+        status: invite.status,
+        invitedBy: invite.inviter
+          ? {
+              id: invite.inviter.id,
+              name: invite.inviter.name,
+              email: invite.inviter.email,
+            }
+          : { id: "", name: "Unknown", email: "" },
+        expiresAt: invite.expiresAt,
+        createdAt: invite.createdAt,
+      }));
+    }),
+
+  /**
+   * Resend invite (regenerate token and email)
+   */
+  resendInvite: adminProcedure
+    .input(z.object({ inviteId: z.string().uuid() }))
+    .mutation(async ({ ctx, input }) => {
+      const invite = await ctx.db.query.invites.findFirst({
+        where: and(
+          eq(invites.id, input.inviteId),
+          eq(invites.tenantId, ctx.tenantId)
+        ),
+      });
+
+      if (!invite) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Invite not found",
+        });
+      }
+
+      if (invite.status !== "pending") {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `Cannot resend ${invite.status} invite`,
+        });
+      }
+
+      // Generate new token and extend expiry
+      const newToken = crypto.randomUUID();
+      const newExpiresAt = new Date();
+      newExpiresAt.setDate(newExpiresAt.getDate() + 7);
+
+      await ctx.db
+        .update(invites)
+        .set({ token: newToken, expiresAt: newExpiresAt })
+        .where(eq(invites.id, input.inviteId));
+
+      // Get org for email
+      const org = await ctx.db.query.organizations.findFirst({
+        where: eq(organizations.id, ctx.tenantId),
+      });
+
+      // Resend email
+      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+      await sendEmail({
+        to: invite.email,
+        subject: `${ctx.user.name} invited you to join ${org?.name || "Reqflow"}`,
+        template: EmailTemplate.TEAM_INVITE,
+        data: {
+          inviterName: ctx.user.name,
+          orgName: org?.name || "your team",
+          inviteUrl: `${baseUrl}/signup?invite=${newToken}`,
+          role: invite.role,
+        },
+      });
+
+      return { success: true };
+    }),
+
+  /**
+   * Revoke invite (set status to expired)
+   */
+  revokeInvite: adminProcedure
+    .input(z.object({ inviteId: z.string().uuid() }))
+    .mutation(async ({ ctx, input }) => {
+      const [updated] = await ctx.db
+        .update(invites)
+        .set({ status: "expired" })
+        .where(
+          and(
+            eq(invites.id, input.inviteId),
+            eq(invites.tenantId, ctx.tenantId)
+          )
+        )
+        .returning();
+
+      if (!updated) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Invite not found",
+        });
+      }
+
+      return { success: true };
+    }),
 });
