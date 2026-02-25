@@ -9,6 +9,7 @@ import { budgetsRouter } from "./routers/budgets";
 import { approvalsRouter } from "./routers/approvals";
 import { trialsRouter } from "./routers/trials";
 import { renewalsRouter } from "./routers/renewals";
+import { onboardingRouter } from "./routers/onboarding";
 
 export const appRouter = router({
   requests: requestsRouter,
@@ -16,6 +17,7 @@ export const appRouter = router({
   approvals: approvalsRouter,
   trials: trialsRouter,
   renewals: renewalsRouter,
+  onboarding: onboardingRouter,
 });
 
 export type AppRouter = typeof appRouter;

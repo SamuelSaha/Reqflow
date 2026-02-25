@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, uuid, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, uuid, boolean, integer } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 
@@ -23,6 +23,10 @@ export const organizations = pgTable("organizations", {
 
   // Status
   isActive: boolean("is_active").notNull().default(true),
+
+  // Onboarding
+  onboardingCompleted: boolean("onboarding_completed").notNull().default(false),
+  onboardingStep: integer("onboarding_step").notNull().default(0), // 0-4
 
   // Timestamps
   createdAt: timestamp("created_at").notNull().defaultNow(),

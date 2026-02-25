@@ -10,6 +10,7 @@ import ApprovalAssignedEmail from "./templates/approval-assigned";
 import RequestApprovedEmail from "./templates/request-approved";
 import RequestRejectedEmail from "./templates/request-rejected";
 import ApprovalReminderEmail from "./templates/approval-reminder";
+import TeamInviteEmail from "./templates/team-invite";
 
 /**
  * Render email template to HTML
@@ -36,6 +37,9 @@ export async function renderEmailTemplate(
 
     case EmailTemplate.APPROVAL_REMINDER:
       return render(ApprovalReminderEmail(d));
+
+    case EmailTemplate.TEAM_INVITE:
+      return render(TeamInviteEmail(d));
 
     default:
       // Fallback for templates without React components yet

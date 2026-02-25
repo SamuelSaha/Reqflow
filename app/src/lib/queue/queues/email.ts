@@ -50,6 +50,9 @@ export const EmailTemplate = {
   PASSWORD_RESET: "password-reset",
   MFA_ENABLED: "mfa-enabled",
 
+  // Team invites
+  TEAM_INVITE: "team-invite",
+
   // Trial reminders
   TRIAL_REMINDER: "trial-reminder",
 

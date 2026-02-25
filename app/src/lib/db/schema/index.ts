@@ -23,6 +23,9 @@ export * from "./audit-logs";
 export * from "./slack-workspaces";
 export * from "./slack-user-mappings";
 
+// Invites
+export * from "./invites";
+
 // Phase 2: Connected data model
 export * from "./vendors";
 export * from "./contracts";

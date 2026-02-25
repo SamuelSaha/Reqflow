@@ -1,13 +1,30 @@
 import { NextResponse } from "next/server";
-import { createUser } from "@/lib/auth/session";
+import { cookies } from "next/headers";
 import { db } from "@/lib/db";
-import { users, departments } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+import {
+  users,
+  organizations,
+  departments,
+  invites,
+} from "@/lib/db/schema";
+import { eq, and } from "drizzle-orm";
+import { hashPassword, createSession } from "@/lib/auth/simple-auth";
+
+const COOKIE_NAME = "reqflow_session";
+const COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
+
+function slugify(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 48);
+}
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { email, password, name } = body;
+    const { email, password, name, inviteToken } = body;
 
     if (!email || !password || !name) {
       return NextResponse.json(
@@ -28,43 +45,126 @@ export async function POST(request: Request) {
       );
     }
 
-    // For MVP, create organization if needed or use default
-    // TODO: In production, handle organization creation separately
-    let tenantId: string;
-    let departmentId: string;
+    const passwordHash = await hashPassword(password);
 
-    const defaultOrg = await db.query.organizations.findFirst();
-    if (defaultOrg) {
-      tenantId = defaultOrg.id;
-      // Get first department from this org
-      const dept = await db.query.departments.findFirst({
-        where: eq(departments.tenantId, defaultOrg.id),
+    // --- Invite flow: join existing org ---
+    if (inviteToken) {
+      const invite = await db.query.invites.findFirst({
+        where: and(
+          eq(invites.token, inviteToken),
+          eq(invites.status, "pending")
+        ),
       });
-      departmentId = dept?.id || "";
-    } else {
-      return NextResponse.json(
-        { error: "No organization found. Please contact support." },
-        { status: 500 }
-      );
+
+      if (!invite || new Date() > invite.expiresAt) {
+        return NextResponse.json(
+          { error: "Invalid or expired invite" },
+          { status: 400 }
+        );
+      }
+
+      // Get a department from the org
+      const dept = await db.query.departments.findFirst({
+        where: eq(departments.tenantId, invite.tenantId),
+      });
+
+      const [user] = await db
+        .insert(users)
+        .values({
+          email: email.toLowerCase(),
+          name,
+          passwordHash,
+          role: invite.role as "requester" | "manager" | "finance" | "admin",
+          tenantId: invite.tenantId,
+          departmentId: dept?.id,
+          isActive: true,
+          emailVerified: true,
+        })
+        .returning();
+
+      // Mark invite as accepted
+      await db
+        .update(invites)
+        .set({ status: "accepted" })
+        .where(eq(invites.id, invite.id));
+
+      // Invited users skip onboarding — the org is already set up
+      const token = await createSession(user, { onboardingCompleted: true });
+
+      const cookieStore = await cookies();
+      cookieStore.set(COOKIE_NAME, token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: COOKIE_MAX_AGE,
+        path: "/",
+      });
+
+      return NextResponse.json({
+        success: true,
+        redirect: "/dashboard",
+        user: { id: user.id, email: user.email, name: user.name, role: user.role },
+      });
     }
 
-    const user = await createUser({
-      email,
-      password,
-      name,
-      role: "requester",
-      tenantId,
-      departmentId,
+    // --- New org flow: create org + admin user + default department ---
+    const orgName = `${name}'s Org`;
+    const slug = slugify(orgName) + "-" + Date.now().toString(36);
+
+    // Create org
+    const [org] = await db
+      .insert(organizations)
+      .values({
+        name: orgName,
+        slug,
+        plan: "starter",
+        isActive: true,
+        onboardingCompleted: false,
+        onboardingStep: 0,
+      })
+      .returning();
+
+    // Create default department
+    const [dept] = await db
+      .insert(departments)
+      .values({
+        tenantId: org.id,
+        name: "General",
+        code: "GEN",
+      })
+      .returning();
+
+    // Create admin user
+    const [user] = await db
+      .insert(users)
+      .values({
+        email: email.toLowerCase(),
+        name,
+        passwordHash,
+        role: "admin",
+        tenantId: org.id,
+        departmentId: dept.id,
+        isActive: true,
+        emailVerified: true,
+      })
+      .returning();
+
+    // Set session cookie
+    const token = await createSession(user, { onboardingCompleted: false });
+
+    const cookieStore = await cookies();
+    cookieStore.set(COOKIE_NAME, token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: COOKIE_MAX_AGE,
+      path: "/",
     });
 
     return NextResponse.json({
       success: true,
-      user: {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        role: user.role,
-      },
+      redirect: "/onboarding",
+      user: { id: user.id, email: user.email, name: user.name, role: user.role },
     });
   } catch (error: unknown) {
     console.error("Signup error:", error);

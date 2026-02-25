@@ -7,7 +7,7 @@ import { SignJWT, jwtVerify } from "jose";
 import bcrypt from "bcryptjs";
 import { cookies } from "next/headers";
 import { db } from "../db";
-import { users } from "../db/schema";
+import { users, organizations } from "../db/schema";
 import { eq } from "drizzle-orm";
 import type { User } from "../db/schema";
 
@@ -21,16 +21,23 @@ const COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
 export interface SessionPayload {
   userId: string;
   email: string;
+  tenantId: string;
+  onboardingCompleted: boolean;
   exp: number;
 }
 
 /**
  * Create a JWT session token
  */
-export async function createSession(user: User): Promise<string> {
+export async function createSession(
+  user: User,
+  opts?: { onboardingCompleted?: boolean }
+): Promise<string> {
   const token = await new SignJWT({
     userId: user.id,
     email: user.email,
+    tenantId: user.tenantId,
+    onboardingCompleted: opts?.onboardingCompleted ?? false,
   })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
@@ -110,7 +117,13 @@ export async function signIn(
     return { error: "Account is disabled" };
   }
 
-  const token = await createSession(user);
+  const org = await db.query.organizations.findFirst({
+    where: eq(organizations.id, user.tenantId),
+  });
+
+  const token = await createSession(user, {
+    onboardingCompleted: org?.onboardingCompleted ?? true,
+  });
 
   // Set cookie
   const cookieStore = await cookies();
@@ -138,6 +151,35 @@ export async function signOut(): Promise<void> {
  */
 export async function hashPassword(password: string): Promise<string> {
   return bcrypt.hash(password, 12);
+}
+
+/**
+ * Refresh session — re-reads user+org from DB, issues new JWT+cookie
+ * Called when onboarding completes to update the JWT claims
+ */
+export async function refreshSession(userId: string): Promise<void> {
+  const user = await db.query.users.findFirst({
+    where: eq(users.id, userId),
+  });
+
+  if (!user) return;
+
+  const org = await db.query.organizations.findFirst({
+    where: eq(organizations.id, user.tenantId),
+  });
+
+  const token = await createSession(user, {
+    onboardingCompleted: org?.onboardingCompleted ?? false,
+  });
+
+  const cookieStore = await cookies();
+  cookieStore.set(COOKIE_NAME, token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: COOKIE_MAX_AGE,
+    path: "/",
+  });
 }
 
 /**

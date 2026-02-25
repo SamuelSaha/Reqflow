@@ -10,6 +10,7 @@ export {
   signOut,
   createUser,
   hashPassword,
+  refreshSession,
 } from "./simple-auth";
 
 import type { User } from "../db/schema";

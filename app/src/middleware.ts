@@ -1,6 +1,7 @@
 /**
  * Next.js middleware for route protection
  * Enforces authentication on protected routes
+ * Gates unonboarded users to the onboarding wizard
  */
 
 import { NextResponse } from "next/server";
@@ -8,7 +9,7 @@ import type { NextRequest } from "next/server";
 import { verifySession } from "@/lib/auth/simple-auth";
 
 // Routes that require authentication
-const protectedRoutes = ["/dashboard"];
+const protectedRoutes = ["/dashboard", "/onboarding"];
 
 // Routes that should redirect to dashboard if already authenticated
 const authRoutes = ["/login", "/signup"];
@@ -28,8 +29,9 @@ const publicRoutes = [
   "/changelog",
   "/careers",
   "/status",
-  "/api/auth", // Better Auth API routes
+  "/api/auth", // Auth API routes
   "/api/webhooks", // Webhook integrations (Slack, QuickBooks, etc.)
+  "/api/trpc", // tRPC routes handle their own auth via protectedProcedure
 ];
 
 export async function middleware(request: NextRequest) {
@@ -61,20 +63,38 @@ export async function middleware(request: NextRequest) {
   const session = token ? await verifySession(token) : null;
   const isAuthenticated = !!session;
 
-  // Protect dashboard routes
+  // Protect dashboard and onboarding routes
   if (protectedRoutes.some((route) => pathname.startsWith(route))) {
     if (!isAuthenticated) {
       const loginUrl = new URL("/login", request.url);
       loginUrl.searchParams.set("redirect", pathname);
       return NextResponse.redirect(loginUrl);
     }
+
+    // Onboarding gate: redirect unonboarded users to /onboarding
+    if (
+      !session.onboardingCompleted &&
+      !pathname.startsWith("/onboarding")
+    ) {
+      return NextResponse.redirect(new URL("/onboarding", request.url));
+    }
+
+    // Redirect completed users away from /onboarding
+    if (
+      session.onboardingCompleted &&
+      pathname.startsWith("/onboarding")
+    ) {
+      return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
+
     return NextResponse.next();
   }
 
   // Redirect authenticated users away from auth pages
   if (authRoutes.some((route) => pathname.startsWith(route))) {
     if (isAuthenticated) {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
+      const dest = session.onboardingCompleted ? "/dashboard" : "/onboarding";
+      return NextResponse.redirect(new URL(dest, request.url));
     }
     return NextResponse.next();
   }
