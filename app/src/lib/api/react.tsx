@@ -10,12 +10,13 @@ import { createTRPCReact } from "@trpc/react-query";
 import { useState } from "react";
 import type { AppRouter } from "./root";
 import superjson from "superjson";
+import { env } from "../env";
 
 export const trpc = createTRPCReact<AppRouter>();
 
 function getBaseUrl() {
   if (typeof window !== "undefined") return "";
-  return process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  return env.NEXT_PUBLIC_APP_URL;
 }
 
 export function TRPCProvider({ children }: { children: React.ReactNode }) {

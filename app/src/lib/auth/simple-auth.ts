@@ -10,10 +10,9 @@ import { db } from "../db";
 import { users, organizations } from "../db/schema";
 import { eq } from "drizzle-orm";
 import type { User } from "../db/schema";
+import { env } from "../env";
 
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.AUTH_SECRET || "dev-secret-change-in-production-32chars"
-);
+const JWT_SECRET = new TextEncoder().encode(env.AUTH_SECRET);
 
 const COOKIE_NAME = "reqflow_session";
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
@@ -129,7 +128,7 @@ export async function signIn(
   const cookieStore = await cookies();
   cookieStore.set(COOKIE_NAME, token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: env.NODE_ENV === "production",
     sameSite: "lax",
     maxAge: COOKIE_MAX_AGE,
     path: "/",
@@ -175,7 +174,7 @@ export async function refreshSession(userId: string): Promise<void> {
   const cookieStore = await cookies();
   cookieStore.set(COOKIE_NAME, token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: env.NODE_ENV === "production",
     sameSite: "lax",
     maxAge: COOKIE_MAX_AGE,
     path: "/",

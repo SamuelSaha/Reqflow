@@ -52,6 +52,8 @@ export const env = createEnv({
     AXIOM_DATASET: z.string().default("reqflow"),
     SENTRY_DSN: z.string().optional(),
     SENTRY_AUTH_TOKEN: z.string().optional(),
+    SENTRY_ORG: z.string().optional(),
+    SENTRY_PROJECT: z.string().optional(),
 
     // Environment
     NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
@@ -95,6 +97,8 @@ export const env = createEnv({
     AXIOM_DATASET: process.env.AXIOM_DATASET,
     SENTRY_DSN: process.env.SENTRY_DSN,
     SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN,
+    SENTRY_ORG: process.env.SENTRY_ORG,
+    SENTRY_PROJECT: process.env.SENTRY_PROJECT,
     NODE_ENV: process.env.NODE_ENV,
 
     // Client

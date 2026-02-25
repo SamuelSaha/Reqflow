@@ -16,6 +16,7 @@ import {
 import { eq, count as drizzleCount } from "drizzle-orm";
 import { refreshSession } from "@/lib/auth/session";
 import { sendEmail, EmailTemplate } from "@/lib/queue/queues/email";
+import { env } from "@/lib/env";
 
 export const onboardingRouter = router({
   /** Get current onboarding state */
@@ -186,7 +187,7 @@ export const onboardingRouter = router({
         });
 
         // Queue invite email
-        const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+        const baseUrl = env.NEXT_PUBLIC_APP_URL;
         await sendEmail({
           to: inv.email,
           subject: `${ctx.user.name} invited you to join ${org?.name || "Reqflow"}`,

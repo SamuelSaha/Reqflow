@@ -5,10 +5,11 @@
 import { createTRPCClient, httpBatchLink } from "@trpc/client";
 import type { AppRouter } from "./root";
 import superjson from "superjson";
+import { env } from "../env";
 
 function getBaseUrl() {
   if (typeof window !== "undefined") return "";
-  return process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  return env.NEXT_PUBLIC_APP_URL;
 }
 
 export const trpc = createTRPCClient<AppRouter>({

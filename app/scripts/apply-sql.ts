@@ -5,6 +5,7 @@
 
 import { readFileSync } from "fs";
 import postgres from "postgres";
+import { env } from "../src/lib/env";
 
 const sqlFile = process.argv[2];
 
@@ -13,14 +14,8 @@ if (!sqlFile) {
   process.exit(1);
 }
 
-const DATABASE_URL = process.env.DATABASE_URL;
-if (!DATABASE_URL) {
-  console.error("DATABASE_URL not found in environment");
-  process.exit(1);
-}
-
 async function main() {
-  const sql = postgres(DATABASE_URL);
+  const sql = postgres(env.DATABASE_URL);
   const sqlContent = readFileSync(sqlFile, "utf-8");
 
   console.log(`📝 Applying SQL from ${sqlFile}...\n`);

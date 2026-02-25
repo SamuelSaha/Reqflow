@@ -10,6 +10,7 @@ import { users, departments, invites, organizations } from "@/lib/db/schema";
 import { eq, and, or, desc, count as drizzleCount, sql } from "drizzle-orm";
 import { sendEmail, EmailTemplate } from "@/lib/queue/queues/email";
 import { createAuditLog, AuditAction } from "@/lib/monitoring/audit";
+import { env } from "@/lib/env";
 
 export const teamRouter = router({
   /**
@@ -143,7 +144,7 @@ export const teamRouter = router({
         });
 
         // Queue invite email
-        const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+        const baseUrl = env.NEXT_PUBLIC_APP_URL;
         await sendEmail({
           to: inv.email,
           subject: `${ctx.user.name} invited you to join ${org?.name || "Reqflow"}`,
@@ -565,7 +566,7 @@ export const teamRouter = router({
       });
 
       // Resend email
-      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+      const baseUrl = env.NEXT_PUBLIC_APP_URL;
       await sendEmail({
         to: invite.email,
         subject: `${ctx.user.name} invited you to join ${org?.name || "Reqflow"}`,

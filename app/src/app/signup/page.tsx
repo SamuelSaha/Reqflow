@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
+import { env } from "@/lib/env";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -44,7 +45,7 @@ export default function SignupPage() {
       setLoading(false);
 
       // In dev mode, auto-redirect after 2s
-      if (process.env.NODE_ENV === "development") {
+      if (env.NODE_ENV === "development") {
         setTimeout(() => {
           router.push("/dashboard");
           router.refresh();
@@ -69,12 +70,12 @@ export default function SignupPage() {
             </div>
             <CardTitle className="text-2xl text-center">Account created!</CardTitle>
             <CardDescription className="text-center">
-              {process.env.NODE_ENV === "development"
+              {env.NODE_ENV === "development"
                 ? "Redirecting to dashboard..."
                 : "Check your email to verify your account"}
             </CardDescription>
           </CardHeader>
-          {process.env.NODE_ENV !== "development" && (
+          {env.NODE_ENV !== "development" && (
             <CardContent>
               <p className="text-sm text-slate-600 text-center">
                 We sent a verification link to <strong>{email}</strong>

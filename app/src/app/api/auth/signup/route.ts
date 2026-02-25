@@ -11,6 +11,7 @@ import { eq, and } from "drizzle-orm";
 import { hashPassword, createSession } from "@/lib/auth/simple-auth";
 import { logger } from "@/lib/monitoring/logger";
 import { captureError } from "@/lib/monitoring/sentry";
+import { env } from "@/lib/env";
 
 const COOKIE_NAME = "reqflow_session";
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
@@ -96,7 +97,7 @@ export async function POST(request: Request) {
       const cookieStore = await cookies();
       cookieStore.set(COOKIE_NAME, token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: env.NODE_ENV === "production",
         sameSite: "lax",
         maxAge: COOKIE_MAX_AGE,
         path: "/",
@@ -157,7 +158,7 @@ export async function POST(request: Request) {
     const cookieStore = await cookies();
     cookieStore.set(COOKIE_NAME, token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: env.NODE_ENV === "production",
       sameSite: "lax",
       maxAge: COOKIE_MAX_AGE,
       path: "/",

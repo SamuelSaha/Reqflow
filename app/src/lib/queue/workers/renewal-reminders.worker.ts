@@ -12,6 +12,7 @@ import { emailQueue, EmailTemplate } from "../queues/email";
 import type { RenewalReminderJobData } from "../queues/renewal-reminders";
 import { logger } from "../../monitoring/logger";
 import { monitorWorker } from "../../monitoring/worker";
+import { env } from "@/lib/env";
 
 async function processRenewalReminder(job: Job<RenewalReminderJobData>) {
   const {
@@ -133,7 +134,7 @@ async function processRenewalReminder(job: Job<RenewalReminderJobData>) {
         renewalDate,
         daysBeforeDeadline,
         readinessScore: totalScore,
-        renewalUrl: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/renewals/${renewalId}`,
+        renewalUrl: `${env.NEXT_PUBLIC_APP_URL}/dashboard/renewals/${renewalId}`,
       },
     });
   }

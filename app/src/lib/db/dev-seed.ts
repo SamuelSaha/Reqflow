@@ -8,6 +8,7 @@ import { db } from "./index";
 import { organizations, departments, users, budgets } from "./schema";
 import { eq } from "drizzle-orm";
 import { logger } from "../monitoring/logger";
+import { env } from "../env";
 
 // Fixed UUIDs for deterministic dev data
 export const DEV_ORG_ID = "00000000-0000-0000-0000-000000000001";
@@ -24,7 +25,7 @@ let seeded = false;
 
 export async function ensureDevSeed() {
   if (seeded) return;
-  if (process.env.NODE_ENV !== "development") return;
+  if (env.NODE_ENV !== "development") return;
 
   // Check if already seeded
   const existing = await db.query.organizations.findFirst({

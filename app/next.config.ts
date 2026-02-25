@@ -1,5 +1,6 @@
 import type { NextConfig } from "next";
 import { withSentryConfig } from "@sentry/nextjs";
+import { env } from "./src/lib/env";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
@@ -7,7 +8,7 @@ const nextConfig: NextConfig = {
   // Logging for debugging
   logging: {
     fetches: {
-      fullUrl: process.env.NODE_ENV === "development",
+      fullUrl: env.NODE_ENV === "development",
     },
   },
 
@@ -42,12 +43,12 @@ const nextConfig: NextConfig = {
 // Sentry configuration options
 const sentryOptions = {
   silent: true,
-  org: process.env.SENTRY_ORG,
-  project: process.env.SENTRY_PROJECT,
-  authToken: process.env.SENTRY_AUTH_TOKEN,
+  org: env.SENTRY_ORG,
+  project: env.SENTRY_PROJECT,
+  authToken: env.SENTRY_AUTH_TOKEN,
 };
 
 // Wrap with Sentry only if DSN is configured
-export default process.env.SENTRY_DSN
+export default env.SENTRY_DSN
   ? withSentryConfig(nextConfig, sentryOptions)
   : nextConfig;

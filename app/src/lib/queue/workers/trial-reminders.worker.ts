@@ -10,6 +10,7 @@ import { sendEmail, EmailTemplate } from "../queues/email";
 import { sql, eq } from "drizzle-orm";
 import { logger } from "../../monitoring/logger";
 import { monitorWorker } from "../../monitoring/worker";
+import { env } from "../../env";
 
 /**
  * Process trial reminder job
@@ -79,7 +80,7 @@ async function processTrialReminder(job: Job<TrialReminderJobData>) {
         toolName,
         daysUntilExpiry,
         endDate,
-        trialUrl: `${process.env.APP_URL}/dashboard/trials/${trialId}`,
+        trialUrl: `${env.NEXT_PUBLIC_APP_URL}/dashboard/trials/${trialId}`,
       },
     });
   }
