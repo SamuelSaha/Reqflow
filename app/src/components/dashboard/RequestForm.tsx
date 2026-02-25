@@ -297,13 +297,11 @@ export function RequestForm() {
               />
             </div>
 
-            <FormDescription>
-              {form.watch("frequency") !== "one-time" && form.watch("amount") && (
-                <span className="text-sm font-medium">
-                  Annual cost: €{(parseFloat(form.watch("amount") || "0") * (form.watch("frequency") === "monthly" ? 12 : 1)).toFixed(2)}
-                </span>
-              )}
-            </FormDescription>
+            {form.watch("frequency") !== "one-time" && form.watch("amount") && (
+              <p className="text-sm font-medium text-slate-600">
+                Annual cost: €{(parseFloat(form.watch("amount") || "0") * (form.watch("frequency") === "monthly" ? 12 : 1)).toFixed(2)}
+              </p>
+            )}
           </CardContent>
         </Card>
 
