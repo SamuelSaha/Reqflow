@@ -6,6 +6,7 @@ import {
   TrustLogos,
   ProblemSection,
 } from "@/components/landing/HeroSection";
+import { CaseBuilderSpotlight } from "@/components/landing/CaseBuilderSection";
 import { SocialProof } from "@/components/landing/GridSection";
 import { FinalCTA } from "@/components/landing/BottomSection";
 
@@ -15,6 +16,7 @@ export default function ReqflowLanding() {
       <HeroSection />
       <TrustLogos />
       <ProblemSection />
+      <CaseBuilderSpotlight />
       <SocialProof />
       <FinalCTA />
     </PageShell>

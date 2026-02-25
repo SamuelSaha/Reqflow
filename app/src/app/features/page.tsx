@@ -5,6 +5,7 @@ import {
   CoreFeatures,
   PersonaSection,
 } from "@/components/landing/FeaturesSection";
+import { CaseBuilderShowcase } from "@/components/landing/CaseBuilderSection";
 import { FeaturesGrid } from "@/components/landing/GridSection";
 import { FinalCTA } from "@/components/landing/BottomSection";
 
@@ -21,6 +22,7 @@ export default function FeaturesPage() {
         </p>
       </section>
       <CoreFeatures />
+      <CaseBuilderShowcase />
       <PersonaSection />
       <FeaturesGrid />
       <FinalCTA />
