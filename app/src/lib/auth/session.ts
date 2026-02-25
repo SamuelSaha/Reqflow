@@ -12,33 +12,58 @@ import type { User } from "../db/schema";
  * Get current session (cached per request)
  */
 export const getSession = cache(async () => {
-  const cookieStore = await cookies();
-  const session = await auth.api.getSession({
-    headers: {
-      cookie: cookieStore.toString(),
-    },
-  });
-
-  return session;
+  try {
+    const cookieStore = await cookies();
+    const session = await auth.api.getSession({
+      headers: {
+        cookie: cookieStore.toString(),
+      },
+    });
+    return session;
+  } catch {
+    return null;
+  }
 });
 
 /**
  * Get current user with organization context
+ * In development, falls back to a seeded dev user when no session
  */
 export async function getCurrentUser(): Promise<User | null> {
   const session = await getSession();
-  if (!session?.user) return null;
 
-  // Fetch full user record from database
-  const { db } = await import("../db");
-  const { users } = await import("../db/schema");
-  const { eq } = await import("drizzle-orm");
+  if (session?.user) {
+    // Real session — look up user by Better Auth ID
+    const { db } = await import("../db");
+    const { users } = await import("../db/schema");
+    const { eq } = await import("drizzle-orm");
 
-  const user = await db.query.users.findFirst({
-    where: eq(users.betterAuthId, session.user.id),
-  });
+    const user = await db.query.users.findFirst({
+      where: eq(users.betterAuthId, session.user.id),
+    });
 
-  return user || null;
+    return user || null;
+  }
+
+  // Dev bypass: return seed user when no session in development
+  if (process.env.NODE_ENV === "development") {
+    const { ensureDevSeed, DEV_USER_ADMIN_ID } = await import(
+      "../db/dev-seed"
+    );
+    await ensureDevSeed();
+
+    const { db } = await import("../db");
+    const { users } = await import("../db/schema");
+    const { eq } = await import("drizzle-orm");
+
+    const devUser = await db.query.users.findFirst({
+      where: eq(users.id, DEV_USER_ADMIN_ID),
+    });
+
+    return devUser || null;
+  }
+
+  return null;
 }
 
 /**

@@ -5,10 +5,94 @@
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { router, protectedProcedure } from "../trpc";
-import { requests, insertRequestSchema } from "../../db/schema";
-import { eq, and, desc } from "drizzle-orm";
+import { requests, approvals, insertRequestSchema } from "../../db/schema";
+import { eq, and, desc, count, sql } from "drizzle-orm";
 
 export const requestsRouter = router({
+  /**
+   * Dashboard stats for current user
+   */
+  stats: protectedProcedure.query(async ({ ctx }) => {
+    const [myRequests] = await ctx.db
+      .select({ count: count() })
+      .from(requests)
+      .where(
+        and(
+          eq(requests.tenantId, ctx.tenantId),
+          eq(requests.requesterId, ctx.user.id)
+        )
+      );
+
+    const [myPending] = await ctx.db
+      .select({ count: count() })
+      .from(requests)
+      .where(
+        and(
+          eq(requests.tenantId, ctx.tenantId),
+          eq(requests.requesterId, ctx.user.id),
+          eq(requests.status, "pending")
+        )
+      );
+
+    const [pendingApprovals] = await ctx.db
+      .select({ count: count() })
+      .from(approvals)
+      .where(
+        and(
+          eq(approvals.tenantId, ctx.tenantId),
+          eq(approvals.approverId, ctx.user.id),
+          eq(approvals.decision, "pending")
+        )
+      );
+
+    const [approvedThisMonth] = await ctx.db
+      .select({
+        total: sql<string>`coalesce(sum(${requests.amount}), '0')`,
+      })
+      .from(requests)
+      .where(
+        and(
+          eq(requests.tenantId, ctx.tenantId),
+          eq(requests.status, "approved"),
+          sql`${requests.approvedAt} >= date_trunc('month', now())`
+        )
+      );
+
+    return {
+      myRequests: myRequests.count,
+      myPending: myPending.count,
+      pendingApprovals: pendingApprovals.count,
+      approvedThisMonth: parseFloat(approvedThisMonth.total),
+    };
+  }),
+
+  /**
+   * List current user's own requests
+   */
+  myList: protectedProcedure
+    .input(
+      z.object({
+        limit: z.number().min(1).max(100).default(50),
+        status: z.enum(["draft", "pending", "approved", "rejected", "cancelled"]).optional(),
+      }).optional()
+    )
+    .query(async ({ ctx, input }) => {
+      const items = await ctx.db.query.requests.findMany({
+        where: and(
+          eq(requests.tenantId, ctx.tenantId),
+          eq(requests.requesterId, ctx.user.id),
+          input?.status ? eq(requests.status, input.status) : undefined
+        ),
+        limit: input?.limit ?? 50,
+        orderBy: [desc(requests.createdAt)],
+        with: {
+          department: true,
+        },
+      });
+
+      return items;
+    }),
+
   /**
    * List all requests for current user's organization
    */
@@ -39,7 +123,7 @@ export const requestsRouter = router({
     }),
 
   /**
-   * Get single request by ID
+   * Get single request by ID with approval chain
    */
   getById: protectedProcedure
     .input(z.object({ id: z.string().uuid() }))
@@ -63,7 +147,19 @@ export const requestsRouter = router({
         });
       }
 
-      return request;
+      // Fetch approval chain
+      const approvalChain = await ctx.db.query.approvals.findMany({
+        where: and(
+          eq(approvals.requestId, input.id),
+          eq(approvals.tenantId, ctx.tenantId)
+        ),
+        orderBy: [approvals.step],
+        with: {
+          approver: true,
+        },
+      });
+
+      return { ...request, approvals: approvalChain };
     }),
 
   /**
