@@ -4,7 +4,7 @@
  */
 
 import { z } from "zod";
-import { router, adminProcedure } from "../trpc";
+import { router, adminProcedure, protectedProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { users, departments, invites, organizations } from "@/lib/db/schema";
 import { eq, and, or, desc, count as drizzleCount } from "drizzle-orm";
@@ -445,20 +445,32 @@ export const teamRouter = router({
 
       const where = conditions.length > 1 ? and(...conditions) : conditions[0];
 
-      const inviteList = await ctx.db.query.invites.findMany({
-        where,
-        with: {
-          inviter: true,
-        },
-        orderBy: [desc(invites.createdAt)],
-      });
+      // Use manual join to avoid relation issues
+      const inviteList = await ctx.db
+        .select({
+          id: invites.id,
+          email: invites.email,
+          role: invites.role,
+          status: invites.status,
+          expiresAt: invites.expiresAt,
+          createdAt: invites.createdAt,
+          inviter: {
+            id: users.id,
+            name: users.name,
+            email: users.email,
+          },
+        })
+        .from(invites)
+        .leftJoin(users, eq(invites.invitedBy, users.id))
+        .where(where)
+        .orderBy(desc(invites.createdAt));
 
       return inviteList.map((invite) => ({
         id: invite.id,
         email: invite.email,
         role: invite.role,
         status: invite.status,
-        invitedBy: invite.inviter
+        invitedBy: invite.inviter.id
           ? {
               id: invite.inviter.id,
               name: invite.inviter.name,

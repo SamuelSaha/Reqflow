@@ -3,6 +3,7 @@ import { relations } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { organizations } from "./organizations";
 import { departments } from "./departments";
+import { invites } from "./invites";
 import { z } from "zod";
 
 /**
@@ -57,7 +58,7 @@ export const users = pgTable(
 );
 
 // Relations
-export const usersRelations = relations(users, ({ one }) => ({
+export const usersRelations = relations(users, ({ one, many }) => ({
   organization: one(organizations, {
     fields: [users.tenantId],
     references: [organizations.id],
@@ -66,6 +67,7 @@ export const usersRelations = relations(users, ({ one }) => ({
     fields: [users.departmentId],
     references: [departments.id],
   }),
+  invites: many(invites),
 }));
 
 // Zod schemas
