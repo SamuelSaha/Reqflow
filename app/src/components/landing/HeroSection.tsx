@@ -20,7 +20,7 @@ import {
 /* ------------------------------------------------------------------ */
 export function HeroSection() {
   return (
-    <section className="bg-gradient-to-b from-white via-[#F8FBFF] to-[#F0F6FF] pt-20 pb-[60px] px-20 flex flex-col items-center gap-12">
+    <section className="bg-gradient-to-b from-white via-[#F8FBFF] to-[#F0F6FF] min-h-[calc(100vh-72px)] pt-16 pb-10 px-20 flex flex-col items-center justify-between gap-8">
       {/* Hero Content - Clean & Minimal */}
       <div className="max-w-[900px] flex flex-col items-center gap-6 text-center">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-slate-200 bg-white shadow-sm">
@@ -55,7 +55,7 @@ export function HeroSection() {
       </div>
 
       {/* Product Mockup - Subtle Shadow */}
-      <div className="w-[1100px] h-[620px] rounded-xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.08)] overflow-hidden bg-white border border-slate-200">
+      <div className="relative w-full max-w-[1100px] aspect-[110/62] max-h-[min(620px,calc(100vh-520px))] rounded-xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.08)] overflow-hidden bg-white border border-slate-200">
         <div className="h-11 bg-white border-b border-slate-200 px-4 flex items-center justify-between">
           <div className="flex items-center gap-1.5">
             <span className="w-[10px] h-[10px] bg-red-500 rounded-full" />
@@ -216,6 +216,7 @@ export function HeroSection() {
             </div>
           </div>
         </div>
+        <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[#F0F6FF] to-transparent" />
       </div>
     </section>
   );
@@ -277,7 +278,7 @@ const painStats = [
 
 export function ProblemSection() {
   return (
-    <section className="bg-gradient-to-b from-white via-slate-50 to-white p-20 flex flex-col items-center gap-16">
+    <section className="bg-gradient-to-b from-white via-slate-50 to-white py-24 px-20 flex flex-col items-center gap-16">
       <div className="max-w-[700px] flex flex-col items-center gap-6 text-center">
         <div className="inline-flex items-center gap-1.5 bg-red-50 rounded-full px-3.5 py-1.5">
           <TriangleAlert className="w-3.5 h-3.5 text-red-600" />

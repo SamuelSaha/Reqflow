@@ -230,7 +230,7 @@ export function CaseBuilderShowcase() {
 /* ------------------------------------------------------------------ */
 export function CaseBuilderSpotlight() {
   return (
-    <section className="bg-gradient-to-b from-slate-50 to-blue-50/50 py-16 px-20 flex flex-col items-center gap-10">
+    <section className="bg-gradient-to-b from-slate-50 to-blue-50/50 py-20 px-20 flex flex-col items-center gap-10">
       <div className="max-w-[1000px] w-full bg-white rounded-2xl border border-slate-200 shadow-md overflow-hidden">
         <div className="flex items-stretch">
           {/* Left: Copy */}

@@ -12,7 +12,7 @@ import { FinalCTA } from "@/components/landing/BottomSection";
 export default function FeaturesPage() {
   return (
     <PageShell>
-      <section className="bg-gradient-to-b from-white to-slate-50 pt-20 pb-12 px-20 text-center">
+      <section className="bg-gradient-to-b from-white to-slate-50 min-h-[50vh] flex flex-col items-center justify-center pt-16 pb-12 px-20 text-center">
         <h1 className="text-[52px] font-extrabold tracking-[-1.5px] text-slate-900 mb-4">
           The connected record for every tool you buy
         </h1>
