@@ -352,66 +352,79 @@ export const renewalsRouter = router({
    * Get dashboard stats (count by urgency)
    */
   getDashboardStats: protectedProcedure.query(async ({ ctx }) => {
-    const tenantId = ctx.tenantId;
-    const today = new Date();
+    try {
+      const tenantId = ctx.tenantId;
+      const today = new Date();
 
-    // Get all upcoming renewals (next 90 days)
-    const next90Days = new Date(today);
-    next90Days.setDate(next90Days.getDate() + 90);
+      // Get all upcoming renewals (next 90 days)
+      const next90Days = new Date(today);
+      next90Days.setDate(next90Days.getDate() + 90);
 
-    const upcomingRenewals = await db.query.renewalEvents.findMany({
-      where: and(
-        eq(renewalEvents.tenantId, tenantId),
-        or(
-          eq(renewalEvents.status, "upcoming"),
-          eq(renewalEvents.status, "in_review")
+      const upcomingRenewals = await db.query.renewalEvents.findMany({
+        where: and(
+          eq(renewalEvents.tenantId, tenantId),
+          or(
+            eq(renewalEvents.status, "upcoming"),
+            eq(renewalEvents.status, "in_review")
+          ),
+          lte(
+            renewalEvents.noticeDeadline,
+            next90Days.toISOString().split("T")[0]
+          )
         ),
-        lte(
-          renewalEvents.noticeDeadline,
-          next90Days.toISOString().split("T")[0]
-        )
-      ),
-      with: {
-        contract: {
-          with: {
-            vendor: true,
+        with: {
+          contract: {
+            with: {
+              vendor: true,
+            },
           },
         },
-      },
-      orderBy: [renewalEvents.noticeDeadline],
-    });
+        orderBy: [renewalEvents.noticeDeadline],
+      });
 
-    // Calculate urgency for each
-    let greenCount = 0;
-    let yellowCount = 0;
-    let redCount = 0;
+      // Calculate urgency for each
+      let greenCount = 0;
+      let yellowCount = 0;
+      let redCount = 0;
 
-    const renewalsWithUrgency = upcomingRenewals.map((renewal) => {
-      const deadline = parseISO(renewal.noticeDeadline);
-      const daysUntilDeadline = differenceInDays(deadline, today);
+      const renewalsWithUrgency = upcomingRenewals.map((renewal) => {
+        const deadline = parseISO(renewal.noticeDeadline);
+        const daysUntilDeadline = differenceInDays(deadline, today);
 
-      const readiness = renewal.readinessScore;
-      const totalScore = readiness?.totalScore ?? 0;
-      const urgencyColor = getUrgencyColor(daysUntilDeadline, totalScore);
+        const readiness = renewal.readinessScore;
+        const totalScore = readiness?.totalScore ?? 0;
+        const urgencyColor = getUrgencyColor(daysUntilDeadline, totalScore);
 
-      if (urgencyColor === "green") greenCount++;
-      if (urgencyColor === "yellow") yellowCount++;
-      if (urgencyColor === "red") redCount++;
+        if (urgencyColor === "green") greenCount++;
+        if (urgencyColor === "yellow") yellowCount++;
+        if (urgencyColor === "red") redCount++;
+
+        return {
+          ...renewal,
+          daysUntilDeadline,
+          readinessScore: totalScore,
+          urgencyColor,
+        };
+      });
 
       return {
-        ...renewal,
-        daysUntilDeadline,
-        readinessScore: totalScore,
-        urgencyColor,
+        total: upcomingRenewals.length,
+        green: greenCount,
+        yellow: yellowCount,
+        red: redCount,
+        next3: renewalsWithUrgency.slice(0, 3), // Next 3 needing attention
       };
-    });
-
-    return {
-      total: upcomingRenewals.length,
-      green: greenCount,
-      yellow: yellowCount,
-      red: redCount,
-      next3: renewalsWithUrgency.slice(0, 3), // Next 3 needing attention
-    };
+    } catch (error) {
+      // Return empty stats if table doesn't exist or query fails
+      // This is graceful degradation for when renewals feature isn't set up yet
+      console.warn("[renewals.getDashboardStats] Query failed, returning empty stats:", error);
+      return {
+        total: 0,
+        green: 0,
+        yellow: 0,
+        red: 0,
+        next3: [],
+      };
+    }
   }),
 });
