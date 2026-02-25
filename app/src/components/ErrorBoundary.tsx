@@ -9,6 +9,7 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { AlertCircle } from "lucide-react";
+import { captureError } from "@/lib/monitoring/sentry";
 
 interface ErrorBoundaryProps {
   children: React.ReactNode;
@@ -37,13 +38,16 @@ export class ErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    // Send to Sentry in all environments
+    captureError(error, {
+      componentStack: errorInfo.componentStack,
+      errorBoundary: true,
+    });
+
     // Log error to console in development
     if (process.env.NODE_ENV === "development") {
       console.error("Error Boundary caught error:", error, errorInfo);
     }
-
-    // In production, send to error tracking service (Sentry, etc.)
-    // TODO: Integrate with error tracking service
   }
 
   render() {

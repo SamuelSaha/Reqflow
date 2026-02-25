@@ -1,7 +1,13 @@
 import type { NextConfig } from "next";
+import { withSentryConfig } from "@sentry/nextjs";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+
+  // Enable instrumentation hook
+  experimental: {
+    instrumentationHook: true,
+  },
 
   // Logging for debugging
   logging: {
@@ -38,4 +44,15 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// Sentry configuration options
+const sentryOptions = {
+  silent: true,
+  org: process.env.SENTRY_ORG,
+  project: process.env.SENTRY_PROJECT,
+  authToken: process.env.SENTRY_AUTH_TOKEN,
+};
+
+// Wrap with Sentry only if DSN is configured
+export default process.env.SENTRY_DSN
+  ? withSentryConfig(nextConfig, sentryOptions)
+  : nextConfig;

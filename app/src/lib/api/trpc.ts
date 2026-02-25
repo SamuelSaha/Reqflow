@@ -8,6 +8,8 @@ import superjson from "superjson";
 import { db } from "../db";
 import { getCurrentUser, getCurrentTenantId } from "../auth/session";
 import type { User } from "../db/schema";
+import { logger } from "../monitoring/logger";
+import { captureError } from "../monitoring/sentry";
 
 /**
  * Context for all tRPC procedures
@@ -32,6 +34,20 @@ export type Context = Awaited<ReturnType<typeof createTRPCContext>>;
 const t = initTRPC.context<Context>().create({
   transformer: superjson,
   errorFormatter({ shape, error }) {
+    // Log all tRPC errors
+    logger.error("tRPC error", error, {
+      code: error.code,
+      path: shape.data.path,
+    });
+
+    // Send INTERNAL_SERVER_ERROR to Sentry
+    if (error.code === "INTERNAL_SERVER_ERROR") {
+      captureError(error.cause || error, {
+        trpcPath: shape.data.path,
+        trpcCode: error.code,
+      });
+    }
+
     return {
       ...shape,
       data: {
