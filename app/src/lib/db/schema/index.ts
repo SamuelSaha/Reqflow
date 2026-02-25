@@ -19,6 +19,10 @@ export * from "./approval-workflows";
 // Audit & Security
 export * from "./audit-logs";
 
+// Integrations
+export * from "./slack-workspaces";
+export * from "./slack-user-mappings";
+
 // Phase 2: Connected data model
 export * from "./vendors";
 export * from "./contracts";

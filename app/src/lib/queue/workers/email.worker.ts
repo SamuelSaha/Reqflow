@@ -8,6 +8,7 @@ import { Resend } from "resend";
 import { defaultQueueOptions, QueueName } from "../config";
 import type { EmailJobData } from "../queues/email";
 import { env } from "../../env";
+import { renderEmailTemplate } from "../../emails/render";
 
 const resend = new Resend(env.RESEND_API_KEY);
 
@@ -18,27 +19,25 @@ async function processEmail(job: Job<EmailJobData>) {
   const { to, subject, template, data } = job.data;
 
   try {
-    // TODO: Implement email templates
-    // For now, send a simple email
+    // Render React Email template to HTML
+    const html = await renderEmailTemplate(template, data);
+
+    // Send via Resend
     const result = await resend.emails.send({
       from: "Reqflow <notifications@reqflow.com>",
       to,
       subject,
-      html: `<div>
-        <h1>${subject}</h1>
-        <p>Template: ${template}</p>
-        <pre>${JSON.stringify(data, null, 2)}</pre>
-      </div>`,
+      html,
     });
 
     if (result.error) {
       throw new Error(`Resend error: ${result.error.message}`);
     }
 
-    console.log("Email sent:", result.data?.id);
+    console.log(`✅ Email sent: ${result.data?.id} (${template} to ${to})`);
     return result;
   } catch (error) {
-    console.error("Email failed:", error);
+    console.error(`❌ Email failed (${template} to ${to}):`, error);
     throw error; // Will trigger retry
   }
 }

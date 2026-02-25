@@ -46,6 +46,8 @@ export const QueueName = {
   APPROVAL_TIMERS: "approval-timers",
   SYNC: "sync",
   AI_CLASSIFICATION: "ai-classification",
+  TRIAL_REMINDERS: "trial-reminders",
+  RENEWAL_REMINDERS: "renewal-reminders",
 } as const;
 
 export type QueueName = (typeof QueueName)[keyof typeof QueueName];

@@ -7,8 +7,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { trpc } from "@/lib/api/react";
-import { Loader2, Wallet, AlertTriangle } from "lucide-react";
+import { Wallet, AlertTriangle, AlertCircle } from "lucide-react";
+import { BudgetCardSkeleton } from "@/components/dashboard/LoadingSkeletons";
+import { getErrorMessage } from "@/lib/utils/error-messages";
 
 export const dynamic = "force-dynamic";
 
@@ -26,10 +29,20 @@ export default function BudgetsPage() {
         </p>
       </div>
 
-      {budgets.isLoading && (
-        <div className="flex items-center justify-center py-12">
-          <Loader2 className="h-6 w-6 animate-spin text-slate-400" />
-        </div>
+      {budgets.isLoading && <BudgetCardSkeleton count={3} />}
+
+      {budgets.error && (
+        <Card className="border-red-200 bg-red-50">
+          <CardContent className="flex flex-col items-center justify-center py-12">
+            <AlertCircle className="h-12 w-12 text-red-400 mb-4" />
+            <p className="text-lg font-medium text-slate-900 mb-2">
+              {getErrorMessage(budgets.error)}
+            </p>
+            <Button onClick={() => budgets.refetch()} variant="outline" className="mt-2">
+              Try again
+            </Button>
+          </CardContent>
+        </Card>
       )}
 
       {budgets.data && budgets.data.length === 0 && (

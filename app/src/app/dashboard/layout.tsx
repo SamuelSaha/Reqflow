@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FileText, CheckSquare, LayoutDashboard, Wallet } from "lucide-react";
+import { FileText, CheckSquare, LayoutDashboard, Wallet, FlaskConical, Calendar } from "lucide-react";
+import { Toaster } from "sonner";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 export const dynamic = "force-dynamic";
 
@@ -10,6 +12,8 @@ const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { href: "/dashboard/requests", label: "Requests", icon: FileText, exact: false },
   { href: "/dashboard/approvals", label: "Approvals", icon: CheckSquare, exact: false },
+  { href: "/dashboard/trials", label: "Trials", icon: FlaskConical, exact: false },
+  { href: "/dashboard/renewals", label: "Renewals", icon: Calendar, exact: false },
   { href: "/dashboard/budgets", label: "Budgets", icon: Wallet, exact: false },
 ];
 
@@ -55,7 +59,12 @@ export default function DashboardLayout({
       </header>
 
       {/* Main content */}
-      <main className="mx-auto max-w-7xl px-6 py-8">{children}</main>
+      <main className="mx-auto max-w-7xl px-6 py-8">
+        <ErrorBoundary>{children}</ErrorBoundary>
+      </main>
+
+      {/* Toast notifications */}
+      <Toaster position="top-right" />
     </div>
   );
 }

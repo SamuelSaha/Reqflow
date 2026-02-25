@@ -16,26 +16,34 @@ import {
   FileText,
   CheckSquare,
   Clock,
-  Loader2,
   TrendingUp,
   ArrowRight,
   AlertCircle,
+  FlaskConical,
+  Calendar as CalendarIcon,
 } from "lucide-react";
+import { StatsCardSkeleton, RequestListSkeleton } from "@/components/dashboard/LoadingSkeletons";
+import { Skeleton } from "@/components/ui/skeleton";
+import { getErrorMessage } from "@/lib/utils/error-messages";
+import { format } from "date-fns";
+import { STATUS_STYLES, TYPOGRAPHY, COLORS } from "@/lib/design/tokens";
 
 export const dynamic = "force-dynamic";
 
-const statusBadge: Record<string, { label: string; className: string }> = {
-  draft: { label: "Draft", className: "bg-slate-100 text-slate-700" },
-  pending: { label: "Pending", className: "bg-amber-100 text-amber-700" },
-  approved: { label: "Approved", className: "bg-green-100 text-green-700" },
-  rejected: { label: "Rejected", className: "bg-red-100 text-red-700" },
-  cancelled: { label: "Cancelled", className: "bg-slate-100 text-slate-500" },
-};
+const statusBadge = STATUS_STYLES;
 
 export default function DashboardPage() {
   const stats = trpc.requests.stats.useQuery();
   const recentRequests = trpc.requests.myList.useQuery({ limit: 5 });
   const pendingApprovals = trpc.approvals.myQueue.useQuery({ status: "pending" });
+  const activeTrials = trpc.trials.list.useQuery({ status: "active" });
+  const renewalsStats = trpc.renewals.getDashboardStats.useQuery();
+
+  // Count expiring soon trials (< 7 days)
+  const expiringSoonCount = activeTrials.data?.filter(t => t.daysRemaining < 7).length || 0;
+
+  // Count urgent renewals (red)
+  const urgentRenewalsCount = renewalsStats.data?.red || 0;
 
   return (
     <div className="space-y-8">
@@ -57,41 +65,65 @@ export default function DashboardPage() {
       </div>
 
       {/* Stat cards */}
-      <div className="grid gap-6 md:grid-cols-4">
-        <StatCard
-          title="Pending Requests"
-          value={stats.data?.myPending}
-          icon={Clock}
-          subtitle="Awaiting approval"
-          loading={stats.isLoading}
-        />
-        <StatCard
-          title="My Requests"
-          value={stats.data?.myRequests}
-          icon={FileText}
-          subtitle="Total submitted"
-          loading={stats.isLoading}
-        />
-        <StatCard
-          title="Pending Approvals"
-          value={stats.data?.pendingApprovals}
-          icon={CheckSquare}
-          subtitle="Require your review"
-          loading={stats.isLoading}
-          highlight={!!stats.data?.pendingApprovals && stats.data.pendingApprovals > 0}
-        />
-        <StatCard
-          title="Approved This Month"
-          value={
-            stats.data
-              ? `€${stats.data.approvedThisMonth.toLocaleString("en", { minimumFractionDigits: 0 })}`
-              : undefined
-          }
-          icon={TrendingUp}
-          subtitle="Total value approved"
-          loading={stats.isLoading}
-        />
-      </div>
+      {(stats.isLoading || activeTrials.isLoading || renewalsStats.isLoading) && <StatsCardSkeleton count={5} />}
+
+      {stats.error && (
+        <Card className="border-red-200 bg-red-50">
+          <CardContent className="flex flex-col items-center justify-center py-12">
+            <AlertCircle className="h-12 w-12 text-red-400 mb-4" />
+            <p className="text-lg font-medium text-slate-900 mb-2">
+              {getErrorMessage(stats.error)}
+            </p>
+            <Button onClick={() => stats.refetch()} variant="outline" className="mt-2">
+              Try again
+            </Button>
+          </CardContent>
+        </Card>
+      )}
+
+      {stats.data && activeTrials.data && renewalsStats.data && (
+        <div className="grid gap-6 md:grid-cols-3 lg:grid-cols-6">
+          <StatCard
+            title="Pending Requests"
+            value={stats.data.myPending}
+            icon={Clock}
+            subtitle="Awaiting approval"
+          />
+          <StatCard
+            title="My Requests"
+            value={stats.data.myRequests}
+            icon={FileText}
+            subtitle="Total submitted"
+          />
+          <StatCard
+            title="Pending Approvals"
+            value={stats.data.pendingApprovals}
+            icon={CheckSquare}
+            subtitle="Require your review"
+            highlight={stats.data.pendingApprovals > 0}
+          />
+          <StatCard
+            title="Active Trials"
+            value={activeTrials.data.length}
+            icon={FlaskConical}
+            subtitle={expiringSoonCount > 0 ? `${expiringSoonCount} expiring soon` : "Being evaluated"}
+            highlight={expiringSoonCount > 0}
+          />
+          <StatCard
+            title="Upcoming Renewals"
+            value={renewalsStats.data.total}
+            icon={CalendarIcon}
+            subtitle={urgentRenewalsCount > 0 ? `${urgentRenewalsCount} urgent` : "Next 90 days"}
+            highlight={urgentRenewalsCount > 0}
+          />
+          <StatCard
+            title="Approved This Month"
+            value={`€${stats.data.approvedThisMonth.toLocaleString("en", { minimumFractionDigits: 0 })}`}
+            icon={TrendingUp}
+            subtitle="Total value approved"
+          />
+        </div>
+      )}
 
       {/* Two-column: recent requests + action required */}
       <div className="grid gap-6 md:grid-cols-2">
@@ -109,11 +141,20 @@ export default function DashboardPage() {
             </Link>
           </CardHeader>
           <CardContent>
-            {recentRequests.isLoading && (
-              <div className="flex justify-center py-6">
-                <Loader2 className="h-5 w-5 animate-spin text-slate-400" />
+            {recentRequests.isLoading && <RequestListSkeleton rows={3} />}
+
+            {recentRequests.error && (
+              <div className="text-center py-6">
+                <AlertCircle className="h-8 w-8 text-red-400 mx-auto mb-2" />
+                <p className="text-sm text-slate-900 font-medium mb-1">
+                  {getErrorMessage(recentRequests.error)}
+                </p>
+                <Button onClick={() => recentRequests.refetch()} variant="link" size="sm">
+                  Try again
+                </Button>
               </div>
             )}
+
             {recentRequests.data && recentRequests.data.length === 0 && (
               <div className="text-center py-6">
                 <FileText className="h-8 w-8 text-slate-300 mx-auto mb-2" />
@@ -125,10 +166,11 @@ export default function DashboardPage() {
                 </Link>
               </div>
             )}
+
             {recentRequests.data && recentRequests.data.length > 0 && (
               <div className="space-y-3">
                 {recentRequests.data.map((req) => {
-                  const badge = statusBadge[req.status] ?? statusBadge.draft;
+                  const badge = statusBadge[req.status as keyof typeof statusBadge] ?? statusBadge.draft;
                   return (
                     <Link
                       key={req.id}
@@ -167,11 +209,20 @@ export default function DashboardPage() {
             </Link>
           </CardHeader>
           <CardContent>
-            {pendingApprovals.isLoading && (
-              <div className="flex justify-center py-6">
-                <Loader2 className="h-5 w-5 animate-spin text-slate-400" />
+            {pendingApprovals.isLoading && <RequestListSkeleton rows={3} />}
+
+            {pendingApprovals.error && (
+              <div className="text-center py-6">
+                <AlertCircle className="h-8 w-8 text-red-400 mx-auto mb-2" />
+                <p className="text-sm text-slate-900 font-medium mb-1">
+                  {getErrorMessage(pendingApprovals.error)}
+                </p>
+                <Button onClick={() => pendingApprovals.refetch()} variant="link" size="sm">
+                  Try again
+                </Button>
               </div>
             )}
+
             {pendingApprovals.data && pendingApprovals.data.length === 0 && (
               <div className="text-center py-6">
                 <CheckSquare className="h-8 w-8 text-slate-300 mx-auto mb-2" />
@@ -179,6 +230,7 @@ export default function DashboardPage() {
                 <p className="text-xs text-slate-400 mt-1">You're all caught up</p>
               </div>
             )}
+
             {pendingApprovals.data && pendingApprovals.data.length > 0 && (
               <div className="space-y-3">
                 {pendingApprovals.data.slice(0, 5).map((approval: any) => (
@@ -215,14 +267,12 @@ function StatCard({
   value,
   icon: Icon,
   subtitle,
-  loading,
   highlight,
 }: {
   title: string;
-  value: number | string | undefined;
+  value: number | string;
   icon: typeof Clock;
   subtitle: string;
-  loading: boolean;
   highlight?: boolean;
 }) {
   return (
@@ -232,13 +282,9 @@ function StatCard({
         <Icon className={`h-4 w-4 ${highlight ? "text-blue-600" : "text-slate-600"}`} />
       </CardHeader>
       <CardContent>
-        {loading ? (
-          <Loader2 className="h-5 w-5 animate-spin text-slate-400" />
-        ) : (
-          <div className={`text-2xl font-bold ${highlight ? "text-blue-700" : ""}`}>
-            {value ?? 0}
-          </div>
-        )}
+        <div className={`text-2xl font-bold ${highlight ? "text-blue-700" : ""}`}>
+          {value}
+        </div>
         <p className="text-xs text-slate-600 mt-1">{subtitle}</p>
       </CardContent>
     </Card>

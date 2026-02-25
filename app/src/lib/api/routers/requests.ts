@@ -293,7 +293,70 @@ export const requestsRouter = router({
       // Persist approval chain
       await executeApprovalRouting(ctx.tenantId, input.id, routingResult);
 
-      // TODO: Send notifications to approvers
+      // Send email notifications
+      const { emailQueue, EmailTemplate } = await import("../../queue/queues/email");
+      const { env } = await import("../../env");
+
+      // Get full request details with requester info
+      const fullRequest = await ctx.db.query.requests.findFirst({
+        where: eq(requests.id, input.id),
+        with: { requester: true },
+      });
+
+      if (!fullRequest) {
+        throw new TRPCError({ code: "NOT_FOUND" });
+      }
+
+      // 1. Send confirmation email to requester
+      await emailQueue.add("request-submitted", {
+        to: fullRequest.requester.email,
+        subject: `Request Submitted: ${fullRequest.requestNumber}`,
+        template: EmailTemplate.REQUEST_SUBMITTED,
+        data: {
+          requesterName: fullRequest.requester.name,
+          requestNumber: fullRequest.requestNumber,
+          title: fullRequest.title,
+          amount: parseFloat(fullRequest.amount).toLocaleString("en", { minimumFractionDigits: 2 }),
+          currency: fullRequest.currency,
+          requestUrl: `${env.NEXT_PUBLIC_APP_URL}/dashboard/requests/${fullRequest.id}`,
+        },
+      });
+
+      // 2. Send notification emails to approvers (unless auto-approved)
+      if (!routingResult.flags.autoApproved) {
+        // Get first step approvers
+        const firstStepApprovals = await ctx.db.query.approvals.findMany({
+          where: and(
+            eq(approvals.requestId, input.id),
+            eq(approvals.step, 0) // First step
+          ),
+          with: { approver: true },
+        });
+
+        for (const approval of firstStepApprovals) {
+          // TODO: Add risk flags from AI analysis when implemented
+          const riskFlags: string[] = [];
+
+          await emailQueue.add(`approval-assigned-${approval.id}`, {
+            to: approval.approver.email,
+            subject: `Action Required: Approve ${fullRequest.requestNumber} - ${fullRequest.title}`,
+            template: EmailTemplate.APPROVAL_REQUESTED,
+            data: {
+              approverName: approval.approver.name,
+              requesterName: fullRequest.requester.name,
+              requestNumber: fullRequest.requestNumber,
+              title: fullRequest.title,
+              amount: parseFloat(fullRequest.amount).toLocaleString("en", { minimumFractionDigits: 2 }),
+              currency: fullRequest.currency,
+              vendor: fullRequest.vendorName,
+              category: fullRequest.category,
+              urgency: fullRequest.urgency,
+              riskFlags,
+              approvalUrl: `${env.NEXT_PUBLIC_APP_URL}/dashboard/approvals`,
+            },
+          });
+        }
+      }
 
       return {
         success: true,

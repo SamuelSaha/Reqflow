@@ -143,6 +143,68 @@ export const approvalsRouter = router({
             updatedAt: new Date(),
           })
           .where(eq(requests.id, approval.requestId));
+
+        // Send email notification to requester
+        const { emailQueue, EmailTemplate } = await import("../../queue/queues/email");
+        const { env } = await import("../../env");
+
+        // Get full request with requester and approver details
+        const fullRequest = await ctx.db.query.requests.findFirst({
+          where: eq(requests.id, approval.requestId),
+          with: { requester: true },
+        });
+
+        if (fullRequest) {
+          if (anyRejected) {
+            // Send rejection email
+            await emailQueue.add(`request-rejected-${approval.requestId}`, {
+              to: fullRequest.requester.email,
+              subject: `Request Not Approved: ${fullRequest.requestNumber}`,
+              template: EmailTemplate.REQUEST_REJECTED,
+              data: {
+                requesterName: fullRequest.requester.name,
+                requestNumber: fullRequest.requestNumber,
+                title: fullRequest.title,
+                amount: parseFloat(fullRequest.amount).toLocaleString("en", { minimumFractionDigits: 2 }),
+                currency: fullRequest.currency,
+                rejectorName: ctx.user.name,
+                rejectionReason: input.comments || "No reason provided",
+                canResubmit: true,
+                requestUrl: `${env.NEXT_PUBLIC_APP_URL}/dashboard/requests/${fullRequest.id}`,
+              },
+            });
+          } else {
+            // Send approval email
+            // Check if there are more approval steps
+            const nextStepApprovals = allApprovals.filter(
+              (a) => a.step > approval.step && a.decision === "pending"
+            );
+            const hasMoreApprovers = nextStepApprovals.length > 0;
+            const nextApproverName = hasMoreApprovers
+              ? await ctx.db.query.users.findFirst({
+                  where: eq((await import("../../db/schema")).users.id, nextStepApprovals[0].approverId),
+                }).then((u) => u?.name)
+              : undefined;
+
+            await emailQueue.add(`request-approved-${approval.requestId}`, {
+              to: fullRequest.requester.email,
+              subject: `Request Approved: ${fullRequest.requestNumber}`,
+              template: EmailTemplate.REQUEST_APPROVED,
+              data: {
+                requesterName: fullRequest.requester.name,
+                requestNumber: fullRequest.requestNumber,
+                title: fullRequest.title,
+                amount: parseFloat(fullRequest.amount).toLocaleString("en", { minimumFractionDigits: 2 }),
+                currency: fullRequest.currency,
+                approverName: ctx.user.name,
+                approverComments: input.comments,
+                hasMoreApprovers,
+                nextApproverName,
+                requestUrl: `${env.NEXT_PUBLIC_APP_URL}/dashboard/requests/${fullRequest.id}`,
+              },
+            });
+          }
+        }
       }
 
       return {

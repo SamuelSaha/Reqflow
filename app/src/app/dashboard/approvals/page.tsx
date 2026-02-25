@@ -1,12 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "sonner";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ApprovalCard } from "@/components/dashboard/ApprovalCard";
 import { trpc } from "@/lib/api/react";
-import { Loader2, CheckSquare, Clock, XCircle } from "lucide-react";
+import { CheckSquare, Clock, XCircle, AlertCircle } from "lucide-react";
+import { ApprovalCardSkeleton } from "@/components/dashboard/LoadingSkeletons";
+import { getErrorMessage } from "@/lib/utils/error-messages";
 
 export const dynamic = "force-dynamic";
 
@@ -16,8 +19,48 @@ export default function ApprovalsPage() {
   const [activeTab, setActiveTab] = useState<Tab>("pending");
   const [decidingId, setDecidingId] = useState<string | null>(null);
 
+  const utils = trpc.useUtils();
   const queue = trpc.approvals.myQueue.useQuery({ status: activeTab });
-  const decideMutation = trpc.approvals.decide.useMutation();
+  const decideMutation = trpc.approvals.decide.useMutation({
+    onMutate: async (variables) => {
+      // Cancel outgoing refetches
+      await utils.approvals.myQueue.cancel();
+
+      // Snapshot current data
+      const previousQueue = utils.approvals.myQueue.getData({ status: activeTab });
+
+      // Optimistically remove from queue
+      utils.approvals.myQueue.setData(
+        { status: activeTab },
+        (old) => old?.filter(a => a.id !== variables.approvalId) ?? []
+      );
+
+      return { previousQueue };
+    },
+
+    onError: (err, variables, context) => {
+      // Rollback on error
+      if (context?.previousQueue) {
+        utils.approvals.myQueue.setData({ status: activeTab }, context.previousQueue);
+      }
+      toast.error("Failed to process approval", {
+        description: err.message || "Please try again",
+      });
+    },
+
+    onSuccess: (data, variables) => {
+      const action = variables.decision === "approved" ? "approved" : "rejected";
+      toast.success(`Request ${action}`, {
+        description: `Successfully ${action} the purchase request`,
+        duration: 4000,
+      });
+    },
+
+    onSettled: () => {
+      // Refetch to ensure consistency
+      utils.approvals.myQueue.invalidate({ status: activeTab });
+    },
+  });
 
   async function handleDecide(
     approvalId: string,
@@ -27,7 +70,6 @@ export default function ApprovalsPage() {
     setDecidingId(approvalId);
     try {
       await decideMutation.mutateAsync({ approvalId, decision, comments });
-      queue.refetch();
     } finally {
       setDecidingId(null);
     }
@@ -66,10 +108,21 @@ export default function ApprovalsPage() {
       </div>
 
       {/* Loading state */}
-      {queue.isLoading && (
-        <div className="flex items-center justify-center py-12">
-          <Loader2 className="h-6 w-6 animate-spin text-slate-400" />
-        </div>
+      {queue.isLoading && <ApprovalCardSkeleton count={4} />}
+
+      {/* Error state */}
+      {queue.error && (
+        <Card className="border-red-200 bg-red-50">
+          <CardContent className="flex flex-col items-center justify-center py-12">
+            <AlertCircle className="h-12 w-12 text-red-400 mb-4" />
+            <p className="text-lg font-medium text-slate-900 mb-2">
+              {getErrorMessage(queue.error)}
+            </p>
+            <Button onClick={() => queue.refetch()} variant="outline" className="mt-2">
+              Try again
+            </Button>
+          </CardContent>
+        </Card>
       )}
 
       {/* Empty state */}

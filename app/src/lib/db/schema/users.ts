@@ -22,6 +22,9 @@ export const users = pgTable(
     name: text("name").notNull(),
     avatar: text("avatar"),
 
+    // Authentication
+    passwordHash: text("password_hash"), // Bcrypt hash
+
     // Role-based access control
     role: text("role").notNull().default("requester"), // requester, manager, finance, admin
 

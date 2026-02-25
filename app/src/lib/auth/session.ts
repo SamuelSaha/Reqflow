@@ -1,84 +1,33 @@
 /**
  * Session management utilities
- * Get current user, tenant, and permissions
+ * Uses lightweight custom auth for MVP
  */
 
-import { cache } from "react";
-import { cookies } from "next/headers";
-import { auth } from "./config";
+export {
+  getCurrentUser,
+  getSession,
+  signIn,
+  signOut,
+  createUser,
+  hashPassword,
+} from "./simple-auth";
+
 import type { User } from "../db/schema";
-
-/**
- * Get current session (cached per request)
- */
-export const getSession = cache(async () => {
-  try {
-    const cookieStore = await cookies();
-    const session = await auth.api.getSession({
-      headers: {
-        cookie: cookieStore.toString(),
-      },
-    });
-    return session;
-  } catch {
-    return null;
-  }
-});
-
-/**
- * Get current user with organization context
- * In development, falls back to a seeded dev user when no session
- */
-export async function getCurrentUser(): Promise<User | null> {
-  const session = await getSession();
-
-  if (session?.user) {
-    // Real session — look up user by Better Auth ID
-    const { db } = await import("../db");
-    const { users } = await import("../db/schema");
-    const { eq } = await import("drizzle-orm");
-
-    const user = await db.query.users.findFirst({
-      where: eq(users.betterAuthId, session.user.id),
-    });
-
-    return user || null;
-  }
-
-  // Dev bypass: return seed user when no session in development
-  if (process.env.NODE_ENV === "development") {
-    const { ensureDevSeed, DEV_USER_ADMIN_ID } = await import(
-      "../db/dev-seed"
-    );
-    await ensureDevSeed();
-
-    const { db } = await import("../db");
-    const { users } = await import("../db/schema");
-    const { eq } = await import("drizzle-orm");
-
-    const devUser = await db.query.users.findFirst({
-      where: eq(users.id, DEV_USER_ADMIN_ID),
-    });
-
-    return devUser || null;
-  }
-
-  return null;
-}
 
 /**
  * Get current tenant ID
  */
 export async function getCurrentTenantId(): Promise<string | null> {
+  const { getCurrentUser } = await import("./simple-auth");
   const user = await getCurrentUser();
   return user?.tenantId || null;
 }
 
 /**
  * Require authentication
- * Throws error if not authenticated
  */
 export async function requireAuth(): Promise<User> {
+  const { getCurrentUser } = await import("./simple-auth");
   const user = await getCurrentUser();
   if (!user) {
     throw new Error("Unauthorized - authentication required");
@@ -107,6 +56,7 @@ export async function requireRole(
  * Check if user has permission
  */
 export async function hasPermission(permission: string): Promise<boolean> {
+  const { getCurrentUser } = await import("./simple-auth");
   const user = await getCurrentUser();
   if (!user) return false;
 

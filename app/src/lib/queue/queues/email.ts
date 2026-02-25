@@ -32,6 +32,9 @@ export async function sendEmail(data: EmailJobData) {
  * Email templates
  */
 export const EmailTemplate = {
+  // Request notifications
+  REQUEST_SUBMITTED: "request-submitted",
+
   // Approval notifications
   APPROVAL_REQUESTED: "approval-requested",
   APPROVAL_REMINDER: "approval-reminder",
@@ -46,4 +49,11 @@ export const EmailTemplate = {
   VERIFY_EMAIL: "verify-email",
   PASSWORD_RESET: "password-reset",
   MFA_ENABLED: "mfa-enabled",
+
+  // Trial reminders
+  TRIAL_REMINDER: "trial-reminder",
+
+  // Renewal reminders
+  RENEWAL_CHECKPOINT: "renewal-checkpoint",
+  RENEWAL_ESCALATION: "renewal-escalation",
 } as const;

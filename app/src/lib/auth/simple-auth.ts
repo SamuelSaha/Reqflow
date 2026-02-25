@@ -1,0 +1,171 @@
+/**
+ * Lightweight auth for MVP
+ * TODO: Migrate to Better Auth post-launch
+ */
+
+import { SignJWT, jwtVerify } from "jose";
+import bcrypt from "bcryptjs";
+import { cookies } from "next/headers";
+import { db } from "../db";
+import { users } from "../db/schema";
+import { eq } from "drizzle-orm";
+import type { User } from "../db/schema";
+
+const JWT_SECRET = new TextEncoder().encode(
+  process.env.AUTH_SECRET || "dev-secret-change-in-production-32chars"
+);
+
+const COOKIE_NAME = "reqflow_session";
+const COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
+
+export interface SessionPayload {
+  userId: string;
+  email: string;
+  exp: number;
+}
+
+/**
+ * Create a JWT session token
+ */
+export async function createSession(user: User): Promise<string> {
+  const token = await new SignJWT({
+    userId: user.id,
+    email: user.email,
+  })
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime("7d")
+    .sign(JWT_SECRET);
+
+  return token;
+}
+
+/**
+ * Verify and decode a JWT session token
+ */
+export async function verifySession(
+  token: string
+): Promise<SessionPayload | null> {
+  try {
+    const { payload } = await jwtVerify(token, JWT_SECRET);
+    return payload as unknown as SessionPayload;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Get session from cookies
+ */
+export async function getSession(): Promise<SessionPayload | null> {
+  const cookieStore = await cookies();
+  const token = cookieStore.get(COOKIE_NAME)?.value;
+
+  if (!token) {
+    return null;
+  }
+
+  return verifySession(token);
+}
+
+/**
+ * Get current user from session
+ */
+export async function getCurrentUser(): Promise<User | null> {
+  const session = await getSession();
+
+  if (!session) {
+    return null;
+  }
+
+  const user = await db.query.users.findFirst({
+    where: eq(users.id, session.userId),
+  });
+
+  return user || null;
+}
+
+/**
+ * Sign in with email and password
+ */
+export async function signIn(
+  email: string,
+  password: string
+): Promise<{ user: User; token: string } | { error: string }> {
+  const user = await db.query.users.findFirst({
+    where: eq(users.email, email.toLowerCase()),
+  });
+
+  if (!user || !user.passwordHash) {
+    return { error: "Invalid email or password" };
+  }
+
+  const valid = await bcrypt.compare(password, user.passwordHash);
+
+  if (!valid) {
+    return { error: "Invalid email or password" };
+  }
+
+  if (!user.isActive) {
+    return { error: "Account is disabled" };
+  }
+
+  const token = await createSession(user);
+
+  // Set cookie
+  const cookieStore = await cookies();
+  cookieStore.set(COOKIE_NAME, token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: COOKIE_MAX_AGE,
+    path: "/",
+  });
+
+  return { user, token };
+}
+
+/**
+ * Sign out (clear session)
+ */
+export async function signOut(): Promise<void> {
+  const cookieStore = await cookies();
+  cookieStore.delete(COOKIE_NAME);
+}
+
+/**
+ * Hash a password
+ */
+export async function hashPassword(password: string): Promise<string> {
+  return bcrypt.hash(password, 12);
+}
+
+/**
+ * Create a new user (for dev/testing)
+ */
+export async function createUser(data: {
+  email: string;
+  password: string;
+  name: string;
+  role?: "requester" | "manager" | "finance" | "admin";
+  tenantId: string;
+  departmentId: string;
+}): Promise<User> {
+  const passwordHash = await hashPassword(data.password);
+
+  const [user] = await db
+    .insert(users)
+    .values({
+      email: data.email.toLowerCase(),
+      name: data.name,
+      passwordHash,
+      role: data.role || "requester",
+      tenantId: data.tenantId,
+      departmentId: data.departmentId,
+      isActive: true,
+      emailVerified: true,
+    })
+    .returning();
+
+  return user;
+}

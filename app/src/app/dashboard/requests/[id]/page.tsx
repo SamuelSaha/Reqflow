@@ -13,7 +13,6 @@ import { Badge } from "@/components/ui/badge";
 import { trpc } from "@/lib/api/react";
 import {
   ArrowLeft,
-  Loader2,
   Clock,
   CheckCircle2,
   XCircle,
@@ -25,6 +24,8 @@ import {
   AlertCircle,
   ShieldCheck,
 } from "lucide-react";
+import { RequestDetailSkeleton } from "@/components/dashboard/LoadingSkeletons";
+import { getErrorMessage } from "@/lib/utils/error-messages";
 
 export const dynamic = "force-dynamic";
 
@@ -51,24 +52,38 @@ export default function RequestDetailPage({
   const request = trpc.requests.getById.useQuery({ id });
 
   if (request.isLoading) {
-    return (
-      <div className="flex items-center justify-center py-24">
-        <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
-      </div>
-    );
+    return <RequestDetailSkeleton />;
   }
 
   if (request.error) {
     return (
-      <div className="flex flex-col items-center justify-center py-24">
-        <AlertCircle className="h-12 w-12 text-red-400 mb-4" />
-        <p className="text-lg font-medium text-slate-900">Request not found</p>
-        <Link href="/dashboard/requests" className="mt-4">
-          <Button variant="outline">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to requests
-          </Button>
+      <div className="space-y-6">
+        <Link
+          href="/dashboard/requests"
+          className="inline-flex items-center text-sm text-slate-500 hover:text-slate-900"
+        >
+          <ArrowLeft className="mr-1 h-4 w-4" />
+          Back to requests
         </Link>
+        <Card className="border-red-200 bg-red-50">
+          <CardContent className="flex flex-col items-center justify-center py-12">
+            <AlertCircle className="h-12 w-12 text-red-400 mb-4" />
+            <p className="text-lg font-medium text-slate-900 mb-2">
+              {getErrorMessage(request.error)}
+            </p>
+            <div className="flex gap-2 mt-4">
+              <Button onClick={() => request.refetch()} variant="outline">
+                Try again
+              </Button>
+              <Link href="/dashboard/requests">
+                <Button variant="outline">
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  Back to requests
+                </Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
   }

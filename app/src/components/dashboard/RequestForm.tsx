@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -24,8 +26,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { trpc } from "@/lib/api/react";
-import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { Loader2, FlaskConical, Plus, X } from "lucide-react";
+import { addDays, format } from "date-fns";
 
 const requestFormSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters"),
@@ -36,13 +40,21 @@ const requestFormSchema = z.object({
   frequency: z.enum(["one-time", "monthly", "annually"]),
   quantity: z.number().min(1).optional(),
   urgency: z.enum(["low", "normal", "urgent"]).optional(),
+  // Trial fields
+  isTrial: z.boolean().optional(),
+  trialEndDate: z.string().optional(),
+  trialSuccessCriteria: z.array(z.object({
+    metric: z.string(),
+    target: z.string(),
+  })).optional(),
+  trialEstimatedAnnualCost: z.string().optional(),
 });
 
 type RequestFormValues = z.infer<typeof requestFormSchema>;
 
 export function RequestForm() {
-  const [submitStatus, setSubmitStatus] = useState<"idle" | "creating" | "submitting" | "success" | "error">("idle");
-  const [routingResult, setRoutingResult] = useState<any>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
 
   const form = useForm<RequestFormValues>({
     resolver: zodResolver(requestFormSchema),
@@ -55,90 +67,81 @@ export function RequestForm() {
       frequency: "one-time",
       quantity: 1,
       urgency: "normal",
+      isTrial: false,
+      trialEndDate: format(addDays(new Date(), 14), "yyyy-MM-dd"),
+      trialSuccessCriteria: [{ metric: "", target: "" }],
+      trialEstimatedAnnualCost: "",
     },
   });
 
   const createRequest = trpc.requests.create.useMutation();
   const submitRequest = trpc.requests.submit.useMutation();
+  const createTrial = trpc.trials.createFromRequest.useMutation();
 
   async function onSubmit(data: RequestFormValues) {
+    setIsSubmitting(true);
     try {
-      // Step 1: Create draft request
-      setSubmitStatus("creating");
-      const request = await createRequest.mutateAsync(data);
+      if (data.isTrial) {
+        // Trial mode: Create trial with request
+        if (!data.trialEndDate) {
+          toast.error("Trial end date is required");
+          return;
+        }
 
-      // Step 2: Submit for approval (triggers workflow engine)
-      setSubmitStatus("submitting");
-      const result = await submitRequest.mutateAsync({ id: request.id });
+        const result = await createTrial.mutateAsync({
+          title: data.title,
+          description: data.description,
+          category: data.category,
+          vendorName: data.vendorName,
+          amount: data.amount,
+          frequency: data.frequency,
+          urgency: data.urgency,
+          trialEndDate: data.trialEndDate,
+          trialSuccessCriteria: data.trialSuccessCriteria?.filter(c => c.metric && c.target),
+          trialEstimatedAnnualCost: data.trialEstimatedAnnualCost,
+        });
 
-      setRoutingResult(result);
-      setSubmitStatus("success");
-    } catch (error) {
-      console.error("Failed to submit request:", error);
-      setSubmitStatus("error");
+        toast.success("Trial created!", {
+          description: `Trial ends on ${format(new Date(data.trialEndDate), "MMM d, yyyy")}. Reminders scheduled.`,
+          duration: 5000,
+        });
+
+        // Navigate to trials dashboard
+        router.push("/dashboard/trials");
+      } else {
+        // Regular request mode
+        const request = await createRequest.mutateAsync(data);
+        const result = await submitRequest.mutateAsync({ id: request.id });
+
+        toast.success("Request submitted!", {
+          description: `${request.requestNumber} routed to ${result.approvalSteps} approver${result.approvalSteps !== 1 ? 's' : ''}`,
+          duration: 5000,
+        });
+
+        if (result.flags && Object.values(result.flags).some(v => v === true)) {
+          const flagMessages = [];
+          if (result.flags.securityReview) flagMessages.push("Security review required");
+          if (result.flags.legalReview) flagMessages.push("Legal review required");
+          if (result.flags.budgetEscalation) flagMessages.push("Budget escalation triggered");
+          if (result.flags.budgetOverrun) flagMessages.push("⚠️ Would exceed budget");
+
+          if (flagMessages.length > 0) {
+            toast.info(result.workflowName, {
+              description: flagMessages.join(" • "),
+              duration: 7000,
+            });
+          }
+        }
+
+        router.push(`/dashboard/requests/${request.id}`);
+      }
+    } catch (error: any) {
+      toast.error(`Failed to ${data.isTrial ? "create trial" : "submit request"}`, {
+        description: error.message || "Please try again",
+      });
+    } finally {
+      setIsSubmitting(false);
     }
-  }
-
-  if (submitStatus === "success" && routingResult) {
-    return (
-      <Card className="border-green-200 bg-green-50">
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <CheckCircle2 className="h-5 w-5 text-green-600" />
-            <CardTitle className="text-green-900">Request Submitted!</CardTitle>
-          </div>
-          <CardDescription className="text-green-700">
-            Your purchase request has been routed for approval
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div>
-            <p className="text-sm font-medium text-green-900">Workflow:</p>
-            <p className="text-sm text-green-700">{routingResult.workflowName}</p>
-          </div>
-
-          <div>
-            <p className="text-sm font-medium text-green-900">Approval Chain:</p>
-            <p className="text-sm text-green-700">
-              {routingResult.approvalSteps} approver{routingResult.approvalSteps !== 1 ? "s" : ""}
-            </p>
-          </div>
-
-          {routingResult.flags && Object.entries(routingResult.flags).some(([key, value]) =>
-            value === true && key !== "autoApproved"
-          ) && (
-            <div>
-              <p className="text-sm font-medium text-green-900 mb-1">Flags:</p>
-              <div className="space-y-1">
-                {routingResult.flags.securityReview && (
-                  <p className="text-xs text-green-700">🔒 Security review recommended</p>
-                )}
-                {routingResult.flags.legalReview && (
-                  <p className="text-xs text-green-700">⚖️ Legal review recommended</p>
-                )}
-                {routingResult.flags.budgetEscalation && (
-                  <p className="text-xs text-green-700">📊 Budget escalation triggered</p>
-                )}
-                {routingResult.flags.budgetOverrun && (
-                  <p className="text-xs text-orange-700 font-medium">⚠️ Would exceed budget</p>
-                )}
-              </div>
-            </div>
-          )}
-
-          <Button
-            onClick={() => {
-              setSubmitStatus("idle");
-              setRoutingResult(null);
-              form.reset();
-            }}
-            className="w-full"
-          >
-            Create Another Request
-          </Button>
-        </CardContent>
-      </Card>
-    );
   }
 
   return (
@@ -305,38 +308,158 @@ export function RequestForm() {
           </CardContent>
         </Card>
 
+        {/* Trial Mode Toggle */}
+        <Card className="border-blue-200 bg-blue-50/30">
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <FormField
+                control={form.control}
+                name="isTrial"
+                render={({ field }) => (
+                  <FormItem className="flex items-center space-x-2">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormLabel className="!mt-0 flex items-center gap-2 cursor-pointer">
+                      <FlaskConical className="h-4 w-4 text-blue-600" />
+                      <span className="font-semibold text-blue-900">This is a trial</span>
+                    </FormLabel>
+                  </FormItem>
+                )}
+              />
+            </div>
+            {form.watch("isTrial") && (
+              <CardDescription className="text-blue-700">
+                Track tool trials and get reminders before they expire
+              </CardDescription>
+            )}
+          </CardHeader>
+
+          {form.watch("isTrial") && (
+            <CardContent className="space-y-4">
+              <FormField
+                control={form.control}
+                name="trialEndDate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Trial End Date</FormLabel>
+                    <FormControl>
+                      <Input type="date" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      You'll receive reminders 7, 3, and 1 days before expiry
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="trialEstimatedAnnualCost"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Estimated Annual Cost (Optional)</FormLabel>
+                    <FormControl>
+                      <Input placeholder="e.g., €2,400" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      If trial converts, this helps with budget planning
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <div className="space-y-2">
+                <FormLabel>Success Criteria (Optional)</FormLabel>
+                <FormDescription className="text-sm">
+                  What needs to happen for this trial to be worth converting?
+                </FormDescription>
+                {form.watch("trialSuccessCriteria")?.map((_, index) => (
+                  <div key={index} className="flex gap-2">
+                    <FormField
+                      control={form.control}
+                      name={`trialSuccessCriteria.${index}.metric`}
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormControl>
+                            <Input placeholder="Metric (e.g., Team adoption)" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name={`trialSuccessCriteria.${index}.target`}
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormControl>
+                            <Input placeholder="Target (e.g., 5+ users)" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    {index > 0 && (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => {
+                          const current = form.getValues("trialSuccessCriteria") || [];
+                          form.setValue(
+                            "trialSuccessCriteria",
+                            current.filter((_, i) => i !== index)
+                          );
+                        }}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                ))}
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    const current = form.getValues("trialSuccessCriteria") || [];
+                    form.setValue("trialSuccessCriteria", [
+                      ...current,
+                      { metric: "", target: "" },
+                    ]);
+                  }}
+                  className="mt-2"
+                >
+                  <Plus className="h-4 w-4 mr-1" />
+                  Add criterion
+                </Button>
+              </div>
+            </CardContent>
+          )}
+        </Card>
+
         <div className="flex gap-3">
           <Button
             type="submit"
-            disabled={submitStatus !== "idle"}
+            disabled={isSubmitting}
             className="flex-1"
           >
-            {submitStatus === "creating" && (
+            {isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Creating Request...
+                {form.watch("isTrial") ? "Creating Trial..." : "Submitting Request..."}
               </>
+            ) : (
+              form.watch("isTrial") ? "Create Trial" : "Submit for Approval"
             )}
-            {submitStatus === "submitting" && (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Routing for Approval...
-              </>
-            )}
-            {submitStatus === "idle" && "Submit for Approval"}
           </Button>
         </div>
-
-        {submitStatus === "error" && (
-          <Card className="border-red-200 bg-red-50">
-            <CardContent className="flex items-center gap-2 pt-6">
-              <AlertCircle className="h-4 w-4 text-red-600" />
-              <p className="text-sm text-red-900">
-                Failed to submit request. Please try again.
-              </p>
-            </CardContent>
-          </Card>
-        )}
       </form>
     </Form>
   );

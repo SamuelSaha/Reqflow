@@ -13,14 +13,16 @@ import { Badge } from "@/components/ui/badge";
 import { trpc } from "@/lib/api/react";
 import {
   Plus,
-  Loader2,
   FileText,
   Clock,
   CheckCircle2,
   XCircle,
   Edit3,
   ArrowUpRight,
+  AlertCircle,
 } from "lucide-react";
+import { RequestListSkeleton } from "@/components/dashboard/LoadingSkeletons";
+import { getErrorMessage } from "@/lib/utils/error-messages";
 
 export const dynamic = "force-dynamic";
 
@@ -86,10 +88,21 @@ export default function RequestsPage() {
       </div>
 
       {/* Loading */}
-      {requestList.isLoading && (
-        <div className="flex items-center justify-center py-12">
-          <Loader2 className="h-6 w-6 animate-spin text-slate-400" />
-        </div>
+      {requestList.isLoading && <RequestListSkeleton rows={5} />}
+
+      {/* Error state */}
+      {requestList.error && (
+        <Card className="border-red-200 bg-red-50">
+          <CardContent className="flex flex-col items-center justify-center py-12">
+            <AlertCircle className="h-12 w-12 text-red-400 mb-4" />
+            <p className="text-lg font-medium text-slate-900 mb-2">
+              {getErrorMessage(requestList.error)}
+            </p>
+            <Button onClick={() => requestList.refetch()} variant="outline" className="mt-2">
+              Try again
+            </Button>
+          </CardContent>
+        </Card>
       )}
 
       {/* Empty state */}

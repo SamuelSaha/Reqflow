@@ -25,21 +25,27 @@ export const renewalEvents = pgTable("renewal_events", {
   decisionById: uuid("decision_by_id"),
   decisionNotes: text("decision_notes"),
 
-  // Renewal readiness score (computed, stored for quick access)
+  // Renewal readiness score with checkpoint tracking
   readinessScore: jsonb("readiness_score").$type<{
-    usageReviewed: boolean;
-    alternativesCompared: boolean;
-    termsKnown: boolean;
-    ownerActive: boolean;
-    score: number; // 0-100
+    checkpoints: Array<{
+      id: string; // "usage_review" | "alternatives" | "decision" | "owner"
+      label: string;
+      weight: number; // 25, 25, 30, 20
+      completed: boolean;
+      completedAt?: string;
+      completedById?: string;
+      notes?: string;
+    }>;
+    totalScore: number; // 0-100
   }>(),
 
-  // Checkpoints sent
-  checkpoints: jsonb("checkpoints").$type<Array<{
-    daysBeforeRenewal: number;
-    sentAt: string;
-    respondedAt?: string;
-    respondedById?: string;
+  // Reminder schedule tracking
+  reminders: jsonb("reminders").$type<Array<{
+    daysBeforeDeadline: number; // 120, 90, 60, 30, 14, 7, 3, 1
+    type: "checkpoint" | "escalation";
+    scheduledFor: string;
+    sentAt?: string;
+    jobId?: string;
   }>>(),
 
   // Outcome
