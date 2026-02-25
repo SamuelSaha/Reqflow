@@ -50,6 +50,9 @@ export function Pricing() {
               "Unlimited users and requests",
               "Full approval workflows",
               "Budget tracking and purchase orders",
+              "Renewal notice-window tracking",
+              "Trial management with auto-reminders",
+              "AI-powered case builder for vendor comparisons",
               "Slack, QuickBooks, Xero integrations",
               "AI copilot for spend analysis",
             ].map((feature) => (

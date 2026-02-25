@@ -2,10 +2,10 @@
 
 ## The Procurement Front Door for Teams Without Procurement
 
-**Version:** 1.0
+**Version:** 2.0
 **Date:** February 18, 2026
 **Author:** Product Strategy Team
-**Status:** Draft for Validation
+**Status:** Strategic Revision
 **Confidentiality:** Internal
 
 ---
@@ -127,6 +127,68 @@ Employee needs a tool
 - Weak on services/contract procurement
 
 **The gap:** Nobody owns the full intake-to-pay lifecycle for the 50-500 employee company with zero procurement headcount. That's Reqflow.
+
+### 2.4 The Ambient Procurement Reality
+
+In companies under 50 people, procurement isn't a department — it's a distributed set of micro-decisions across Slack, email, credit cards, and ad-hoc spreadsheets. This creates three structural problems Reqflow must assume as features of reality, not user errors:
+
+**1. Information is created in places that aren't systems of record.**
+Key facts live in email threads, Zoom calls, vendor portals, random PDFs, Stripe descriptors, Slack DMs, Notion docs, and personal calendars. No single source captures the full story of why something was purchased.
+
+**2. Ownership is ambiguous and constantly changing.**
+The person who requested a tool is rarely the right long-term owner of the renewal, contract, invoice reconciliation, or seat hygiene. Tools outlast the people who bought them.
+
+**3. The tech stack evolves faster than governance.**
+Tools are purchased quickly to unblock work; governance and documentation lag behind permanently. By the time someone builds a tracker, half the data is already stale.
+
+### 2.5 The Procurement Lifecycle (Where Small Teams Bleed)
+
+Procurement is a lifecycle, not a purchase event. The 12 stages:
+
+1. Intake / request
+2. Discovery & shortlist
+3. Evaluation & trials
+4. Business case + stakeholder alignment
+5. Security + compliance checks
+6. Pricing + negotiation
+7. Contracting + signatures
+8. Purchase execution + provisioning
+9. Invoice capture + accounting
+10. Ongoing management (usage, seats, ownership)
+11. Renewal / cancellation / offboarding
+12. Vendor performance assessment
+
+The biggest cost leaks cluster around: **Intake** (duplicate tools + shadow IT), **Evaluation** (no standardized comparisons), **Purchase execution** (messy payment paths), **Invoice/accounting** (reconciliation chaos), **Renewals** (missed deadlines + auto-renew traps), and **Ongoing management** (seat waste, orphaned tools).
+
+### 2.6 The Top 10 Inefficiencies to Design Around
+
+These are the highest-ROI pain points for small teams. If Reqflow nails #1, #2, and #5, it delivers outsized value immediately:
+
+1. **Unknown renewal notice periods** → forced renewals (the #1 predictable failure)
+2. **Orphaned tools** → no owner after employees leave
+3. **Seat waste + poor offboarding** → paying for unused licenses
+4. **Duplicate category spend** → stack sprawl across departments
+5. **Invoice ≠ contract ≠ actual charges** → reconciliation chaos
+6. **Card descriptor ambiguity** → vendor identity resolution failures
+7. **Ad-hoc approvals with no audit trail** → compliance gaps
+8. **Unstructured evaluations** → slow, biased tool decisions
+9. **Security review rework** → same questionnaire repeated per vendor
+10. **Tool records disconnected from "why we bought it"** → impossible to cancel
+
+### 2.7 Strategic Thesis: The Connected Record
+
+The real problem isn't buying tools — it's losing the story. Small teams don't fail at procurement because they don't care. They fail because the story of each tool purchase is not captured in a durable, connected way:
+
+- **Why we bought it** (business case, requirements, alternatives considered)
+- **Who owns it** (and what happens when they leave)
+- **What it costs** (really — including hidden fees, overages, and FX)
+- **What the terms are** (auto-renew, notice periods, uplift caps)
+- **How we'll know it's working** (usage metrics, adoption, ROI)
+- **When and how we can exit** (notice deadlines, data portability, offboarding)
+
+If Reqflow becomes the system that captures and connects that story automatically — without slowing people down — it eliminates the majority of procurement waste small teams experience.
+
+This is Reqflow's defensible position against Ramp adding workflows, Freqens adding intake, or any card issuer bolting on approvals. They can copy individual features; they can't replicate the connected institutional memory.
 
 ---
 
@@ -448,6 +510,25 @@ No implementation project. No consultants. Connect your email, import your vendo
 #### 7.1.4 Browser Extension
 **Description:** When browsing a vendor's pricing page, click the Reqflow extension to auto-populate a purchase request with the tool name, pricing tier, and URL.
 
+#### 7.1.5 Trial Management
+**Description:** Trials are shadow IT by another name. When a trial converts without a procurement record, you lose visibility on 30-40% of SaaS purchases. Reqflow tracks trials as first-class objects.
+
+**Trial object:**
+- Start date, end date
+- Stakeholders (who's evaluating)
+- Success criteria ("X workflows moved," "Y hours saved," "Z adoption")
+- Decision checkpoint with default outcome (buy / extend / cancel)
+- Auto-reminders at 7 days, 3 days, and 1 day before end
+
+**Flow:**
+1. Marc starts a trial → creates a trial object in Reqflow (from Slack or web)
+2. Reqflow tracks the evaluation period
+3. At checkpoint: stakeholders vote (keep / extend / cancel)
+4. If "keep" → trial auto-converts to a purchase request, pre-filled with vendor data
+5. If no action → trial auto-cancels, preventing silent conversion
+
+**Phase:** Phase 1 (bolts directly onto Smart Intake with minimal engineering)
+
 ### 7.2 Module 2: Intelligent Approval Engine
 
 #### 7.2.1 Configurable Approval Workflows
@@ -612,6 +693,28 @@ Company Total Budget
 - 90/60/30 days before renewal
 - Compliance document expiry
 - SLA breach indicators
+
+#### 7.5.5 Renewal Notice-Window Tracking
+**Description:** Renewal calendar is table stakes. Notice-window tracking is the killer feature. Most tools track when something renews. Nobody tracks when you must decide. That's the difference between "your Figma renews March 1" and "you have until January 15 to cancel or you're locked in for another year."
+
+**Per contract/subscription tracked:**
+- Renewal date
+- Notice deadline (the real decision point)
+- Auto-renew flag (yes/no)
+- Uplift/price increase limits (if contractual)
+- Owner (current, not who originally purchased)
+
+**Renewal workflow:**
+- 120/90/60/30-day checkpoints depending on contract value
+- Owner + finance + security prompted at each checkpoint
+- Decision capture: keep / downgrade / cancel / replace
+- "Renewal readiness" score:
+  - Have we reviewed usage?
+  - Have we compared alternatives?
+  - Do we know current contract terms?
+  - Is the owner still employed?
+
+**Phase:** Phase 1 (high value, low engineering cost, directly saves money)
 
 #### 7.5.4 Preferred Vendor Catalog
 **Description:** Finance curates a catalog of pre-approved vendors and products.
@@ -900,52 +1003,74 @@ Full REST + GraphQL API for custom integrations. Webhook support for all events.
 
 ## 12. Data Model
 
-### 12.1 Core Entities
+### 12.1 Core Objects (The Connected Record)
+
+Reqflow's real moat isn't the intake form — it's the connected record. Any tool can build a form. Nobody has built the durable, linked story of **why we bought this → who owns it → what it really costs → when we can leave**.
 
 ```
 Organization
   ├── Users (roles, departments, permissions)
   ├── Departments
-  ├── Budgets (allocated, committed, spent)
+  ├── Budgets (allocated, committed, spent, forecasted)
   ├── Approval Workflows (rules, conditions, chains)
   ├── Policies (rules, enforcement level)
   │
+  ├── Vendors (legal entity + billing names + portals + contacts)
+  │   ├── Contracts (term, auto-renew, notice period, clauses, pricing model)
+  │   ├── Compliance Documents (SOC2, DPA, insurance, certifications)
+  │   └── Performance Scores
+  │
+  ├── Tools (capability + category + owner + risk tier)
+  │   ├── Subscriptions (plan, seats, add-ons, billing cycle)
+  │   ├── Trials (start/end, criteria, stakeholders, outcome)
+  │   └── User/Seat assignments (assigned vs active vs last used)
+  │
   ├── Requests
-  │   ├── Line Items
+  │   ├── Evaluations (options, rubric, trial outcomes, recommendation)
   │   ├── Approvals (chain of decisions)
-  │   ├── Comments
+  │   ├── Business Cases (alternatives, cost models, impact)
   │   └── Attachments
   │
   ├── Purchase Orders
   │   ├── PO Line Items
-  │   ├── Receipts
-  │   └── Status History
+  │   └── Receipts
   │
   ├── Invoices
   │   ├── Invoice Line Items
   │   ├── Matching Results (PO + Receipt)
   │   └── Payment Records
   │
-  ├── Vendors
-  │   ├── Contacts
-  │   ├── Compliance Documents
-  │   ├── Contracts
-  │   └── Performance Scores
-  │
-  └── Contracts
-      ├── Key Terms (AI-extracted)
-      ├── Renewal Alerts
-      └── Amendments
+  └── Renewal Events
+      ├── Notice deadline tracking
+      ├── Decision log (keep/downgrade/cancel/replace)
+      └── Readiness score
 ```
 
-### 12.2 Key Relationships
+### 12.2 Key Relationships (The Graph)
 
-- A **Request** belongs to one User (requester) and one Department
-- A **Request** triggers one or more **Approval** steps (sequential or parallel)
-- An approved **Request** generates one **Purchase Order**
-- A **Purchase Order** matches to one or more **Invoices**
-- A **Vendor** has many **Contracts**, **Purchase Orders**, and **Invoices**
-- A **Budget** is consumed by **Requests** (committed) and **Invoices** (spent)
+The power of Reqflow is in the connections, not the objects:
+
+- **Decision traceability:** Request → Evaluation → Approval → Contract (why did we buy this?)
+- **Financial traceability:** Invoice ↔ Contract ↔ Subscription ↔ Tool ↔ Owner (what does it really cost?)
+- **Payment matching:** Payment ↔ Invoice (many-to-one, one-to-many edge cases)
+- **Budget consumption:** Budget → Request (committed) → Invoice (spent)
+- **Renewal chain:** Contract → Renewal Event → Notice Deadline → Decision → Next Contract
+- **Ownership chain:** Tool → Owner → Department → Budget
+
+### 12.3 Edge Cases That Cause 80% of Pain
+
+If Reqflow handles these, it will feel "built by people who lived it":
+
+- One vendor, multiple products (e.g., Google Workspace + Google Cloud — separate renewals)
+- One invoice covering multiple tools (bundles or consolidated billing)
+- Usage-based pricing (hard to forecast, invoice spikes)
+- Mid-cycle plan changes (proration, credits, adjustments)
+- Multi-currency + FX fees (variance between expected and actual)
+- Marketplace purchases (AWS/Azure/GCP, app stores) → invoices look different
+- Subsidiary billing (wrong entity on invoice; tax issues)
+- Owner leaves company (renewal contact dead)
+- Shadow IT trials that convert (no procurement record)
+- SSO/SCIM locked behind enterprise plan (security vs cost tradeoff)
 
 ---
 
@@ -1114,6 +1239,8 @@ Built-in virality through the requester experience:
 - Email notifications
 - Slack integration
 - Google Workspace SSO
+- Trial management (trial objects with success criteria and auto-reminders)
+- Renewal notice-window tracking (notice deadlines, not just renewal dates)
 
 **Success criteria:**
 - 10 beta customers live
@@ -1255,6 +1382,7 @@ Built-in virality through the requester experience:
 | Version | Date | Author | Changes |
 |---|---|---|---|
 | 1.0 | 2026-02-18 | Product Strategy | Initial PRD |
+| 2.0 | 2026-02-25 | Product Strategy | Added ambient procurement reality, connected data model, trial management, renewal notice-window tracking, top 10 inefficiencies, strategic thesis. Expanded Phase 1 scope. |
 
 ---
 

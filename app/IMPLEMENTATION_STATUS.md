@@ -1,6 +1,6 @@
 # Reqflow Implementation Status
 
-## Completed ✅ (6/20 tasks)
+## Completed ✅ (7/21 tasks)
 
 ### 1. Next.js 14 Project Structure
 - ✅ App Router with TypeScript
@@ -17,7 +17,7 @@
 
 ### 3. Drizzle ORM with PostgreSQL Schema
 - ✅ Multi-tenant data model with `tenant_id` on all tables
-- ✅ Core entities:
+- ✅ Core entities (Phase 1):
   - Organizations (tenants)
   - Users (with RBAC roles)
   - Departments
@@ -27,8 +27,15 @@
   - Approval Workflows
   - Audit Logs (append-only)
   - Auth Events (append-only)
+- ✅ Connected data model (Phase 2):
+  - Vendors (identity, billing names, compliance tier, performance)
+  - Contracts (terms, auto-renew, **notice deadlines**, AI-extracted clauses)
+  - Subscriptions (plan, seats, billing cycle, ownership)
+  - Invoices (matching, variance detection, accounting sync)
+  - Trials (success criteria, auto-reminders, conversion tracking)
+  - Renewal Events (**notice-window tracking**, readiness score, decision log)
 - ✅ Zod schemas for validation
-- ✅ Relations configured
+- ✅ Relations configured (full graph: Tool → Contract → Subscription → Invoice → Owner)
 - ✅ Migration system ready
 
 ### 4. Better Auth with MFA
@@ -59,7 +66,7 @@
 
 ---
 
-## In Progress / Pending (14/20 tasks)
+## In Progress / Pending (14/21 tasks)
 
 ### 7. Slack Integration
 **Status:** Not started
@@ -68,13 +75,15 @@
 - `/api/slack/events` - Handle interactive components
 - Slack modal templates
 
-### 8. Smart Intake Form with AI Classification
+### 8. Smart Intake Form with AI Classification + Trial Management
 **Status:** Infrastructure ready, needs implementation
 **Next steps:**
 - Create adaptive request form component
 - Implement rule-based classification (50 keyword rules)
 - Add Claude Haiku fallback for ambiguous cases
 - Implement duplicate detection using PostgreSQL `pg_trgm`
+- **Trial tracking:** Create trial from intake form, with success criteria, auto-reminders, and conversion-to-request flow
+- **Schema ready:** `trials` table with start/end dates, stakeholders, success criteria, decision capture
 
 ### 9. **Approval Workflow Engine** ⚠️ NEEDS YOUR INPUT
 **Status:** Schema ready, routing logic placeholder created
@@ -97,7 +106,18 @@ The function `routeApproval()` determines who approves what and when. Right now 
 
 **Location:** `/Users/samuelsaha/emdash-projects/Reqflow/app/src/lib/workflows/approval-router.ts`
 
-### 10. Budget Tracking with Real-time Enforcement
+### 10. Renewal Notice-Window Tracking ⭐ HIGH VALUE
+**Status:** Schema complete, needs UI and workflow implementation
+**Key insight:** Renewal calendar is table stakes. Notice-window tracking is the killer feature.
+**Schema ready:** `contracts` table (notice_deadline, auto_renew, uplift_cap) + `renewal_events` table (readiness score, decision log, checkpoints)
+**Next steps:**
+- Renewal calendar dashboard with notice deadlines highlighted
+- 120/90/60/30-day checkpoint workflow engine
+- "Renewal readiness" score computation (usage reviewed? alternatives compared? terms known? owner active?)
+- Decision capture: keep / downgrade / cancel / replace / renegotiate
+- Email/Slack reminders at each checkpoint
+
+### 11. Budget Tracking with Real-time Enforcement
 **Status:** Database schema complete, API ready
 **Next steps:**
 - Budget dashboard UI components
@@ -210,15 +230,16 @@ The function `routeApproval()` determines who approves what and when. Right now 
 
 ## Next Steps (Priority Order)
 
-1. **Implement approval routing logic** (Task #9) - This is the core business logic
-2. Build smart intake form (Task #8)
-3. Set up shadcn/ui components (Task #17)
-4. Implement Slack integration (Task #7)
-5. Set up file storage (Task #14)
-6. Add remaining integrations (Tasks #11-13, #16)
-7. Write RLS tests (Task #20)
-8. Set up CI/CD (Task #18)
-9. Deploy to production (Task #19)
+1. **Implement approval routing logic** (Task #9) - Core business logic
+2. **Build smart intake form + trial management** (Task #8) - The front door + trial tracking
+3. **Renewal notice-window tracking** (Task #10) - Highest-ROI feature, directly saves money
+4. Set up shadcn/ui components (Task #17)
+5. Implement Slack integration (Task #7)
+6. Set up file storage (Task #14)
+7. Add remaining integrations (Tasks #11-13, #16)
+8. Write RLS tests (Task #20)
+9. Set up CI/CD (Task #18)
+10. Deploy to production (Task #19)
 
 ---
 
@@ -226,11 +247,16 @@ The function `routeApproval()` determines who approves what and when. Right now 
 
 ### 🔴 Critical (Implement Soon)
 - `src/lib/workflows/approval-router.ts` - **Approval routing logic**
-- `src/lib/db/schema/*` - Review and add custom fields if needed
+- `src/lib/db/schema/contracts.ts` - **Notice-window tracking** (notice_deadline is the killer field)
+- `src/lib/db/schema/trials.ts` - **Trial management** (success criteria, auto-conversion)
+- `src/lib/db/schema/renewal-events.ts` - **Renewal workflow** (readiness score, decision log)
 
-### 🟡 Important (Phase 2)
+### 🟡 Important (Phase 1-2 Bridge)
+- `src/lib/db/schema/vendors.ts` - Vendor identity resolution (billing name matching)
+- `src/lib/db/schema/subscriptions.ts` - Tool ownership + seat tracking
+- `src/lib/db/schema/invoices.ts` - Invoice matching + variance detection
 - `src/lib/queue/workers/*` - Email templates, sync logic
-- `src/components/*` - UI components for requests, approvals, budgets
+- `src/components/*` - UI components for requests, approvals, budgets, renewals
 
 ### 🟢 Optional (Later)
 - `src/lib/ai/*` - AI classification logic (currently uses Claude Haiku)
@@ -255,7 +281,7 @@ The function `routeApproval()` determines who approves what and when. Right now 
 |---|---|---|
 | **Frontend** | Next.js 14 + React 19 + Tailwind | ✅ Setup complete |
 | **API** | tRPC + Zod | ✅ Core routers implemented |
-| **Database** | PostgreSQL (Neon) + Drizzle ORM | ✅ Schema complete |
+| **Database** | PostgreSQL (Neon) + Drizzle ORM | ✅ Full schema (15 tables) |
 | **Cache/Queue** | Redis (Upstash) + BullMQ | ✅ Configured |
 | **Auth** | Better Auth | ✅ Basic setup |
 | **Storage** | Cloudflare R2 | ⏳ Pending |
@@ -268,5 +294,6 @@ The function `routeApproval()` determines who approves what and when. Right now 
 
 ---
 
-**Total Progress: 30% complete (6/20 tasks)**
-**Estimated time to MVP: ~8-12 weeks with 1-2 developers**
+**Total Progress: 33% complete (7/21 tasks)**
+**Connected data model: 15 tables covering the full procurement lifecycle**
+**Strategic thesis: The connected record — why you bought it, who owns it, what it costs, when you can leave**

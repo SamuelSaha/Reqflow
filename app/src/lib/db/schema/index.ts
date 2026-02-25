@@ -19,8 +19,10 @@ export * from "./approval-workflows";
 // Audit & Security
 export * from "./audit-logs";
 
-// TODO: Add in Phase 2
-// export * from "./vendors";
-// export * from "./purchase-orders";
-// export * from "./invoices";
-// export * from "./contracts";
+// Phase 2: Connected data model
+export * from "./vendors";
+export * from "./contracts";
+export * from "./subscriptions";
+export * from "./invoices";
+export * from "./trials";
+export * from "./renewal-events";

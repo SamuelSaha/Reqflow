@@ -14,11 +14,11 @@ export default function FeaturesPage() {
     <PageShell>
       <section className="bg-gradient-to-b from-white to-slate-50 pt-20 pb-12 px-20 text-center">
         <h1 className="text-[52px] font-extrabold tracking-[-1.5px] text-slate-900 mb-4">
-          Everything your team needs to buy smarter
+          The connected record for every tool you buy
         </h1>
         <p className="text-[18px] text-slate-600 max-w-[620px] mx-auto">
-          From request to payment, Reqflow handles the full procurement workflow
-          so your team can focus on what matters.
+          From first request to renewal decision, Reqflow captures why you bought
+          it, who owns it, what it costs, and when you can leave — automatically.
         </p>
       </section>
       <CoreFeatures />

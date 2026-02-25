@@ -8,6 +8,8 @@ import {
   Sparkles,
   TrendingUp,
   Plug,
+  CalendarClock,
+  FlaskConical,
 } from "lucide-react";
 
 /* ------------------------------------------------------------------ */
@@ -48,6 +50,16 @@ export function FeaturesGrid() {
       title: "AI Copilot",
       desc: "Ask questions about your spending in plain English. Get smart suggestions on where to save and what needs attention.",
     },
+    {
+      icon: CalendarClock,
+      title: "Renewal Tracking",
+      desc: "Track notice deadlines, not just renewal dates. Know when you must decide — before auto-renew locks you in for another year.",
+    },
+    {
+      icon: FlaskConical,
+      title: "Trial Management",
+      desc: "Track every trial with success criteria and auto-reminders. No more silent conversions — trials either become purchases or end cleanly.",
+    },
   ];
 
   return (
@@ -63,12 +75,13 @@ export function FeaturesGrid() {
         </span>
 
         <h2 className="text-[44px] font-bold leading-[1.15] tracking-tight text-white whitespace-pre-line">
-          {"Stop chasing approvals.\nStart buying smarter."}
+          {"The full procurement lifecycle.\nNot just another form."}
         </h2>
 
         <p className="text-[18px] leading-relaxed text-slate-400 max-w-[620px]">
-          Requests, approvals, purchase orders, and spend tracking in one place.
-          Built for teams that move fast and hate busywork.
+          From intake to renewal, every tool purchase is tracked, connected, and
+          auditable. The story of why you bought it, who owns it, and when you
+          can leave — captured automatically.
         </p>
       </div>
 
@@ -87,7 +100,7 @@ export function FeaturesGrid() {
         ))}
       </div>
 
-      <div className="relative z-10 max-w-[1200px] w-full grid grid-cols-4 gap-6">
+      <div className="relative z-10 max-w-[1200px] w-full grid grid-cols-3 gap-6">
         {smallCards.map(({ icon: Icon, title, desc }) => (
           <div
             key={title}
@@ -117,18 +130,18 @@ export function SocialProof() {
     },
     {
       value: "100%",
-      label: "Purchases tracked in one place",
-      sub: "From day one, not month three",
+      label: "Tools with an owner and renewal date",
+      sub: "No more orphaned subscriptions",
+    },
+    {
+      value: "Zero",
+      label: "Missed cancellation windows",
+      sub: "Notice deadlines tracked, not just renewal dates",
     },
     {
       value: "5x",
       label: "Faster audit prep",
-      sub: "Everything is already logged",
-    },
-    {
-      value: "Zero",
-      label: "Surprise charges at quarter end",
-      sub: "Real-time visibility into every dollar",
+      sub: "Every purchase linked to why, who, and what it costs",
     },
   ];
 
