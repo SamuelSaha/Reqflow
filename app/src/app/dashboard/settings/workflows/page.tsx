@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/lib/utils/error-messages";
+import { TestWorkflowDialog } from "@/components/settings/TestWorkflowDialog";
 
 export const dynamic = "force-dynamic";
 
@@ -35,6 +36,12 @@ export default function WorkflowsPage() {
   const workflows = trpc.workflows.list.useQuery();
   const thresholds = trpc.workflows.getThresholds.useQuery();
   const utils = trpc.useUtils();
+
+  const [testDialogOpen, setTestDialogOpen] = useState(false);
+  const [selectedWorkflow, setSelectedWorkflow] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
 
   const toggleActive = trpc.workflows.toggleActive.useMutation({
     onSuccess: (data) => {
@@ -61,6 +68,11 @@ export default function WorkflowsPage() {
     },
     onError: (error) => toast.error(error.message),
   });
+
+  function handleTestWorkflow(workflow: { id: string; name: string }) {
+    setSelectedWorkflow(workflow);
+    setTestDialogOpen(true);
+  }
 
   function formatConditions(conditions: any): string {
     const parts: string[] = [];
@@ -244,7 +256,14 @@ export default function WorkflowsPage() {
                         <Edit className="h-4 w-4 mr-2" />
                         Edit
                       </DropdownMenuItem>
-                      <DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() =>
+                          handleTestWorkflow({
+                            id: workflow.id,
+                            name: workflow.name,
+                          })
+                        }
+                      >
                         <FlaskConical className="h-4 w-4 mr-2" />
                         Test Workflow
                       </DropdownMenuItem>
@@ -288,6 +307,16 @@ export default function WorkflowsPage() {
             </Card>
           ))}
         </div>
+      )}
+
+      {/* Test Workflow Dialog */}
+      {selectedWorkflow && (
+        <TestWorkflowDialog
+          open={testDialogOpen}
+          onOpenChange={setTestDialogOpen}
+          workflowId={selectedWorkflow.id}
+          workflowName={selectedWorkflow.name}
+        />
       )}
     </div>
   );

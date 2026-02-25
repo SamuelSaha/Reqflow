@@ -10,6 +10,10 @@ import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 import { trpc } from "@/lib/api/react";
 import { Badge } from "@/components/ui/badge";
+import { ApprovalChainEditor } from "./ApprovalChainEditor";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { Loader2, CheckCircle2 } from "lucide-react";
 
 const CATEGORIES = [
   { value: "saas", label: "SaaS / Software" },
@@ -26,6 +30,7 @@ interface WorkflowBuilderProps {
 }
 
 export function WorkflowBuilder({ onComplete, initialData }: WorkflowBuilderProps) {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
 
   // Step 1: Basic Info
@@ -47,8 +52,25 @@ export function WorkflowBuilder({ onComplete, initialData }: WorkflowBuilderProp
     initialData?.conditions?.departments || []
   );
 
+  // Step 3: Approval Chain
+  const [approvalChain, setApprovalChain] = useState<any[]>(
+    initialData?.approvalChain || []
+  );
+
   const departments = trpc.team.listDepartments.useQuery(undefined, {
     enabled: currentStep >= 2,
+  });
+
+  const utils = trpc.useUtils();
+  const createWorkflow = trpc.workflows.create.useMutation({
+    onSuccess: () => {
+      toast.success("Workflow created successfully");
+      utils.workflows.list.invalidate();
+      router.push("/dashboard/settings/workflows");
+    },
+    onError: (error) => {
+      toast.error(error.message || "Failed to create workflow");
+    },
   });
 
   function handleCategoryToggle(category: string) {
@@ -71,17 +93,40 @@ export function WorkflowBuilder({ onComplete, initialData }: WorkflowBuilderProp
     if (step === 1) {
       return name.trim().length > 0;
     }
+    if (step === 3) {
+      return approvalChain.length > 0;
+    }
     return true;
   }
 
   function handleNext() {
-    if (validateStep(currentStep)) {
+    if (!validateStep(currentStep)) return;
+
+    if (currentStep === 4) {
+      // Final step - save workflow
+      handleSave();
+    } else {
       setCurrentStep((s) => s + 1);
     }
   }
 
   function handleBack() {
     setCurrentStep((s) => s - 1);
+  }
+
+  function handleSave() {
+    createWorkflow.mutate({
+      name,
+      description,
+      isActive,
+      conditions: {
+        amountMin,
+        amountMax,
+        categories: selectedCategories.length > 0 ? selectedCategories : undefined,
+        departments: selectedDepartments.length > 0 ? selectedDepartments : undefined,
+      },
+      approvalChain,
+    });
   }
 
   const steps = [
@@ -275,21 +320,124 @@ export function WorkflowBuilder({ onComplete, initialData }: WorkflowBuilderProp
             </>
           )}
 
-          {/* Step 3: Approval Chain (Placeholder) */}
+          {/* Step 3: Approval Chain */}
           {currentStep === 3 && (
-            <div className="text-center py-12 text-slate-500">
-              <p className="mb-4">Approval Chain editor coming in Sprint 4</p>
-              <p className="text-sm">
-                Define who approves requests matching this workflow
-              </p>
-            </div>
+            <>
+              <div className="mb-4">
+                <Label className="text-base">Approval Chain</Label>
+                <p className="text-sm text-slate-600">
+                  Define the approval steps for requests matching this workflow
+                </p>
+              </div>
+              <ApprovalChainEditor
+                value={approvalChain}
+                onChange={setApprovalChain}
+              />
+            </>
           )}
 
-          {/* Step 4: Review (Placeholder) */}
+          {/* Step 4: Review & Save */}
           {currentStep === 4 && (
-            <div className="text-center py-12 text-slate-500">
-              <p className="mb-4">Review & Save coming in Sprint 4</p>
-              <p className="text-sm">Preview and save your workflow</p>
+            <div className="space-y-6">
+              <div className="flex items-center gap-3 mb-4">
+                <CheckCircle2 className="h-6 w-6 text-green-500" />
+                <div>
+                  <h3 className="text-lg font-semibold text-slate-900">
+                    Review Your Workflow
+                  </h3>
+                  <p className="text-sm text-slate-600">
+                    Verify all settings before saving
+                  </p>
+                </div>
+              </div>
+
+              {/* Basic Info Summary */}
+              <div>
+                <Label className="text-base">Basic Information</Label>
+                <Card className="mt-2 bg-slate-50">
+                  <CardContent className="p-4 space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-slate-600">Name:</span>
+                      <span className="font-medium">{name}</span>
+                    </div>
+                    {description && (
+                      <div className="flex justify-between">
+                        <span className="text-slate-600">Description:</span>
+                        <span className="font-medium">{description}</span>
+                      </div>
+                    )}
+                    <div className="flex justify-between">
+                      <span className="text-slate-600">Status:</span>
+                      <Badge variant={isActive ? "default" : "outline"}>
+                        {isActive ? "Active" : "Inactive"}
+                      </Badge>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Conditions Summary */}
+              <div>
+                <Label className="text-base">Conditions</Label>
+                <Card className="mt-2 bg-slate-50">
+                  <CardContent className="p-4 space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-slate-600">Amount Range:</span>
+                      <span className="font-medium">
+                        €{amountMin ?? 0} - €{amountMax ?? "∞"}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-600">Categories:</span>
+                      <span className="font-medium">
+                        {selectedCategories.length > 0
+                          ? `${selectedCategories.length} selected`
+                          : "All categories"}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-600">Departments:</span>
+                      <span className="font-medium">
+                        {selectedDepartments.length > 0
+                          ? `${selectedDepartments.length} selected`
+                          : "All departments"}
+                      </span>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Approval Chain Summary */}
+              <div>
+                <Label className="text-base">Approval Chain</Label>
+                <Card className="mt-2 bg-slate-50">
+                  <CardContent className="p-4">
+                    {approvalChain.length === 0 ? (
+                      <p className="text-sm text-slate-500">No steps defined</p>
+                    ) : (
+                      <ol className="space-y-2">
+                        {approvalChain.map((step, idx) => (
+                          <li key={idx} className="flex items-center gap-3 text-sm">
+                            <Badge variant="outline" className="shrink-0">
+                              {idx + 1}
+                            </Badge>
+                            <span className="font-medium">
+                              {step.type === "role"
+                                ? `${step.value} role`
+                                : step.type === "department_head"
+                                ? "Department Head"
+                                : "Specific User"}
+                            </span>
+                            <Badge variant="secondary" className="ml-auto">
+                              {step.required}
+                            </Badge>
+                          </li>
+                        ))}
+                      </ol>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           )}
         </CardContent>
@@ -300,7 +448,7 @@ export function WorkflowBuilder({ onComplete, initialData }: WorkflowBuilderProp
         <Button
           variant="outline"
           onClick={handleBack}
-          disabled={currentStep === 1}
+          disabled={currentStep === 1 || createWorkflow.isPending}
         >
           Back
         </Button>
@@ -309,9 +457,12 @@ export function WorkflowBuilder({ onComplete, initialData }: WorkflowBuilderProp
         </div>
         <Button
           onClick={handleNext}
-          disabled={!validateStep(currentStep) || currentStep === steps.length}
+          disabled={!validateStep(currentStep) || createWorkflow.isPending}
         >
-          {currentStep === steps.length ? "Save" : "Next"}
+          {createWorkflow.isPending && (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          )}
+          {currentStep === steps.length ? "Save Workflow" : "Next"}
         </Button>
       </div>
     </div>
