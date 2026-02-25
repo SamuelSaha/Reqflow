@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { PageShell } from "@/components/layout";
 
 type ServiceStatus = "operational" | "degraded" | "down";
@@ -21,16 +21,12 @@ export default function StatusPage() {
     { name: "Database (Neon)", status: "operational", uptime: "99.9%" },
   ]);
 
-  const [lastUpdate, setLastUpdate] = useState("");
-
-  useEffect(() => {
-    setLastUpdate(
-      new Date().toLocaleString("en-US", {
-        month: "short", day: "numeric", year: "numeric",
-        hour: "2-digit", minute: "2-digit", timeZoneName: "short",
-      })
-    );
-  }, []);
+  const [lastUpdate] = useState(() =>
+    new Date().toLocaleString("en-US", {
+      month: "short", day: "numeric", year: "numeric",
+      hour: "2-digit", minute: "2-digit", timeZoneName: "short",
+    })
+  );
 
   const statusColor = (s: ServiceStatus) =>
     s === "operational" ? "text-emerald-600" : s === "degraded" ? "text-amber-500" : "text-red-500";

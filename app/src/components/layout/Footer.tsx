@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 const productLinks = [
@@ -32,12 +33,12 @@ export function Footer() {
       <div className="flex gap-16">
         {/* Brand column */}
         <div className="w-[320px] flex flex-col gap-4">
-          <a href="/" className="flex items-center gap-2.5 no-underline">
+          <Link href="/" className="flex items-center gap-2.5 no-underline">
             <div className="w-7 h-7 bg-blue-600 rounded-[7px] flex items-center justify-center">
               <ArrowRight className="w-4 h-4 text-white" />
             </div>
             <span className="text-[20px] font-bold text-white">Reqflow</span>
-          </a>
+          </Link>
           <p className="text-[14px] leading-[1.6] text-slate-400 max-w-[280px]">
             Free procurement software for small teams that buy without a
             procurement department. From request to invoice, governed and
@@ -61,13 +62,13 @@ export function Footer() {
         </span>
         <div className="flex items-center gap-6">
           {legalLinks.map(({ label, href }) => (
-            <a
+            <Link
               key={label}
               href={href}
               className="text-[13px] text-slate-400 no-underline hover:text-white transition-colors"
             >
               {label}
-            </a>
+            </Link>
           ))}
         </div>
       </div>
@@ -88,13 +89,13 @@ function FooterColumn({
         {title}
       </span>
       {links.map(({ label, href }) => (
-        <a
+        <Link
           key={label}
           href={href}
           className="text-[14px] text-slate-400 no-underline hover:text-white transition-colors"
         >
           {label}
-        </a>
+        </Link>
       ))}
     </div>
   );

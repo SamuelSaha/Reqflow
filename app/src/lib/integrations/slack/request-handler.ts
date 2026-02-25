@@ -4,7 +4,7 @@
  */
 
 import { db } from "@/lib/db";
-import { requests, users } from "@/lib/db/schema";
+import { requests } from "@/lib/db/schema";
 import { insertRequestSchema } from "@/lib/db/schema";
 import {
   buildRoutingContext,
@@ -62,9 +62,10 @@ export async function createSlackRequest(
   let validated: z.infer<typeof validationSchema>;
   try {
     validated = validationSchema.parse(input);
-  } catch (error: any) {
+  } catch (error: unknown) {
     // Re-throw with clearer message for Slack users
-    const firstError = error.errors?.[0];
+    const zodError = error as { errors?: Array<{ path: string[]; message: string }> };
+    const firstError = zodError.errors?.[0];
     if (firstError) {
       throw new Error(
         `Invalid ${firstError.path.join(".")}: ${firstError.message}`
@@ -132,6 +133,7 @@ export async function createSlackRequest(
  * @param values - Modal state values from Slack
  * @returns Request input data
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function extractModalValues(values: any): RequestInput {
   return {
     title: values.title_block?.title?.value || "",

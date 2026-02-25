@@ -13,7 +13,6 @@ import { Badge } from "@/components/ui/badge";
 import { trpc } from "@/lib/api/react";
 import {
   ArrowLeft,
-  Calendar,
   Building2,
   CheckCircle2,
   Clock,
@@ -39,7 +38,7 @@ export default function RenewalDetailPage({
   const { id } = use(params);
   const [showCheckpointModal, setShowCheckpointModal] = useState(false);
   const [showDecisionModal, setShowDecisionModal] = useState(false);
-  const [selectedCheckpoint, setSelectedCheckpoint] = useState<any>(null);
+  const [selectedCheckpoint, setSelectedCheckpoint] = useState<{ id: string; label: string; weight: number; completed: boolean; notes?: string; completedAt?: string } | null>(null);
 
   const renewal = trpc.renewals.getById.useQuery({ id });
 
@@ -83,7 +82,7 @@ export default function RenewalDetailPage({
   const r = renewal.data!;
   const contract = r.contract;
   const vendor = contract?.vendor;
-  const checkpoints = r.readinessCheckpoints || [];
+  const checkpoints = (r.readinessCheckpoints || []) as Array<{ id: string; label: string; weight: number; completed: boolean; notes?: string; completedAt?: string }>;
 
   const daysUntilDeadline = r.daysUntilDeadline;
   const progressPercentage = Math.max(
@@ -217,7 +216,7 @@ export default function RenewalDetailPage({
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {checkpoints.map((checkpoint: any, index: number) => (
+                  {checkpoints.map((checkpoint) => (
                     <div
                       key={checkpoint.id}
                       className="flex items-start gap-3 p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"

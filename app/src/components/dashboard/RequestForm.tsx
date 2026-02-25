@@ -88,7 +88,7 @@ export function RequestForm() {
           return;
         }
 
-        const result = await createTrial.mutateAsync({
+        await createTrial.mutateAsync({
           title: data.title,
           description: data.description,
           category: data.category,
@@ -135,9 +135,10 @@ export function RequestForm() {
 
         router.push(`/dashboard/requests/${request.id}`);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Please try again";
       toast.error(`Failed to ${data.isTrial ? "create trial" : "submit request"}`, {
-        description: error.message || "Please try again",
+        description: message,
       });
     } finally {
       setIsSubmitting(false);

@@ -20,7 +20,6 @@ async function processTrialReminder(job: Job<TrialReminderJobData>) {
     endDate,
     initiatedById,
     stakeholders,
-    tenantId,
   } = job.data;
 
   // Check if trial is still active

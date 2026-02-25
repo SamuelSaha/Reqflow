@@ -3,7 +3,7 @@
  */
 
 import { z } from "zod";
-import { router, protectedProcedure, financeProcedure } from "../trpc";
+import { router, protectedProcedure } from "../trpc";
 import { budgets } from "../../db/schema";
 import { eq, and } from "drizzle-orm";
 

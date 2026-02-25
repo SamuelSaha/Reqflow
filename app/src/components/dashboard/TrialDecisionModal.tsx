@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -140,7 +139,7 @@ export function TrialDecisionModal({
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <RadioGroup
             value={selectedDecision}
-            onValueChange={(value) => form.setValue("decision", value as any)}
+            onValueChange={(value) => form.setValue("decision", value as DecisionFormValues["decision"])}
             className="space-y-3"
           >
             {/* Convert Option */}

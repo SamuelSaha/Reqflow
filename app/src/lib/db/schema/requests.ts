@@ -89,7 +89,7 @@ export const requests = pgTable(
 );
 
 // Relations
-export const requestsRelations = relations(requests, ({ one, many }) => ({
+export const requestsRelations = relations(requests, ({ one }) => ({
   organization: one(organizations, {
     fields: [requests.tenantId],
     references: [organizations.id],

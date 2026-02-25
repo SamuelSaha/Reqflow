@@ -5,7 +5,7 @@ export async function POST() {
   try {
     await signOut();
     return NextResponse.json({ success: true });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Logout error:", error);
     return NextResponse.json(
       { error: "An error occurred" },

@@ -63,7 +63,7 @@ export async function mapSlackUserToReqflow(
   let userInfo;
   try {
     userInfo = await slackClient.users.info({ user: slackUserId });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("[Slack] Failed to fetch user info:", error);
     throw new Error("Failed to fetch user information from Slack");
   }

@@ -13,9 +13,9 @@
  * It doesn't make decisions — it surfaces insights so humans decide faster.
  */
 
-import { eq, and, gte, sql, desc } from "drizzle-orm";
+import { eq, and, gte, desc } from "drizzle-orm";
 import { db } from "../db";
-import { requests, approvals, budgets } from "../db/schema";
+import { requests } from "../db/schema";
 import type { Request, Budget } from "../db/schema";
 
 /* ------------------------------------------------------------------ */
@@ -450,7 +450,7 @@ function generateSummary(
   request: Request,
   signals: RiskSignal[],
   recommendation: string,
-  budgetImpact: RequestAnalysis["budgetImpact"]
+  _budgetImpact: RequestAnalysis["budgetImpact"]
 ): string {
   const amount = parseFloat(request.amount);
   const highSignals = signals.filter((s) => s.severity === "high");

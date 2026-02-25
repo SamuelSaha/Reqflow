@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ApprovalCard } from "@/components/dashboard/ApprovalCard";
 import { trpc } from "@/lib/api/react";
@@ -147,7 +146,7 @@ export default function ApprovalsPage() {
       {/* Approval cards with AI analysis */}
       {queue.data && queue.data.length > 0 && (
         <div className="space-y-4">
-          {queue.data.map((approval: any) => (
+          {queue.data.map((approval) => (
             <ApprovalCardWithAnalysis
               key={approval.id}
               approval={approval}
@@ -169,6 +168,7 @@ function ApprovalCardWithAnalysis({
   onDecide,
   deciding,
 }: {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   approval: any;
   onDecide: (id: string, decision: "approved" | "rejected", comments?: string) => void;
   deciding: boolean;

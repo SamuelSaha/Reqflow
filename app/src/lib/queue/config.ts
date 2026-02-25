@@ -3,7 +3,6 @@
  * Background job processing with Redis
  */
 
-import { Queue, Worker, QueueEvents } from "bullmq";
 import { env } from "../env";
 
 /**

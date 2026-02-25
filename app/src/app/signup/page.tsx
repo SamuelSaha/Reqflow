@@ -50,8 +50,9 @@ export default function SignupPage() {
           router.refresh();
         }, 2000);
       }
-    } catch (err: any) {
-      setError(err.message || "An error occurred. Please try again.");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "An error occurred. Please try again.";
+      setError(message);
       setLoading(false);
     }
   }

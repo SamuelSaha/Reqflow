@@ -16,23 +16,26 @@ import ApprovalReminderEmail from "./templates/approval-reminder";
  */
 export async function renderEmailTemplate(
   template: string,
-  data: Record<string, unknown>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data: Record<string, any>
 ): Promise<string> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const d = data as any;
   switch (template) {
     case EmailTemplate.REQUEST_SUBMITTED:
-      return render(RequestSubmittedEmail(data as any));
+      return render(RequestSubmittedEmail(d));
 
     case EmailTemplate.APPROVAL_REQUESTED:
-      return render(ApprovalAssignedEmail(data as any));
+      return render(ApprovalAssignedEmail(d));
 
     case EmailTemplate.REQUEST_APPROVED:
-      return render(RequestApprovedEmail(data as any));
+      return render(RequestApprovedEmail(d));
 
     case EmailTemplate.REQUEST_REJECTED:
-      return render(RequestRejectedEmail(data as any));
+      return render(RequestRejectedEmail(d));
 
     case EmailTemplate.APPROVAL_REMINDER:
-      return render(ApprovalReminderEmail(data as any));
+      return render(ApprovalReminderEmail(d));
 
     default:
       // Fallback for templates without React components yet

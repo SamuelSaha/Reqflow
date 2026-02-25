@@ -5,11 +5,11 @@
 
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { eq, and, desc, gte, lte, count, or } from "drizzle-orm";
-import { differenceInDays, parseISO, format, startOfMonth, endOfMonth } from "date-fns";
+import { eq, and, gte, lte, or, type SQL } from "drizzle-orm";
+import { differenceInDays, parseISO, startOfMonth, endOfMonth } from "date-fns";
 import { router, protectedProcedure } from "../trpc";
 import { db } from "@/lib/db";
-import { renewalEvents, contracts, subscriptions } from "@/lib/db/schema";
+import { renewalEvents } from "@/lib/db/schema";
 import {
   initializeCheckpoints,
   calculateReadinessScore,
@@ -41,7 +41,7 @@ export const renewalsRouter = router({
       const today = new Date();
 
       // Build where clause
-      let conditions: any[] = [eq(renewalEvents.tenantId, tenantId)];
+      const conditions: SQL[] = [eq(renewalEvents.tenantId, tenantId)];
 
       if (input.status) {
         conditions.push(eq(renewalEvents.status, input.status));
@@ -76,7 +76,7 @@ export const renewalsRouter = router({
           const daysUntilDeadline = differenceInDays(deadline, today);
 
           // Get readiness score
-          const readiness = renewal.readinessScore as any;
+          const readiness = renewal.readinessScore;
           const totalScore = readiness?.totalScore ?? 0;
 
           const urgencyColor = getUrgencyColor(daysUntilDeadline, totalScore);
@@ -133,7 +133,7 @@ export const renewalsRouter = router({
       const daysUntilDeadline = differenceInDays(deadline, today);
 
       // Get readiness
-      const readiness = renewal.readinessScore as any;
+      const readiness = renewal.readinessScore;
       const checkpoints = readiness?.checkpoints ?? initializeCheckpoints();
       const totalScore = calculateReadinessScore(checkpoints);
 
@@ -180,7 +180,7 @@ export const renewalsRouter = router({
       }
 
       // Get existing checkpoints or initialize
-      const readiness = renewal.readinessScore as any;
+      const readiness = renewal.readinessScore;
       let checkpoints: RenewalCheckpoint[] =
         readiness?.checkpoints ?? initializeCheckpoints();
 
@@ -205,10 +205,8 @@ export const renewalsRouter = router({
       const [updatedRenewal] = await db
         .update(renewalEvents)
         .set({
-          readinessScore: {
-            checkpoints,
-            totalScore,
-          } as any,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          readinessScore: { checkpoints, totalScore } as any,
           status: totalScore === 100 ? "in_review" : renewal.status,
           updatedAt: new Date(),
         })
@@ -322,13 +320,14 @@ export const renewalsRouter = router({
       });
 
       // Group by date and calculate urgency
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const renewalsByDate = new Map<string, any[]>();
 
       renewalsList.forEach((renewal) => {
         const deadline = parseISO(renewal.noticeDeadline);
         const daysUntilDeadline = differenceInDays(deadline, today);
 
-        const readiness = renewal.readinessScore as any;
+        const readiness = renewal.readinessScore;
         const totalScore = readiness?.totalScore ?? 0;
         const urgencyColor = getUrgencyColor(daysUntilDeadline, totalScore);
 
@@ -391,7 +390,7 @@ export const renewalsRouter = router({
       const deadline = parseISO(renewal.noticeDeadline);
       const daysUntilDeadline = differenceInDays(deadline, today);
 
-      const readiness = renewal.readinessScore as any;
+      const readiness = renewal.readinessScore;
       const totalScore = readiness?.totalScore ?? 0;
       const urgencyColor = getUrgencyColor(daysUntilDeadline, totalScore);
 

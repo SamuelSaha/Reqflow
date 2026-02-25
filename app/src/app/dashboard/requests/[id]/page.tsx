@@ -218,7 +218,7 @@ export default function RequestDetailPage({
                   <div className="absolute left-4 top-6 bottom-6 w-px bg-slate-200" />
 
                   <div className="space-y-6">
-                    {req.approvals.map((approval: any, i: number) => {
+                    {req.approvals.map((approval) => {
                       const config = decisionConfig[approval.decision] ?? decisionConfig.pending;
                       const Icon = config.icon;
                       return (

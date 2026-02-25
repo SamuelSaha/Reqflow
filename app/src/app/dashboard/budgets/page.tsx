@@ -61,7 +61,7 @@ export default function BudgetsPage() {
 
       {budgets.data && budgets.data.length > 0 && (
         <div className="grid gap-6 md:grid-cols-2">
-          {budgets.data.map((budget: any) => {
+          {budgets.data.map((budget) => {
             const allocated = parseFloat(budget.allocated);
             const committed = parseFloat(budget.committed);
             const spent = parseFloat(budget.spent);

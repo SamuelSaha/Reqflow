@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -15,7 +14,6 @@ import { trpc } from "@/lib/api/react";
 import {
   Plus,
   FlaskConical,
-  Clock,
   AlertCircle,
   ArrowRight,
 } from "lucide-react";
@@ -198,12 +196,12 @@ export default function TrialsPage() {
                     </div>
 
                     {/* Success Criteria Count */}
-                    {trial.successCriteria && (trial.successCriteria as any[]).length > 0 && (
+                    {trial.successCriteria && (trial.successCriteria as unknown[]).length > 0 && (
                       <div className="flex items-center gap-2 text-sm text-slate-600">
                         <CheckCircle className="h-4 w-4" />
                         <span>
-                          {(trial.successCriteria as any[]).length} success{" "}
-                          {(trial.successCriteria as any[]).length === 1 ? "criterion" : "criteria"}
+                          {(trial.successCriteria as unknown[]).length} success{" "}
+                          {(trial.successCriteria as unknown[]).length === 1 ? "criterion" : "criteria"}
                         </span>
                       </div>
                     )}

@@ -44,7 +44,7 @@ export function RenewalCheckpointModal({
   const utils = trpc.useUtils();
 
   const updateCheckpoint = trpc.renewals.updateCheckpoint.useMutation({
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast.success("Checkpoint updated", {
         description: `${checkpoint.label} marked as ${completed ? "complete" : "incomplete"}`,
       });

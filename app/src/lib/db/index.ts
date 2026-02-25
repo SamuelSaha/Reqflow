@@ -25,7 +25,7 @@ export type Database = typeof db;
  * Tenant isolation middleware
  * Ensures all queries are scoped to the current tenant
  */
-export function withTenant<T extends { tenantId: string }>(
+export function withTenant(
   tenantId: string
 ): { tenantId: string } {
   return { tenantId };

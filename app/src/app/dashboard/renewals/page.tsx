@@ -27,7 +27,8 @@ import {
   getReadinessBadgeClass,
   getReadinessStatus,
 } from "@/lib/utils/renewal-readiness";
-import { TYPOGRAPHY, PRESETS } from "@/lib/design/tokens";
+// Design tokens available for future use
+// import { TYPOGRAPHY, PRESETS } from "@/lib/design/tokens";
 
 export const dynamic = "force-dynamic";
 
@@ -39,6 +40,7 @@ export default function RenewalsPage() {
   const [urgencyFilter, setUrgencyFilter] = useState<"green" | "yellow" | "red" | undefined>();
 
   const renewals = trpc.renewals.list.useQuery({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     status: statusFilter as any,
     urgency: urgencyFilter,
   });
@@ -162,7 +164,7 @@ export default function RenewalsPage() {
       {/* List view */}
       {viewMode === "list" && renewals.data && renewals.data.length > 0 && (
         <div className="space-y-4">
-          {renewals.data.map((renewal: any) => {
+          {renewals.data.map((renewal) => {
             const contract = renewal.contract;
             const vendor = contract?.vendor;
 

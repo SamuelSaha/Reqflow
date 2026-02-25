@@ -5,11 +5,11 @@
 
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { eq, and, desc, sql, count } from "drizzle-orm";
-import { differenceInDays, addDays, parseISO } from "date-fns";
+import { eq, and, desc, count } from "drizzle-orm";
+import { differenceInDays, parseISO } from "date-fns";
 import { router, protectedProcedure } from "../trpc";
 import { db } from "@/lib/db";
-import { trials, requests, users, vendors, departments } from "@/lib/db/schema";
+import { trials, requests } from "@/lib/db/schema";
 import { scheduleTrialReminders, cancelTrialReminders, rescheduleTrialReminders } from "@/lib/queue/queues/trial-reminders";
 
 export const trialsRouter = router({
@@ -301,6 +301,7 @@ export const trialsRouter = router({
             decisionNotes: input.decisionNotes,
             convertedRequestId: request.id,
             successCriteria: input.actualCriteria
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               ? (input.actualCriteria as any)
               : trial.successCriteria,
             updatedAt: new Date(),
@@ -409,6 +410,7 @@ export const trialsRouter = router({
       const [updatedTrial] = await db
         .update(trials)
         .set({
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           successCriteria: input.criteria as any,
           updatedAt: new Date(),
         })

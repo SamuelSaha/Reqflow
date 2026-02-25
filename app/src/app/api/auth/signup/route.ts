@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import { createUser } from "@/lib/auth/session";
 import { db } from "@/lib/db";
-import { users, organizations, departments } from "@/lib/db/schema";
+import { users, departments } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { email, password, name, organizationName } = body;
+    const { email, password, name } = body;
 
     if (!email || !password || !name) {
       return NextResponse.json(
@@ -66,7 +66,7 @@ export async function POST(request: Request) {
         role: user.role,
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Signup error:", error);
     return NextResponse.json(
       { error: "An error occurred during signup" },

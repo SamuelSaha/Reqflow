@@ -5,7 +5,7 @@
 
 import { NextResponse } from "next/server";
 import { verifySlackRequest } from "@/lib/integrations/slack/signature";
-import { buildSuccessMessage, buildErrorMessage } from "@/lib/integrations/slack/modals";
+import { buildSuccessMessage } from "@/lib/integrations/slack/modals";
 import { mapSlackUserToReqflow, getUserMappingErrorMessage } from "@/lib/integrations/slack/user-mapper";
 import { createSlackRequest, extractModalValues } from "@/lib/integrations/slack/request-handler";
 
@@ -42,7 +42,7 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ text: "Unknown interaction type" });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("[Slack Interactivity] Error:", error);
     return NextResponse.json(
       { error: "Internal server error" },
@@ -55,6 +55,7 @@ export async function POST(request: Request) {
  * Handle modal form submission
  */
 async function handleModalSubmission(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   view: any,
   slackUserId: string,
   slackTeamId: string,
@@ -69,12 +70,12 @@ async function handleModalSubmission(
     let mappedUser;
     try {
       mappedUser = await mapSlackUserToReqflow(slackUserId, slackTeamId);
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Return error in modal - this shows error message in the modal itself
       return NextResponse.json({
         response_action: "errors",
         errors: {
-          title_block: getUserMappingErrorMessage(error),
+          title_block: getUserMappingErrorMessage(error as Error),
         },
       });
     }
@@ -113,14 +114,15 @@ async function handleModalSubmission(
 
     // Return empty response to close modal
     return NextResponse.json({});
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("[Slack Interactivity] Modal submission error:", error);
 
     // Show error in modal
+    const message = error instanceof Error ? error.message : "Failed to create request";
     return NextResponse.json({
       response_action: "errors",
       errors: {
-        title_block: error.message || "Failed to create request",
+        title_block: message,
       },
     });
   }
@@ -129,7 +131,7 @@ async function handleModalSubmission(
 /**
  * Send message to Slack response_url
  */
-async function sendToResponseUrl(responseUrl: string | null, payload: any) {
+async function sendToResponseUrl(responseUrl: string | null, payload: Record<string, unknown>) {
   if (!responseUrl) {
     console.warn("[Slack Interactivity] No response_url provided");
     return;

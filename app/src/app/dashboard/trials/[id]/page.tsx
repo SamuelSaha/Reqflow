@@ -14,7 +14,6 @@ import { trpc } from "@/lib/api/react";
 import {
   ArrowLeft,
   FlaskConical,
-  Calendar,
   Clock,
   AlertCircle,
   CheckCircle2,
@@ -101,8 +100,8 @@ export default function TrialDetailPage({
     )
   );
 
-  const successCriteria = (t.successCriteria as any[]) || [];
-  const remindersSent = (t.remindersSent as any[]) || [];
+  const successCriteria = (t.successCriteria as Array<{ metric: string; target: string; met?: boolean; actual?: string }>) || [];
+  const remindersSent = (t.remindersSent as Array<{ type: string; date: string }>) || [];
 
   return (
     <>
@@ -213,7 +212,7 @@ export default function TrialDetailPage({
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {successCriteria.map((criterion: any, index: number) => (
+                    {successCriteria.map((criterion, index) => (
                       <div key={index} className="flex items-start gap-3 p-3 bg-slate-50 rounded-lg">
                         {criterion.met === true ? (
                           <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5" />
@@ -299,14 +298,14 @@ export default function TrialDetailPage({
             </Card>
 
             {/* Stakeholders */}
-            {t.stakeholders && (t.stakeholders as any[]).length > 0 && (
+            {t.stakeholders && (t.stakeholders as Array<{ role: string }>).length > 0 && (
               <Card>
                 <CardHeader>
                   <CardTitle className="text-base">Stakeholders</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
-                    {(t.stakeholders as any[]).map((stakeholder: any, index: number) => (
+                    {(t.stakeholders as Array<{ role: string }>).map((stakeholder, index) => (
                       <div key={index} className="flex items-center gap-2 text-sm">
                         <Building2 className="h-4 w-4 text-slate-400" />
                         <span className="text-slate-700">{stakeholder.role}</span>
@@ -325,7 +324,7 @@ export default function TrialDetailPage({
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
-                    {remindersSent.map((reminder: any, index: number) => (
+                    {remindersSent.map((reminder, index) => (
                       <div key={index} className="flex items-center gap-2 text-sm text-slate-600">
                         <Mail className="h-4 w-4 text-slate-400" />
                         <span>{reminder.type} reminder</span>

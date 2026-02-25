@@ -96,7 +96,7 @@ async function processRenewalReminder(job: Job<RenewalReminderJobData>) {
     .map((u) => u.email);
 
   // Get readiness score
-  const readiness = renewal.readinessScore as any;
+  const readiness = renewal.readinessScore as Record<string, number> | null;
   const totalScore = readiness?.totalScore ?? 0;
 
   // Send emails
@@ -126,7 +126,7 @@ async function processRenewalReminder(job: Job<RenewalReminderJobData>) {
   }
 
   // Update renewal reminders tracking
-  const reminders = (renewal.reminders as any[]) || [];
+  const reminders = (renewal.reminders as Record<string, unknown>[]) || [];
   reminders.push({
     daysBeforeDeadline,
     type: reminderType,
@@ -138,7 +138,7 @@ async function processRenewalReminder(job: Job<RenewalReminderJobData>) {
   await db
     .update(renewalEvents)
     .set({
-      reminders: reminders as any,
+      reminders: reminders as unknown as typeof renewal.reminders,
       updatedAt: new Date(),
     })
     .where(eq(renewalEvents.id, renewalId));

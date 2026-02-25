@@ -23,10 +23,8 @@ import {
   Calendar as CalendarIcon,
 } from "lucide-react";
 import { StatsCardSkeleton, RequestListSkeleton } from "@/components/dashboard/LoadingSkeletons";
-import { Skeleton } from "@/components/ui/skeleton";
 import { getErrorMessage } from "@/lib/utils/error-messages";
-import { format } from "date-fns";
-import { STATUS_STYLES, TYPOGRAPHY, COLORS } from "@/lib/design/tokens";
+import { STATUS_STYLES } from "@/lib/design/tokens";
 
 export const dynamic = "force-dynamic";
 
@@ -233,7 +231,7 @@ export default function DashboardPage() {
 
             {pendingApprovals.data && pendingApprovals.data.length > 0 && (
               <div className="space-y-3">
-                {pendingApprovals.data.slice(0, 5).map((approval: any) => (
+                {pendingApprovals.data.slice(0, 5).map((approval) => (
                   <Link
                     key={approval.id}
                     href="/dashboard/approvals"
@@ -248,7 +246,7 @@ export default function DashboardPage() {
                         €{parseFloat(approval.request.amount).toLocaleString("en", { minimumFractionDigits: 2 })}
                       </p>
                     </div>
-                    {approval.context?.riskFlags?.length > 0 && (
+                    {(approval.context?.riskFlags?.length ?? 0) > 0 && (
                       <AlertCircle className="h-4 w-4 text-amber-500 flex-shrink-0" />
                     )}
                   </Link>

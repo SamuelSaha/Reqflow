@@ -53,7 +53,7 @@ export async function POST(request: Request) {
     });
 
     return immediateResponse;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("[Slack Commands] Error:", error);
     return NextResponse.json(
       { error: "Internal server error" },
@@ -84,10 +84,10 @@ async function processQuickRequest(
     let mappedUser;
     try {
       mappedUser = await mapSlackUserToReqflow(slackUserId, slackTeamId);
-    } catch (error: any) {
+    } catch (error: unknown) {
       await sendToResponseUrl(
         responseUrl,
-        buildErrorMessage(getUserMappingErrorMessage(error))
+        buildErrorMessage(getUserMappingErrorMessage(error as Error))
       );
       return;
     }
@@ -121,11 +121,12 @@ async function processQuickRequest(
       responseUrl,
       buildSuccessMessage(result.requestNumber, result.workflowName, result.approvalSteps)
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("[Slack Commands] Quick request error:", error);
+    const message = error instanceof Error ? error.message : "Failed to create request";
     await sendToResponseUrl(
       responseUrl,
-      buildErrorMessage(error.message || "Failed to create request")
+      buildErrorMessage(message)
     );
   }
 }
@@ -133,7 +134,7 @@ async function processQuickRequest(
 /**
  * Send message to Slack response_url
  */
-async function sendToResponseUrl(responseUrl: string | null, payload: any) {
+async function sendToResponseUrl(responseUrl: string | null, payload: Record<string, unknown>) {
   if (!responseUrl) {
     console.warn("[Slack Commands] No response_url provided");
     return;

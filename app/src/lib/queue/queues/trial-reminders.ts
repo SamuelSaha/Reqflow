@@ -5,7 +5,7 @@
 
 import { Queue } from "bullmq";
 import { defaultQueueOptions, QueueName } from "../config";
-import { differenceInDays, subDays, parseISO } from "date-fns";
+import { subDays, parseISO } from "date-fns";
 
 export interface TrialReminderJobData {
   trialId: string;

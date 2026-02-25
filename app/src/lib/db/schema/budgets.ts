@@ -63,7 +63,7 @@ export const budgets = pgTable(
 );
 
 // Relations
-export const budgetsRelations = relations(budgets, ({ one, many }) => ({
+export const budgetsRelations = relations(budgets, ({ one }) => ({
   organization: one(organizations, {
     fields: [budgets.tenantId],
     references: [organizations.id],

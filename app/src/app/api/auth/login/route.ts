@@ -28,7 +28,7 @@ export async function POST(request: Request) {
         role: result.user.role,
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Login error:", error);
     return NextResponse.json(
       { error: "An error occurred" },

@@ -38,7 +38,7 @@ export function RenewalDecisionModal({
   const utils = trpc.useUtils();
 
   const makeDecision = trpc.renewals.makeDecision.useMutation({
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast.success("Decision recorded", {
         description: `Renewal ${decision} - ${vendorName}`,
       });
@@ -85,7 +85,7 @@ export function RenewalDecisionModal({
           {/* Decision options */}
           <div className="space-y-3">
             <Label>What would you like to do?</Label>
-            <RadioGroup value={decision} onValueChange={(value: any) => setDecision(value)}>
+            <RadioGroup value={decision} onValueChange={(value) => setDecision(value as typeof decision)}>
               <div className="flex items-start space-x-2 p-3 rounded-lg border hover:bg-slate-50 transition-colors">
                 <RadioGroupItem value="keep" id="keep" className="mt-1" />
                 <Label htmlFor="keep" className="flex-1 cursor-pointer">

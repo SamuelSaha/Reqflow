@@ -12,7 +12,7 @@ import { sendEmail, EmailTemplate } from "../queues/email";
  * Process approval timer job
  */
 async function processApprovalTimer(job: Job<ApprovalTimerJobData>) {
-  const { approvalId, requestId, approverId, type, tenantId } = job.data;
+  const { approvalId, type } = job.data;
 
   // Check if approval is still pending
   const { db } = await import("../../db");

@@ -43,7 +43,7 @@ export async function requireRole(
 ): Promise<User> {
   const user = await requireAuth();
 
-  if (!allowedRoles.includes(user.role as any)) {
+  if (!allowedRoles.includes(user.role as "requester" | "manager" | "finance" | "admin")) {
     throw new Error(
       `Forbidden - requires one of: ${allowedRoles.join(", ")}`
     );

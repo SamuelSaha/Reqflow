@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
 export function ComingSoon({
@@ -19,13 +20,13 @@ export function ComingSoon({
         {title}
       </h1>
       <p className="text-[18px] text-slate-600 max-w-[500px]">{description}</p>
-      <a
+      <Link
         href="/"
         className="inline-flex items-center gap-2 text-blue-600 font-semibold no-underline hover:text-blue-700 transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
         Back to Home
-      </a>
+      </Link>
     </section>
   );
 }
