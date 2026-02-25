@@ -2,6 +2,7 @@ import { pgTable, text, timestamp, uuid, boolean, index } from "drizzle-orm/pg-c
 import { relations } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { organizations } from "./organizations";
+import { departments } from "./departments";
 import { z } from "zod";
 
 /**
@@ -60,6 +61,10 @@ export const usersRelations = relations(users, ({ one }) => ({
   organization: one(organizations, {
     fields: [users.tenantId],
     references: [organizations.id],
+  }),
+  department: one(departments, {
+    fields: [users.departmentId],
+    references: [departments.id],
   }),
 }));
 
