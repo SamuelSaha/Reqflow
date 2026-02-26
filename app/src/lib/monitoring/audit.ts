@@ -118,6 +118,12 @@ export const AuditAction = {
   RENEWAL_DECISION: "renewal.decision",
   RENEWAL_CHECKPOINT_UPDATED: "renewal.checkpoint.updated",
 
+  // Vendor actions
+  VENDOR_CREATED: "vendor.created",
+  VENDOR_UPDATED: "vendor.updated",
+  VENDOR_AUTO_CREATED: "vendor.auto_created",
+  COMPLIANCE_DOC_UPLOADED: "vendor.compliance_doc.uploaded",
+
   // Organization actions
   ORG_SETTINGS_UPDATED: "org.settings.updated",
   ORG_PLAN_CHANGED: "org.plan.changed",
