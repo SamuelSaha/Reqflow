@@ -126,7 +126,7 @@ export default function DashboardPage() {
       {/* Two-column: recent requests + action required */}
       <div className="grid gap-6 md:grid-cols-2">
         {/* Recent Requests */}
-        <Card>
+        <Card className="shadow-sm hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
               <CardTitle>Recent Requests</CardTitle>
@@ -194,7 +194,7 @@ export default function DashboardPage() {
         </Card>
 
         {/* Action Required */}
-        <Card>
+        <Card className="shadow-sm hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
               <CardTitle>Action Required</CardTitle>
@@ -274,7 +274,7 @@ function StatCard({
   highlight?: boolean;
 }) {
   return (
-    <Card className={highlight ? "ring-2 ring-blue-200 bg-blue-50/30" : ""}>
+    <Card className={highlight ? "ring-2 ring-blue-200 bg-blue-50/30 shadow-md" : "shadow-sm hover:shadow-md transition-shadow"}>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
         <Icon className={`h-4 w-4 ${highlight ? "text-blue-600" : "text-slate-600"}`} />
