@@ -22,12 +22,7 @@ export async function GET() {
       clientId: env.XERO_CLIENT_ID,
       clientSecret: env.XERO_CLIENT_SECRET,
       redirectUris: [env.XERO_REDIRECT_URI],
-      scopes: [
-        "offline_access",
-        "accounting.transactions",
-        "accounting.contacts",
-        "accounting.settings.read",
-      ].join(" "),
+      scopes: "offline_access accounting.transactions accounting.contacts accounting.settings.read".split(" "),
     });
 
     // Generate authorization URL

@@ -44,12 +44,7 @@ export async function GET(request: Request) {
       clientId: env.XERO_CLIENT_ID!,
       clientSecret: env.XERO_CLIENT_SECRET!,
       redirectUris: [env.XERO_REDIRECT_URI!],
-      scopes: [
-        "offline_access",
-        "accounting.transactions",
-        "accounting.contacts",
-        "accounting.settings.read",
-      ].join(" "),
+      scopes: "offline_access accounting.transactions accounting.contacts accounting.settings.read".split(" "),
     });
 
     // Exchange authorization code for tokens

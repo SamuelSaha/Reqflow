@@ -145,6 +145,30 @@ export const approvalsRouter = router({
           })
           .where(eq(requests.id, approval.requestId));
 
+        // Queue accounting sync if approved
+        if (!anyRejected) {
+          const { accountingIntegrations } = await import("../../db/schema");
+          const activeIntegration = await ctx.db.query.accountingIntegrations.findFirst({
+            where: and(
+              eq(accountingIntegrations.tenantId, ctx.tenantId),
+              eq(accountingIntegrations.isActive, true),
+              eq(accountingIntegrations.autoSync, true)
+            ),
+          });
+
+          if (activeIntegration) {
+            const { queueSync } = await import("../../queue/queues/sync");
+            await queueSync({
+              tenantId: ctx.tenantId,
+              provider: activeIntegration.provider as "quickbooks" | "xero",
+              entity: "purchase_order",
+              entityId: approval.requestId,
+              action: "create",
+              data: {},
+            });
+          }
+        }
+
         // Send email notification to requester
         const { emailQueue, EmailTemplate } = await import("../../queue/queues/email");
         const { env } = await import("../../env");

@@ -9,6 +9,7 @@ import { startEmailWorker } from "./workers/email.worker";
 import { startApprovalTimersWorker } from "./workers/approval-timers.worker";
 import { startTrialRemindersWorker } from "./workers/trial-reminders.worker";
 import { startRenewalRemindersWorker } from "./workers/renewal-reminders.worker";
+import { startSyncWorker } from "./workers/sync.worker";
 import { logger } from "../monitoring/logger";
 
 logger.info("Starting Reqflow workers");
@@ -19,6 +20,7 @@ const workers = [
   startApprovalTimersWorker(),
   startTrialRemindersWorker(),
   startRenewalRemindersWorker(),
+  startSyncWorker(),
   // Add more workers as needed
 ];
 
