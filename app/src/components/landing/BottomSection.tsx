@@ -16,16 +16,16 @@ export function Pricing() {
       <div className="max-w-[700px] text-center flex flex-col items-center gap-4">
         <span className="inline-flex items-center gap-1.5 bg-blue-50 rounded-full px-3.5 py-1.5">
           <CreditCard className="text-blue-600" size={14} />
-          <span className="text-[13px] font-semibold text-blue-600">
+          <span className="text-caption text-blue-600">
             Early Access
           </span>
         </span>
 
-        <h2 className="text-[44px] font-bold leading-[1.15] tracking-[-1px] text-slate-900">
+        <h2 className="text-h2 text-slate-900">
           Free while we build this together.
         </h2>
 
-        <p className="text-[18px] leading-[1.6] text-slate-600 max-w-[620px]">
+        <p className="text-body-lg text-slate-600 max-w-[620px]">
           Reqflow is in early access. Everything is free for now. No credit
           card, no trial countdown, no limits. Use it, break it, tell us
           what&apos;s missing.
@@ -35,10 +35,10 @@ export function Pricing() {
       <div className="w-[800px]">
         <div className="bg-white rounded-2xl border-2 border-blue-600 p-10 flex flex-col items-center gap-8">
           <div className="flex flex-col items-center gap-2">
-            <span className="text-[56px] font-bold tracking-[-2px] text-slate-900">
+            <span className="text-hero text-slate-900">
               $0
             </span>
-            <span className="text-[18px] font-medium text-slate-600">
+            <span className="text-body-lg font-medium text-slate-600">
               Free during early access
             </span>
           </div>
@@ -58,7 +58,7 @@ export function Pricing() {
             ].map((feature) => (
               <div key={feature} className="flex items-center gap-2.5">
                 <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
-                <span className="text-[15px] font-medium text-slate-600">
+                <span className="text-body font-medium text-slate-600">
                   {feature}
                 </span>
               </div>
@@ -67,12 +67,12 @@ export function Pricing() {
 
           <div className="w-full h-px bg-slate-200" />
 
-          <button className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white px-12 py-3.5 rounded-[10px] text-[16px] font-semibold hover:bg-blue-700 transition-colors">
+          <button className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white px-12 py-3.5 rounded-[10px] text-body font-semibold hover:bg-blue-700 transition-colors">
             Get Started Free
             <ArrowRight className="w-[18px] h-[18px]" />
           </button>
 
-          <p className="text-[14px] font-medium text-slate-400 text-center">
+          <p className="text-body-sm font-medium text-slate-400 text-center">
             Paid plans will come later. Early users get locked-in pricing.
           </p>
         </div>
@@ -119,10 +119,10 @@ export function FAQ() {
   return (
     <section className="bg-gradient-to-b from-slate-50 to-white py-20 px-20 flex flex-col items-center gap-12">
       <div className="max-w-[700px] text-center flex flex-col items-center gap-4">
-        <h2 className="text-[36px] font-bold tracking-[-0.5px] text-slate-900">
+        <h2 className="text-h3 text-slate-900">
           Common questions
         </h2>
-        <p className="text-[18px] text-slate-600">
+        <p className="text-body-lg text-slate-600">
           What small teams ask before signing up.
         </p>
       </div>
@@ -140,7 +140,7 @@ export function FAQ() {
                 onClick={() => setOpenIndex(isOpen ? -1 : i)}
                 className="w-full flex items-center justify-between px-6 py-5 text-left"
               >
-                <span className="text-[16px] font-semibold text-slate-900">
+                <span className="text-body font-semibold text-slate-900">
                   {faq.question}
                 </span>
                 {isOpen ? (
@@ -151,7 +151,7 @@ export function FAQ() {
               </button>
               {isOpen && (
                 <div className="px-6 pb-5">
-                  <p className="text-[15px] leading-[1.6] text-slate-600">
+                  <p className="text-body text-slate-600 leading-relaxed">
                     {faq.answer}
                   </p>
                 </div>
@@ -170,26 +170,26 @@ export function FAQ() {
 export function FinalCTA() {
   return (
     <section className="bg-blue-600 py-16 md:py-20 lg:py-24 px-6 md:px-12 lg:px-20 flex flex-col items-center gap-8">
-      <h2 className="text-[44px] font-bold leading-[1.15] tracking-[-1px] text-white text-center max-w-[700px] whitespace-pre-line">
+      <h2 className="text-h2 text-white text-center max-w-[700px] whitespace-pre-line">
         {"Stop buying things\nover Slack."}
       </h2>
 
-      <p className="text-[18px] leading-[1.6] text-white/80 text-center max-w-[600px]">
+      <p className="text-body-lg text-white/80 text-center max-w-[600px]">
         Reqflow gives your small team a real procurement workflow. Free during
         early access. No credit card, no limits.
       </p>
 
       <div className="flex items-center gap-4">
-        <button className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-3.5 rounded-[10px] text-[16px] font-semibold hover:bg-blue-50 transition-colors">
+        <button className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-3.5 rounded-[10px] text-body font-semibold hover:bg-blue-50 transition-colors">
           Get Started Free
           <ArrowRight className="w-[18px] h-[18px]" />
         </button>
-        <button className="inline-flex items-center gap-2 border-[1.5px] border-white/25 text-white px-8 py-3.5 rounded-[10px] text-[16px] font-semibold hover:bg-white/10 transition-colors">
+        <button className="inline-flex items-center gap-2 border-[1.5px] border-white/25 text-white px-8 py-3.5 rounded-[10px] text-body font-semibold hover:bg-white/10 transition-colors">
           See How It Works
         </button>
       </div>
 
-      <p className="text-[14px] font-medium text-white/60">
+      <p className="text-body-sm font-medium text-white/60">
         100% free &nbsp;&middot;&nbsp; No card required &nbsp;&middot;&nbsp;
         Live in under 10 minutes
       </p>

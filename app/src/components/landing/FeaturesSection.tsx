@@ -25,16 +25,16 @@ export function CoreFeatures() {
       <div className="max-w-[700px] text-center flex flex-col items-center gap-4">
         <div className="bg-blue-50 rounded-full px-3.5 py-1.5 flex items-center gap-1.5">
           <Zap className="w-3.5 h-3.5 text-blue-600" />
-          <span className="text-[13px] font-semibold text-blue-600">
+          <span className="text-caption text-blue-600">
             How It Works
           </span>
         </div>
-        <h2 className="text-[44px] font-bold leading-[1.15] tracking-tight text-slate-900">
+        <h2 className="text-h2 text-slate-900">
           Every purchase request tracked,
           <br />
           approved, and paid. Automatically.
         </h2>
-        <p className="text-[18px] leading-relaxed text-slate-600 max-w-[620px]">
+        <p className="text-body-lg text-slate-600 max-w-[620px]">
           Reqflow replaces scattered requests and manual follow-ups with a
           structured procurement process that runs in minutes, not days.
         </p>
@@ -43,13 +43,13 @@ export function CoreFeatures() {
       {/* Feature 1 - Smart Intake */}
       <div className="max-w-[1200px] flex gap-12 items-center">
         <div className="flex-1 flex flex-col gap-5">
-          <span className="bg-blue-50 rounded-md px-3 py-1 text-[11px] font-bold text-blue-600 tracking-wide w-fit">
+          <span className="bg-blue-50 rounded-md px-3 py-1 text-caption text-blue-600 w-fit">
             STEP 1
           </span>
-          <h3 className="text-[28px] font-bold tracking-tight text-slate-900">
+          <h3 className="text-h4 text-slate-900">
             Smart Intake: One Entry Point
           </h3>
-          <p className="text-[16px] leading-relaxed text-slate-600">
+          <p className="text-body text-slate-600 leading-relaxed">
             Submit requests from Slack, email, or browser. The AI-powered form
             detects categories, flags duplicates against existing subscriptions,
             and validates budget so requests arrive complete on the first try.
@@ -62,7 +62,7 @@ export function CoreFeatures() {
             ].map((text) => (
               <div key={text} className="flex items-center gap-2">
                 <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
-                <span className="text-[14px] font-medium text-slate-600">
+                <span className="text-body-sm font-medium text-slate-600">
                   {text}
                 </span>
               </div>
@@ -238,7 +238,7 @@ export function CoreFeatures() {
             ].map((text) => (
               <div key={text} className="flex items-center gap-2">
                 <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
-                <span className="text-[14px] font-medium text-slate-600">
+                <span className="text-body-sm font-medium text-slate-600">
                   {text}
                 </span>
               </div>
@@ -269,7 +269,7 @@ export function CoreFeatures() {
             ].map((text) => (
               <div key={text} className="flex items-center gap-2">
                 <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
-                <span className="text-[14px] font-medium text-slate-600">
+                <span className="text-body-sm font-medium text-slate-600">
                   {text}
                 </span>
               </div>

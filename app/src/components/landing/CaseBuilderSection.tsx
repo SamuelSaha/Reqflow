@@ -47,15 +47,15 @@ export function CaseBuilderShowcase() {
       <div className="max-w-[700px] text-center flex flex-col items-center gap-4">
         <div className="bg-violet-50 rounded-full px-3.5 py-1.5 flex items-center gap-1.5">
           <Scale className="w-3.5 h-3.5 text-violet-600" />
-          <span className="text-[13px] font-semibold text-violet-600">
+          <span className="text-caption text-violet-600">
             AI-Powered Case Builder
           </span>
         </div>
-        <h2 className="text-[44px] font-bold leading-[1.15] tracking-tight text-slate-900">
+        <h2 className="text-h2 text-slate-900">
           Every purchase over €500 gets
           <br />a business case. Automatically.
         </h2>
-        <p className="text-[18px] leading-relaxed text-slate-600 max-w-[620px]">
+        <p className="text-body-lg text-slate-600 max-w-[620px]">
           No more guessing which vendor is best. Reqflow's AI researches
           alternatives, compares pricing, and builds a structured case — so
           approvers get context, not just a number.
@@ -65,13 +65,13 @@ export function CaseBuilderShowcase() {
       {/* Content: Bullets + Mockup */}
       <div className="max-w-[1200px] flex gap-12 items-center">
         <div className="flex-1 flex flex-col gap-5">
-          <span className="bg-violet-50 rounded-md px-3 py-1 text-[11px] font-bold text-violet-600 tracking-wide w-fit">
+          <span className="bg-violet-50 rounded-md px-3 py-1 text-caption text-violet-600 w-fit">
             BUILT INTO THE REQUEST FLOW
           </span>
-          <h3 className="text-[28px] font-bold tracking-tight text-slate-900">
+          <h3 className="text-h4 text-slate-900">
             Compare Alternatives Before You Even Submit
           </h3>
-          <p className="text-[16px] leading-relaxed text-slate-600">
+          <p className="text-body text-slate-600 leading-relaxed">
             When a request crosses the €500 threshold, Case Builder activates
             automatically. AI pre-fills vendor data from public sources — pricing,
             reviews, contract terms — and presents 2-3 structured alternatives
@@ -87,7 +87,7 @@ export function CaseBuilderShowcase() {
             ].map((text) => (
               <div key={text} className="flex items-center gap-2">
                 <Check className="w-4 h-4 text-green-500 flex-shrink-0" />
-                <span className="text-[14px] font-medium text-slate-600">
+                <span className="text-body-sm font-medium text-slate-600">
                   {text}
                 </span>
               </div>
@@ -237,23 +237,23 @@ export function CaseBuilderSpotlight() {
           <div className="flex-1 p-10 flex flex-col justify-center gap-4">
             <div className="bg-violet-50 rounded-full px-3 py-1 flex items-center gap-1.5 w-fit">
               <Scale className="w-3.5 h-3.5 text-violet-600" />
-              <span className="text-[12px] font-semibold text-violet-600">
+              <span className="text-caption text-violet-600">
                 Case Builder
               </span>
             </div>
-            <h2 className="text-[32px] font-bold leading-[1.2] tracking-tight text-slate-900">
+            <h2 className="text-h3 text-slate-900">
               Built-in business cases
               <br />
               for every big purchase.
             </h2>
-            <p className="text-[16px] leading-relaxed text-slate-600 max-w-[400px]">
+            <p className="text-body text-slate-600 leading-relaxed max-w-[400px]">
               Purchases over €500 automatically trigger an AI-powered comparison
               of 2-3 vendor alternatives — pricing, reviews, and budget impact —
               so approvers never fly blind.
             </p>
             <a
               href="/features"
-              className="inline-flex items-center gap-1.5 text-[14px] font-semibold text-blue-600 hover:text-blue-700 transition-colors w-fit"
+              className="inline-flex items-center gap-1.5 text-body-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors w-fit"
             >
               See how it works
               <ArrowRight className="w-4 h-4" />
