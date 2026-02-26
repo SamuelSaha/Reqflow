@@ -13,6 +13,7 @@ import { hashPassword, createSession } from "@/lib/auth/simple-auth";
 import { logger } from "@/lib/monitoring/logger";
 import { captureError } from "@/lib/monitoring/sentry";
 import { env } from "@/lib/env";
+import { checkSignupRateLimit } from "@/lib/security/rate-limit";
 
 const COOKIE_NAME = "reqflow_session";
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
@@ -66,6 +67,30 @@ export async function POST(request: Request) {
     }
 
     const { email, password, name, inviteToken } = validation.data;
+
+    // Rate limiting - prevent spam signups
+    const rateLimitResult = await checkSignupRateLimit(request);
+    if (!rateLimitResult.success) {
+      logger.warn("Signup rate limit exceeded", {
+        remaining: rateLimitResult.remaining,
+        reset: new Date(rateLimitResult.reset).toISOString(),
+      });
+      return NextResponse.json(
+        {
+          error: "Too many signup attempts. Please try again later.",
+          retryAfter: Math.ceil((rateLimitResult.reset - Date.now()) / 1000),
+        },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": Math.ceil((rateLimitResult.reset - Date.now()) / 1000).toString(),
+            "X-RateLimit-Limit": rateLimitResult.limit.toString(),
+            "X-RateLimit-Remaining": rateLimitResult.remaining.toString(),
+            "X-RateLimit-Reset": rateLimitResult.reset.toString(),
+          },
+        }
+      );
+    }
 
     // Check if user already exists
     const existingUser = await db.query.users.findFirst({
