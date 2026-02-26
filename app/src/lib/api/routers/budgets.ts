@@ -286,7 +286,12 @@ export const budgetsRouter = router({
       const [updated] = await ctx.db
         .update(budgets)
         .set(updateData)
-        .where(eq(budgets.id, input.budgetId))
+        .where(
+          and(
+            eq(budgets.id, input.budgetId),
+            eq(budgets.tenantId, ctx.tenantId)
+          )
+        )
         .returning();
 
       return { success: true, budget: updated };
