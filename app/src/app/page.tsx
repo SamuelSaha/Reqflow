@@ -10,6 +10,7 @@ import {
 import { CaseBuilderSpotlight } from "@/components/landing/CaseBuilderSection";
 import { SocialProof } from "@/components/landing/GridSection";
 import { ProductScreenshots } from "@/components/landing/ProductScreenshots";
+import { FeatureGrid } from "@/components/landing/FeatureGrid";
 import { FinalCTA } from "@/components/landing/BottomSection";
 
 export default function ReqflowLanding() {
@@ -20,6 +21,7 @@ export default function ReqflowLanding() {
       <TrustLogos />
       <ProblemSection />
       <ProductScreenshots />
+      <FeatureGrid />
       <CaseBuilderSpotlight />
       <SocialProof />
       <FinalCTA />
