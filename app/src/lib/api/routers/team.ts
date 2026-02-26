@@ -207,7 +207,10 @@ export const teamRouter = router({
         input.isActive === false
       ) {
         const user = await ctx.db.query.users.findFirst({
-          where: eq(users.id, input.userId),
+          where: and(
+            eq(users.id, input.userId),
+            eq(users.tenantId, ctx.tenantId)
+          ),
         });
 
         if (user?.role === "admin") {
@@ -243,7 +246,10 @@ export const teamRouter = router({
       const [updatedUser] = await ctx.db
         .update(users)
         .set(updateData)
-        .where(eq(users.id, input.userId))
+        .where(and(
+          eq(users.id, input.userId),
+          eq(users.tenantId, ctx.tenantId)
+        ))
         .returning();
 
       if (!updatedUser) {
@@ -419,7 +425,10 @@ export const teamRouter = router({
       const [updated] = await ctx.db
         .update(departments)
         .set(updateData)
-        .where(eq(departments.id, input.departmentId))
+        .where(and(
+          eq(departments.id, input.departmentId),
+          eq(departments.tenantId, ctx.tenantId)
+        ))
         .returning();
 
       if (!updated) {
@@ -456,7 +465,10 @@ export const teamRouter = router({
 
       const [deleted] = await ctx.db
         .delete(departments)
-        .where(eq(departments.id, input.departmentId))
+        .where(and(
+          eq(departments.id, input.departmentId),
+          eq(departments.tenantId, ctx.tenantId)
+        ))
         .returning();
 
       if (!deleted) {
@@ -558,7 +570,10 @@ export const teamRouter = router({
       await ctx.db
         .update(invites)
         .set({ token: newToken, expiresAt: newExpiresAt })
-        .where(eq(invites.id, input.inviteId));
+        .where(and(
+          eq(invites.id, input.inviteId),
+          eq(invites.tenantId, ctx.tenantId)
+        ));
 
       // Get org for email
       const org = await ctx.db.query.organizations.findFirst({
