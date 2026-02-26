@@ -132,3 +132,116 @@ export async function checkSignupRateLimit(
     reset: result.reset,
   };
 }
+
+/**
+ * Account Lockout - Progressive lockout after failed login attempts
+ * Separate from rate limiting - locks specific accounts regardless of IP
+ */
+
+const LOCKOUT_THRESHOLDS = [
+  { attempts: 5, duration: 15 * 60 * 1000 },      // 5 attempts = 15 min lockout
+  { attempts: 8, duration: 30 * 60 * 1000 },      // 8 attempts = 30 min lockout
+  { attempts: 10, duration: 60 * 60 * 1000 },     // 10 attempts = 1 hour lockout
+  { attempts: 15, duration: 24 * 60 * 60 * 1000 }, // 15 attempts = 24 hour lockout
+];
+
+interface AccountLockoutData {
+  failedAttempts: number;
+  lockedUntil: number | null;
+  lastFailedAt: number;
+}
+
+/**
+ * Check if account is locked due to failed login attempts
+ */
+export async function checkAccountLockout(
+  email: string
+): Promise<{ locked: boolean; lockedUntil?: number; attempts?: number }> {
+  if (!redis) {
+    return { locked: false };
+  }
+
+  const key = `lockout:${email.toLowerCase()}`;
+  const data = await redis.get<AccountLockoutData>(key);
+
+  if (!data) {
+    return { locked: false, attempts: 0 };
+  }
+
+  // Check if lockout has expired
+  if (data.lockedUntil && Date.now() < data.lockedUntil) {
+    return {
+      locked: true,
+      lockedUntil: data.lockedUntil,
+      attempts: data.failedAttempts,
+    };
+  }
+
+  // Lockout expired, reset if it was locked
+  if (data.lockedUntil && Date.now() >= data.lockedUntil) {
+    await redis.del(key);
+    return { locked: false, attempts: 0 };
+  }
+
+  return { locked: false, attempts: data.failedAttempts };
+}
+
+/**
+ * Record failed login attempt and lock account if threshold exceeded
+ */
+export async function recordFailedLogin(
+  email: string
+): Promise<{ locked: boolean; lockedUntil?: number; attempts: number }> {
+  if (!redis) {
+    return { locked: false, attempts: 0 };
+  }
+
+  const key = `lockout:${email.toLowerCase()}`;
+  const data = await redis.get<AccountLockoutData>(key);
+
+  const currentAttempts = (data?.failedAttempts || 0) + 1;
+  const now = Date.now();
+
+  // Determine lockout duration based on attempt count
+  let lockedUntil: number | null = null;
+  for (const threshold of LOCKOUT_THRESHOLDS) {
+    if (currentAttempts >= threshold.attempts) {
+      lockedUntil = now + threshold.duration;
+    }
+  }
+
+  const newData: AccountLockoutData = {
+    failedAttempts: currentAttempts,
+    lockedUntil,
+    lastFailedAt: now,
+  };
+
+  // Store for 24 hours (max lockout duration)
+  await redis.set(key, newData, { ex: 24 * 60 * 60 });
+
+  logger.warn("Failed login attempt recorded", {
+    email,
+    attempts: currentAttempts,
+    locked: !!lockedUntil,
+  });
+
+  return {
+    locked: !!lockedUntil,
+    lockedUntil: lockedUntil || undefined,
+    attempts: currentAttempts,
+  };
+}
+
+/**
+ * Clear failed login attempts after successful login
+ */
+export async function clearFailedAttempts(email: string): Promise<void> {
+  if (!redis) {
+    return;
+  }
+
+  const key = `lockout:${email.toLowerCase()}`;
+  await redis.del(key);
+
+  logger.info("Failed login attempts cleared", { email });
+}

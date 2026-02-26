@@ -2,7 +2,12 @@ import { NextResponse } from "next/server";
 import { signIn } from "@/lib/auth/session";
 import { logger } from "@/lib/monitoring/logger";
 import { captureError } from "@/lib/monitoring/sentry";
-import { checkAuthRateLimit } from "@/lib/security/rate-limit";
+import {
+  checkAuthRateLimit,
+  checkAccountLockout,
+  recordFailedLogin,
+  clearFailedAttempts,
+} from "@/lib/security/rate-limit";
 
 export async function POST(request: Request) {
   try {
@@ -16,7 +21,31 @@ export async function POST(request: Request) {
       );
     }
 
-    // Rate limiting - prevent brute force attacks
+    // Account lockout check - prevents targeted account compromise
+    const lockoutCheck = await checkAccountLockout(email);
+    if (lockoutCheck.locked && lockoutCheck.lockedUntil) {
+      const remainingTime = Math.ceil((lockoutCheck.lockedUntil - Date.now()) / 1000);
+      logger.warn("Account locked due to failed attempts", {
+        email,
+        attempts: lockoutCheck.attempts,
+        lockedUntil: new Date(lockoutCheck.lockedUntil).toISOString(),
+      });
+      return NextResponse.json(
+        {
+          error: `Account temporarily locked due to multiple failed login attempts. Please try again in ${Math.ceil(remainingTime / 60)} minutes.`,
+          retryAfter: remainingTime,
+          locked: true,
+        },
+        {
+          status: 423, // 423 Locked
+          headers: {
+            "Retry-After": remainingTime.toString(),
+          },
+        }
+      );
+    }
+
+    // Rate limiting - prevent brute force attacks (IP-based)
     const rateLimitResult = await checkAuthRateLimit(email, request);
     if (!rateLimitResult.success) {
       logger.warn("Login rate limit exceeded", {
@@ -26,7 +55,7 @@ export async function POST(request: Request) {
       });
       return NextResponse.json(
         {
-          error: "Too many login attempts. Please try again later.",
+          error: "Too many login attempts from this location. Please try again later.",
           retryAfter: Math.ceil((rateLimitResult.reset - Date.now()) / 1000),
         },
         {
@@ -41,11 +70,47 @@ export async function POST(request: Request) {
       );
     }
 
+    // Attempt sign in
     const result = await signIn(email, password);
 
     if ("error" in result) {
-      return NextResponse.json({ error: result.error }, { status: 401 });
+      // Record failed login attempt for account lockout
+      const lockoutResult = await recordFailedLogin(email);
+
+      if (lockoutResult.locked && lockoutResult.lockedUntil) {
+        const remainingTime = Math.ceil((lockoutResult.lockedUntil - Date.now()) / 1000);
+        logger.warn("Account locked after failed attempt", {
+          email,
+          attempts: lockoutResult.attempts,
+          lockedUntil: new Date(lockoutResult.lockedUntil).toISOString(),
+        });
+        return NextResponse.json(
+          {
+            error: `Too many failed attempts. Account locked for ${Math.ceil(remainingTime / 60)} minutes.`,
+            retryAfter: remainingTime,
+            locked: true,
+          },
+          {
+            status: 423, // 423 Locked
+            headers: {
+              "Retry-After": remainingTime.toString(),
+            },
+          }
+        );
+      }
+
+      // Not locked yet, return generic auth error
+      return NextResponse.json(
+        {
+          error: "Invalid email or password",
+          attemptsRemaining: lockoutResult.attempts < 5 ? 5 - lockoutResult.attempts : undefined,
+        },
+        { status: 401 }
+      );
     }
+
+    // Successful login - clear any failed attempts
+    await clearFailedAttempts(email);
 
     return NextResponse.json({
       success: true,

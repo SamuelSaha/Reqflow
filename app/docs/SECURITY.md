@@ -121,6 +121,109 @@ The system detects client IPs from these headers (in order):
 
 Ensure your reverse proxy/CDN is configured to pass these headers.
 
+## Account Lockout
+
+### Overview
+Progressive account lockout protects individual accounts from targeted brute force attacks:
+- **Separate from rate limiting**: Rate limiting protects by IP, lockout protects by account
+- **Progressive penalties**: Lockout duration increases with repeated failures
+- **Automatic unlock**: Accounts automatically unlock after lockout period
+- **Attack prevention**: Prevents unlimited password guessing on specific accounts
+
+### Implementation
+
+**Lockout Thresholds:**
+- 5 failed attempts → 15 minute lockout
+- 8 failed attempts → 30 minute lockout
+- 10 failed attempts → 1 hour lockout
+- 15 failed attempts → 24 hour lockout
+
+**Key Features:**
+- Failed attempts tracked per email address (case-insensitive)
+- Lockout persists across different IP addresses (prevents distributed attacks)
+- Successful login clears all failed attempts
+- Lockout data expires after 24 hours
+- HTTP 423 (Locked) status code returned when locked
+
+### Behavior
+
+**Failed Login Flow:**
+1. Check if account is currently locked
+2. If locked, return 423 with remaining lockout time
+3. If not locked, attempt authentication
+4. On failure, increment failed attempt counter
+5. If threshold reached, lock account and return 423
+6. If below threshold, return 401 with attempts remaining
+
+**Successful Login:**
+- All failed attempts cleared for that account
+- Account unlocked immediately
+- User can login normally
+
+### Testing Account Lockout
+
+```bash
+# Test progressive lockout - make 6 failed attempts
+EMAIL="lockout-test@example.com"
+
+for i in {1..6}; do
+  echo "Attempt $i:"
+  curl -X POST http://localhost:3000/api/auth/login \
+    -H "Content-Type: application/json" \
+    -d "{\"email\":\"$EMAIL\",\"password\":\"wrong\"}" \
+    -w "\nStatus: %{http_code}\n\n" | jq
+  sleep 1
+done
+
+# Attempts 1-4: Should return 401 with attemptsRemaining
+# Attempt 5: Should return 401 (last attempt before lockout)
+# Attempt 6: Should return 423 with lockout message
+```
+
+### Response Examples
+
+**Failed attempt (below threshold):**
+```json
+{
+  "error": "Invalid email or password",
+  "attemptsRemaining": 3
+}
+HTTP 401 Unauthorized
+```
+
+**Account locked:**
+```json
+{
+  "error": "Too many failed attempts. Account locked for 15 minutes.",
+  "retryAfter": 900,
+  "locked": true
+}
+HTTP 423 Locked
+Retry-After: 900
+```
+
+### Monitoring
+
+Account lockouts are logged to Axiom (if configured):
+
+```json
+{
+  "level": "warn",
+  "message": "Account locked after failed attempt",
+  "email": "user@example.com",
+  "attempts": 5,
+  "lockedUntil": "2024-03-01T12:30:00.000Z"
+}
+```
+
+### Security Notes
+
+- **Account enumeration**: Returns same error for invalid email vs invalid password
+- **Timing attacks**: Response time is consistent regardless of whether account exists
+- **Distributed attacks**: Lockout persists across all IP addresses
+- **Recovery**: Users can wait for automatic unlock or contact support
+- **Customization**: Thresholds can be adjusted in `rate-limit.ts`
+
 ## Password Policy
 
 See issue #42 for password requirements:
