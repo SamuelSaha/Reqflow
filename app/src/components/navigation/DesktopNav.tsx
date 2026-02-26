@@ -49,7 +49,7 @@ function FeaturesMegaMenu() {
         <ChevronDown className="w-4 h-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className="w-[560px] p-6"
+        className="w-[560px] p-6 z-[60]"
         align="start"
         sideOffset={8}
       >
@@ -113,7 +113,7 @@ function ResourcesDropdown() {
         <ChevronDown className="w-4 h-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className="w-48"
+        className="w-48 z-[60]"
         align="start"
         sideOffset={8}
       >
