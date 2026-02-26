@@ -11,27 +11,27 @@ export default function RenewalAlertsPage() {
           <div className="text-center max-w-[700px] mx-auto mb-16">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-orange-200 bg-orange-50 mb-6">
               <Bell className="w-4 h-4 text-orange-600" />
-              <span className="text-[13px] font-semibold text-orange-900">Renewal Alerts</span>
+              <span className="text-caption text-orange-900">Renewal Alerts</span>
             </div>
-            <h1 className="text-[52px] font-extrabold tracking-[-1.5px] text-slate-900 mb-6 leading-[1.1]">
+            <h1 className="text-hero text-slate-900 mb-6">
               Never miss a renewal
             </h1>
-            <p className="text-[19px] text-slate-600 leading-relaxed">
+            <p className="text-body-lg text-slate-600 leading-relaxed">
               Track notice windows, not just renewal dates. Get alerted when you MUST decide — before auto-renew locks you in for another year.
             </p>
           </div>
 
           {/* The problem */}
           <div className="bg-red-50 border border-red-200 rounded-2xl p-10 mb-16">
-            <h2 className="text-[28px] font-bold text-slate-900 mb-6 text-center">
+            <h2 className="text-h4 text-slate-900 mb-6 text-center">
               The renewal trap
             </h2>
             <div className="space-y-6">
               <div className="bg-white rounded-xl border border-red-200 p-6">
-                <h3 className="text-[18px] font-bold text-slate-900 mb-3">
+                <h3 className="text-body-lg font-bold text-slate-900 mb-3">
                   What usually happens:
                 </h3>
-                <div className="space-y-3 text-[15px] text-slate-700">
+                <div className="space-y-3 text-body text-slate-700">
                   <div className="flex items-start gap-3">
                     <span className="text-[20px]">1️⃣</span>
                     <span>You sign a 1-year contract with 60-day cancellation notice</span>
@@ -55,8 +55,8 @@ export default function RenewalAlertsPage() {
                 </div>
               </div>
               <div className="bg-white rounded-xl border border-red-200 p-6 text-center">
-                <div className="text-[48px] font-bold text-red-600 mb-2">€12K–€30K</div>
-                <div className="text-[16px] text-slate-600">
+                <div className="text-h2 text-red-600 mb-2">€12K–€30K</div>
+                <div className="text-body text-slate-600">
                   Average annual cost of missed cancellation windows for a 50-person company
                 </div>
               </div>
@@ -65,7 +65,7 @@ export default function RenewalAlertsPage() {
 
           {/* The wrong date */}
           <div className="mb-16">
-            <h2 className="text-[32px] font-bold text-slate-900 mb-8 text-center">
+            <h2 className="text-h3 text-slate-900 mb-8 text-center">
               You're tracking the wrong date
             </h2>
             <div className="grid md:grid-cols-2 gap-6">
@@ -74,14 +74,14 @@ export default function RenewalAlertsPage() {
                   <div className="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center">
                     <AlertCircle className="w-5 h-5 text-red-600" />
                   </div>
-                  <h3 className="text-[20px] font-bold text-slate-900">
+                  <h3 className="text-h5 text-slate-900">
                     Wrong: Renewal Date
                   </h3>
                 </div>
-                <p className="text-[15px] text-slate-600 leading-relaxed mb-4">
+                <p className="text-body text-slate-600 leading-relaxed mb-4">
                   Most tools only track when subscriptions renew (Jan 1, 2027). By the time renewal hits, it's too late — the notice window closed 60 days ago.
                 </p>
-                <div className="text-[13px] text-red-600 font-medium bg-red-50 rounded-lg p-3 border border-red-200">
+                <div className="text-body-sm text-red-600 font-medium bg-red-50 rounded-lg p-3 border border-red-200">
                   "Notion renews tomorrow at €4,800. Cancel?" → TOO LATE. Notice window closed 60 days ago.
                 </div>
               </div>
@@ -90,14 +90,14 @@ export default function RenewalAlertsPage() {
                   <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center">
                     <Target className="w-5 h-5 text-green-600" />
                   </div>
-                  <h3 className="text-[20px] font-bold text-slate-900">
+                  <h3 className="text-h5 text-slate-900">
                     Right: Notice Window
                   </h3>
                 </div>
-                <p className="text-[15px] text-slate-700 leading-relaxed mb-4">
+                <p className="text-body text-slate-700 leading-relaxed mb-4">
                   Reqflow tracks the notice deadline — when you MUST decide. We alert you 90/60/30 days before the window closes, so you have time to evaluate.
                 </p>
-                <div className="text-[13px] text-green-700 font-medium bg-green-100 rounded-lg p-3 border border-green-200">
+                <div className="text-body-sm text-green-700 font-medium bg-green-100 rounded-lg p-3 border border-green-200">
                   "Notion renews in 90 days (€4,800). Notice window closes in 30 days. Decide now or auto-renew."
                 </div>
               </div>
@@ -106,7 +106,7 @@ export default function RenewalAlertsPage() {
 
           {/* How it works */}
           <div className="mb-16 space-y-6">
-            <h2 className="text-[32px] font-bold text-slate-900 mb-8 text-center">
+            <h2 className="text-h3 text-slate-900 mb-8 text-center">
               How Reqflow tracks renewals
             </h2>
 
@@ -115,14 +115,14 @@ export default function RenewalAlertsPage() {
                 <Calendar className="w-6 h-6 text-blue-600" />
               </div>
               <div>
-                <h3 className="text-[22px] font-bold text-slate-900 mb-3">
+                <h3 className="text-h5 text-slate-900 mb-3">
                   Log contracts with notice windows
                 </h3>
-                <p className="text-[16px] text-slate-600 leading-relaxed mb-4">
+                <p className="text-body text-slate-600 leading-relaxed mb-4">
                   Upload contracts or manually enter terms. Reqflow extracts renewal date, term length, and cancellation notice period (30/60/90 days).
                 </p>
                 <div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
-                  <div className="text-[14px] font-mono text-slate-700 space-y-1">
+                  <div className="text-body-sm font-mono text-slate-700 space-y-1">
                     <div>Contract: Notion Team Plan</div>
                     <div>Start: Jan 1, 2026</div>
                     <div>Term: 1 year</div>
@@ -138,10 +138,10 @@ export default function RenewalAlertsPage() {
                 <Bell className="w-6 h-6 text-orange-600" />
               </div>
               <div>
-                <h3 className="text-[22px] font-bold text-slate-900 mb-3">
+                <h3 className="text-h5 text-slate-900 mb-3">
                   Multi-stage alerts (90/60/30 days)
                 </h3>
-                <p className="text-[16px] text-slate-600 leading-relaxed mb-4">
+                <p className="text-body text-slate-600 leading-relaxed mb-4">
                   Reqflow sends alerts at three key milestones. First reminder at 90 days (start evaluating). Second at 60 days (make decision). Final at 30 days (last chance).
                 </p>
                 <div className="space-y-3">
@@ -163,10 +163,10 @@ export default function RenewalAlertsPage() {
                 <Clock className="w-6 h-6 text-green-600" />
               </div>
               <div>
-                <h3 className="text-[22px] font-bold text-slate-900 mb-3">
+                <h3 className="text-h5 text-slate-900 mb-3">
                   Centralized renewal calendar
                 </h3>
-                <p className="text-[16px] text-slate-600 leading-relaxed mb-4">
+                <p className="text-body text-slate-600 leading-relaxed mb-4">
                   Dashboard shows all upcoming renewals in a timeline view: 30-day window, 60-day window, 90-day window. Color-coded by urgency.
                 </p>
                 <div className="grid md:grid-cols-3 gap-3">
