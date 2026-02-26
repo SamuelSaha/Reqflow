@@ -38,9 +38,9 @@ export function HeroSection() {
 
       <Container size="default" className="relative">
         {/* Viewport-optimized padding - fits content above fold */}
-        <div className="grid grid-cols-1 gap-8 lg:gap-10 py-12 md:py-16 lg:py-20">
+        <div className="flex flex-col items-center py-16 md:py-20 lg:py-24">
           {/* Content Section - Instant paint, no animation delays */}
-          <div className="grid grid-cols-1 gap-6 md:gap-7 text-center max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 gap-6 md:gap-7 text-center max-w-4xl mx-auto w-full">
             {/* Trust Badge with Icon - NO ANIMATION DELAY */}
             <div className="flex justify-center">
               <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-emerald-200 bg-emerald-50/80 backdrop-blur-sm shadow-sm hover:shadow-md transition-shadow">
@@ -114,8 +114,21 @@ export function HeroSection() {
               </CtaGroup>
             </div>
           </div>
+        </div>
+      </Container>
+    </Section>
+  );
+}
 
-          {/* Product Showcase - Viewport-aware sizing, NO ANIMATION DELAY */}
+/* ------------------------------------------------------------------ */
+/*  Product Showcase Section - Below the fold                        */
+/* ------------------------------------------------------------------ */
+export function ProductShowcaseSection() {
+  return (
+    <Section background="warm" className="relative" noPadding>
+      <Container size="default">
+        <div className="py-12 md:py-16 lg:py-20">
+          {/* Product Showcase */}
           <div className="relative max-w-6xl mx-auto">
             {/* Glow effect behind mockup */}
             <div className="absolute inset-0 bg-gradient-to-t from-blue-500/20 via-transparent to-transparent blur-3xl -z-10 scale-150" />

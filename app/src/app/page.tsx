@@ -3,6 +3,7 @@
 import { PageShell } from "@/components/layout";
 import {
   HeroSection,
+  ProductShowcaseSection,
   TrustLogos,
   ProblemSection,
 } from "@/components/landing/HeroSection";
@@ -14,6 +15,7 @@ export default function ReqflowLanding() {
   return (
     <PageShell>
       <HeroSection />
+      <ProductShowcaseSection />
       <TrustLogos />
       <ProblemSection />
       <CaseBuilderSpotlight />
