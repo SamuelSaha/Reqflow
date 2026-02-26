@@ -6,7 +6,7 @@
 import { z } from "zod";
 import { router, adminProcedure } from "../trpc";
 import { requests, users, auditLogs, authEvents } from "@/lib/db/schema";
-import { eq, and, gte, desc, sql, count } from "drizzle-orm";
+import { eq, and, gte, desc, sql, count, inArray } from "drizzle-orm";
 import { subDays } from "date-fns";
 
 export const analyticsRouter = router({
@@ -141,10 +141,16 @@ export const analyticsRouter = router({
 
     // Enrich with user details
     const userIds = topUserStats.map((stat) => stat.userId);
+
+    // Handle empty array case
+    if (userIds.length === 0) {
+      return [];
+    }
+
     const userDetails = await ctx.db.query.users.findMany({
       where: and(
         eq(users.tenantId, ctx.tenantId),
-        sql`${users.id} = ANY(${userIds})`
+        inArray(users.id, userIds)
       ),
       columns: {
         id: true,
