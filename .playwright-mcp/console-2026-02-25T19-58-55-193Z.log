@@ -1,0 +1,79 @@
+[     155ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/dashboard/settings/analytics:0
+[     323ms] [ERROR] %o
+
+%s TypeError: client[procedureType] is not a function
+    at http://localhost:3000/_next/static/chunks/f48d6_6fde9466._.js:8076:37
+    at Object.apply (http://localhost:3000/_next/static/chunks/f48d6_6fde9466._.js:3416:20)
+    at AnalyticsPage (http://localhost:3000/_next/static/chunks/emdash-projects_Reqflow_app_src_0958c72a._.js:338:254)
+    at Object.react_stack_bottom_frame (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:14826:24)
+    at renderWithHooks (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:4651:24)
+    at updateFunctionComponent (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:6112:21)
+    at beginWork (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:6708:24)
+    at runWithFiberInDEV (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:965:74)
+    at performUnitOfWork (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:9562:97)
+    at workLoopSync (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:9456:40)
+    at renderRootSync (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:9440:13)
+    at performWorkOnRoot (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:9105:47)
+    at performWorkOnRootViaSchedulerTask (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:10230:9)
+    at MessagePort.performWorkUntilDeadline (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_3f2a4419._.js:2647:64) The above error occurred in the <AnalyticsPage> component. It was handled by the <ErrorBoundary> error boundary. @ http://localhost:3000/_next/static/chunks/f48d6_next_dist_client_dcf7f85a._.js:1342
+[     324ms] [ERROR] Error Boundary caught error: TypeError: client[procedureType] is not a function
+    at http://localhost:3000/_next/static/chunks/f48d6_6fde9466._.js:8076:37
+    at Object.apply (http://localhost:3000/_next/static/chunks/f48d6_6fde9466._.js:3416:20)
+    at AnalyticsPage (http://localhost:3000/_next/static/chunks/emdash-projects_Reqflow_app_src_0958c72a._.js:338:254)
+    at Object.react_stack_bottom_frame (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:14826:24)
+    at renderWithHooks (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:4651:24)
+    at updateFunctionComponent (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:6112:21)
+    at beginWork (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:6708:24)
+    at runWithFiberInDEV (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:965:74)
+    at performUnitOfWork (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:9562:97)
+    at workLoopSync (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:9456:40)
+    at renderRootSync (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:9440:13)
+    at performWorkOnRoot (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:9105:47)
+    at performWorkOnRootViaSchedulerTask (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:10230:9)
+    at MessagePort.performWorkUntilDeadline (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_3f2a4419._.js:2647:64) {componentStack: 
+    at AnalyticsPage (http://localhost:3000/_next…tic/chunks/f48d6_next_dist_5f75ad20._.js:3561:39)} @ http://localhost:3000/_next/static/chunks/f48d6_next_dist_5f75ad20._.js:3127
+[   18300ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=tC3J5Hm_rDX-ZY_4we8v0' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/f48d6_next_dist_client_dcf7f85a._.js:10878
+[   20242ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/dashboard/settings/analytics:0
+[   20498ms] [ERROR] %o
+
+%s TypeError: client[procedureType] is not a function
+    at http://localhost:3000/_next/static/chunks/f48d6_6fde9466._.js:8076:37
+    at Object.apply (http://localhost:3000/_next/static/chunks/f48d6_6fde9466._.js:3416:20)
+    at AnalyticsPage (http://localhost:3000/_next/static/chunks/emdash-projects_Reqflow_app_src_0958c72a._.js:338:254)
+    at Object.react_stack_bottom_frame (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:14826:24)
+    at renderWithHooks (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:4651:24)
+    at updateFunctionComponent (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:6112:21)
+    at beginWork (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:6708:24)
+    at runWithFiberInDEV (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:965:74)
+    at performUnitOfWork (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:9562:97)
+    at workLoopSync (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:9456:40)
+    at renderRootSync (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:9440:13)
+    at performWorkOnRoot (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:9105:47)
+    at performWorkOnRootViaSchedulerTask (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:10230:9)
+    at MessagePort.performWorkUntilDeadline (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_3f2a4419._.js:2647:64) The above error occurred in the <AnalyticsPage> component. It was handled by the <ErrorBoundary> error boundary. @ http://localhost:3000/_next/static/chunks/f48d6_next_dist_client_dcf7f85a._.js:1342
+[   20498ms] [ERROR] Error Boundary caught error: TypeError: client[procedureType] is not a function
+    at http://localhost:3000/_next/static/chunks/f48d6_6fde9466._.js:8076:37
+    at Object.apply (http://localhost:3000/_next/static/chunks/f48d6_6fde9466._.js:3416:20)
+    at AnalyticsPage (http://localhost:3000/_next/static/chunks/emdash-projects_Reqflow_app_src_0958c72a._.js:338:254)
+    at Object.react_stack_bottom_frame (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:14826:24)
+    at renderWithHooks (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:4651:24)
+    at updateFunctionComponent (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:6112:21)
+    at beginWork (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:6708:24)
+    at runWithFiberInDEV (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:965:74)
+    at performUnitOfWork (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:9562:97)
+    at workLoopSync (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:9456:40)
+    at renderRootSync (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:9440:13)
+    at performWorkOnRoot (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:9105:47)
+    at performWorkOnRootViaSchedulerTask (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:10230:9)
+    at MessagePort.performWorkUntilDeadline (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_3f2a4419._.js:2647:64) {componentStack: 
+    at AnalyticsPage (http://localhost:3000/_next…tic/chunks/f48d6_next_dist_5f75ad20._.js:3561:39)} @ http://localhost:3000/_next/static/chunks/f48d6_next_dist_5f75ad20._.js:3127
+[   95816ms] [WARNING] [Fast Refresh] performing full reload
+
+Fast Refresh will perform a full reload when you edit a file that's imported by modules outside of the React rendering tree.
+You might have a file which exports a React component but also exports a value that is imported by a non-React component file.
+Consider migrating the non-React component export to a separate file and importing it into both files.
+
+It is also possible the parent component of the component you edited is a class component, which disables Fast Refresh.
+Fast Refresh requires at least one parent function component in your React tree. @ http://localhost:3000/_next/static/chunks/f48d6_next_dist_5f75ad20._.js:2297
+[   98571ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/api/trpc/analytics.topUsers?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D:0
+[  100605ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/api/trpc/analytics.topUsers?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%2C%22v%22%3A1%7D%7D%7D:0

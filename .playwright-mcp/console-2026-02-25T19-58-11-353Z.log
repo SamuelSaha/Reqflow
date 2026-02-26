@@ -1,0 +1,156 @@
+[     175ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/dashboard/settings/analytics:0
+[     228ms] Error: ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx:5:1
+Module not found: Can't resolve '@/components/ui/tabs'
+  3 | import { trpc } from "@/lib/api/client";
+  4 | import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+> 5 | import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import {
+  7 |   Table,
+  8 |   TableBody,
+
+Import map: aliased to relative './src/components/ui/tabs' inside of [project]/emdash-projects/Reqflow/app
+
+
+Import traces:
+  Client Component Browser:
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Client Component Browser]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Client Component SSR]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (Error: ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx:5:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at Object.getCompilationErrors (file:///Users/samuelsaha/emdash-projects/Reqflow/app/node_modules/next/dist/server/dev/hot-reloader-turbopack.js:1008:59)
+    at DevBundlerService.getCompilationError (file:///Users/samuelsaha/emdash-projects/Reqflow/app/node_modules/next/dist/server/lib/dev-bundler-service.js:44:55)
+    at DevServer.getCompilationError (file:///Users/samuelsaha/emdash-projects/Reqflow/app/node_modules/next/dist/server/dev/next-dev-server.js:706:42)
+    at DevServer.findPageComponents (file:///Users/samuelsaha/emdash-projects/Reqflow/app/node_modules/next/dist/server/dev/next-dev-server.js:676:43)
+    at async DevServer.renderErrorToResponseImpl (file:///Users/samuelsaha/emdash-projects/Reqflow/app/node_modules/next/dist/server/base-server.js:1733:26)
+[     235ms] [ERROR] ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx:5:1
+Module not found: Can't resolve '@/components/ui/tabs'
+  3 | import { trpc } from "@/lib/api/client";
+  4 | import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+> 5 | import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import {
+  7 |   Table,
+  8 |   TableBody,
+
+Import map: aliased to relative './src/components/ui/tabs' inside of [project]/emdash-projects/Reqflow/app
+
+Import traces:
+  Client Component Browser:
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Client Component Browser]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Client Component SSR]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/f48d6_next_dist_1553afda._.js:1920
+[     263ms] [ERROR] ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx:5:1
+Module not found: Can't resolve '@/components/ui/tabs'
+  3 | import { trpc } from "@/lib/api/client";
+  4 | import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+> 5 | import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import {
+  7 |   Table,
+  8 |   TableBody,
+
+Import map: aliased to relative './src/components/ui/tabs' inside of [project]/emdash-projects/Reqflow/app
+
+Import traces:
+  Client Component Browser:
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Client Component Browser]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Client Component SSR]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/f48d6_next_dist_1553afda._.js:1920
+[   17551ms] [ERROR] ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx:5:1
+Module not found: Can't resolve '@/components/ui/tabs'
+  3 | import { trpc } from "@/lib/api/client";
+  4 | import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+> 5 | import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import {
+  7 |   Table,
+  8 |   TableBody,
+
+Import map: aliased to relative './src/components/ui/tabs' inside of [project]/emdash-projects/Reqflow/app
+
+Import traces:
+  Client Component Browser:
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Client Component Browser]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Client Component SSR]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/f48d6_next_dist_1553afda._.js:1920
+[   17752ms] [ERROR] ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx:5:1
+Module not found: Can't resolve '@/components/ui/tabs'
+  3 | import { trpc } from "@/lib/api/client";
+  4 | import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+> 5 | import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import {
+  7 |   Table,
+  8 |   TableBody,
+
+Import map: aliased to relative './src/components/ui/tabs' inside of [project]/emdash-projects/Reqflow/app
+
+Import traces:
+  Client Component Browser:
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Client Component Browser]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Client Component SSR]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/f48d6_next_dist_1553afda._.js:1920
+[   38878ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ http://localhost:3000/_next/static/chunks/f48d6_next_dist_1553afda._.js:1206
+[   39722ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/dashboard/settings/analytics:0
+[   39988ms] [ERROR] %o
+
+%s TypeError: client[procedureType] is not a function
+    at http://localhost:3000/_next/static/chunks/f48d6_6fde9466._.js:8076:37
+    at Object.apply (http://localhost:3000/_next/static/chunks/f48d6_6fde9466._.js:3416:20)
+    at AnalyticsPage (http://localhost:3000/_next/static/chunks/emdash-projects_Reqflow_app_src_0958c72a._.js:338:254)
+    at Object.react_stack_bottom_frame (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:14826:24)
+    at renderWithHooks (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:4651:24)
+    at updateFunctionComponent (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:6112:21)
+    at beginWork (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:6708:24)
+    at runWithFiberInDEV (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:965:74)
+    at performUnitOfWork (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:9562:97)
+    at workLoopSync (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:9456:40)
+    at renderRootSync (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:9440:13)
+    at performWorkOnRoot (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:9105:47)
+    at performWorkOnRootViaSchedulerTask (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:10230:9)
+    at MessagePort.performWorkUntilDeadline (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_3f2a4419._.js:2647:64) The above error occurred in the <AnalyticsPage> component. It was handled by the <ErrorBoundary> error boundary. @ http://localhost:3000/_next/static/chunks/f48d6_next_dist_client_dcf7f85a._.js:1342
+[   39989ms] [ERROR] Error Boundary caught error: TypeError: client[procedureType] is not a function
+    at http://localhost:3000/_next/static/chunks/f48d6_6fde9466._.js:8076:37
+    at Object.apply (http://localhost:3000/_next/static/chunks/f48d6_6fde9466._.js:3416:20)
+    at AnalyticsPage (http://localhost:3000/_next/static/chunks/emdash-projects_Reqflow_app_src_0958c72a._.js:338:254)
+    at Object.react_stack_bottom_frame (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:14826:24)
+    at renderWithHooks (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:4651:24)
+    at updateFunctionComponent (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:6112:21)
+    at beginWork (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:6708:24)
+    at runWithFiberInDEV (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:965:74)
+    at performUnitOfWork (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:9562:97)
+    at workLoopSync (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:9456:40)
+    at renderRootSync (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:9440:13)
+    at performWorkOnRoot (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:9105:47)
+    at performWorkOnRootViaSchedulerTask (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_react-dom_9137820e._.js:10230:9)
+    at MessagePort.performWorkUntilDeadline (http://localhost:3000/_next/static/chunks/f48d6_next_dist_compiled_3f2a4419._.js:2647:64) {componentStack: 
+    at AnalyticsPage (http://localhost:3000/_next…tic/chunks/f48d6_next_dist_5f75ad20._.js:3561:39)} @ http://localhost:3000/_next/static/chunks/f48d6_next_dist_5f75ad20._.js:3127

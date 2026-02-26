@@ -1,0 +1,189 @@
+[    1044ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/api/trpc/team.listUsers?batch=1&input=%7B%220%22%3A%7B%22json%22%3A%7B%7D%7D%7D:0
+[    2073ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/api/trpc/team.listUsers?batch=1&input=%7B%220%22%3A%7B%22json%22%3A%7B%7D%7D%7D:0
+[    4100ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/api/trpc/team.listUsers?batch=1&input=%7B%220%22%3A%7B%22json%22%3A%7B%7D%7D%7D:0
+[    8125ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/api/trpc/team.listUsers?batch=1&input=%7B%220%22%3A%7B%22json%22%3A%7B%7D%7D%7D:0
+[  660483ms] [ERROR] ./emdash-projects/Reqflow/app/src/app/dashboard/settings/team/page.tsx:23:1
+Module not found: Can't resolve '@/components/ui/dropdown-menu'
+  21 | import { InviteUsersDialog } from "@/components/settings/InviteUsersDialog";
+  22 | import { EditUserDialog } from "@/components/settings/EditUserDialog";
+> 23 | import {
+     | ^^^^^^^^
+> 24 |   DropdownMenu,
+     | ^^^^^^^^^^^^^^^
+> 25 |   DropdownMenuContent,
+     | ^^^^^^^^^^^^^^^
+> 26 |   DropdownMenuItem,
+     | ^^^^^^^^^^^^^^^
+> 27 |   DropdownMenuTrigger,
+     | ^^^^^^^^^^^^^^^
+> 28 | } from "@/components/ui/dropdown-menu";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  29 | import { toast } from "sonner";
+  30 |
+  31 | export const dynamic = "force-dynamic";
+
+Import map: aliased to relative './src/components/ui/dropdown-menu' inside of [project]/emdash-projects/Reqflow/app
+
+Import traces:
+  Client Component Browser:
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/team/page.tsx [Client Component Browser]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/team/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/team/page.tsx [Client Component SSR]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/team/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/f48d6_next_dist_5f75ad20._.js:3127
+[  660484ms] [ERROR] ./emdash-projects/Reqflow/app/src/components/settings/EditUserDialog.tsx:23:1
+Module not found: Can't resolve '@/components/ui/switch'
+  21 |   SelectValue,
+  22 | } from "@/components/ui/select";
+> 23 | import { Switch } from "@/components/ui/switch";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { Loader2 } from "lucide-react";
+  25 | import { toast } from "sonner";
+  26 |
+
+Import map: aliased to relative './src/components/ui/switch' inside of [project]/emdash-projects/Reqflow/app
+
+Import traces:
+  Client Component Browser:
+    ./emdash-projects/Reqflow/app/src/components/settings/EditUserDialog.tsx [Client Component Browser]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/team/page.tsx [Client Component Browser]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/team/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./emdash-projects/Reqflow/app/src/components/settings/EditUserDialog.tsx [Client Component SSR]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/team/page.tsx [Client Component SSR]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/team/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/f48d6_next_dist_5f75ad20._.js:3127
+[  686050ms] [ERROR] ./emdash-projects/Reqflow/app/src/app/dashboard/settings/team/page.tsx:23:1
+Module not found: Can't resolve '@/components/ui/dropdown-menu'
+  21 | import { InviteUsersDialog } from "@/components/settings/InviteUsersDialog";
+  22 | import { EditUserDialog } from "@/components/settings/EditUserDialog";
+> 23 | import {
+     | ^^^^^^^^
+> 24 |   DropdownMenu,
+     | ^^^^^^^^^^^^^^^
+> 25 |   DropdownMenuContent,
+     | ^^^^^^^^^^^^^^^
+> 26 |   DropdownMenuItem,
+     | ^^^^^^^^^^^^^^^
+> 27 |   DropdownMenuTrigger,
+     | ^^^^^^^^^^^^^^^
+> 28 | } from "@/components/ui/dropdown-menu";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  29 | import { toast } from "sonner";
+  30 |
+  31 | export const dynamic = "force-dynamic";
+
+Import map: aliased to relative './src/components/ui/dropdown-menu' inside of [project]/emdash-projects/Reqflow/app
+
+Import traces:
+  Client Component Browser:
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/team/page.tsx [Client Component Browser]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/team/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/team/page.tsx [Client Component SSR]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/team/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/f48d6_next_dist_5f75ad20._.js:3127
+[  686051ms] [ERROR] ./emdash-projects/Reqflow/app/src/components/settings/EditUserDialog.tsx:23:1
+Module not found: Can't resolve '@/components/ui/switch'
+  21 |   SelectValue,
+  22 | } from "@/components/ui/select";
+> 23 | import { Switch } from "@/components/ui/switch";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { Loader2 } from "lucide-react";
+  25 | import { toast } from "sonner";
+  26 |
+
+Import map: aliased to relative './src/components/ui/switch' inside of [project]/emdash-projects/Reqflow/app
+
+Import traces:
+  Client Component Browser:
+    ./emdash-projects/Reqflow/app/src/components/settings/EditUserDialog.tsx [Client Component Browser]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/team/page.tsx [Client Component Browser]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/team/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./emdash-projects/Reqflow/app/src/components/settings/EditUserDialog.tsx [Client Component SSR]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/team/page.tsx [Client Component SSR]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/team/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/f48d6_next_dist_5f75ad20._.js:3127
+[  686298ms] [ERROR] ./emdash-projects/Reqflow/app/src/app/dashboard/settings/team/page.tsx:23:1
+Module not found: Can't resolve '@/components/ui/dropdown-menu'
+  21 | import { InviteUsersDialog } from "@/components/settings/InviteUsersDialog";
+  22 | import { EditUserDialog } from "@/components/settings/EditUserDialog";
+> 23 | import {
+     | ^^^^^^^^
+> 24 |   DropdownMenu,
+     | ^^^^^^^^^^^^^^^
+> 25 |   DropdownMenuContent,
+     | ^^^^^^^^^^^^^^^
+> 26 |   DropdownMenuItem,
+     | ^^^^^^^^^^^^^^^
+> 27 |   DropdownMenuTrigger,
+     | ^^^^^^^^^^^^^^^
+> 28 | } from "@/components/ui/dropdown-menu";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  29 | import { toast } from "sonner";
+  30 |
+  31 | export const dynamic = "force-dynamic";
+
+Import map: aliased to relative './src/components/ui/dropdown-menu' inside of [project]/emdash-projects/Reqflow/app
+
+Import traces:
+  Client Component Browser:
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/team/page.tsx [Client Component Browser]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/team/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/team/page.tsx [Client Component SSR]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/team/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/f48d6_next_dist_5f75ad20._.js:3127
+[  686298ms] [ERROR] ./emdash-projects/Reqflow/app/src/components/settings/EditUserDialog.tsx:23:1
+Module not found: Can't resolve '@/components/ui/switch'
+  21 |   SelectValue,
+  22 | } from "@/components/ui/select";
+> 23 | import { Switch } from "@/components/ui/switch";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  24 | import { Loader2 } from "lucide-react";
+  25 | import { toast } from "sonner";
+  26 |
+
+Import map: aliased to relative './src/components/ui/switch' inside of [project]/emdash-projects/Reqflow/app
+
+Import traces:
+  Client Component Browser:
+    ./emdash-projects/Reqflow/app/src/components/settings/EditUserDialog.tsx [Client Component Browser]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/team/page.tsx [Client Component Browser]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/team/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./emdash-projects/Reqflow/app/src/components/settings/EditUserDialog.tsx [Client Component SSR]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/team/page.tsx [Client Component SSR]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/team/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/f48d6_next_dist_5f75ad20._.js:3127
+[  687465ms] [WARNING] [Fast Refresh] performing full reload
+
+Fast Refresh will perform a full reload when you edit a file that's imported by modules outside of the React rendering tree.
+You might have a file which exports a React component but also exports a value that is imported by a non-React component file.
+Consider migrating the non-React component export to a separate file and importing it into both files.
+
+It is also possible the parent component of the component you edited is a class component, which disables Fast Refresh.
+Fast Refresh requires at least one parent function component in your React tree. @ http://localhost:3000/_next/static/chunks/f48d6_next_dist_5f75ad20._.js:2297
+[  689302ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/api/trpc/team.listInvites?batch=1&input=%7B%220%22%3A%7B%22json%22%3A%7B%7D%7D%7D:0
+[  691322ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/api/trpc/team.listInvites?batch=1&input=%7B%220%22%3A%7B%22json%22%3A%7B%7D%7D%7D:0
+[  695396ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/api/trpc/team.listInvites?batch=1&input=%7B%220%22%3A%7B%22json%22%3A%7B%7D%7D%7D:0
+[ 1010518ms] [WARNING] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior @ http://localhost:3000/_next/static/chunks/f48d6_next_dist_5f75ad20._.js:2297
+[ 1015572ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/api/trpc/renewals.list?batch=1&input=%7B%220%22%3A%7B%22json%22%3A%7B%22status%22%3Anull%2C%22urgency%22%3Anull%7D%2C%22meta%22%3A%7B%22values%22%3A%7B%22status%22%3A%5B%22undefined%22%5D%2C%22urgency%22%3A%5B%22undefined%22%5D%7D%2C%22v%22%3A1%7D%7D%7D:0
+[ 1016941ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/dashboard/settings?_rsc=1sg2m:0
+[ 1016992ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/dashboard/settings:0
+[ 1279795ms] [WARNING] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior @ http://localhost:3000/_next/static/chunks/f48d6_next_dist_5f75ad20._.js:2297
+[ 1283178ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/api/trpc/renewals.list?batch=1&input=%7B%220%22%3A%7B%22json%22%3A%7B%22status%22%3Anull%2C%22urgency%22%3Anull%7D%2C%22meta%22%3A%7B%22values%22%3A%7B%22status%22%3A%5B%22undefined%22%5D%2C%22urgency%22%3A%5B%22undefined%22%5D%7D%2C%22v%22%3A1%7D%7D%7D:0

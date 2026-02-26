@@ -1,0 +1,11 @@
+[    1719ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/api/trpc/team.listInvites?batch=1&input=%7B%220%22%3A%7B%22json%22%3A%7B%7D%7D%7D:0
+[    3739ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/api/trpc/team.listInvites?batch=1&input=%7B%220%22%3A%7B%22json%22%3A%7B%7D%7D%7D:0
+[    7758ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/api/trpc/team.listInvites?batch=1&input=%7B%220%22%3A%7B%22json%22%3A%7B%7D%7D%7D:0
+[ 1137728ms] [WARNING] [HMR] Invalid message: {"isTrusted":true}
+TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at extractModulesFromTurbopackMessage (http://localhost:3000/_next/static/chunks/f48d6_next_dist_client_dcf7f85a._.js:11210:39)
+    at TurbopackHmr.onTurbopackMessage (http://localhost:3000/_next/static/chunks/f48d6_next_dist_client_dcf7f85a._.js:11157:32)
+    at processMessage (http://localhost:3000/_next/static/chunks/f48d6_next_dist_client_dcf7f85a._.js:11589:30)
+    at WebSocket.handleMessage (http://localhost:3000/_next/static/chunks/f48d6_next_dist_client_dcf7f85a._.js:10914:52) @ http://localhost:3000/_next/static/chunks/f48d6_next_dist_5f75ad20._.js:2297
+[ 1449222ms] [WARNING] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior @ http://localhost:3000/_next/static/chunks/f48d6_next_dist_5f75ad20._.js:2297

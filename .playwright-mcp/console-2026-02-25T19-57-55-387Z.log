@@ -1,0 +1,185 @@
+[     172ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/dashboard/settings/analytics:0
+[     309ms] Error: ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx:6:1
+Module not found: Can't resolve '@/components/ui/table'
+   4 | import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+   5 | import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+>  6 | import {
+     | ^^^^^^^^
+>  7 |   Table,
+     | ^^^^^^^^
+>  8 |   TableBody,
+     | ^^^^^^^^
+>  9 |   TableCell,
+     | ^^^^^^^^
+> 10 |   TableHead,
+     | ^^^^^^^^
+> 11 |   TableHeader,
+     | ^^^^^^^^
+> 12 |   TableRow,
+     | ^^^^^^^^
+> 13 | } from "@/components/ui/table";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  14 | import { Badge } from "@/components/ui/badge";
+  15 | import { Users, FileText, Clock, DollarSign, TrendingUp, Activity, Shield, Boxes } from "lucide-react";
+  16 | import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+
+Import map: aliased to relative './src/components/ui/table' inside of [project]/emdash-projects/Reqflow/app
+
+
+Import traces:
+  Client Component Browser:
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Client Component Browser]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Client Component SSR]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (Error: ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx:6:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at Object.getCompilationErrors (file:///Users/samuelsaha/emdash-projects/Reqflow/app/node_modules/next/dist/server/dev/hot-reloader-turbopack.js:1008:59)
+    at DevBundlerService.getCompilationError (file:///Users/samuelsaha/emdash-projects/Reqflow/app/node_modules/next/dist/server/lib/dev-bundler-service.js:44:55)
+    at DevServer.getCompilationError (file:///Users/samuelsaha/emdash-projects/Reqflow/app/node_modules/next/dist/server/dev/next-dev-server.js:706:42)
+    at DevServer.findPageComponents (file:///Users/samuelsaha/emdash-projects/Reqflow/app/node_modules/next/dist/server/dev/next-dev-server.js:676:43)
+    at async DevServer.renderErrorToResponseImpl (file:///Users/samuelsaha/emdash-projects/Reqflow/app/node_modules/next/dist/server/base-server.js:1733:26)
+[     323ms] [ERROR] ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx:6:1
+Module not found: Can't resolve '@/components/ui/table'
+   4 | import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+   5 | import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+>  6 | import {
+     | ^^^^^^^^
+>  7 |   Table,
+     | ^^^^^^^^
+>  8 |   TableBody,
+     | ^^^^^^^^
+>  9 |   TableCell,
+     | ^^^^^^^^
+> 10 |   TableHead,
+     | ^^^^^^^^
+> 11 |   TableHeader,
+     | ^^^^^^^^
+> 12 |   TableRow,
+     | ^^^^^^^^
+> 13 | } from "@/components/ui/table";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  14 | import { Badge } from "@/components/ui/badge";
+  15 | import { Users, FileText, Clock, DollarSign, TrendingUp, Activity, Shield, Boxes } from "lucide-react";
+  16 | import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+
+Import map: aliased to relative './src/components/ui/table' inside of [project]/emdash-projects/Reqflow/app
+
+Import traces:
+  Client Component Browser:
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Client Component Browser]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Client Component SSR]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/f48d6_next_dist_1553afda._.js:1920
+[     323ms] [ERROR] ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx:5:1
+Module not found: Can't resolve '@/components/ui/tabs'
+  3 | import { trpc } from "@/lib/api/client";
+  4 | import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+> 5 | import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import {
+  7 |   Table,
+  8 |   TableBody,
+
+Import map: aliased to relative './src/components/ui/tabs' inside of [project]/emdash-projects/Reqflow/app
+
+Import traces:
+  Client Component Browser:
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Client Component Browser]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Client Component SSR]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/f48d6_next_dist_1553afda._.js:1920
+[     380ms] [ERROR] ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx:6:1
+Module not found: Can't resolve '@/components/ui/table'
+   4 | import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+   5 | import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+>  6 | import {
+     | ^^^^^^^^
+>  7 |   Table,
+     | ^^^^^^^^
+>  8 |   TableBody,
+     | ^^^^^^^^
+>  9 |   TableCell,
+     | ^^^^^^^^
+> 10 |   TableHead,
+     | ^^^^^^^^
+> 11 |   TableHeader,
+     | ^^^^^^^^
+> 12 |   TableRow,
+     | ^^^^^^^^
+> 13 | } from "@/components/ui/table";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  14 | import { Badge } from "@/components/ui/badge";
+  15 | import { Users, FileText, Clock, DollarSign, TrendingUp, Activity, Shield, Boxes } from "lucide-react";
+  16 | import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+
+Import map: aliased to relative './src/components/ui/table' inside of [project]/emdash-projects/Reqflow/app
+
+Import traces:
+  Client Component Browser:
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Client Component Browser]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Client Component SSR]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/f48d6_next_dist_1553afda._.js:1920
+[     380ms] [ERROR] ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx:5:1
+Module not found: Can't resolve '@/components/ui/tabs'
+  3 | import { trpc } from "@/lib/api/client";
+  4 | import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+> 5 | import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import {
+  7 |   Table,
+  8 |   TableBody,
+
+Import map: aliased to relative './src/components/ui/tabs' inside of [project]/emdash-projects/Reqflow/app
+
+Import traces:
+  Client Component Browser:
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Client Component Browser]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Client Component SSR]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/f48d6_next_dist_1553afda._.js:1920
+[   11219ms] [ERROR] ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx:5:1
+Module not found: Can't resolve '@/components/ui/tabs'
+  3 | import { trpc } from "@/lib/api/client";
+  4 | import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+> 5 | import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import {
+  7 |   Table,
+  8 |   TableBody,
+
+Import map: aliased to relative './src/components/ui/tabs' inside of [project]/emdash-projects/Reqflow/app
+
+Import traces:
+  Client Component Browser:
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Client Component Browser]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Client Component SSR]
+    ./emdash-projects/Reqflow/app/src/app/dashboard/settings/analytics/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/f48d6_next_dist_1553afda._.js:1920
