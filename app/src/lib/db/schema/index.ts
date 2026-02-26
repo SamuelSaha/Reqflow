@@ -22,6 +22,7 @@ export * from "./audit-logs";
 // Integrations
 export * from "./slack-workspaces";
 export * from "./slack-user-mappings";
+export * from "./integrations";
 
 // Invites
 export * from "./invites";

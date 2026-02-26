@@ -62,6 +62,13 @@ export const requests = pgTable(
     status: text("status").notNull().default("draft"), // draft, pending, approved, rejected, cancelled
     urgency: text("urgency").notNull().default("normal"), // low, normal, urgent
 
+    // Accounting integration sync
+    syncedToAccounting: boolean("synced_to_accounting").default(false).notNull(),
+    accountingSyncRef: text("accounting_sync_ref"), // PO ID in QuickBooks/Xero (e.g., "PO-1234")
+    accountingSyncProvider: text("accounting_sync_provider"), // "quickbooks" | "xero"
+    accountingSyncError: text("accounting_sync_error"), // Last sync error message
+    lastSyncAttempt: timestamp("last_sync_attempt"), // When we last tried to sync
+
     // AI-assisted fields
     aiCategory: text("ai_category"), // AI-suggested category
     aiCategoryConfidence: numeric("ai_category_confidence", { precision: 3, scale: 2 }),
