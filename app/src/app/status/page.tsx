@@ -48,7 +48,7 @@ export default function StatusPage() {
             <h2 className="text-[24px] font-bold text-slate-900 mb-2">
               {allOperational ? "All Systems Operational" : "Some Services Degraded"}
             </h2>
-            <p className="text-[15px] text-slate-600">
+            <p className="text-body text-slate-600">
               {allOperational ? "All Reqflow services are running normally." : "Some services are experiencing issues. Check details below."}
             </p>
           </div>
@@ -72,7 +72,7 @@ export default function StatusPage() {
                       {service.status === "operational" ? "\u2713" : service.status === "degraded" ? "\u26A0" : "\u2715"}
                     </div>
                     <div>
-                      <div className="text-[16px] font-semibold text-slate-900 mb-1">{service.name}</div>
+                      <div className="text-body font-semibold text-slate-900 mb-1">{service.name}</div>
                       <div className={`text-[13px] capitalize ${statusColor(service.status)}`}>{service.status}</div>
                     </div>
                   </div>
@@ -88,7 +88,7 @@ export default function StatusPage() {
           <div className="mb-12">
             <h2 className="text-[24px] font-bold text-slate-900 mb-6">Recent Incidents</h2>
             <div className="bg-slate-50 border border-slate-200 rounded-xl p-10 text-center">
-              <p className="text-[17px] text-slate-600 mb-2"><strong className="text-slate-900">No incidents in the last 30 days</strong></p>
+              <p className="text-body text-slate-600 mb-2"><strong className="text-slate-900">No incidents in the last 30 days</strong></p>
               <p className="text-[14px] text-slate-500">Beta launched February 2026 · We're tracking uptime from day one</p>
             </div>
           </div>
@@ -106,7 +106,7 @@ export default function StatusPage() {
               ].map(({ label, value }) => (
                 <div key={label} className="bg-slate-50 border border-slate-200 rounded-[10px] p-5">
                   <div className="text-[13px] text-slate-500 mb-1.5 uppercase tracking-[0.05em]">{label}</div>
-                  <div className="text-[15px] font-semibold text-slate-900">{value}</div>
+                  <div className="text-body font-semibold text-slate-900">{value}</div>
                 </div>
               ))}
             </div>

@@ -150,10 +150,10 @@ export default function ChangelogPage() {
         <div className="max-w-[900px] mx-auto">
           {/* Header */}
           <div className="mb-16 text-center">
-            <h1 className="text-[48px] font-extrabold tracking-tight text-slate-900 mb-4">
+            <h1 className="text-h2 font-extrabold tracking-tight text-slate-900 mb-4">
               Changelog
             </h1>
-            <p className="text-[18px] text-slate-600 leading-relaxed max-w-[600px] mx-auto">
+            <p className="text-body-lg text-slate-600 leading-relaxed max-w-[600px] mx-auto">
               Every update, improvement, and fix as we build Reqflow. We ship fast and communicate honestly about what's working and what's not.
             </p>
           </div>
@@ -163,8 +163,8 @@ export default function ChangelogPage() {
             <div className="flex items-start gap-3">
               <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
               <div>
-                <h3 className="text-[16px] font-bold text-amber-900 mb-2">We're in beta</h3>
-                <p className="text-[14px] text-amber-800 leading-relaxed">
+                <h3 className="text-body font-bold text-amber-900 mb-2">We're in beta</h3>
+                <p className="text-body-sm text-amber-800 leading-relaxed">
                   This changelog reflects our current development pace. Expect frequent updates, occasional breaking changes, and honest communication about what's ready and what's still rough.
                 </p>
               </div>
@@ -192,10 +192,10 @@ export default function ChangelogPage() {
                           {idx + 1}
                         </div>
                         <div>
-                          <div className="text-[20px] font-bold text-slate-900 mb-1">
+                          <div className="text-h5 font-bold text-slate-900 mb-1">
                             {entry.version}
                           </div>
-                          <div className="text-[14px] text-slate-500">{entry.date}</div>
+                          <div className="text-body-sm text-slate-500">{entry.date}</div>
                         </div>
                       </div>
                       <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full border ${badge.color}`}>
@@ -217,7 +217,7 @@ export default function ChangelogPage() {
                             </div>
                             <div className="flex-1">
                               <div className="flex items-center gap-2 mb-1">
-                                <h3 className="text-[16px] font-semibold text-slate-900">
+                                <h3 className="text-body font-semibold text-slate-900">
                                   {item.title}
                                 </h3>
                                 <span className={`text-[11px] font-bold uppercase tracking-wide px-2 py-0.5 rounded ${
@@ -228,7 +228,7 @@ export default function ChangelogPage() {
                                   {item.type}
                                 </span>
                               </div>
-                              <p className="text-[14px] text-slate-600 leading-relaxed">
+                              <p className="text-body-sm text-slate-600 leading-relaxed">
                                 {item.desc}
                               </p>
                             </div>
@@ -244,15 +244,15 @@ export default function ChangelogPage() {
 
           {/* Subscribe CTA */}
           <div className="mt-16 bg-slate-900 rounded-2xl border border-slate-700 p-10 text-center text-white">
-            <h2 className="text-[24px] font-bold mb-3">
+            <h2 className="text-h4 font-bold mb-3">
               Get changelog updates
             </h2>
-            <p className="text-[15px] text-slate-300 mb-6 max-w-[500px] mx-auto">
+            <p className="text-body text-slate-300 mb-6 max-w-[500px] mx-auto">
               Beta customers are automatically added to our shared Slack channel where we announce updates in real-time. No email spam.
             </p>
             <a
               href="/beta"
-              className="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg text-[16px] font-semibold hover:bg-blue-700 transition-colors no-underline"
+              className="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg text-body font-semibold hover:bg-blue-700 transition-colors no-underline"
             >
               Join Beta Program
             </a>
@@ -260,7 +260,7 @@ export default function ChangelogPage() {
 
           {/* Coming soon */}
           <div className="mt-12 bg-blue-50 border border-blue-200 rounded-xl p-8">
-            <h3 className="text-[20px] font-bold text-blue-900 mb-4">Coming in March 2026</h3>
+            <h3 className="text-h5 font-bold text-blue-900 mb-4">Coming in March 2026</h3>
             <div className="grid md:grid-cols-2 gap-4">
               {[
                 "Mobile app (iOS + Android)",
@@ -270,7 +270,7 @@ export default function ChangelogPage() {
                 "API access for integrations",
                 "SSO with Google Workspace and Microsoft"
               ].map((feature) => (
-                <div key={feature} className="flex items-center gap-2 text-[14px] text-blue-800">
+                <div key={feature} className="flex items-center gap-2 text-body-sm text-blue-800">
                   <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />
                   <span>{feature}</span>
                 </div>

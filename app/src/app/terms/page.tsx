@@ -20,14 +20,14 @@ export default function TermsPage() {
           <div className="mb-12">
             <h2 className="text-[24px] font-bold text-slate-900 mb-5">1. Service Description</h2>
             <div className="bg-slate-50 border border-slate-200 rounded-xl p-8">
-              <p className="text-[15px] text-slate-600 leading-[1.7] mb-4"><strong className="text-slate-900">What Reqflow does:</strong> Provides a procurement request intake and approval system with accounting sync. During beta, features are limited to:</p>
-              <ul className="text-[15px] text-slate-600 leading-[1.8] pl-5 list-disc mb-4">
+              <p className="text-body text-slate-600 leading-[1.7] mb-4"><strong className="text-slate-900">What Reqflow does:</strong> Provides a procurement request intake and approval system with accounting sync. During beta, features are limited to:</p>
+              <ul className="text-body text-slate-600 leading-[1.8] pl-5 list-disc mb-4">
                 <li>Slack-based request intake</li>
                 <li>Basic email approval workflows (manual setup)</li>
                 <li>QuickBooks/Xero sync (manual trigger)</li>
                 <li>Audit trail and export</li>
               </ul>
-              <p className="text-[15px] text-slate-600 leading-[1.7]"><strong className="text-slate-900">What Reqflow does NOT do (yet):</strong> AI classification, duplicate detection, real-time budgets, mobile push notifications, auto-escalation.</p>
+              <p className="text-body text-slate-600 leading-[1.7]"><strong className="text-slate-900">What Reqflow does NOT do (yet):</strong> AI classification, duplicate detection, real-time budgets, mobile push notifications, auto-escalation.</p>
             </div>
           </div>
 
@@ -75,9 +75,9 @@ export default function TermsPage() {
           <div className="mb-12">
             <h2 className="text-[24px] font-bold text-slate-900 mb-5">6. Service Availability & Warranties</h2>
             <div className="bg-slate-50 border border-slate-200 rounded-xl p-8 space-y-4">
-              <p className="text-[17px] text-slate-600 leading-[1.7]"><strong className="text-slate-900">Beta Disclaimer:</strong> Reqflow is provided "as is" during beta. We make no warranties about uptime, data accuracy, or feature completeness.</p>
-              <p className="text-[17px] text-slate-600 leading-[1.7]"><strong className="text-slate-900">No SLA:</strong> We don't have a formal SLA yet (planned for post-beta). We aim for 99% uptime but can't guarantee it.</p>
-              <p className="text-[17px] text-slate-600 leading-[1.7]"><strong className="text-slate-900">Best Effort Support:</strong> We respond to support requests within 48 hours (business days, CET). Critical issues get priority.</p>
+              <p className="text-body text-slate-600 leading-[1.7]"><strong className="text-slate-900">Beta Disclaimer:</strong> Reqflow is provided "as is" during beta. We make no warranties about uptime, data accuracy, or feature completeness.</p>
+              <p className="text-body text-slate-600 leading-[1.7]"><strong className="text-slate-900">No SLA:</strong> We don't have a formal SLA yet (planned for post-beta). We aim for 99% uptime but can't guarantee it.</p>
+              <p className="text-body text-slate-600 leading-[1.7]"><strong className="text-slate-900">Best Effort Support:</strong> We respond to support requests within 48 hours (business days, CET). Critical issues get priority.</p>
             </div>
           </div>
 

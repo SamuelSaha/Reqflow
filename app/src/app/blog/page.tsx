@@ -42,10 +42,10 @@ export default function BlogPage() {
         <div className="max-w-[1000px] mx-auto">
           {/* Header */}
           <div className="mb-16 text-center">
-            <h1 className="text-[48px] font-extrabold tracking-tight text-slate-900 mb-4">
+            <h1 className="text-h2 font-extrabold tracking-tight text-slate-900 mb-4">
               Blog
             </h1>
-            <p className="text-[18px] text-slate-600 leading-relaxed max-w-[600px] mx-auto">
+            <p className="text-body-lg text-slate-600 leading-relaxed max-w-[600px] mx-auto">
               Thoughts on procurement, operations, and building software for teams that move too fast for spreadsheets.
             </p>
           </div>
@@ -86,10 +86,10 @@ export default function BlogPage() {
                           {post.readTime}
                         </div>
                       </div>
-                      <h2 className="text-[28px] font-bold text-slate-900 mb-3 leading-tight">
+                      <h2 className="text-h4 font-bold text-slate-900 mb-3 leading-tight">
                         {post.title}
                       </h2>
-                      <p className="text-[16px] text-slate-600 leading-relaxed mb-6">
+                      <p className="text-body text-slate-600 leading-relaxed mb-6">
                         {post.excerpt}
                       </p>
                       <div className="flex items-center justify-between">
@@ -98,7 +98,7 @@ export default function BlogPage() {
                             <User className="w-5 h-5 text-slate-600" />
                           </div>
                           <div>
-                            <div className="text-[14px] font-semibold text-slate-900">
+                            <div className="text-body-sm font-semibold text-slate-900">
                               {post.author}
                             </div>
                             <div className="text-[13px] text-slate-500">Founder</div>
@@ -106,7 +106,7 @@ export default function BlogPage() {
                         </div>
                         <Link
                           href={`/blog/${post.slug}`}
-                          className="inline-flex items-center gap-2 text-[15px] font-semibold text-blue-600 hover:text-blue-700 transition-colors no-underline"
+                          className="inline-flex items-center gap-2 text-body font-semibold text-blue-600 hover:text-blue-700 transition-colors no-underline"
                         >
                           Read post
                           <ArrowRight className="w-4 h-4" />
@@ -129,10 +129,10 @@ export default function BlogPage() {
                         {post.readTime}
                       </div>
                     </div>
-                    <h2 className="text-[24px] font-bold text-slate-900 mb-3 leading-tight">
+                    <h2 className="text-h4 font-bold text-slate-900 mb-3 leading-tight">
                       {post.title}
                     </h2>
-                    <p className="text-[15px] text-slate-600 leading-relaxed mb-6">
+                    <p className="text-body text-slate-600 leading-relaxed mb-6">
                       {post.excerpt}
                     </p>
                     <div className="flex items-center justify-between">
@@ -163,17 +163,17 @@ export default function BlogPage() {
 
           {/* Newsletter CTA */}
           <div className="mt-16 bg-slate-900 rounded-2xl border border-slate-700 p-10 text-center text-white">
-            <h2 className="text-[24px] font-bold mb-3">Get new posts via email</h2>
-            <p className="text-[15px] text-slate-300 mb-6 max-w-[500px] mx-auto">
+            <h2 className="text-h4 font-bold mb-3">Get new posts via email</h2>
+            <p className="text-body text-slate-300 mb-6 max-w-[500px] mx-auto">
               We publish 1-2 posts per month on procurement operations, team building, and product development. No spam, no marketing fluff.
             </p>
             <div className="flex items-center gap-3 max-w-[500px] mx-auto">
               <input
                 type="email"
                 placeholder="your@email.com"
-                className="flex-1 px-4 py-3 text-[15px] bg-white border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 outline-none"
+                className="flex-1 px-4 py-3 text-body bg-white border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 outline-none"
               />
-              <button className="bg-blue-600 text-white px-6 py-3 rounded-lg text-[15px] font-semibold hover:bg-blue-700 transition-colors">
+              <button className="bg-blue-600 text-white px-6 py-3 rounded-lg text-body font-semibold hover:bg-blue-700 transition-colors">
                 Subscribe
               </button>
             </div>
@@ -181,10 +181,10 @@ export default function BlogPage() {
 
           {/* Coming soon */}
           <div className="mt-12 bg-blue-50 border border-blue-200 rounded-xl p-8 text-center">
-            <h3 className="text-[18px] font-bold text-blue-900 mb-2">
+            <h3 className="text-body-lg font-bold text-blue-900 mb-2">
               More posts coming soon
             </h3>
-            <p className="text-[14px] text-blue-800">
+            <p className="text-body-sm text-blue-800">
               We're building in public and sharing what we learn. Follow along on{" "}
               <a href="https://twitter.com/reqflow" className="text-blue-600 font-semibold no-underline">
                 Twitter

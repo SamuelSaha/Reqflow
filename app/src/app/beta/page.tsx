@@ -29,15 +29,15 @@ export default function BetaPage() {
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <Check className="w-8 h-8 text-green-600" />
             </div>
-            <h1 className="text-[32px] font-bold text-slate-900 mb-4">
+            <h1 className="text-h3 font-bold text-slate-900 mb-4">
               Application received
             </h1>
-            <p className="text-[17px] text-slate-600 leading-relaxed mb-8">
+            <p className="text-body text-slate-600 leading-relaxed mb-8">
               We'll review within 48 hours and email you at <strong className="text-slate-900">{formData.email}</strong>.
             </p>
             <div className="bg-blue-50 rounded-xl p-6 border border-blue-200 text-left">
-              <h3 className="text-[15px] font-bold text-blue-900 mb-3">What happens next:</h3>
-              <ul className="text-[14px] text-blue-800 leading-relaxed space-y-2">
+              <h3 className="text-body font-bold text-blue-900 mb-3">What happens next:</h3>
+              <ul className="text-body-sm text-blue-800 leading-relaxed space-y-2">
                 <li>• We'll schedule a 20-min intro call to understand your workflow</li>
                 <li>• If it's a good fit, we'll get you set up the same day</li>
                 <li>• You'll join our shared Slack channel with other beta customers</li>
@@ -62,13 +62,13 @@ export default function BetaPage() {
                 Founding Member Program
               </span>
             </div>
-            <h1 className="text-[52px] font-extrabold tracking-[-1.5px] text-slate-900 mb-6 leading-[1.1]">
+            <h1 className="text-hero font-extrabold tracking-[-1.5px] text-slate-900 mb-6 leading-[1.1]">
               Help us build the procurement tool you've always wanted.
             </h1>
-            <p className="text-[19px] text-slate-600 leading-relaxed mb-8">
+            <p className="text-body-lg text-slate-600 leading-relaxed mb-8">
               Reqflow is in early beta. We're looking for 10 teams willing to tolerate rough edges in exchange for locked-in pricing and direct input on what we build next.
             </p>
-            <div className="flex items-center justify-center gap-8 text-[15px] font-medium text-slate-600">
+            <div className="flex items-center justify-center gap-8 text-body font-medium text-slate-600">
               <div className="flex items-center gap-2">
                 <Lock className="w-4 h-4 text-green-500" />
                 <span>€99/mo locked forever</span>
@@ -83,7 +83,7 @@ export default function BetaPage() {
           <div className="grid md:grid-cols-2 gap-12 mb-16">
             {/* Left: What you get */}
             <div className="bg-white rounded-2xl border border-slate-200 shadow-md p-8">
-              <h2 className="text-[24px] font-bold text-slate-900 mb-6">
+              <h2 className="text-h4 font-bold text-slate-900 mb-6">
                 What you get
               </h2>
               <div className="space-y-4">
@@ -114,8 +114,8 @@ export default function BetaPage() {
                       <Icon className="w-5 h-5 text-blue-600" />
                     </div>
                     <div>
-                      <h3 className="text-[16px] font-semibold text-slate-900 mb-1">{title}</h3>
-                      <p className="text-[14px] text-slate-600 leading-relaxed">{desc}</p>
+                      <h3 className="text-body font-semibold text-slate-900 mb-1">{title}</h3>
+                      <p className="text-body-sm text-slate-600 leading-relaxed">{desc}</p>
                     </div>
                   </div>
                 ))}
@@ -129,34 +129,34 @@ export default function BetaPage() {
               </h2>
               <div className="space-y-5">
                 <div>
-                  <h3 className="text-[16px] font-semibold text-white mb-2">
+                  <h3 className="text-body font-semibold text-white mb-2">
                     Honest feedback
                   </h3>
-                  <p className="text-[14px] text-slate-300 leading-relaxed">
+                  <p className="text-body-sm text-slate-300 leading-relaxed">
                     Tell us when something doesn't work. Don't sugarcoat it. We need to know what's broken so we can fix it.
                   </p>
                 </div>
                 <div>
-                  <h3 className="text-[16px] font-semibold text-white mb-2">
+                  <h3 className="text-body font-semibold text-white mb-2">
                     Monthly check-ins (15 min)
                   </h3>
-                  <p className="text-[14px] text-slate-300 leading-relaxed">
+                  <p className="text-body-sm text-slate-300 leading-relaxed">
                     Quick sync once a month to discuss what's working and what needs attention. That's it.
                   </p>
                 </div>
                 <div>
-                  <h3 className="text-[16px] font-semibold text-white mb-2">
+                  <h3 className="text-body font-semibold text-white mb-2">
                     Patience with bugs
                   </h3>
-                  <p className="text-[14px] text-slate-300 leading-relaxed">
+                  <p className="text-body-sm text-slate-300 leading-relaxed">
                     This is beta software. Things will break. Some features are half-built. We'll fix issues fast, but they'll happen.
                   </p>
                 </div>
                 <div>
-                  <h3 className="text-[16px] font-semibold text-white mb-2">
+                  <h3 className="text-body font-semibold text-white mb-2">
                     30-min onboarding
                   </h3>
-                  <p className="text-[14px] text-slate-300 leading-relaxed">
+                  <p className="text-body-sm text-slate-300 leading-relaxed">
                     We'll walk you through setup, connect Slack and accounting, and configure your first approval workflow together.
                   </p>
                 </div>
@@ -166,13 +166,13 @@ export default function BetaPage() {
 
           {/* Who this is for */}
           <div className="bg-white rounded-2xl border border-slate-200 shadow-md p-10 mb-16">
-            <h2 className="text-[28px] font-bold text-slate-900 mb-6 text-center">
+            <h2 className="text-h4 font-bold text-slate-900 mb-6 text-center">
               Is this for you?
             </h2>
             <div className="grid md:grid-cols-2 gap-8">
               <div>
-                <h3 className="text-[18px] font-bold text-green-600 mb-4">✓ Good fit if you:</h3>
-                <ul className="space-y-3 text-[15px] text-slate-600 leading-relaxed">
+                <h3 className="text-body-lg font-bold text-green-600 mb-4">✓ Good fit if you:</h3>
+                <ul className="space-y-3 text-body text-slate-600 leading-relaxed">
                   <li className="flex items-start gap-2">
                     <Check className="w-4 h-4 text-green-500 flex-shrink-0 mt-1" />
                     <span>Have 15–100 employees and procurement is becoming a mess</span>
@@ -196,8 +196,8 @@ export default function BetaPage() {
                 </ul>
               </div>
               <div>
-                <h3 className="text-[18px] font-bold text-red-600 mb-4">✗ Not for you if:</h3>
-                <ul className="space-y-3 text-[15px] text-slate-600 leading-relaxed">
+                <h3 className="text-body-lg font-bold text-red-600 mb-4">✗ Not for you if:</h3>
+                <ul className="space-y-3 text-body text-slate-600 leading-relaxed">
                   <li className="flex items-start gap-2">
                     <span className="text-red-500 flex-shrink-0">×</span>
                     <span>You need a polished, production-ready system right now</span>
@@ -226,16 +226,16 @@ export default function BetaPage() {
           {/* Application form */}
           <div className="max-w-[700px] mx-auto">
             <div className="bg-white rounded-2xl border border-slate-200 shadow-lg p-10">
-              <h2 className="text-[28px] font-bold text-slate-900 mb-3">
+              <h2 className="text-h4 font-bold text-slate-900 mb-3">
                 Apply for beta access
               </h2>
-              <p className="text-[15px] text-slate-600 mb-8 leading-relaxed">
+              <p className="text-body text-slate-600 mb-8 leading-relaxed">
                 We review applications within 48 hours. If it's a fit, we'll schedule a quick intro call and get you set up the same day.
               </p>
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <label className="block text-[14px] font-medium text-slate-700 mb-2">
+                  <label className="block text-body-sm font-medium text-slate-700 mb-2">
                     Your name *
                   </label>
                   <input
@@ -244,12 +244,12 @@ export default function BetaPage() {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="Claire Dupont"
-                    className="w-full px-4 py-3 text-[15px] bg-white border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all"
+                    className="w-full px-4 py-3 text-body bg-white border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[14px] font-medium text-slate-700 mb-2">
+                  <label className="block text-body-sm font-medium text-slate-700 mb-2">
                     Work email *
                   </label>
                   <input
@@ -258,12 +258,12 @@ export default function BetaPage() {
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="claire@yourcompany.com"
-                    className="w-full px-4 py-3 text-[15px] bg-white border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all"
+                    className="w-full px-4 py-3 text-body bg-white border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[14px] font-medium text-slate-700 mb-2">
+                  <label className="block text-body-sm font-medium text-slate-700 mb-2">
                     Company name *
                   </label>
                   <input
@@ -272,12 +272,12 @@ export default function BetaPage() {
                     value={formData.company}
                     onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                     placeholder="Acme Corp"
-                    className="w-full px-4 py-3 text-[15px] bg-white border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all"
+                    className="w-full px-4 py-3 text-body bg-white border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[14px] font-medium text-slate-700 mb-2">
+                  <label className="block text-body-sm font-medium text-slate-700 mb-2">
                     Team size *
                   </label>
                   <select
@@ -296,7 +296,7 @@ export default function BetaPage() {
                 </div>
 
                 <div>
-                  <label className="block text-[14px] font-medium text-slate-700 mb-2">
+                  <label className="block text-body-sm font-medium text-slate-700 mb-2">
                     How do you handle purchase requests today? *
                   </label>
                   <textarea
@@ -310,7 +310,7 @@ export default function BetaPage() {
                 </div>
 
                 <div>
-                  <label className="block text-[14px] font-medium text-slate-700 mb-2">
+                  <label className="block text-body-sm font-medium text-slate-700 mb-2">
                     What's your biggest procurement pain point? *
                   </label>
                   <textarea
@@ -325,7 +325,7 @@ export default function BetaPage() {
 
                 <button
                   type="submit"
-                  className="w-full bg-blue-600 text-white py-4 px-8 text-[16px] font-semibold rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+                  className="w-full bg-blue-600 text-white py-4 px-8 text-body font-semibold rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
                 >
                   Submit application
                   <ArrowRight className="w-5 h-5" />
@@ -343,12 +343,12 @@ export default function BetaPage() {
 
           {/* Social proof */}
           <div className="mt-16 text-center max-w-[800px] mx-auto">
-            <p className="text-[14px] font-medium text-slate-500 mb-6">
+            <p className="text-body-sm font-medium text-slate-500 mb-6">
               WHAT BETA CUSTOMERS ARE SAYING
             </p>
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-slate-50 rounded-xl border border-slate-200 p-6 text-left">
-                <p className="text-[15px] text-slate-700 italic leading-relaxed mb-4">
+                <p className="text-body text-slate-700 italic leading-relaxed mb-4">
                   "We went from 2-week approval cycles to same-day approvals. The founders are incredibly responsive — they fixed a bug we reported within 3 hours."
                 </p>
                 <div className="flex items-center gap-3">
@@ -356,13 +356,13 @@ export default function BetaPage() {
                     MT
                   </div>
                   <div>
-                    <div className="text-[14px] font-semibold text-slate-900">Marc T.</div>
+                    <div className="text-body-sm font-semibold text-slate-900">Marc T.</div>
                     <div className="text-[13px] text-slate-500">COO, 35-person SaaS company</div>
                   </div>
                 </div>
               </div>
               <div className="bg-slate-50 rounded-xl border border-slate-200 p-6 text-left">
-                <p className="text-[15px] text-slate-700 italic leading-relaxed mb-4">
+                <p className="text-body text-slate-700 italic leading-relaxed mb-4">
                   "Finally, we know what subscriptions we're paying for. The renewal tracking alone saves us €15K/year in forgotten trials that auto-converted."
                 </p>
                 <div className="flex items-center gap-3">
@@ -370,7 +370,7 @@ export default function BetaPage() {
                     SL
                   </div>
                   <div>
-                    <div className="text-[14px] font-semibold text-slate-900">Sophie L.</div>
+                    <div className="text-body-sm font-semibold text-slate-900">Sophie L.</div>
                     <div className="text-[13px] text-slate-500">Finance Lead, 50-person agency</div>
                   </div>
                 </div>

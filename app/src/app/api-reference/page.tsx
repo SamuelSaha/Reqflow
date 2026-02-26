@@ -74,10 +74,10 @@ export default function ApiReferencePage() {
                 API Reference
               </span>
             </div>
-            <h1 className="text-[48px] font-extrabold tracking-tight text-slate-900 mb-4">
+            <h1 className="text-h2 font-extrabold tracking-tight text-slate-900 mb-4">
               Build on Reqflow
             </h1>
-            <p className="text-[18px] text-slate-600 leading-relaxed max-w-[600px] mx-auto">
+            <p className="text-body-lg text-slate-600 leading-relaxed max-w-[600px] mx-auto">
               REST API with full CRUD operations, webhooks for real-time events, and SDKs for Node.js and Python (coming soon).
             </p>
           </div>
@@ -87,8 +87,8 @@ export default function ApiReferencePage() {
             <div className="flex items-start gap-3">
               <Terminal className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
               <div>
-                <h3 className="text-[16px] font-bold text-amber-900 mb-2">API in Beta</h3>
-                <p className="text-[14px] text-amber-800 leading-relaxed">
+                <h3 className="text-body font-bold text-amber-900 mb-2">API in Beta</h3>
+                <p className="text-body-sm text-amber-800 leading-relaxed">
                   The API is functional but not publicly documented yet. Beta customers can request API access. We'll provide keys and work with you to build your integration.{" "}
                   <a href="mailto:api@reqflow.co" className="text-amber-900 font-semibold underline">
                     Email us for access
@@ -100,18 +100,18 @@ export default function ApiReferencePage() {
 
           {/* Quick start */}
           <div className="bg-slate-900 rounded-2xl border border-slate-700 p-10 mb-12 text-white">
-            <h2 className="text-[28px] font-bold mb-6">Quick Start</h2>
+            <h2 className="text-h4 font-bold mb-6">Quick Start</h2>
             <div className="space-y-6">
               <div>
-                <h3 className="text-[16px] font-semibold text-slate-200 mb-3">
+                <h3 className="text-body font-semibold text-slate-200 mb-3">
                   1. Get your API key
                 </h3>
-                <p className="text-[14px] text-slate-300 mb-4">
+                <p className="text-body-sm text-slate-300 mb-4">
                   Navigate to Settings → Integrations → API and generate a new API key. Keep it secure — it grants full access to your Reqflow data.
                 </p>
               </div>
               <div>
-                <h3 className="text-[16px] font-semibold text-slate-200 mb-3">
+                <h3 className="text-body font-semibold text-slate-200 mb-3">
                   2. Make your first request
                 </h3>
                 <div className="bg-slate-800 rounded-lg p-4 border border-slate-700 overflow-x-auto">
@@ -123,7 +123,7 @@ export default function ApiReferencePage() {
                 </div>
               </div>
               <div>
-                <h3 className="text-[16px] font-semibold text-slate-200 mb-3">
+                <h3 className="text-body font-semibold text-slate-200 mb-3">
                   3. Create a purchase request
                 </h3>
                 <div className="bg-slate-800 rounded-lg p-4 border border-slate-700 overflow-x-auto">
@@ -150,10 +150,10 @@ export default function ApiReferencePage() {
               <div className="w-12 h-12 rounded-lg bg-green-50 flex items-center justify-center mb-4">
                 <Lock className="w-6 h-6 text-green-600" />
               </div>
-              <h3 className="text-[18px] font-bold text-slate-900 mb-2">
+              <h3 className="text-body-lg font-bold text-slate-900 mb-2">
                 Secure by Default
               </h3>
-              <p className="text-[14px] text-slate-600 leading-relaxed">
+              <p className="text-body-sm text-slate-600 leading-relaxed">
                 TLS 1.3 encryption, Bearer token auth, rate limiting (100 req/min), and audit logging for every API call.
               </p>
             </div>
@@ -161,10 +161,10 @@ export default function ApiReferencePage() {
               <div className="w-12 h-12 rounded-lg bg-blue-50 flex items-center justify-center mb-4">
                 <Zap className="w-6 h-6 text-blue-600" />
               </div>
-              <h3 className="text-[18px] font-bold text-slate-900 mb-2">
+              <h3 className="text-body-lg font-bold text-slate-900 mb-2">
                 Real-Time Webhooks
               </h3>
-              <p className="text-[14px] text-slate-600 leading-relaxed">
+              <p className="text-body-sm text-slate-600 leading-relaxed">
                 Get instant notifications for request approvals, budget alerts, and renewals. Build reactive integrations.
               </p>
             </div>
@@ -172,10 +172,10 @@ export default function ApiReferencePage() {
               <div className="w-12 h-12 rounded-lg bg-violet-50 flex items-center justify-center mb-4">
                 <Globe className="w-6 h-6 text-violet-600" />
               </div>
-              <h3 className="text-[18px] font-bold text-slate-900 mb-2">
+              <h3 className="text-body-lg font-bold text-slate-900 mb-2">
                 RESTful & JSON
               </h3>
-              <p className="text-[14px] text-slate-600 leading-relaxed">
+              <p className="text-body-sm text-slate-600 leading-relaxed">
                 Standard REST conventions, JSON payloads, consistent error codes. Works with any HTTP client.
               </p>
             </div>
@@ -222,7 +222,7 @@ export default function ApiReferencePage() {
             <h2 className="text-[28px] font-bold text-slate-900 mb-6">
               Webhook Events
             </h2>
-            <p className="text-[16px] text-slate-600 mb-6">
+            <p className="text-body text-slate-600 mb-6">
               Register webhook endpoints to receive real-time notifications when events occur in Reqflow.
             </p>
             <div className="bg-white rounded-2xl border border-slate-200 shadow-sm divide-y divide-slate-100">
@@ -287,10 +287,10 @@ export default function ApiReferencePage() {
 
           {/* SDKs coming soon */}
           <div className="bg-blue-50 border border-blue-200 rounded-xl p-8 mb-12">
-            <h3 className="text-[20px] font-bold text-blue-900 mb-3">
+            <h3 className="text-h5 font-bold text-blue-900 mb-3">
               SDKs Coming Soon
             </h3>
-            <p className="text-[14px] text-blue-800 mb-6">
+            <p className="text-body-sm text-blue-800 mb-6">
               We're building official SDKs for Node.js and Python. In the meantime, the REST API works with any HTTP client (fetch, axios, requests, etc.).
             </p>
             <div className="grid md:grid-cols-2 gap-4">
@@ -300,7 +300,7 @@ export default function ApiReferencePage() {
                     <span className="text-[18px]">📦</span>
                   </div>
                   <div>
-                    <div className="text-[15px] font-bold text-slate-900">Node.js SDK</div>
+                    <div className="text-body font-bold text-slate-900">Node.js SDK</div>
                     <div className="text-[13px] text-slate-600">Coming March 2026</div>
                   </div>
                 </div>
@@ -311,7 +311,7 @@ export default function ApiReferencePage() {
                     <span className="text-[18px]">🐍</span>
                   </div>
                   <div>
-                    <div className="text-[15px] font-bold text-slate-900">Python SDK</div>
+                    <div className="text-body font-bold text-slate-900">Python SDK</div>
                     <div className="text-[13px] text-slate-600">Coming March 2026</div>
                   </div>
                 </div>
@@ -324,22 +324,22 @@ export default function ApiReferencePage() {
             <div className="w-16 h-16 bg-violet-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
               <Key className="w-8 h-8 text-white" />
             </div>
-            <h2 className="text-[28px] font-bold mb-3">
+            <h2 className="text-h4 font-bold mb-3">
               Request API Access
             </h2>
-            <p className="text-[16px] text-slate-300 mb-6 max-w-[500px] mx-auto">
+            <p className="text-body text-slate-300 mb-6 max-w-[500px] mx-auto">
               The API is available to beta customers. Email us with your use case and we'll get you set up with keys and documentation.
             </p>
             <div className="flex items-center justify-center gap-4">
               <a
                 href="mailto:api@reqflow.co"
-                className="inline-block bg-white text-slate-900 px-6 py-3 rounded-lg text-[16px] font-semibold hover:bg-slate-100 transition-colors no-underline"
+                className="inline-block bg-white text-slate-900 px-6 py-3 rounded-lg text-body font-semibold hover:bg-slate-100 transition-colors no-underline"
               >
                 Request Access
               </a>
               <Link
                 href="/documentation"
-                className="inline-flex items-center gap-2 text-white hover:text-slate-200 transition-colors no-underline text-[16px] font-semibold"
+                className="inline-flex items-center gap-2 text-white hover:text-slate-200 transition-colors no-underline text-body font-semibold"
               >
                 View Docs
                 <ArrowRight className="w-5 h-5" />
