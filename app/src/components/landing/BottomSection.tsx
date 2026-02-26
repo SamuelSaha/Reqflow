@@ -169,7 +169,7 @@ export function FAQ() {
 /* ------------------------------------------------------------------ */
 export function FinalCTA() {
   return (
-    <section className="bg-blue-600 py-20 px-20 flex flex-col items-center gap-8">
+    <section className="bg-blue-600 py-16 md:py-20 lg:py-24 px-6 md:px-12 lg:px-20 flex flex-col items-center gap-8">
       <h2 className="text-[44px] font-bold leading-[1.15] tracking-[-1px] text-white text-center max-w-[700px] whitespace-pre-line">
         {"Stop buying things\nover Slack."}
       </h2>

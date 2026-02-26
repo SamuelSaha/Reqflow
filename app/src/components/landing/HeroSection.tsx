@@ -287,7 +287,7 @@ export function TrustLogos() {
   const logos = ["Doctolib", "Qonto", "Alan", "Pennylane", "Swile", "Spendesk"];
 
   return (
-    <section className="bg-white py-10 px-20 flex flex-col items-center gap-6">
+    <section className="bg-white py-10 md:py-12 px-6 md:px-12 lg:px-20 flex flex-col items-center gap-6">
       <span className="text-[12px] font-semibold text-slate-400 tracking-[1.5px] uppercase">
         TRUSTED BY STARTUPS AND SCALE-UPS WHO MOVE TOO FAST FOR TRADITIONAL PROCUREMENT
       </span>
@@ -336,7 +336,7 @@ const painStats = [
 
 export function ProblemSection() {
   return (
-    <section className="bg-gradient-to-b from-white via-slate-50 to-white py-24 px-20 flex flex-col items-center gap-16">
+    <section className="bg-[var(--warm-50)] py-16 md:py-20 lg:py-24 px-6 md:px-12 lg:px-20 flex flex-col items-center gap-16">
       <div className="max-w-[700px] flex flex-col items-center gap-6 text-center">
         <div className="inline-flex items-center gap-1.5 bg-red-50 rounded-full px-3.5 py-1.5">
           <TriangleAlert className="w-3.5 h-3.5 text-red-600" />

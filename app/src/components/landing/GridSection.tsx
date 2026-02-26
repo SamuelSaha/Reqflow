@@ -146,7 +146,7 @@ export function SocialProof() {
   ];
 
   return (
-    <section className="bg-gradient-to-b from-white to-slate-50 p-20 flex flex-col items-center gap-16">
+    <section className="bg-[var(--warm-50)] py-16 md:py-20 lg:py-24 px-6 md:px-12 lg:px-20 flex flex-col items-center gap-16">
       <div className="max-w-[700px] text-center flex flex-col items-center gap-4">
         <span className="inline-flex items-center gap-1.5 bg-green-50 rounded-full px-3.5 py-1.5">
           <TrendingUp className="text-green-600" size={14} />
