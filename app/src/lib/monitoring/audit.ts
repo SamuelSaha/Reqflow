@@ -56,16 +56,19 @@ export async function createAuthEvent(data: {
   metadata?: Record<string, unknown>;
 }) {
   try {
-    await db.insert(authEvents).values(data);
+    await db.insert(authEvents).values({
+      ...data,
+      success: data.success.toString(), // Convert boolean to string for DB
+    });
     logger.info("Auth event created", {
       event: data.event,
       success: data.success,
-      userId: data.userId,
+      userId: data.userId ?? undefined,
     });
   } catch (error) {
     logger.error("Failed to create auth event", error as Error, {
       event: data.event,
-      userId: data.userId,
+      userId: data.userId ?? undefined,
     });
   }
 }

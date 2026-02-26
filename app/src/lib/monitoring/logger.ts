@@ -25,7 +25,6 @@ class Logger {
     if (env.AXIOM_API_TOKEN) {
       this.axiom = new Axiom({
         token: env.AXIOM_API_TOKEN,
-        orgId: env.AXIOM_ORG_ID,
       });
     }
   }
@@ -48,9 +47,7 @@ class Logger {
 
     // Send to Axiom if configured
     if (this.axiom) {
-      this.axiom.ingest(this.dataset, [logEntry]).catch((err) => {
-        console.error("Failed to send log to Axiom:", err);
-      });
+      this.axiom.ingest(this.dataset, [logEntry]);
     }
   }
 
