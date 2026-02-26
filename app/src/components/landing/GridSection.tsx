@@ -89,12 +89,12 @@ export function FeaturesGrid() {
         {largeCards.map(({ icon: Icon, title, desc }) => (
           <div
             key={title}
-            className="h-[260px] p-8 rounded-2xl bg-gradient-to-b from-[#1A2744] to-[#0F172A] border border-blue-600/20 flex flex-col gap-4"
+            className="group h-[260px] p-8 rounded-2xl bg-gradient-to-b from-[#1A2744] to-[#0F172A] border border-blue-600/20 flex flex-col gap-4 transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(59,_130,_246,_0.2)] hover:border-blue-500/40 will-change-transform"
           >
-            <div className="w-[52px] h-[52px] bg-[#1E3A5F] rounded-xl flex items-center justify-center">
-              <Icon className="text-blue-500" size={26} />
+            <div className="w-[52px] h-[52px] bg-[#1E3A5F] rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:bg-[#2563EB] transition-all duration-200">
+              <Icon className="text-blue-500 group-hover:text-blue-300 transition-colors duration-200" size={26} />
             </div>
-            <h3 className="text-[22px] font-bold text-white">{title}</h3>
+            <h3 className="text-[22px] font-bold text-white group-hover:text-blue-300 transition-colors duration-200">{title}</h3>
             <p className="text-[15px] text-slate-400 leading-relaxed">{desc}</p>
           </div>
         ))}
@@ -104,12 +104,12 @@ export function FeaturesGrid() {
         {smallCards.map(({ icon: Icon, title, desc }) => (
           <div
             key={title}
-            className="p-7 rounded-2xl bg-slate-800/50 border border-slate-700 flex flex-col gap-4"
+            className="group p-7 rounded-2xl bg-slate-800/50 border border-slate-700 flex flex-col gap-4 transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(59,_130,_246,_0.15)] hover:border-slate-600 will-change-transform"
           >
-            <div className="w-[44px] h-[44px] bg-[#1E3A5F] rounded-[10px] flex items-center justify-center">
-              <Icon className="text-blue-500" size={22} />
+            <div className="w-[44px] h-[44px] bg-[#1E3A5F] rounded-[10px] flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-200">
+              <Icon className="text-blue-500 group-hover:text-blue-300 transition-colors duration-200" size={22} />
             </div>
-            <h3 className="text-[18px] font-bold text-white">{title}</h3>
+            <h3 className="text-[18px] font-bold text-white group-hover:text-blue-300 transition-colors duration-200">{title}</h3>
             <p className="text-[14px] text-slate-400 leading-relaxed">{desc}</p>
           </div>
         ))}
@@ -164,9 +164,9 @@ export function SocialProof() {
         {outcomes.map(({ value, label, sub }) => (
           <div
             key={value}
-            className="bg-slate-50 rounded-2xl p-8 border border-slate-200 flex flex-col items-center gap-3"
+            className="group bg-slate-50 rounded-2xl p-8 border border-slate-200 flex flex-col items-center gap-3 transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-xl hover:border-slate-300 hover:bg-white will-change-transform"
           >
-            <span className="text-[40px] font-bold text-blue-600 tracking-tight">
+            <span className="text-[40px] font-bold text-blue-600 tracking-tight group-hover:scale-110 transition-transform duration-200">
               {value}
             </span>
             <span className="text-[15px] font-medium text-slate-600 text-center">
@@ -219,10 +219,10 @@ export function Integrations() {
         {integrations.map(({ letter, bg, name }) => (
           <div
             key={name}
-            className="w-[148px] h-[120px] bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow p-5 flex flex-col items-center justify-center gap-3"
+            className="group w-[148px] h-[120px] bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex flex-col items-center justify-center gap-3 transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-xl hover:border-slate-300 will-change-transform"
           >
             <div
-              className="w-[40px] h-[40px] rounded-[10px] flex items-center justify-center"
+              className="w-[40px] h-[40px] rounded-[10px] flex items-center justify-center group-hover:scale-110 transition-transform duration-200"
               style={{ backgroundColor: bg }}
             >
               <span className="text-white font-bold text-[18px]">

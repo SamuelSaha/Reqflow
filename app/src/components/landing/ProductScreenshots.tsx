@@ -51,7 +51,7 @@ const screenshots = [
 
 function BrowserChrome({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative rounded-xl overflow-hidden shadow-2xl bg-white border border-slate-200">
+    <div className="group relative rounded-xl overflow-hidden shadow-2xl bg-white border border-slate-200 transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(8,_112,_184,_0.15)] hover:border-slate-300 will-change-transform">
       {/* Browser chrome header */}
       <div className="h-10 bg-gradient-to-b from-slate-50 to-white border-b border-slate-200 px-4 flex items-center gap-2">
         <div className="flex items-center gap-1.5">
@@ -66,7 +66,7 @@ function BrowserChrome({ children }: { children: React.ReactNode }) {
         </div>
       </div>
       {/* Screenshot content */}
-      <div className="relative bg-slate-50">
+      <div className="relative bg-slate-50 overflow-hidden">
         {children}
       </div>
     </div>
@@ -96,9 +96,9 @@ function ScreenshotCard({
     <div className="flex flex-col gap-4">
       <BrowserChrome>
         {/* Placeholder with icon - replace with actual screenshot */}
-        <div className="relative aspect-[16/10] bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
+        <div className="relative aspect-[16/10] bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center group-hover:scale-105 transition-transform duration-200 ease-out">
           <div className="text-center">
-            <Icon className="w-16 h-16 text-slate-300 mx-auto mb-3" />
+            <Icon className="w-16 h-16 text-slate-300 mx-auto mb-3 group-hover:scale-110 group-hover:text-blue-400 transition-all duration-200" />
             <p className="text-sm text-slate-400 font-medium">
               Screenshot placeholder
             </p>
@@ -111,7 +111,7 @@ function ScreenshotCard({
             src={imagePath}
             alt={alt}
             fill
-            className="object-cover"
+            className="object-cover group-hover:scale-105 transition-transform duration-200 ease-out"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
             loading="lazy"
           /> */}
@@ -175,13 +175,13 @@ export function ProductScreenshots() {
             <div className="flex items-center justify-center gap-4">
               <a
                 href="/signup"
-                className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all duration-150 ease-in-out hover:scale-105 hover:shadow-lg active:scale-95"
               >
                 Start Free Trial
               </a>
               <a
                 href="/demo"
-                className="text-slate-600 hover:text-slate-900 font-medium transition-colors"
+                className="relative text-slate-600 hover:text-blue-600 font-medium transition-colors duration-150 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-blue-600 after:transition-all after:duration-150 hover:after:w-full"
               >
                 Watch Demo →
               </a>

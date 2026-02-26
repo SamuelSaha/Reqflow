@@ -333,3 +333,71 @@ a[role="button"],
     grid-template-columns: 3fr 2fr;
   }
 }
+
+/* ========================================
+   MICRO-INTERACTIONS & HOVER STATES
+   ======================================== */
+
+/* Reduced Motion Support - Respect user accessibility preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  /* Disable scale and translate transforms */
+  .hover\:scale-105:hover,
+  .hover\:scale-110:hover,
+  .group:hover .group-hover\:scale-105,
+  .group:hover .group-hover\:scale-110 {
+    transform: none !important;
+  }
+  
+  .hover\:-translate-y-1:hover,
+  .hover\:-translate-y-0\.5:hover,
+  .group:hover .group-hover\:-translate-y-1,
+  .group:hover .group-hover\:-translate-y-0\.5 {
+    transform: none !important;
+  }
+}
+
+/* Icon Hover Effects - Global */
+.icon-hover {
+  transition: all 200ms ease-out;
+}
+
+.icon-hover:hover {
+  transform: scale(1.1);
+}
+
+.icon-hover-rotate {
+  transition: all 200ms ease-out;
+}
+
+.icon-hover-rotate:hover {
+  transform: rotate(6deg) scale(1.05);
+}
+
+/* Link Underline Animation - Grow from left */
+.link-underline {
+  position: relative;
+}
+
+.link-underline::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: currentColor;
+  transition: width 150ms ease-in-out;
+}
+
+.link-underline:hover::after {
+  width: 100%;
+}

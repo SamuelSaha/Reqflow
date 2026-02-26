@@ -62,8 +62,8 @@ function FeaturesMegaMenu() {
             <div className="space-y-1">
               {featuresDropdown.byRole.map((item) => (
                 <Link key={item.href} href={item.href}>
-                  <DropdownMenuItem className="flex flex-col items-start gap-0.5 p-3 cursor-pointer">
-                    <span className="text-sm font-semibold text-slate-900">
+                  <DropdownMenuItem className="flex flex-col items-start gap-0.5 p-3 cursor-pointer transition-all duration-200 ease-out hover:-translate-y-0.5 hover:bg-slate-50/80 hover:shadow-sm rounded-lg">
+                    <span className="text-sm font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
                       {item.label}
                     </span>
                     <span className="text-xs text-slate-600">
@@ -83,8 +83,8 @@ function FeaturesMegaMenu() {
             <div className="space-y-1">
               {featuresDropdown.byUseCase.map((item) => (
                 <Link key={item.href} href={item.href}>
-                  <DropdownMenuItem className="flex flex-col items-start gap-0.5 p-3 cursor-pointer">
-                    <span className="text-sm font-semibold text-slate-900">
+                  <DropdownMenuItem className="flex flex-col items-start gap-0.5 p-3 cursor-pointer transition-all duration-200 ease-out hover:-translate-y-0.5 hover:bg-slate-50/80 hover:shadow-sm rounded-lg">
+                    <span className="text-sm font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
                       {item.label}
                     </span>
                     <span className="text-xs text-slate-600">
@@ -119,7 +119,7 @@ function ResourcesDropdown() {
       >
         {resourcesDropdown.map((item) => (
           <Link key={item.href} href={item.href}>
-            <DropdownMenuItem className="text-sm cursor-pointer">
+            <DropdownMenuItem className="text-sm cursor-pointer transition-all duration-150 ease-out hover:bg-slate-50 hover:text-blue-600">
               {item.label}
             </DropdownMenuItem>
           </Link>
@@ -140,7 +140,7 @@ export function DesktopNav() {
 
       <Link
         href="/pricing"
-        className="text-[15px] font-medium text-slate-600 hover:text-slate-900 transition-colors"
+        className="relative text-[15px] font-medium text-slate-600 hover:text-blue-600 transition-colors duration-150 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-blue-600 after:transition-all after:duration-150 hover:after:w-full"
       >
         Pricing
       </Link>
@@ -149,7 +149,7 @@ export function DesktopNav() {
 
       <Link
         href="/about"
-        className="text-[15px] font-medium text-slate-600 hover:text-slate-900 transition-colors"
+        className="relative text-[15px] font-medium text-slate-600 hover:text-blue-600 transition-colors duration-150 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-blue-600 after:transition-all after:duration-150 hover:after:w-full"
       >
         About
       </Link>

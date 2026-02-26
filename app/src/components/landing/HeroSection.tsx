@@ -43,8 +43,8 @@ export function HeroSection() {
           <div className="grid grid-cols-1 gap-6 md:gap-7 text-center max-w-4xl mx-auto w-full">
             {/* Trust Badge with Icon - NO ANIMATION DELAY */}
             <div className="flex justify-center">
-              <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-emerald-200 bg-emerald-50/80 backdrop-blur-sm shadow-sm hover:shadow-md transition-shadow">
-                <Sparkles className="w-4 h-4 text-emerald-600" />
+              <div className="group inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-emerald-200 bg-emerald-50/80 backdrop-blur-sm shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 hover:border-emerald-300">
+                <Sparkles className="w-4 h-4 text-emerald-600 transition-all duration-200 group-hover:scale-110 group-hover:rotate-12" />
                 <span className="text-sm font-semibold text-emerald-900">
                   Free during early access
                 </span>
@@ -75,20 +75,20 @@ export function HeroSection() {
 
             {/* Quick wins - Value props - NO ANIMATION DELAY */}
             <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 text-sm">
-              <div className="flex items-center gap-2 text-slate-700">
-                <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+              <div className="group flex items-center gap-2 text-slate-700 transition-colors duration-150 hover:text-emerald-600">
+                <CheckCircle2 className="w-5 h-5 text-emerald-600 transition-transform duration-200 group-hover:scale-110" />
                 <span className="font-medium">2-minute setup</span>
               </div>
-              <div className="flex items-center gap-2 text-slate-700">
-                <Zap className="w-5 h-5 text-amber-500" />
+              <div className="group flex items-center gap-2 text-slate-700 transition-colors duration-150 hover:text-amber-600">
+                <Zap className="w-5 h-5 text-amber-500 transition-all duration-200 group-hover:scale-110 group-hover:rotate-6" />
                 <span className="font-medium">Instant approvals</span>
               </div>
-              <div className="flex items-center gap-2 text-slate-700">
-                <Shield className="w-5 h-5 text-blue-600" />
+              <div className="group flex items-center gap-2 text-slate-700 transition-colors duration-150 hover:text-blue-600">
+                <Shield className="w-5 h-5 text-blue-600 transition-transform duration-200 group-hover:scale-110" />
                 <span className="font-medium">Budget guardrails</span>
               </div>
-              <div className="flex items-center gap-2 text-slate-700">
-                <Clock className="w-5 h-5 text-purple-600" />
+              <div className="group flex items-center gap-2 text-slate-700 transition-colors duration-150 hover:text-purple-600">
+                <Clock className="w-5 h-5 text-purple-600 transition-transform duration-200 group-hover:scale-110" />
                 <span className="font-medium">Never miss renewals</span>
               </div>
             </div>
