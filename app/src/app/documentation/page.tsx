@@ -120,7 +120,7 @@ export default function DocumentationPage() {
           <div className="mb-16 text-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-blue-200 bg-blue-50 mb-6">
               <BookOpen className="w-4 h-4 text-blue-600" />
-              <span className="text-[13px] font-semibold text-blue-900">
+              <span className="text-caption font-semibold text-blue-900">
                 Documentation
               </span>
             </div>
@@ -163,7 +163,7 @@ export default function DocumentationPage() {
               <p className="text-body-sm text-slate-600 leading-relaxed">
                 Get running in under 10 minutes. Connect Slack, create a workflow, submit a request.
               </p>
-              <div className="flex items-center gap-2 text-[14px] font-semibold text-blue-600">
+              <div className="flex items-center gap-2 text-body-sm font-semibold text-blue-600">
                 Start here
                 <ArrowRight className="w-4 h-4" />
               </div>
@@ -182,7 +182,7 @@ export default function DocumentationPage() {
               <p className="text-body-sm text-slate-600 leading-relaxed">
                 Install the Slack app and configure request intake in 5 minutes.
               </p>
-              <div className="flex items-center gap-2 text-[14px] font-semibold text-blue-600">
+              <div className="flex items-center gap-2 text-body-sm font-semibold text-blue-600">
                 Learn more
                 <ArrowRight className="w-4 h-4" />
               </div>
@@ -201,7 +201,7 @@ export default function DocumentationPage() {
               <p className="text-body-sm text-slate-600 leading-relaxed">
                 Build custom integrations with the Reqflow API. Full REST + webhooks.
               </p>
-              <div className="flex items-center gap-2 text-[14px] font-semibold text-blue-600">
+              <div className="flex items-center gap-2 text-body-sm font-semibold text-blue-600">
                 View docs
                 <ArrowRight className="w-4 h-4" />
               </div>
@@ -233,14 +233,14 @@ export default function DocumentationPage() {
                           <h3 className="text-body-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
                             {guide.title}
                           </h3>
-                          <span className="text-[12px] font-medium text-slate-500 bg-slate-100 px-2 py-1 rounded">
+                          <span className="text-caption font-medium text-slate-500 bg-slate-100 px-2 py-1 rounded">
                             {guide.time}
                           </span>
                         </div>
-                        <p className="text-[14px] text-slate-600 leading-relaxed flex-1">
+                        <p className="text-body-sm text-slate-600 leading-relaxed flex-1">
                           {guide.desc}
                         </p>
-                        <div className="flex items-center gap-2 text-[14px] font-semibold text-blue-600">
+                        <div className="flex items-center gap-2 text-body-sm font-semibold text-blue-600">
                           Read guide
                           <ArrowRight className="w-4 h-4" />
                         </div>

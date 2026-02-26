@@ -25,7 +25,7 @@ export default function AboutPage() {
           </div>
 
           <div className="mb-12">
-            <h2 className="text-[24px] font-bold text-slate-900 mb-6">Our Principles</h2>
+            <h2 className="text-h4 font-bold text-slate-900 mb-6">Our Principles</h2>
             <div className="grid gap-5">
               {[
                 { title: "€0 infrastructure obsession", desc: "We run on Oracle Always Free, Neon/Upstash free tiers, and open-source tools. This forces us to stay lean and pass savings to customers." },

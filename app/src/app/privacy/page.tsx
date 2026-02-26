@@ -60,7 +60,7 @@ export default function PrivacyPage() {
               <li><strong className="text-slate-900">QuickBooks/Xero:</strong> Accounting sync (if you configure it)</li>
               <li><strong className="text-slate-900">Cloudflare R2:</strong> File storage (for invoice attachments)</li>
             </ul>
-            <p className="text-[15px] text-slate-500 mt-4">Each service has its own privacy policy. We only share data necessary for functionality.</p>
+            <p className="text-body text-slate-500 mt-4">Each service has its own privacy policy. We only share data necessary for functionality.</p>
           </div>
 
           <div className="mb-12">

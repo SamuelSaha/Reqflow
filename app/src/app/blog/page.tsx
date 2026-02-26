@@ -65,23 +65,23 @@ export default function BlogPage() {
                     <div className="md:w-2/5 bg-gradient-to-br from-blue-50 to-violet-50 p-12 flex items-center justify-center">
                       <div className="text-center">
                         <div className="w-20 h-20 bg-blue-600 rounded-2xl flex items-center justify-center mb-4 mx-auto">
-                          <span className="text-white text-[32px] font-bold">🎯</span>
+                          <span className="text-white text-h3 font-bold">🎯</span>
                         </div>
-                        <span className="inline-block px-3 py-1 bg-blue-600 text-white text-[12px] font-bold rounded-full">
+                        <span className="inline-block px-3 py-1 bg-blue-600 text-white text-caption font-bold rounded-full">
                           FEATURED
                         </span>
                       </div>
                     </div>
                     <div className="md:w-3/5 p-10">
                       <div className="flex items-center gap-3 mb-4">
-                        <span className="px-3 py-1 bg-blue-50 text-blue-700 text-[13px] font-semibold rounded-full">
+                        <span className="px-3 py-1 bg-blue-50 text-blue-700 text-caption font-semibold rounded-full">
                           {post.category}
                         </span>
-                        <div className="flex items-center gap-2 text-[13px] text-slate-500">
+                        <div className="flex items-center gap-2 text-caption text-slate-500">
                           <Calendar className="w-4 h-4" />
                           {post.date}
                         </div>
-                        <div className="flex items-center gap-2 text-[13px] text-slate-500">
+                        <div className="flex items-center gap-2 text-caption text-slate-500">
                           <Clock className="w-4 h-4" />
                           {post.readTime}
                         </div>
@@ -101,7 +101,7 @@ export default function BlogPage() {
                             <div className="text-body-sm font-semibold text-slate-900">
                               {post.author}
                             </div>
-                            <div className="text-[13px] text-slate-500">Founder</div>
+                            <div className="text-caption text-slate-500">Founder</div>
                           </div>
                         </div>
                         <Link
@@ -117,14 +117,14 @@ export default function BlogPage() {
                 ) : (
                   <div className="p-8">
                     <div className="flex items-center gap-3 mb-4">
-                      <span className="px-3 py-1 bg-slate-100 text-slate-700 text-[13px] font-semibold rounded-full">
+                      <span className="px-3 py-1 bg-slate-100 text-slate-700 text-caption font-semibold rounded-full">
                         {post.category}
                       </span>
-                      <div className="flex items-center gap-2 text-[13px] text-slate-500">
+                      <div className="flex items-center gap-2 text-caption text-slate-500">
                         <Calendar className="w-4 h-4" />
                         {post.date}
                       </div>
-                      <div className="flex items-center gap-2 text-[13px] text-slate-500">
+                      <div className="flex items-center gap-2 text-caption text-slate-500">
                         <Clock className="w-4 h-4" />
                         {post.readTime}
                       </div>
@@ -141,15 +141,15 @@ export default function BlogPage() {
                           <User className="w-5 h-5 text-slate-600" />
                         </div>
                         <div>
-                          <div className="text-[14px] font-semibold text-slate-900">
+                          <div className="text-body-sm font-semibold text-slate-900">
                             {post.author}
                           </div>
-                          <div className="text-[13px] text-slate-500">Founder</div>
+                          <div className="text-caption text-slate-500">Founder</div>
                         </div>
                       </div>
                       <Link
                         href={`/blog/${post.slug}`}
-                        className="inline-flex items-center gap-2 text-[15px] font-semibold text-blue-600 hover:text-blue-700 transition-colors no-underline"
+                        className="inline-flex items-center gap-2 text-body font-semibold text-blue-600 hover:text-blue-700 transition-colors no-underline"
                       >
                         Read post
                         <ArrowRight className="w-4 h-4" />

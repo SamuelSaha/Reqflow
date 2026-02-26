@@ -44,7 +44,7 @@ export default function CareersPage() {
           <div className="mb-16 text-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-violet-200 bg-violet-50 mb-6">
               <Heart className="w-4 h-4 text-violet-600" />
-              <span className="text-[13px] font-semibold text-violet-900">
+              <span className="text-caption font-semibold text-violet-900">
                 Careers
               </span>
             </div>
@@ -128,14 +128,14 @@ export default function CareersPage() {
           {/* What we offer */}
           <div className="bg-slate-900 rounded-2xl border border-slate-700 p-10 mb-16 text-white">
             <h2 className="text-h4 font-bold mb-6">What we offer</h2>
-            <p className="text-[16px] text-slate-300 mb-8 leading-relaxed">
+            <p className="text-body text-slate-300 mb-8 leading-relaxed">
               We're early stage, so you won't get Google-level compensation. But you'll get meaningful equity, direct impact on product direction, and the chance to build something from scratch.
             </p>
             <div className="grid md:grid-cols-2 gap-4">
               {perks.map((perk) => (
                 <div key={perk} className="flex items-start gap-3">
                   <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-white text-[12px]">✓</span>
+                    <span className="text-white text-caption">✓</span>
                   </div>
                   <span className="text-body text-slate-200">{perk}</span>
                 </div>
@@ -154,16 +154,16 @@ export default function CareersPage() {
                   <h3 className="text-h5 font-bold text-slate-900">
                     Full-Stack Engineer
                   </h3>
-                  <span className="px-3 py-1 bg-amber-50 text-amber-700 text-[13px] font-semibold rounded-full">
+                  <span className="px-3 py-1 bg-amber-50 text-amber-700 text-caption font-semibold rounded-full">
                     Q2 2026
                   </span>
                 </div>
-                <p className="text-[15px] text-slate-600 leading-relaxed mb-4">
+                <p className="text-body text-slate-600 leading-relaxed mb-4">
                   We need someone who can ship features end-to-end: design implementation, tRPC endpoints, database schema, job queues, and deployment. TypeScript fluency required.
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {["Next.js", "React", "TypeScript", "PostgreSQL", "tRPC"].map((skill) => (
-                    <span key={skill} className="px-3 py-1 bg-blue-50 text-blue-700 text-[13px] font-medium rounded-full">
+                    <span key={skill} className="px-3 py-1 bg-blue-50 text-blue-700 text-caption font-medium rounded-full">
                       {skill}
                     </span>
                   ))}
@@ -175,16 +175,16 @@ export default function CareersPage() {
                   <h3 className="text-h5 font-bold text-slate-900">
                     Product Designer
                   </h3>
-                  <span className="px-3 py-1 bg-amber-50 text-amber-700 text-[13px] font-semibold rounded-full">
+                  <span className="px-3 py-1 bg-amber-50 text-amber-700 text-caption font-semibold rounded-full">
                     Q3 2026
                   </span>
                 </div>
-                <p className="text-[15px] text-slate-600 leading-relaxed mb-4">
+                <p className="text-body text-slate-600 leading-relaxed mb-4">
                   Design the full procurement experience: request forms, approval flows, budget dashboards, and mobile app. Strong interaction design and prototyping skills.
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {["Figma", "Prototyping", "User Research", "Design Systems", "Mobile"].map((skill) => (
-                    <span key={skill} className="px-3 py-1 bg-violet-50 text-violet-700 text-[13px] font-medium rounded-full">
+                    <span key={skill} className="px-3 py-1 bg-violet-50 text-violet-700 text-caption font-medium rounded-full">
                       {skill}
                     </span>
                   ))}
@@ -196,16 +196,16 @@ export default function CareersPage() {
                   <h3 className="text-h5 font-bold text-slate-900">
                     Customer Success Lead
                   </h3>
-                  <span className="px-3 py-1 bg-amber-50 text-amber-700 text-[13px] font-semibold rounded-full">
+                  <span className="px-3 py-1 bg-amber-50 text-amber-700 text-caption font-semibold rounded-full">
                     Q3 2026
                   </span>
                 </div>
-                <p className="text-[15px] text-slate-600 leading-relaxed mb-4">
+                <p className="text-body text-slate-600 leading-relaxed mb-4">
                   Own onboarding, support, and customer relationships. Help beta customers succeed, collect feedback, and feed insights back to product. Procurement or fintech ops experience a plus.
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {["Customer Onboarding", "Support", "Operations", "Procurement"].map((skill) => (
-                    <span key={skill} className="px-3 py-1 bg-green-50 text-green-700 text-[13px] font-medium rounded-full">
+                    <span key={skill} className="px-3 py-1 bg-green-50 text-green-700 text-caption font-medium rounded-full">
                       {skill}
                     </span>
                   ))}
@@ -219,7 +219,7 @@ export default function CareersPage() {
             <h2 className="text-h4 font-bold text-slate-900 mb-4">
               Interested in joining?
             </h2>
-            <p className="text-[16px] text-slate-700 leading-relaxed mb-8 max-w-[600px] mx-auto">
+            <p className="text-body text-slate-700 leading-relaxed mb-8 max-w-[600px] mx-auto">
               No open roles right now, but we're growing. If you're excited about building procurement software that doesn't suck, send us an email. Tell us what you'd bring and why Reqflow.
             </p>
             <div className="flex items-center justify-center gap-4">

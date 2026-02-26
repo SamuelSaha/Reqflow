@@ -148,13 +148,13 @@ export default function ForFoundersPage() {
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-[48px] font-bold text-green-400 mb-2">15-20%</div>
+                <div className="text-h2 font-bold text-green-400 mb-2">15-20%</div>
                 <div className="text-body text-slate-300">
                   Reduction in SaaS spend (cancelled unused tools)
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-[48px] font-bold text-violet-400 mb-2">100%</div>
+                <div className="text-h2 font-bold text-violet-400 mb-2">100%</div>
                 <div className="text-body text-slate-300">
                   Visibility into who owns what
                 </div>
@@ -164,15 +164,15 @@ export default function ForFoundersPage() {
 
           {/* CTA */}
           <div className="text-center bg-blue-50 border border-blue-200 rounded-2xl p-10">
-            <h2 className="text-[28px] font-bold text-slate-900 mb-4">
+            <h2 className="text-h3 font-bold text-slate-900 mb-4">
               Get procurement off your plate
             </h2>
-            <p className="text-[16px] text-slate-600 mb-6 max-w-[600px] mx-auto">
+            <p className="text-body text-slate-600 mb-6 max-w-[600px] mx-auto">
               Join 7 other founders in our beta program. €99/mo locked forever, 10-minute setup, cancel anytime.
             </p>
             <a
               href="/beta"
-              className="inline-flex items-center gap-2 bg-blue-600 text-white px-8 py-4 rounded-lg text-[16px] font-semibold hover:bg-blue-700 transition-colors no-underline"
+              className="inline-flex items-center gap-2 bg-blue-600 text-white px-8 py-4 rounded-lg text-body font-semibold hover:bg-blue-700 transition-colors no-underline"
             >
               Apply for beta access
               <ArrowRight className="w-5 h-5" />

@@ -33,23 +33,23 @@ export default function RenewalAlertsPage() {
                 </h3>
                 <div className="space-y-3 text-body text-slate-700">
                   <div className="flex items-start gap-3">
-                    <span className="text-[20px]">1️⃣</span>
+                    <span className="text-body-lg">1️⃣</span>
                     <span>You sign a 1-year contract with 60-day cancellation notice</span>
                   </div>
                   <div className="flex items-start gap-3">
-                    <span className="text-[20px]">2️⃣</span>
+                    <span className="text-body-lg">2️⃣</span>
                     <span>You put the renewal date (Jan 1, 2027) in your calendar</span>
                   </div>
                   <div className="flex items-start gap-3">
-                    <span className="text-[20px]">3️⃣</span>
+                    <span className="text-body-lg">3️⃣</span>
                     <span>Notice window closes (Nov 1, 2026) — you didn't get reminded</span>
                   </div>
                   <div className="flex items-start gap-3">
-                    <span className="text-[20px]">4️⃣</span>
+                    <span className="text-body-lg">4️⃣</span>
                     <span>Dec 15: You realize you wanted to cancel. TOO LATE.</span>
                   </div>
                   <div className="flex items-start gap-3">
-                    <span className="text-[20px]">💸</span>
+                    <span className="text-body-lg">💸</span>
                     <span className="font-semibold text-red-600">You're locked in for another year at €50K</span>
                   </div>
                 </div>
@@ -150,7 +150,7 @@ export default function RenewalAlertsPage() {
                     { days: 60, color: "amber", message: "60 days: Decision time. Keep, cancel, or renegotiate?" },
                     { days: 30, color: "red", message: "30 days: LAST CHANCE. Notice window closes soon." },
                   ].map((alert) => (
-                    <div key={alert.days} className={`text-[13px] bg-${alert.color}-50 border border-${alert.color}-200 rounded-lg p-3 text-${alert.color}-700 font-medium`}>
+                    <div key={alert.days} className={`text-caption bg-${alert.color}-50 border border-${alert.color}-200 rounded-lg p-3 text-${alert.color}-700 font-medium`}>
                       {alert.message}
                     </div>
                   ))}
@@ -175,7 +175,7 @@ export default function RenewalAlertsPage() {
                     "31-60 days (AMBER - decide soon)",
                     "61-90 days (BLUE - start evaluating)",
                   ].map((item) => (
-                    <div key={item} className="text-[13px] text-slate-600 bg-slate-50 px-3 py-2 rounded-lg text-center">
+                    <div key={item} className="text-caption text-slate-600 bg-slate-50 px-3 py-2 rounded-lg text-center">
                       {item}
                     </div>
                   ))}
@@ -186,23 +186,23 @@ export default function RenewalAlertsPage() {
 
           {/* Results */}
           <div className="bg-slate-900 rounded-2xl border border-slate-700 p-12 text-white mb-16">
-            <h2 className="text-[28px] font-bold mb-8 text-center">What you get back</h2>
+            <h2 className="text-h3 font-bold mb-8 text-center">What you get back</h2>
             <div className="grid md:grid-cols-3 gap-8">
               <div className="text-center">
-                <div className="text-[48px] font-bold text-blue-400 mb-2">Zero</div>
-                <div className="text-[16px] text-slate-300">
+                <div className="text-h2 font-bold text-blue-400 mb-2">Zero</div>
+                <div className="text-body text-slate-300">
                   Missed cancellation windows
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-[48px] font-bold text-green-400 mb-2">€15K+</div>
-                <div className="text-[16px] text-slate-300">
+                <div className="text-h2 font-bold text-green-400 mb-2">€15K+</div>
+                <div className="text-body text-slate-300">
                   Saved annually by cancelling on time
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-[48px] font-bold text-orange-400 mb-2">100%</div>
-                <div className="text-[16px] text-slate-300">
+                <div className="text-h2 font-bold text-orange-400 mb-2">100%</div>
+                <div className="text-body text-slate-300">
                   Renewals reviewed before auto-renew
                 </div>
               </div>
@@ -211,15 +211,15 @@ export default function RenewalAlertsPage() {
 
           {/* CTA */}
           <div className="text-center bg-orange-50 border border-orange-200 rounded-2xl p-10">
-            <h2 className="text-[28px] font-bold text-slate-900 mb-4">
+            <h2 className="text-h3 font-bold text-slate-900 mb-4">
               Stop missing notice windows
             </h2>
-            <p className="text-[16px] text-slate-600 mb-6 max-w-[600px] mx-auto">
+            <p className="text-body text-slate-600 mb-6 max-w-[600px] mx-auto">
               Track the dates that actually matter. Get reminded when you MUST decide, not when it's already too late.
             </p>
             <a
               href="/beta"
-              className="inline-flex items-center gap-2 bg-orange-600 text-white px-8 py-4 rounded-lg text-[16px] font-semibold hover:bg-orange-700 transition-colors no-underline"
+              className="inline-flex items-center gap-2 bg-orange-600 text-white px-8 py-4 rounded-lg text-body font-semibold hover:bg-orange-700 transition-colors no-underline"
             >
               Apply for beta access
               <ArrowRight className="w-5 h-5" />

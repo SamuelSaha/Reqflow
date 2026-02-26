@@ -188,7 +188,7 @@ export default function ChangelogPage() {
                     {/* Header */}
                     <div className="px-8 py-6 border-b border-slate-100 flex items-center justify-between">
                       <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white text-[14px] font-bold">
+                        <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white text-body-sm font-bold">
                           {idx + 1}
                         </div>
                         <div>
@@ -200,7 +200,7 @@ export default function ChangelogPage() {
                       </div>
                       <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full border ${badge.color}`}>
                         <BadgeIcon className="w-4 h-4" />
-                        <span className="text-[13px] font-semibold">{badge.label}</span>
+                        <span className="text-caption font-semibold">{badge.label}</span>
                       </div>
                     </div>
 

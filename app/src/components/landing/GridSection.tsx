@@ -69,7 +69,7 @@ export function FeaturesGrid() {
       <div className="relative z-10 max-w-[700px] text-center flex flex-col items-center gap-4">
         <span className="inline-flex items-center gap-1.5 border border-slate-700 rounded-full px-3.5 py-1.5">
           <Layers className="text-blue-500" size={14} />
-          <span className="text-[13px] font-semibold text-blue-500">
+          <span className="text-caption font-semibold text-blue-500">
             Built for Small Teams
           </span>
         </span>
@@ -150,7 +150,7 @@ export function SocialProof() {
       <div className="max-w-[700px] text-center flex flex-col items-center gap-4">
         <span className="inline-flex items-center gap-1.5 bg-green-50 rounded-full px-3.5 py-1.5">
           <TrendingUp className="text-green-600" size={14} />
-          <span className="text-[13px] font-semibold text-green-600">
+          <span className="text-caption font-semibold text-green-600">
             Measured Outcomes
           </span>
         </span>
@@ -166,7 +166,7 @@ export function SocialProof() {
             key={value}
             className="group bg-slate-50 rounded-2xl p-8 border border-slate-200 flex flex-col items-center gap-3 transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-xl hover:border-slate-300 hover:bg-white will-change-transform"
           >
-            <span className="text-[40px] font-bold text-blue-600 tracking-tight group-hover:scale-110 transition-transform duration-200">
+            <span className="text-h2 font-bold text-blue-600 tracking-tight group-hover:scale-110 transition-transform duration-200">
               {value}
             </span>
             <span className="text-body-sm font-medium text-slate-600 text-center">
@@ -200,7 +200,7 @@ export function Integrations() {
       <div className="max-w-[700px] text-center flex flex-col items-center gap-4">
         <span className="inline-flex items-center gap-1.5 bg-blue-50 rounded-full px-3.5 py-1.5">
           <Plug className="text-blue-600" size={14} />
-          <span className="text-[13px] font-semibold text-blue-600">
+          <span className="text-caption font-semibold text-blue-600">
             Integrations
           </span>
         </span>
@@ -225,7 +225,7 @@ export function Integrations() {
               className="w-[40px] h-[40px] rounded-[10px] flex items-center justify-center group-hover:scale-110 transition-transform duration-200"
               style={{ backgroundColor: bg }}
             >
-              <span className="text-white font-bold text-[18px]">
+              <span className="text-white font-bold text-body-lg">
                 {letter}
               </span>
             </div>

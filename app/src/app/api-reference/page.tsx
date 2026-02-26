@@ -70,7 +70,7 @@ export default function ApiReferencePage() {
           <div className="mb-16 text-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-violet-200 bg-violet-50 mb-6">
               <Code className="w-4 h-4 text-violet-600" />
-              <span className="text-[13px] font-semibold text-violet-900">
+              <span className="text-caption font-semibold text-violet-900">
                 API Reference
               </span>
             </div>
@@ -115,7 +115,7 @@ export default function ApiReferencePage() {
                   2. Make your first request
                 </h3>
                 <div className="bg-slate-800 rounded-lg p-4 border border-slate-700 overflow-x-auto">
-                  <pre className="text-[13px] text-slate-200 font-mono">
+                  <pre className="text-caption text-slate-200 font-mono">
 {`curl https://api.reqflow.com/v1/requests \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -H "Content-Type: application/json"`}
@@ -127,7 +127,7 @@ export default function ApiReferencePage() {
                   3. Create a purchase request
                 </h3>
                 <div className="bg-slate-800 rounded-lg p-4 border border-slate-700 overflow-x-auto">
-                  <pre className="text-[13px] text-slate-200 font-mono">
+                  <pre className="text-caption text-slate-200 font-mono">
 {`curl -X POST https://api.reqflow.com/v1/requests \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -H "Content-Type: application/json" \\
@@ -183,7 +183,7 @@ export default function ApiReferencePage() {
 
           {/* Endpoints */}
           <div className="mb-16">
-            <h2 className="text-[28px] font-bold text-slate-900 mb-6">
+            <h2 className="text-h3 font-bold text-slate-900 mb-6">
               API Endpoints
             </h2>
             <div className="bg-white rounded-2xl border border-slate-200 shadow-sm divide-y divide-slate-100">
@@ -200,15 +200,15 @@ export default function ApiReferencePage() {
                         }`}>
                           {endpoint.method}
                         </span>
-                        <code className="text-[14px] font-mono text-slate-900">
+                        <code className="text-body-sm font-mono text-slate-900">
                           {endpoint.path}
                         </code>
                       </div>
-                      <p className="text-[14px] text-slate-600">
+                      <p className="text-body-sm text-slate-600">
                         {endpoint.desc}
                       </p>
                     </div>
-                    <span className="text-[12px] font-medium text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
+                    <span className="text-caption font-medium text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
                       {endpoint.category}
                     </span>
                   </div>
@@ -219,7 +219,7 @@ export default function ApiReferencePage() {
 
           {/* Webhooks */}
           <div className="mb-16">
-            <h2 className="text-[28px] font-bold text-slate-900 mb-6">
+            <h2 className="text-h3 font-bold text-slate-900 mb-6">
               Webhook Events
             </h2>
             <p className="text-body text-slate-600 mb-6">
@@ -231,10 +231,10 @@ export default function ApiReferencePage() {
                   <div className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
                     <div>
-                      <code className="text-[14px] font-mono text-slate-900 font-semibold">
+                      <code className="text-body-sm font-mono text-slate-900 font-semibold">
                         {webhook.event}
                       </code>
-                      <p className="text-[14px] text-slate-600 mt-1">
+                      <p className="text-body-sm text-slate-600 mt-1">
                         {webhook.desc}
                       </p>
                     </div>
@@ -246,11 +246,11 @@ export default function ApiReferencePage() {
 
           {/* Example response */}
           <div className="mb-16">
-            <h2 className="text-[28px] font-bold text-slate-900 mb-6">
+            <h2 className="text-h3 font-bold text-slate-900 mb-6">
               Example Response
             </h2>
             <div className="bg-slate-900 rounded-xl p-6 border border-slate-700 overflow-x-auto">
-              <pre className="text-[13px] text-slate-200 font-mono">
+              <pre className="text-caption text-slate-200 font-mono">
 {`{
   "id": "req_1a2b3c4d",
   "title": "GitHub Copilot Business",
@@ -297,22 +297,22 @@ export default function ApiReferencePage() {
               <div className="bg-white rounded-lg border border-blue-200 p-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center">
-                    <span className="text-[18px]">📦</span>
+                    <span className="text-body-lg">📦</span>
                   </div>
                   <div>
                     <div className="text-body font-bold text-slate-900">Node.js SDK</div>
-                    <div className="text-[13px] text-slate-600">Coming March 2026</div>
+                    <div className="text-caption text-slate-600">Coming March 2026</div>
                   </div>
                 </div>
               </div>
               <div className="bg-white rounded-lg border border-blue-200 p-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
-                    <span className="text-[18px]">🐍</span>
+                    <span className="text-body-lg">🐍</span>
                   </div>
                   <div>
                     <div className="text-body font-bold text-slate-900">Python SDK</div>
-                    <div className="text-[13px] text-slate-600">Coming March 2026</div>
+                    <div className="text-caption text-slate-600">Coming March 2026</div>
                   </div>
                 </div>
               </div>

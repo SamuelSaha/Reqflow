@@ -5,8 +5,8 @@ export default function SecurityPage() {
     <PageShell>
       <section className="pt-20 pb-20 px-20">
         <div className="max-w-[900px] mx-auto">
-          <h1 className="text-[48px] font-extrabold tracking-tight text-slate-900 mb-4">Security Practices</h1>
-          <p className="text-[15px] text-slate-500 mb-12">Last updated: February 2026 · Beta version</p>
+          <h1 className="text-h2 font-extrabold tracking-tight text-slate-900 mb-4">Security Practices</h1>
+          <p className="text-body text-slate-500 mb-12">Last updated: February 2026 · Beta version</p>
 
           <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 mb-12">
             <h3 className="text-body-lg font-bold text-amber-600 mb-3">Beta Security Status</h3>
@@ -71,7 +71,7 @@ export default function SecurityPage() {
 
           <div className="mb-12">
             <h2 className="text-h4 font-bold text-slate-900 mb-5">Third-Party Services</h2>
-            <p className="text-[17px] text-slate-600 leading-[1.7] mb-5">We use minimal third-party services, all with strong security practices:</p>
+            <p className="text-body-lg text-slate-600 leading-[1.7] mb-5">We use minimal third-party services, all with strong security practices:</p>
             <div className="grid grid-cols-2 gap-4">
               {[
                 { name: "Neon (PostgreSQL)", cert: "SOC 2 Type II" },
@@ -82,8 +82,8 @@ export default function SecurityPage() {
                 { name: "Oracle Cloud", cert: "SOC 1/2/3, ISO 27001" },
               ].map(({ name, cert }) => (
                 <div key={name} className="bg-slate-50 border border-slate-200 rounded-[10px] p-5">
-                  <div className="text-[15px] font-semibold text-slate-900 mb-1.5">{name}</div>
-                  <div className="text-[13px] text-emerald-600 font-medium">{cert}</div>
+                  <div className="text-body font-semibold text-slate-900 mb-1.5">{name}</div>
+                  <div className="text-caption text-emerald-600 font-medium">{cert}</div>
                 </div>
               ))}
             </div>
@@ -108,8 +108,8 @@ export default function SecurityPage() {
                 { status: "\u23F3", label: "ISO 27001 certification (planned 2027)", ready: false },
               ].map(({ status, label, ready }) => (
                 <div key={label} className="bg-slate-50 border border-slate-200 rounded-[10px] p-[18px] flex items-center gap-3">
-                  <span className="text-[18px]">{status}</span>
-                  <span className={`text-[15px] ${ready ? "text-emerald-600" : "text-slate-600"}`}>{label}</span>
+                  <span className="text-body-lg">{status}</span>
+                  <span className={`text-body ${ready ? "text-emerald-600" : "text-slate-600"}`}>{label}</span>
                 </div>
               ))}
             </div>
@@ -117,17 +117,17 @@ export default function SecurityPage() {
 
           <div className="mb-12">
             <h2 className="text-h4 font-bold text-slate-900 mb-5">Responsible Disclosure</h2>
-            <p className="text-[17px] text-slate-600 leading-[1.7] mb-4">Found a security vulnerability? Please report it responsibly:</p>
+            <p className="text-body-lg text-slate-600 leading-[1.7] mb-4">Found a security vulnerability? Please report it responsibly:</p>
             <div className="bg-slate-50 border border-slate-200 rounded-xl p-7 space-y-3">
-              <p className="text-[15px] text-slate-600 leading-[1.7]"><strong className="text-slate-900">Email:</strong> <a href="mailto:security@reqflow.co" className="text-blue-600 font-semibold no-underline">security@reqflow.co</a></p>
-              <p className="text-[15px] text-slate-600 leading-[1.7]"><strong className="text-slate-900">Response time:</strong> We'll acknowledge within 24 hours and provide updates within 72 hours.</p>
-              <p className="text-[15px] text-slate-600 leading-[1.7]"><strong className="text-slate-900">Beta bounty:</strong> No formal bug bounty program yet, but we'll credit you publicly (if you want) and offer 3 months free for critical findings.</p>
+              <p className="text-body text-slate-600 leading-[1.7]"><strong className="text-slate-900">Email:</strong> <a href="mailto:security@reqflow.co" className="text-blue-600 font-semibold no-underline">security@reqflow.co</a></p>
+              <p className="text-body text-slate-600 leading-[1.7]"><strong className="text-slate-900">Response time:</strong> We'll acknowledge within 24 hours and provide updates within 72 hours.</p>
+              <p className="text-body text-slate-600 leading-[1.7]"><strong className="text-slate-900">Beta bounty:</strong> No formal bug bounty program yet, but we'll credit you publicly (if you want) and offer 3 months free for critical findings.</p>
             </div>
           </div>
 
           <div className="mb-12">
             <h2 className="text-h4 font-bold text-slate-900 mb-5">Questions?</h2>
-            <p className="text-[17px] text-slate-600 leading-[1.7]">Security questions or concerns: <a href="mailto:security@reqflow.co" className="text-blue-600 font-semibold no-underline">security@reqflow.co</a></p>
+            <p className="text-body-lg text-slate-600 leading-[1.7]">Security questions or concerns: <a href="mailto:security@reqflow.co" className="text-blue-600 font-semibold no-underline">security@reqflow.co</a></p>
           </div>
         </div>
       </section>

@@ -58,7 +58,7 @@ export default function BetaPage() {
           <div className="text-center max-w-[700px] mx-auto mb-16">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-blue-200 bg-blue-50 mb-6">
               <Sparkles className="w-4 h-4 text-blue-600" />
-              <span className="text-[13px] font-semibold text-blue-900">
+              <span className="text-caption font-semibold text-blue-900">
                 Founding Member Program
               </span>
             </div>
@@ -124,7 +124,7 @@ export default function BetaPage() {
 
             {/* Right: What we need */}
             <div className="bg-slate-900 rounded-2xl border border-slate-700 shadow-md p-8 text-white">
-              <h2 className="text-[24px] font-bold mb-6">
+              <h2 className="text-h4 font-bold mb-6">
                 What we need from you
               </h2>
               <div className="space-y-5">
@@ -284,7 +284,7 @@ export default function BetaPage() {
                     required
                     value={formData.teamSize}
                     onChange={(e) => setFormData({ ...formData, teamSize: e.target.value })}
-                    className="w-full px-4 py-3 text-[15px] bg-white border border-slate-200 rounded-lg text-slate-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all"
+                    className="w-full px-4 py-3 text-body bg-white border border-slate-200 rounded-lg text-slate-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all"
                   >
                     <option value="">Select team size</option>
                     <option value="5-15">5–15 people</option>
@@ -305,7 +305,7 @@ export default function BetaPage() {
                     onChange={(e) => setFormData({ ...formData, currentProcess: e.target.value })}
                     placeholder="e.g., Slack DMs to our CFO, approval via email, then we manually log it in QuickBooks"
                     rows={3}
-                    className="w-full px-4 py-3 text-[15px] bg-white border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all resize-none"
+                    className="w-full px-4 py-3 text-body bg-white border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all resize-none"
                   />
                 </div>
 
@@ -319,7 +319,7 @@ export default function BetaPage() {
                     onChange={(e) => setFormData({ ...formData, painPoint: e.target.value })}
                     placeholder="e.g., We have no idea what SaaS tools we're paying for. Renewals sneak up on us and we forget to cancel trials."
                     rows={3}
-                    className="w-full px-4 py-3 text-[15px] bg-white border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all resize-none"
+                    className="w-full px-4 py-3 text-body bg-white border border-slate-200 rounded-lg text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all resize-none"
                   />
                 </div>
 
@@ -331,7 +331,7 @@ export default function BetaPage() {
                   <ArrowRight className="w-5 h-5" />
                 </button>
 
-                <p className="text-[13px] text-slate-500 text-center">
+                <p className="text-caption text-slate-500 text-center">
                   We'll respond within 48 hours (business days, CET). Questions? Email{" "}
                   <a href="mailto:beta@reqflow.co" className="text-blue-600 font-semibold no-underline">
                     beta@reqflow.co
@@ -352,12 +352,12 @@ export default function BetaPage() {
                   "We went from 2-week approval cycles to same-day approvals. The founders are incredibly responsive — they fixed a bug we reported within 3 hours."
                 </p>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white text-[13px] font-bold">
+                  <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white text-caption font-bold">
                     MT
                   </div>
                   <div>
                     <div className="text-body-sm font-semibold text-slate-900">Marc T.</div>
-                    <div className="text-[13px] text-slate-500">COO, 35-person SaaS company</div>
+                    <div className="text-caption text-slate-500">COO, 35-person SaaS company</div>
                   </div>
                 </div>
               </div>
@@ -366,12 +366,12 @@ export default function BetaPage() {
                   "Finally, we know what subscriptions we're paying for. The renewal tracking alone saves us €15K/year in forgotten trials that auto-converted."
                 </p>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white text-[13px] font-bold">
+                  <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white text-caption font-bold">
                     SL
                   </div>
                   <div>
                     <div className="text-body-sm font-semibold text-slate-900">Sophie L.</div>
-                    <div className="text-[13px] text-slate-500">Finance Lead, 50-person agency</div>
+                    <div className="text-caption text-slate-500">Finance Lead, 50-person agency</div>
                   </div>
                 </div>
               </div>

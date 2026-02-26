@@ -428,7 +428,7 @@ export function ProblemSection() {
             key={stat.value}
             className="bg-white rounded-xl p-6 border border-slate-200 shadow-md hover:shadow-lg transition-shadow flex flex-col items-center gap-2"
           >
-            <span className="text-[28px] font-bold text-red-600 tracking-tight">
+            <span className="text-h3 font-bold text-red-600 tracking-tight">
               {stat.value}
             </span>
             <span className="text-caption font-medium text-slate-600 text-center">

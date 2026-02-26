@@ -92,7 +92,7 @@ export function CoreFeatures() {
               <label className="text-[11px] font-medium text-slate-500">
                 What do you need?
               </label>
-              <div className="border border-slate-200 rounded-md px-3 py-1.5 text-[12px] text-slate-900">
+              <div className="border border-slate-200 rounded-md px-3 py-1.5 text-caption text-slate-900">
                 GitHub Copilot Business for 12 engineers
               </div>
             </div>
@@ -101,7 +101,7 @@ export function CoreFeatures() {
                 <label className="text-[11px] font-medium text-slate-500">
                   Category
                 </label>
-                <div className="border border-slate-200 rounded-md px-3 py-1.5 text-[12px] text-slate-900 flex items-center justify-between">
+                <div className="border border-slate-200 rounded-md px-3 py-1.5 text-caption text-slate-900 flex items-center justify-between">
                   <span>Dev Tools (AI-filled)</span>
                   <ArrowRight className="w-3 h-3 text-slate-400 rotate-90" />
                 </div>
@@ -110,7 +110,7 @@ export function CoreFeatures() {
                 <label className="text-[11px] font-medium text-slate-500">
                   Est. Cost
                 </label>
-                <div className="border border-slate-200 rounded-md px-3 py-1.5 text-[12px] text-slate-900 flex items-center justify-between">
+                <div className="border border-slate-200 rounded-md px-3 py-1.5 text-caption text-slate-900 flex items-center justify-between">
                   <span>$228/mo (AI-filled)</span>
                   <ArrowRight className="w-3 h-3 text-slate-400 rotate-90" />
                 </div>
@@ -120,16 +120,16 @@ export function CoreFeatures() {
               <label className="text-[11px] font-medium text-slate-500">
                 Business Justification
               </label>
-              <div className="border border-slate-200 rounded-md px-3 py-1.5 text-[12px] text-slate-400 flex-1">
+              <div className="border border-slate-200 rounded-md px-3 py-1.5 text-caption text-slate-400 flex-1">
                 Explain why this purchase is needed...
               </div>
             </div>
           </div>
           <div className="flex items-center justify-end gap-2">
-            <button className="border border-slate-200 rounded-md px-3 py-1.5 text-[12px] font-medium text-slate-600">
+            <button className="border border-slate-200 rounded-md px-3 py-1.5 text-caption font-medium text-slate-600">
               Save Draft
             </button>
-            <button className="bg-blue-600 rounded-md px-3 py-1.5 text-[12px] font-medium text-white flex items-center gap-1">
+            <button className="bg-blue-600 rounded-md px-3 py-1.5 text-caption font-medium text-white flex items-center gap-1">
               Submit Request
               <ArrowRight className="w-3 h-3" />
             </button>
@@ -147,11 +147,11 @@ export function CoreFeatures() {
             </span>
           </div>
           <div className="flex items-center gap-3 bg-slate-50 rounded-lg p-3">
-            <div className="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center text-white text-[12px] font-bold">
+            <div className="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center text-white text-caption font-bold">
               MD
             </div>
             <div className="flex flex-col">
-              <span className="text-[13px] font-semibold text-slate-900">
+              <span className="text-caption font-semibold text-slate-900">
                 Marc Dubois &middot; Engineering
               </span>
               <span className="text-[11px] text-slate-500">
@@ -165,7 +165,7 @@ export function CoreFeatures() {
                 <Check className="w-3.5 h-3.5 text-green-600" />
               </div>
               <div className="flex flex-col">
-                <span className="text-[12px] font-semibold text-slate-900">
+                <span className="text-caption font-semibold text-slate-900">
                   Sarah Chen &middot; Eng Lead
                 </span>
                 <span className="text-[11px] text-slate-500">
@@ -178,7 +178,7 @@ export function CoreFeatures() {
                 <Check className="w-3.5 h-3.5 text-green-600" />
               </div>
               <div className="flex flex-col">
-                <span className="text-[12px] font-semibold text-slate-900">
+                <span className="text-caption font-semibold text-slate-900">
                   Claire Dupont &middot; Head of Finance
                 </span>
                 <span className="text-[11px] text-slate-500">
@@ -191,7 +191,7 @@ export function CoreFeatures() {
                 <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
               </div>
               <div className="flex flex-col">
-                <span className="text-[12px] font-semibold text-slate-900">
+                <span className="text-caption font-semibold text-slate-900">
                   IT Security Review
                 </span>
                 <span className="text-[11px] text-slate-500">
@@ -222,10 +222,10 @@ export function CoreFeatures() {
           <span className="bg-blue-50 rounded-md px-3 py-1 text-[11px] font-bold text-blue-600 tracking-wide w-fit">
             STEP 2
           </span>
-          <h3 className="text-[28px] font-bold tracking-tight text-slate-900">
+          <h3 className="text-h3 font-bold tracking-tight text-slate-900">
             Approval Workflows That Route Themselves
           </h3>
-          <p className="text-[16px] leading-relaxed text-slate-600">
+          <p className="text-body leading-relaxed text-slate-600">
             A visual workflow builder routes each request to the right approver
             with full context: budget impact, purchase history, and similar
             orders. Approvers act in one click from wherever they work.
@@ -253,10 +253,10 @@ export function CoreFeatures() {
           <span className="bg-blue-50 rounded-md px-3 py-1 text-[11px] font-bold text-blue-600 tracking-wide w-fit">
             STEP 3
           </span>
-          <h3 className="text-[28px] font-bold tracking-tight text-slate-900">
+          <h3 className="text-h3 font-bold tracking-tight text-slate-900">
             Live Budget Tracking &amp; Enforcement
           </h3>
-          <p className="text-[16px] leading-relaxed text-slate-600">
+          <p className="text-body leading-relaxed text-slate-600">
             Departments see available budget before they even request. Hard stops
             prevent overspend automatically, while AI forecasting surfaces
             anomalies and trends before they become problems.
@@ -286,13 +286,13 @@ export function CoreFeatures() {
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex items-baseline justify-between">
-              <span className="text-[22px] font-bold text-slate-900">
+              <span className="text-h4 font-bold text-slate-900">
                 &euro;495K{" "}
-                <span className="text-[13px] font-normal text-slate-500">
+                <span className="text-caption font-normal text-slate-500">
                   of &euro;650K
                 </span>
               </span>
-              <span className="text-[12px] font-semibold text-amber-600">
+              <span className="text-caption font-semibold text-amber-600">
                 76% consumed
               </span>
             </div>
@@ -312,7 +312,7 @@ export function CoreFeatures() {
             ].map(({ name, pct, color, alert }) => (
               <div key={name} className="flex flex-col gap-1">
                 <div className="flex items-center justify-between">
-                  <span className="text-[12px] font-medium text-slate-700 flex items-center gap-1.5">
+                  <span className="text-caption font-medium text-slate-700 flex items-center gap-1.5">
                     {name}
                     {alert && (
                       <AlertTriangle className="w-3 h-3 text-red-500" />
@@ -348,16 +348,16 @@ export function PersonaSection() {
       <div className="text-center flex flex-col items-center gap-4">
         <div className="bg-blue-50 rounded-full px-3.5 py-1.5 flex items-center gap-1.5">
           <Users className="w-3.5 h-3.5 text-blue-600" />
-          <span className="text-[12px] font-semibold text-blue-600 tracking-wide">
+          <span className="text-caption font-semibold text-blue-600 tracking-wide">
             BUILT FOR SMALL TEAMS
           </span>
         </div>
-        <h2 className="text-[44px] font-bold leading-[1.15] tracking-tight text-slate-900">
+        <h2 className="text-h2 font-bold leading-[1.15] tracking-tight text-slate-900">
           One tool for everyone
           <br />
           wearing multiple hats.
         </h2>
-        <p className="text-[18px] leading-relaxed text-slate-600 max-w-[600px]">
+        <p className="text-body-lg leading-relaxed text-slate-600 max-w-[600px]">
           Whether you handle finances, ship code, or keep operations running,
           Reqflow gives you a view shaped around your decisions.
         </p>
@@ -368,19 +368,19 @@ export function PersonaSection() {
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col">
           <div className="p-7 pb-5 flex flex-col gap-3">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white text-[14px] font-bold">
+              <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white text-body-sm font-bold">
                 CD
               </div>
               <div className="flex flex-col">
-                <span className="text-[14px] font-semibold text-slate-900">
+                <span className="text-body-sm font-semibold text-slate-900">
                   Claire D.
                 </span>
-                <span className="text-[13px] text-slate-500">
+                <span className="text-caption text-slate-500">
                   Founder &amp; COO
                 </span>
               </div>
             </div>
-            <p className="text-[14px] leading-relaxed text-slate-600 italic">
+            <p className="text-body-sm leading-relaxed text-slate-600 italic">
               &ldquo;I need to see where every dollar goes without chasing
               receipts across a dozen channels.&rdquo;
             </p>
@@ -388,19 +388,19 @@ export function PersonaSection() {
           <div className="bg-slate-50 px-7 py-4 flex flex-col gap-2.5">
             <div className="flex items-center gap-2">
               <ChartPie className="w-4 h-4 text-blue-600 flex-shrink-0" />
-              <span className="text-[13px] text-slate-600">
+              <span className="text-caption text-slate-600">
                 Real-time budget dashboards
               </span>
             </div>
             <div className="flex items-center gap-2">
               <Bell className="w-4 h-4 text-blue-600 flex-shrink-0" />
-              <span className="text-[13px] text-slate-600">
+              <span className="text-caption text-slate-600">
                 Overspend alerts by project
               </span>
             </div>
             <div className="flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-blue-600 flex-shrink-0" />
-              <span className="text-[13px] text-slate-600">
+              <span className="text-caption text-slate-600">
                 Full compliance audit trail
               </span>
             </div>
@@ -411,19 +411,19 @@ export function PersonaSection() {
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col">
           <div className="p-7 pb-5 flex flex-col gap-3">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center text-white text-[14px] font-bold">
+              <div className="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center text-white text-body-sm font-bold">
                 MD
               </div>
               <div className="flex flex-col">
-                <span className="text-[14px] font-semibold text-slate-900">
+                <span className="text-body-sm font-semibold text-slate-900">
                   Marc D.
                 </span>
-                <span className="text-[13px] text-slate-500">
+                <span className="text-caption text-slate-500">
                   Engineering Lead
                 </span>
               </div>
             </div>
-            <p className="text-[14px] leading-relaxed text-slate-600 italic">
+            <p className="text-body-sm leading-relaxed text-slate-600 italic">
               &ldquo;I just want to buy what my team needs without a 3-page form
               and a two-week wait.&rdquo;
             </p>
@@ -431,19 +431,19 @@ export function PersonaSection() {
           <div className="bg-slate-50 px-7 py-4 flex flex-col gap-2.5">
             <div className="flex items-center gap-2">
               <Zap className="w-4 h-4 text-green-500 flex-shrink-0" />
-              <span className="text-[13px] text-slate-600">
+              <span className="text-caption text-slate-600">
                 2-minute smart request form
               </span>
             </div>
             <div className="flex items-center gap-2">
               <Eye className="w-4 h-4 text-green-500 flex-shrink-0" />
-              <span className="text-[13px] text-slate-600">
+              <span className="text-caption text-slate-600">
                 Live approval status tracking
               </span>
             </div>
             <div className="flex items-center gap-2">
               <MessageSquare className="w-4 h-4 text-green-500 flex-shrink-0" />
-              <span className="text-[13px] text-slate-600">
+              <span className="text-caption text-slate-600">
                 Slack &amp; Teams notifications
               </span>
             </div>
@@ -454,17 +454,17 @@ export function PersonaSection() {
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col">
           <div className="p-7 pb-5 flex flex-col gap-3">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-violet-500 flex items-center justify-center text-white text-[14px] font-bold">
+              <div className="w-12 h-12 rounded-full bg-violet-500 flex items-center justify-center text-white text-body-sm font-bold">
                 SL
               </div>
               <div className="flex flex-col">
-                <span className="text-[14px] font-semibold text-slate-900">
+                <span className="text-body-sm font-semibold text-slate-900">
                   Sophie L.
                 </span>
-                <span className="text-[13px] text-slate-500">Ops Manager</span>
+                <span className="text-caption text-slate-500">Ops Manager</span>
               </div>
             </div>
-            <p className="text-[14px] leading-relaxed text-slate-600 italic">
+            <p className="text-body-sm leading-relaxed text-slate-600 italic">
               &ldquo;I need guardrails that enforce themselves, not ones I have
               to babysit.&rdquo;
             </p>
@@ -472,19 +472,19 @@ export function PersonaSection() {
           <div className="bg-slate-50 px-7 py-4 flex flex-col gap-2.5">
             <div className="flex items-center gap-2">
               <Settings className="w-4 h-4 text-violet-500 flex-shrink-0" />
-              <span className="text-[13px] text-slate-600">
+              <span className="text-caption text-slate-600">
                 Configurable approval workflows
               </span>
             </div>
             <div className="flex items-center gap-2">
               <Lock className="w-4 h-4 text-violet-500 flex-shrink-0" />
-              <span className="text-[13px] text-slate-600">
+              <span className="text-caption text-slate-600">
                 Policy engine with auto-enforcement
               </span>
             </div>
             <div className="flex items-center gap-2">
               <BarChart className="w-4 h-4 text-violet-500 flex-shrink-0" />
-              <span className="text-[13px] text-slate-600">
+              <span className="text-caption text-slate-600">
                 Vendor performance scoring
               </span>
             </div>

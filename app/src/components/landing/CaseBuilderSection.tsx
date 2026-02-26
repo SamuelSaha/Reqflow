@@ -101,7 +101,7 @@ export function CaseBuilderShowcase() {
           <div className="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Scale className="w-4 h-4 text-violet-600" />
-              <span className="text-[14px] font-bold text-slate-900">
+              <span className="text-body-sm font-bold text-slate-900">
                 Case Builder
               </span>
               <span className="bg-violet-50 text-violet-600 text-[10px] font-semibold px-2 py-0.5 rounded-full">
@@ -142,7 +142,7 @@ export function CaseBuilderShowcase() {
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-[13px] font-bold text-slate-900">
+                  <span className="text-caption font-bold text-slate-900">
                     {alt.vendor}
                   </span>
                   {alt.recommended && (
@@ -150,7 +150,7 @@ export function CaseBuilderShowcase() {
                   )}
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-[17px] font-bold text-slate-900">
+                  <span className="text-body-lg font-bold text-slate-900">
                     {alt.annual}
                   </span>
                   <span className="text-[10px] text-slate-500">
@@ -282,7 +282,7 @@ export function CaseBuilderSpotlight() {
                 }`}
               >
                 <div className="flex items-center gap-2">
-                  <span className="text-[13px] font-bold text-slate-900">
+                  <span className="text-caption font-bold text-slate-900">
                     {v.name}
                   </span>
                   {v.rec && (
@@ -301,7 +301,7 @@ export function CaseBuilderSpotlight() {
                   >
                     {v.score}
                   </span>
-                  <span className="text-[13px] font-semibold text-slate-700">
+                  <span className="text-caption font-semibold text-slate-700">
                     {v.cost}
                   </span>
                 </div>
