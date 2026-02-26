@@ -1,86 +1,283 @@
 /**
- * Hero Section - Updated to match issue #56 requirements
- * - Warm background (cream/beige)
- * - Grid-based centered layout
- * - Responsive typography system
- * - CTA components with analytics
- * - Social proof integration
- * - 70-80vh height
+ * Hero Section - BEAST MODE EDITION
+ * Premium conversion-optimized design with:
+ * - Visual hierarchy amplification
+ * - Product showcase integration
+ * - Advanced micro-interactions
+ * - Social proof at decision moments
+ * - Grid-based responsive layout
  */
 
 import { Section } from "@/components/layout/Section";
 import { Container } from "@/components/layout/Container";
-import { PrimaryCta, SecondaryCta, CtaGroup } from "@/components/ui/cta-button";
-import { SocialProofGroup } from "@/components/marketing/SocialProof";
+import { PrimaryCta, SecondaryCta, CtaGroup, TertiaryCta } from "@/components/ui/cta-button";
+import { SocialProofGroup, UserCount, NoCreditCard } from "@/components/marketing/SocialProof";
 import {
+  Sparkles,
+  CheckCircle2,
+  Zap,
+  Shield,
+  Clock,
+  TrendingDown,
   TriangleAlert,
   X,
   Check,
 } from "lucide-react";
 
 /* ------------------------------------------------------------------ */
-/*  Hero Section - Issue #56 Spec                                     */
+/*  Hero Section - Premium Edition with Product Showcase             */
 /* ------------------------------------------------------------------ */
 export function HeroSection() {
   return (
     <Section
       background="warm"
-      className="min-h-[80vh] flex items-center justify-center"
+      className="relative overflow-hidden"
     >
-      <Container size="narrow">
-        {/* Grid-based layout for content organization */}
-        <div className="grid grid-cols-1 gap-8 text-center">
-          {/* Badge - Optional */}
-          <div className="flex justify-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200 bg-white shadow-sm">
-              <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-              <span className="text-sm font-medium text-slate-700">
-                Free during early access • No card needed
-              </span>
+      {/* Subtle gradient overlay for depth */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white/30 pointer-events-none" />
+
+      <Container size="default" className="relative">
+        <div className="grid grid-cols-1 gap-12 lg:gap-16 py-20 lg:py-24">
+          {/* Content Section */}
+          <div className="grid grid-cols-1 gap-8 text-center max-w-4xl mx-auto">
+            {/* Trust Badge with Icon */}
+            <div className="flex justify-center animate-in fade-in slide-in-from-top duration-500">
+              <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-emerald-200 bg-emerald-50/80 backdrop-blur-sm shadow-sm hover:shadow-md transition-shadow">
+                <Sparkles className="w-4 h-4 text-emerald-600" />
+                <span className="text-sm font-semibold text-emerald-900">
+                  Free during early access
+                </span>
+                <span className="text-sm text-emerald-600">•</span>
+                <span className="text-sm text-emerald-700">
+                  No credit card required
+                </span>
+              </div>
+            </div>
+
+            {/* Headline with emphasis */}
+            <div className="space-y-6 animate-in fade-in slide-in-from-top duration-700 delay-100">
+              <h1 className="text-hero text-slate-900 leading-[1.1]">
+                Procurement for teams that{" "}
+                <span className="relative inline-block">
+                  <span className="relative z-10">move too fast</span>
+                  <span className="absolute bottom-2 left-0 right-0 h-3 bg-blue-200/60 -rotate-1" />
+                </span>
+                {" "}for spreadsheets
+              </h1>
+
+              {/* Enhanced subheadline with benefits */}
+              <p className="text-body-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
+                Replace Slack chaos with a real purchasing workflow. Track budgets, manage vendors,
+                catch renewals—all in one place. <span className="font-semibold text-slate-700">Built for teams of 5-50.</span>
+              </p>
+            </div>
+
+            {/* Quick wins - Value props */}
+            <div className="flex flex-wrap items-center justify-center gap-6 text-sm animate-in fade-in slide-in-from-top duration-700 delay-200">
+              <div className="flex items-center gap-2 text-slate-700">
+                <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                <span className="font-medium">2-minute setup</span>
+              </div>
+              <div className="flex items-center gap-2 text-slate-700">
+                <Zap className="w-5 h-5 text-amber-500" />
+                <span className="font-medium">Instant approvals</span>
+              </div>
+              <div className="flex items-center gap-2 text-slate-700">
+                <Shield className="w-5 h-5 text-blue-600" />
+                <span className="font-medium">Budget guardrails</span>
+              </div>
+              <div className="flex items-center gap-2 text-slate-700">
+                <Clock className="w-5 h-5 text-purple-600" />
+                <span className="font-medium">Never miss renewals</span>
+              </div>
+            </div>
+
+            {/* CTAs with enhanced spacing */}
+            <div className="space-y-6 animate-in fade-in slide-in-from-top duration-700 delay-300">
+              <CtaGroup alignment="center">
+                <PrimaryCta
+                  href="/signup"
+                  size="large"
+                  icon="arrow"
+                  analyticsEvent="hero_primary_click"
+                >
+                  Start Free Trial
+                </PrimaryCta>
+                <SecondaryCta
+                  href="/contact"
+                  size="large"
+                  analyticsEvent="hero_secondary_click"
+                >
+                  Book a Demo
+                </SecondaryCta>
+              </CtaGroup>
+
+              {/* Social proof directly under CTAs */}
+              <div className="flex flex-col items-center gap-3">
+                <div className="flex items-center gap-6 flex-wrap justify-center">
+                  <UserCount count={500} size="md" />
+                  <div className="h-4 w-px bg-slate-300" />
+                  <NoCreditCard size="md" additionalText="Cancel anytime" />
+                </div>
+              </div>
+
+              {/* Tertiary action */}
+              <div className="pt-2">
+                <TertiaryCta
+                  href="/demo"
+                  analyticsEvent="hero_watch_demo"
+                >
+                  Watch 2-min demo →
+                </TertiaryCta>
+              </div>
             </div>
           </div>
 
-          {/* Headline - Responsive typography */}
-          <div className="space-y-4">
-            <h1 className="text-hero text-slate-900">
-              The connected procurement workflow for small teams
-            </h1>
+          {/* Product Showcase - Elevated design */}
+          <div className="relative max-w-6xl mx-auto animate-in fade-in slide-in-from-bottom duration-1000 delay-500">
+            {/* Glow effect behind mockup */}
+            <div className="absolute inset-0 bg-gradient-to-t from-blue-500/20 via-transparent to-transparent blur-3xl -z-10 scale-150" />
 
-            {/* Subheadline - Responsive typography */}
-            <p className="text-body-lg text-slate-600 max-w-2xl mx-auto">
-              Streamline vendor management, budget tracking, and renewals in one place.
-              Never miss a deadline. Never overspend.
-            </p>
-          </div>
+            <div className="relative rounded-2xl shadow-2xl overflow-hidden border border-slate-200/80 bg-white">
+              {/* Browser chrome */}
+              <div className="h-12 bg-gradient-to-b from-slate-50 to-white border-b border-slate-200 px-4 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="w-3 h-3 bg-red-500 rounded-full" />
+                  <span className="w-3 h-3 bg-amber-400 rounded-full" />
+                  <span className="w-3 h-3 bg-green-500 rounded-full" />
+                </div>
+                <div className="flex items-center gap-2 bg-slate-100 rounded-lg h-8 px-4">
+                  <Shield className="w-3.5 h-3.5 text-green-600" />
+                  <span className="text-xs font-medium text-slate-600">
+                    app.reqflow.com/dashboard
+                  </span>
+                </div>
+                <div className="w-[68px]" />
+              </div>
 
-          {/* CTAs - Using new CTA components */}
-          <div className="space-y-6">
-            <CtaGroup alignment="center">
-              <PrimaryCta
-                href="/signup"
-                size="large"
-                icon="arrow"
-                analyticsEvent="hero_primary_click"
-              >
-                Start Free Trial
-              </PrimaryCta>
-              <SecondaryCta
-                href="/contact"
-                size="large"
-                analyticsEvent="hero_secondary_click"
-              >
-                Book a Demo
-              </SecondaryCta>
-            </CtaGroup>
+              {/* Dashboard mockup with real metrics */}
+              <div className="bg-gradient-to-br from-slate-50 to-white p-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                  {/* Metric Cards */}
+                  <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition-shadow">
+                    <div className="flex items-start justify-between mb-3">
+                      <div>
+                        <div className="text-3xl font-bold text-slate-900 mb-1">
+                          €127K
+                        </div>
+                        <div className="text-sm font-medium text-slate-600">
+                          Monthly Spend
+                        </div>
+                      </div>
+                      <div className="p-2 bg-blue-50 rounded-lg">
+                        <TrendingDown className="w-5 h-5 text-blue-600" />
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <div className="text-xs font-semibold text-green-600">
+                        ↓ 12% vs last month
+                      </div>
+                    </div>
+                  </div>
 
-            {/* Social Proof - Trust signals */}
-            <SocialProofGroup
-              userCount={500}
-              rating={{ rating: 4.9, reviews: 127 }}
-              showNoCreditCard
-              alignment="center"
-              size="md"
-            />
+                  <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition-shadow">
+                    <div className="flex items-start justify-between mb-3">
+                      <div>
+                        <div className="text-3xl font-bold text-slate-900 mb-1">
+                          3.2h
+                        </div>
+                        <div className="text-sm font-medium text-slate-600">
+                          Avg. Approval Time
+                        </div>
+                      </div>
+                      <div className="p-2 bg-amber-50 rounded-lg">
+                        <Clock className="w-5 h-5 text-amber-600" />
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <div className="text-xs font-semibold text-green-600">
+                        ↓ 40% improvement
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition-shadow">
+                    <div className="flex items-start justify-between mb-3">
+                      <div>
+                        <div className="text-3xl font-bold text-slate-900 mb-1">
+                          94%
+                        </div>
+                        <div className="text-sm font-medium text-slate-600">
+                          Budget Compliance
+                        </div>
+                      </div>
+                      <div className="p-2 bg-green-50 rounded-lg">
+                        <Shield className="w-5 h-5 text-green-600" />
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <div className="text-xs font-semibold text-green-600">
+                        ✓ On target
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Recent Requests Table Preview */}
+                <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+                  <div className="px-6 py-4 border-b border-slate-200 bg-slate-50/50">
+                    <h3 className="text-base font-semibold text-slate-900">
+                      Recent Requests
+                    </h3>
+                  </div>
+                  <div className="divide-y divide-slate-100">
+                    <div className="px-6 py-4 flex items-center justify-between hover:bg-slate-50/50 transition-colors">
+                      <div className="flex items-center gap-4 flex-1">
+                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center text-white font-semibold text-sm">
+                          GH
+                        </div>
+                        <div>
+                          <div className="font-semibold text-slate-900">GitHub Copilot</div>
+                          <div className="text-sm text-slate-600">GitHub • Engineering</div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-6">
+                        <div className="text-right">
+                          <div className="font-semibold text-slate-900">€2,736/yr</div>
+                          <div className="text-xs text-slate-600">20 seats</div>
+                        </div>
+                        <span className="px-3 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full">
+                          Approved
+                        </span>
+                      </div>
+                    </div>
+                    <div className="px-6 py-4 flex items-center justify-between hover:bg-slate-50/50 transition-colors">
+                      <div className="flex items-center gap-4 flex-1">
+                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-semibold text-sm">
+                          FG
+                        </div>
+                        <div>
+                          <div className="font-semibold text-slate-900">Figma Enterprise</div>
+                          <div className="text-sm text-slate-600">Figma • Design</div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-6">
+                        <div className="text-right">
+                          <div className="font-semibold text-slate-900">€8,400/yr</div>
+                          <div className="text-xs text-slate-600">15 seats</div>
+                        </div>
+                        <span className="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-semibold rounded-full">
+                          Pending
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Bottom fade */}
+              <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none" />
+            </div>
           </div>
         </div>
       </Container>
