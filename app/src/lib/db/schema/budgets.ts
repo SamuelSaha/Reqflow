@@ -74,8 +74,12 @@ export const budgetsRelations = relations(budgets, ({ one }) => ({
   }),
 }));
 
-// Zod schemas
+// Zod schemas with input validation
 export const insertBudgetSchema = createInsertSchema(budgets, {
+  // Text field length limits (prevent DoS via large inputs)
+  name: z.string().min(1).max(200),
+
+  // Enum validations
   type: z.enum(["company", "department", "category", "project"]),
   period: z.enum(["monthly", "quarterly", "annually"]),
   category: z

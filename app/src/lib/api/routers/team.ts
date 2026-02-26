@@ -395,7 +395,7 @@ export const teamRouter = router({
       z.object({
         name: z.string().min(1).max(100),
         code: z.string().min(1).max(20).optional(),
-        description: z.string().optional(),
+        description: z.string().max(500).optional(),
         headId: z.string().uuid().optional(),
       })
     )
@@ -447,7 +447,7 @@ export const teamRouter = router({
         departmentId: z.string().uuid(),
         name: z.string().min(1).max(100).optional(),
         code: z.string().min(1).max(20).optional(),
-        description: z.string().optional(),
+        description: z.string().max(500).optional(),
         headId: z.string().uuid().nullable().optional(),
       })
     )

@@ -157,20 +157,20 @@ export const vendorsRouter = router({
     .input(
       z.object({
         name: z.string().min(1).max(255),
-        legalName: z.string().optional(),
-        website: z.string().url().optional(),
-        industry: z.string().optional(),
-        country: z.string().optional(),
-        taxId: z.string().optional(),
+        legalName: z.string().max(255).optional(),
+        website: z.string().url().max(500).optional(),
+        industry: z.string().max(100).optional(),
+        country: z.string().max(100).optional(),
+        taxId: z.string().max(100).optional(),
         complianceTier: z
           .enum(["none", "basic", "customer_data", "regulated"])
           .default("none"),
         primaryContact: z
           .object({
-            name: z.string(),
+            name: z.string().max(100),
             email: z.string().email(),
-            phone: z.string().optional(),
-            role: z.string().optional(),
+            phone: z.string().max(50).optional(),
+            role: z.string().max(100).optional(),
           })
           .optional(),
       })
@@ -230,23 +230,23 @@ export const vendorsRouter = router({
       z.object({
         id: z.string().uuid(),
         name: z.string().min(1).max(255).optional(),
-        legalName: z.string().optional(),
-        website: z.string().url().optional(),
-        industry: z.string().optional(),
-        country: z.string().optional(),
-        taxId: z.string().optional(),
+        legalName: z.string().max(255).optional(),
+        website: z.string().url().max(500).optional(),
+        industry: z.string().max(100).optional(),
+        country: z.string().max(100).optional(),
+        taxId: z.string().max(100).optional(),
         complianceTier: z
           .enum(["none", "basic", "customer_data", "regulated"])
           .optional(),
         performanceScore: z.number().min(0).max(5).optional(),
-        internalNotes: z.string().optional(),
+        internalNotes: z.string().max(5000).optional(),
         status: z.enum(["active", "inactive", "blocked", "pending_review"]).optional(),
         primaryContact: z
           .object({
-            name: z.string(),
+            name: z.string().max(100),
             email: z.string().email(),
-            phone: z.string().optional(),
-            role: z.string().optional(),
+            phone: z.string().max(50).optional(),
+            role: z.string().max(100).optional(),
           })
           .optional(),
       })

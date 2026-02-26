@@ -115,12 +115,24 @@ export const requestsRelations = relations(requests, ({ one }) => ({
   }),
 }));
 
-// Zod schemas
+// Zod schemas with input validation
 export const insertRequestSchema = createInsertSchema(requests, {
+  // Text field length limits (prevent DoS via large inputs)
+  title: z.string().min(1).max(200),
+  description: z.string().max(5000).optional(),
+  vendorName: z.string().max(200).optional(),
+  accountingSyncRef: z.string().max(100).optional(),
+  accountingSyncProvider: z.string().max(50).optional(),
+  accountingSyncError: z.string().max(1000).optional(),
+  aiCategory: z.string().max(50).optional(),
+
+  // Enum validations
   category: z.enum(["saas", "services", "office", "travel", "hardware", "other"]),
   status: z.enum(["draft", "pending", "approved", "rejected", "cancelled"]).optional(),
   urgency: z.enum(["low", "normal", "urgent"]).optional(),
   frequency: z.enum(["one-time", "monthly", "annually"]).optional(),
+
+  // Numeric validations
   amount: z.string().regex(/^\d+(\.\d{1,2})?$/),
 });
 
