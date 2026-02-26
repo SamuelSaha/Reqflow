@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { z } from "zod";
 import { db } from "@/lib/db";
 import {
   users,
@@ -16,6 +17,32 @@ import { env } from "@/lib/env";
 const COOKIE_NAME = "reqflow_session";
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
 
+/**
+ * Password policy enforcement (NIST, OWASP compliant)
+ * - Minimum 12 characters
+ * - At least one uppercase letter
+ * - At least one lowercase letter
+ * - At least one number
+ * - At least one special character
+ */
+const passwordSchema = z
+  .string()
+  .min(12, "Password must be at least 12 characters")
+  .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+  .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+  .regex(/[0-9]/, "Password must contain at least one number")
+  .regex(
+    /[^A-Za-z0-9]/,
+    "Password must contain at least one special character (!@#$%^&* etc.)"
+  );
+
+const signupSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: passwordSchema,
+  name: z.string().min(1, "Name is required"),
+  inviteToken: z.string().optional(),
+});
+
 function slugify(name: string): string {
   return name
     .toLowerCase()
@@ -27,14 +54,18 @@ function slugify(name: string): string {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { email, password, name, inviteToken } = body;
 
-    if (!email || !password || !name) {
+    // Validate input with password policy
+    const validation = signupSchema.safeParse(body);
+    if (!validation.success) {
+      const errors = validation.error.issues.map((err) => err.message);
       return NextResponse.json(
-        { error: "Email, password, and name are required" },
+        { error: errors.join(". ") },
         { status: 400 }
       );
     }
+
+    const { email, password, name, inviteToken } = validation.data;
 
     // Check if user already exists
     const existingUser = await db.query.users.findFirst({

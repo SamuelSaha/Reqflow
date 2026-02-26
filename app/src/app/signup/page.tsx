@@ -148,17 +148,24 @@ export default function SignupPage() {
               <Input
                 id="password"
                 type="password"
-                placeholder="Minimum 8 characters"
+                placeholder="Minimum 12 characters"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                minLength={8}
+                minLength={12}
                 autoComplete="new-password"
                 disabled={loading}
               />
-              <p className="text-xs text-slate-500">
-                At least 8 characters with a mix of letters and numbers
-              </p>
+              <div className="text-xs text-slate-500 space-y-1">
+                <p className="font-medium">Password must contain:</p>
+                <ul className="list-disc list-inside space-y-0.5 ml-2">
+                  <li>At least 12 characters</li>
+                  <li>Uppercase letter (A-Z)</li>
+                  <li>Lowercase letter (a-z)</li>
+                  <li>Number (0-9)</li>
+                  <li>Special character (!@#$%^&* etc.)</li>
+                </ul>
+              </div>
             </div>
 
             <Button type="submit" className="w-full" disabled={loading}>
