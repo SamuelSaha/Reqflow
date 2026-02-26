@@ -69,8 +69,8 @@ export function HeroSection() {
 
               {/* Enhanced subheadline with benefits */}
               <p className="text-body-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
-                Replace Slack chaos with a real purchasing workflow. Track budgets, manage vendors,
-                catch renewals—all in one place. <span className="font-semibold text-slate-700">Built for teams of 5-50.</span>
+                Stop losing invoices in Slack threads. Stop wondering if you already pay for that tool.
+                Stop chasing approvals across DMs. <span className="font-semibold text-slate-700">Built for teams of 5-50 who don't have a procurement department.</span>
               </p>
             </div>
 
@@ -296,7 +296,7 @@ export function TrustLogos() {
   return (
     <section className="bg-white py-10 px-20 flex flex-col items-center gap-6">
       <span className="text-[12px] font-semibold text-slate-400 tracking-[1.5px] uppercase">
-        BUILT FOR FAST-MOVING TEAMS WHO BUY WITHOUT A PROCUREMENT DEPARTMENT
+        TRUSTED BY STARTUPS AND SCALE-UPS WHO MOVE TOO FAST FOR TRADITIONAL PROCUREMENT
       </span>
       <div className="flex items-center justify-center gap-16">
         {logos.map((name) => (
@@ -353,13 +353,12 @@ export function ProblemSection() {
         </div>
 
         <h2 className="text-[44px] font-bold leading-[1.15] tracking-tight text-slate-900">
-          Your team buys tools on a shared card and hopes someone is tracking it.
+          Your team buys SaaS tools on a shared card and you find out when the invoice arrives.
         </h2>
 
         <p className="text-[18px] leading-relaxed text-slate-600 max-w-[620px]">
-          No procurement team. No formal process. Just Slack messages, a shared
-          credit card, and a founder who finds surprise charges every month.
-          Sound familiar?
+          You're not big enough for a procurement team, but you're too big to track everything in your head.
+          Slack threads, shared cards, surprise renewals. Every founder's been there.
         </p>
       </div>
 
@@ -375,7 +374,7 @@ export function ProblemSection() {
             </span>
           </div>
           <h3 className="text-[22px] font-bold text-slate-900 mb-6">
-            A week to approve a $200 tool for a 20-person team
+            Approving a $20/month tool takes a week and three Slack threads
           </h3>
           <div className="flex flex-col gap-4">
             {beforeSteps.map((step, i) => (
@@ -404,7 +403,7 @@ export function ProblemSection() {
             </span>
           </div>
           <h3 className="text-[22px] font-bold text-slate-900 mb-6">
-            Under 2 hours. Every time. Zero confusion.
+            Same request gets approved in under 2 hours. Every single time.
           </h3>
           <div className="flex flex-col gap-4">
             {afterSteps.map((step, i) => {
@@ -444,6 +443,89 @@ export function ProblemSection() {
             </span>
           </div>
         ))}
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  FAQ Section - SEO-optimized for long-tail queries                */
+/* ------------------------------------------------------------------ */
+
+const faqs = [
+  {
+    question: "How is Reqflow different from using spreadsheets for procurement?",
+    answer: "Spreadsheets break down when your team hits 10-15 people. They live outside your workflow—nobody updates them, nobody checks them before buying, and they're always out of date. Reqflow lives where your team already works (Slack, email, web) and automatically captures every purchase request, duplicate check, and approval. The data stays current without anyone doing extra work.",
+  },
+  {
+    question: "Do I need a procurement team to use procurement software?",
+    answer: "No. That's exactly who we built Reqflow for—teams without procurement departments. If you're the founder, ops lead, or finance person handling purchases while also doing your actual job, this replaces the manual work. Set it up once (takes 2 minutes), and it runs itself. No training, no procurement expertise needed.",
+  },
+  {
+    question: "How does SaaS spend management work for small teams without finance software?",
+    answer: "We track every SaaS subscription from the moment someone requests it. You'll see what you're paying, when it renews, who uses it, and if you already have something similar. We flag duplicates automatically, so you don't end up paying for three project management tools. Export everything for your accountant in one click.",
+  },
+  {
+    question: "Can Reqflow catch duplicate SaaS subscriptions before we buy them?",
+    answer: "Yes. When someone submits a request, we check your existing tools and flag potential overlaps before the purchase happens. For example, if your design team already uses Figma and someone requests Sketch, we'll surface that immediately. Saves you from discovering duplicates months later when renewals hit.",
+  },
+  {
+    question: "What's the fastest way to set up procurement for a startup?",
+    answer: "Connect your Slack workspace or create a web form (2 minutes). Set approval rules—like \"under €500 auto-approve, over €500 needs founder approval.\" That's it. Your team can start submitting requests immediately. No software to install, no training meetings, no complicated setup. Most teams are fully running within their first hour.",
+  },
+];
+
+export function FaqSection() {
+  return (
+    <section className="bg-white py-20 px-6 md:px-20 flex flex-col items-center">
+      <div className="max-w-[800px] w-full flex flex-col gap-12">
+        {/* Header */}
+        <div className="flex flex-col items-center gap-4 text-center">
+          <h2 className="text-[40px] md:text-[44px] font-bold leading-[1.15] tracking-tight text-slate-900">
+            Common questions about procurement software for small teams
+          </h2>
+          <p className="text-[17px] md:text-[18px] text-slate-600 max-w-[600px]">
+            Everything you need to know about managing SaaS spend without a procurement department.
+          </p>
+        </div>
+
+        {/* FAQ Items */}
+        <div className="flex flex-col gap-8">
+          {faqs.map((faq, index) => (
+            <div key={index} className="flex flex-col gap-3">
+              <h3 className="text-[19px] md:text-[20px] font-bold text-slate-900 leading-snug">
+                {faq.question}
+              </h3>
+              <p className="text-[16px] md:text-[17px] leading-relaxed text-slate-600">
+                {faq.answer}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {/* CTA after FAQ */}
+        <div className="flex flex-col items-center gap-6 pt-8 border-t border-slate-200">
+          <p className="text-[17px] md:text-[18px] text-slate-700 font-medium">
+            Still have questions? See how it works in 2 minutes.
+          </p>
+          <CtaGroup alignment="center">
+            <PrimaryCta
+              href="/signup"
+              size="large"
+              icon="arrow"
+              analyticsEvent="faq_cta_click"
+            >
+              Start Free Trial
+            </PrimaryCta>
+            <SecondaryCta
+              href="/demo"
+              size="large"
+              analyticsEvent="faq_demo_click"
+            >
+              Watch Demo
+            </SecondaryCta>
+          </CtaGroup>
+        </div>
       </div>
     </section>
   );
