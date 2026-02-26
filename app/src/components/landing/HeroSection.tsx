@@ -10,8 +10,7 @@
 
 import { Section } from "@/components/layout/Section";
 import { Container } from "@/components/layout/Container";
-import { PrimaryCta, SecondaryCta, CtaGroup, TertiaryCta } from "@/components/ui/cta-button";
-import { SocialProofGroup, UserCount, NoCreditCard } from "@/components/marketing/SocialProof";
+import { PrimaryCta, SecondaryCta, CtaGroup } from "@/components/ui/cta-button";
 import {
   Sparkles,
   CheckCircle2,
@@ -70,7 +69,7 @@ export function HeroSection() {
               {/* Enhanced subheadline with benefits */}
               <p className="text-body-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
                 Stop losing invoices in Slack threads. Stop wondering if you already pay for that tool.
-                Stop chasing approvals across DMs. <span className="font-semibold text-slate-700">Built for teams of 5-50 who don't have a procurement department.</span>
+                Stop chasing approvals across DMs. <span className="font-semibold text-slate-700">Built for teams who buy without a procurement department.</span>
               </p>
             </div>
 
@@ -113,25 +112,6 @@ export function HeroSection() {
                   Book a Demo
                 </SecondaryCta>
               </CtaGroup>
-
-              {/* Social proof directly under CTAs */}
-              <div className="flex flex-col items-center gap-2.5">
-                <div className="flex items-center gap-4 md:gap-6 flex-wrap justify-center">
-                  <UserCount count={500} size="md" />
-                  <div className="h-4 w-px bg-slate-300" />
-                  <NoCreditCard size="md" additionalText="Cancel anytime" />
-                </div>
-              </div>
-
-              {/* Tertiary action */}
-              <div className="pt-1">
-                <TertiaryCta
-                  href="/demo"
-                  analyticsEvent="hero_watch_demo"
-                >
-                  Watch 2-min demo →
-                </TertiaryCta>
-              </div>
             </div>
           </div>
 
