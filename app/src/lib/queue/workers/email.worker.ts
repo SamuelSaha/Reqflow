@@ -26,7 +26,7 @@ async function processEmail(job: Job<EmailJobData>) {
 
     // Send via Resend
     const result = await resend.emails.send({
-      from: "Reqflow <notifications@reqflow.com>",
+      from: env.EMAIL_FROM,
       to,
       subject,
       html,

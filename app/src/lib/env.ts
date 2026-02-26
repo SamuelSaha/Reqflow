@@ -24,6 +24,7 @@ export const env = createEnv({
 
     // Resend (Email)
     RESEND_API_KEY: z.string().optional(),
+    EMAIL_FROM: z.string().optional().default("Reqflow <notifications@reqflow.com>"),
 
     // OneSignal (Push Notifications)
     ONESIGNAL_APP_ID: z.string().optional(),
@@ -85,6 +86,7 @@ export const env = createEnv({
     R2_SECRET_ACCESS_KEY: process.env.R2_SECRET_ACCESS_KEY,
     R2_BUCKET_NAME: process.env.R2_BUCKET_NAME,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
+    EMAIL_FROM: process.env.EMAIL_FROM,
     ONESIGNAL_APP_ID: process.env.ONESIGNAL_APP_ID,
     ONESIGNAL_API_KEY: process.env.ONESIGNAL_API_KEY,
     SLACK_CLIENT_ID: process.env.SLACK_CLIENT_ID,
