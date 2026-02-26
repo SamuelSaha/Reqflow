@@ -1,224 +1,90 @@
+/**
+ * Hero Section - Updated to match issue #56 requirements
+ * - Warm background (cream/beige)
+ * - Grid-based centered layout
+ * - Responsive typography system
+ * - CTA components with analytics
+ * - Social proof integration
+ * - 70-80vh height
+ */
+
+import { Section } from "@/components/layout/Section";
+import { Container } from "@/components/layout/Container";
+import { PrimaryCta, SecondaryCta, CtaGroup } from "@/components/ui/cta-button";
+import { SocialProofGroup } from "@/components/marketing/SocialProof";
 import {
-  ArrowRight,
-  Play,
-  Lock,
-  LayoutDashboard,
-  FilePlus,
-  CircleCheck,
-  Wallet,
-  Building2,
-  FileText,
-  TrendingDown,
-  Plus,
   TriangleAlert,
   X,
   Check,
 } from "lucide-react";
 
 /* ------------------------------------------------------------------ */
-/*  Hero Section                                                       */
+/*  Hero Section - Issue #56 Spec                                     */
 /* ------------------------------------------------------------------ */
 export function HeroSection() {
   return (
-    <section className="bg-gradient-to-b from-white via-[#F8FBFF] to-[#F0F6FF] min-h-[calc(100vh-72px)] pt-16 pb-10 px-20 flex flex-col items-center justify-between gap-8">
-      {/* Hero Content - Clean & Minimal */}
-      <div className="max-w-[900px] flex flex-col items-center gap-6 text-center">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-slate-200 bg-white shadow-sm">
-          <span className="w-2 h-2 bg-emerald-500 rounded-full" />
-          <span className="text-[13px] font-medium text-slate-700">
-            Free during early access. No card needed.
-          </span>
-        </div>
-
-        <h1 className="text-[64px] font-extrabold leading-[1.1] tracking-[-2px] text-slate-900">
-          Procurement for teams
-          <br />
-          that move too fast for spreadsheets.
-        </h1>
-
-        <p className="max-w-[680px] text-[20px] leading-relaxed text-slate-600">
-          Reqflow gives small teams a real purchasing workflow. Free to use,
-          ready in minutes, and built to replace the Slack threads your ops lead
-          is drowning in.
-        </p>
-
-        <div className="flex gap-4">
-          <button className="inline-flex items-center gap-2 bg-blue-600 text-white px-7 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
-            Get Started Free
-            <ArrowRight className="w-[18px] h-[18px]" />
-          </button>
-          <button className="inline-flex items-center gap-2 border border-slate-300 bg-white px-7 py-3 rounded-lg font-semibold text-slate-900 hover:bg-slate-50 transition-colors">
-            Watch Demo
-            <Play className="w-[18px] h-[18px]" />
-          </button>
-        </div>
-      </div>
-
-      {/* Product Mockup - Subtle Shadow */}
-      <div className="relative w-full max-w-[1100px] aspect-[110/62] max-h-[min(620px,calc(100vh-520px))] rounded-xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.08)] overflow-hidden bg-white border border-slate-200">
-        <div className="h-11 bg-white border-b border-slate-200 px-4 flex items-center justify-between">
-          <div className="flex items-center gap-1.5">
-            <span className="w-[10px] h-[10px] bg-red-500 rounded-full" />
-            <span className="w-[10px] h-[10px] bg-amber-500 rounded-full" />
-            <span className="w-[10px] h-[10px] bg-green-500 rounded-full" />
-          </div>
-          <div className="flex items-center gap-1.5 bg-slate-100 rounded-md h-7 px-3">
-            <Lock className="w-3 h-3 text-slate-400" />
-            <span className="text-[12px] text-slate-400">
-              app.reqflow.com/dashboard
-            </span>
-          </div>
-          <div className="w-[52px]" />
-        </div>
-
-        <div className="flex h-[calc(100%-44px)]">
-          {/* Sidebar */}
-          <div className="w-[220px] bg-white border-r border-slate-200 p-4 flex flex-col gap-1">
-            <div className="flex items-center gap-2 pb-4 mb-1">
-              <div className="w-6 h-6 bg-blue-600 rounded-md flex items-center justify-center">
-                <ArrowRight className="w-3.5 h-3.5 text-white" />
-              </div>
-              <span className="text-[15px] font-bold text-slate-900">
-                Reqflow
-              </span>
-            </div>
-
-            <div className="flex items-center gap-2.5 px-3 py-2 bg-blue-50 rounded-lg">
-              <LayoutDashboard className="w-4 h-4 text-blue-600" />
-              <span className="text-[13px] font-semibold text-blue-600">
-                Dashboard
-              </span>
-            </div>
-            <div className="flex items-center gap-2.5 px-3 py-2 rounded-lg">
-              <FilePlus className="w-4 h-4 text-slate-600" />
-              <span className="text-[13px] font-medium text-slate-600">
-                Requests
-              </span>
-            </div>
-            <div className="flex items-center gap-2.5 px-3 py-2 rounded-lg">
-              <CircleCheck className="w-4 h-4 text-slate-600" />
-              <span className="text-[13px] font-medium text-slate-600">
-                Approvals
-              </span>
-            </div>
-            <div className="flex items-center gap-2.5 px-3 py-2 rounded-lg">
-              <Wallet className="w-4 h-4 text-slate-600" />
-              <span className="text-[13px] font-medium text-slate-600">
-                Budgets
-              </span>
-            </div>
-            <div className="flex items-center gap-2.5 px-3 py-2 rounded-lg">
-              <Building2 className="w-4 h-4 text-slate-600" />
-              <span className="text-[13px] font-medium text-slate-600">
-                Vendors
-              </span>
-            </div>
-            <div className="flex items-center gap-2.5 px-3 py-2 rounded-lg">
-              <FileText className="w-4 h-4 text-slate-600" />
-              <span className="text-[13px] font-medium text-slate-600">
-                Invoices
+    <Section
+      background="warm"
+      className="min-h-[80vh] flex items-center justify-center"
+    >
+      <Container size="narrow">
+        {/* Grid-based layout for content organization */}
+        <div className="grid grid-cols-1 gap-8 text-center">
+          {/* Badge - Optional */}
+          <div className="flex justify-center">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200 bg-white shadow-sm">
+              <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+              <span className="text-sm font-medium text-slate-700">
+                Free during early access • No card needed
               </span>
             </div>
           </div>
 
-          {/* Main Content */}
-          <div className="flex-1 bg-slate-50 p-8">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-[20px] font-bold text-slate-900">Dashboard</h2>
-              <button className="inline-flex items-center gap-1.5 bg-blue-600 text-white px-4 py-2 rounded-lg text-[13px] font-semibold">
-                <Plus className="w-3.5 h-3.5" />
-                New Request
-              </button>
-            </div>
+          {/* Headline - Responsive typography */}
+          <div className="space-y-4">
+            <h1 className="text-hero text-slate-900">
+              The connected procurement workflow for small teams
+            </h1>
 
-            <div className="grid grid-cols-3 gap-4 mb-6">
-              <div className="bg-white rounded-xl border border-slate-200 p-4">
-                <div className="text-[24px] font-bold text-slate-900 mb-1">
-                  &euro;127K
-                </div>
-                <div className="text-[12px] font-medium text-slate-600 mb-2">
-                  Monthly Spend
-                </div>
-                <div className="inline-flex items-center gap-1">
-                  <TrendingDown className="w-3 h-3 text-green-600" />
-                  <span className="text-[11px] font-medium text-green-600">
-                    -12%
-                  </span>
-                </div>
-              </div>
-              <div className="bg-white rounded-xl border border-slate-200 p-4">
-                <div className="text-[24px] font-bold text-slate-900 mb-1">
-                  3.2h
-                </div>
-                <div className="text-[12px] font-medium text-slate-600 mb-2">
-                  Avg. Approval Time
-                </div>
-                <div className="inline-flex items-center gap-1">
-                  <TrendingDown className="w-3 h-3 text-green-600" />
-                  <span className="text-[11px] font-medium text-green-600">
-                    -40%
-                  </span>
-                </div>
-              </div>
-              <div className="bg-white rounded-xl border border-slate-200 p-4">
-                <div className="text-[24px] font-bold text-slate-900 mb-1">
-                  94%
-                </div>
-                <div className="text-[12px] font-medium text-slate-600">
-                  Budget Compliance
-                </div>
-              </div>
-            </div>
+            {/* Subheadline - Responsive typography */}
+            <p className="text-body-lg text-slate-600 max-w-2xl mx-auto">
+              Streamline vendor management, budget tracking, and renewals in one place.
+              Never miss a deadline. Never overspend.
+            </p>
+          </div>
 
-            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-              <div className="px-4 py-3 border-b border-slate-200 flex items-center">
-                <span className="text-[11px] font-semibold text-slate-500 w-[200px]">
-                  REQUEST
-                </span>
-                <span className="text-[11px] font-semibold text-slate-500 w-[140px]">
-                  VENDOR
-                </span>
-                <span className="text-[11px] font-semibold text-slate-500 w-[100px]">
-                  AMOUNT
-                </span>
-                <span className="text-[11px] font-semibold text-slate-500 flex-1">
-                  STATUS
-                </span>
-              </div>
-              <div className="px-4 py-2.5 border-b border-slate-100 flex items-center">
-                <span className="text-[13px] font-medium text-slate-900 w-[200px]">
-                  GitHub Copilot
-                </span>
-                <span className="text-[13px] text-slate-600 w-[140px]">
-                  GitHub
-                </span>
-                <span className="text-[13px] font-medium text-slate-900 w-[100px]">
-                  &euro;2,736/yr
-                </span>
-                <span className="inline-flex px-2.5 py-1 bg-green-100 text-green-800 text-[11px] font-semibold rounded-full">
-                  Approved
-                </span>
-              </div>
-              <div className="px-4 py-2.5 flex items-center">
-                <span className="text-[13px] font-medium text-slate-900 w-[200px]">
-                  Figma Enterprise
-                </span>
-                <span className="text-[13px] text-slate-600 w-[140px]">
-                  Figma
-                </span>
-                <span className="text-[13px] font-medium text-slate-900 w-[100px]">
-                  &euro;8,400/yr
-                </span>
-                <span className="inline-flex px-2.5 py-1 bg-amber-100 text-amber-800 text-[11px] font-semibold rounded-full">
-                  Pending
-                </span>
-              </div>
-            </div>
+          {/* CTAs - Using new CTA components */}
+          <div className="space-y-6">
+            <CtaGroup alignment="center">
+              <PrimaryCta
+                href="/signup"
+                size="large"
+                icon="arrow"
+                analyticsEvent="hero_primary_click"
+              >
+                Start Free Trial
+              </PrimaryCta>
+              <SecondaryCta
+                href="/contact"
+                size="large"
+                analyticsEvent="hero_secondary_click"
+              >
+                Book a Demo
+              </SecondaryCta>
+            </CtaGroup>
+
+            {/* Social Proof - Trust signals */}
+            <SocialProofGroup
+              userCount={500}
+              rating={{ rating: 4.9, reviews: 127 }}
+              showNoCreditCard
+              alignment="center"
+              size="md"
+            />
           </div>
         </div>
-        <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[#F0F6FF] to-transparent" />
-      </div>
-    </section>
+      </Container>
+    </Section>
   );
 }
 
