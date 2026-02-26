@@ -64,10 +64,10 @@ export function IntegrationsStep() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h2 className="text-[24px] font-bold text-slate-900">
+        <h2 className="text-h4 font-bold text-slate-900">
           Connect your tools
         </h2>
-        <p className="text-[15px] text-slate-500 mt-1">
+        <p className="text-body-sm text-slate-500 mt-1">
           Integrations are coming soon. Here&apos;s what we&apos;re building.
         </p>
       </div>
@@ -81,14 +81,14 @@ export function IntegrationsStep() {
             <div className="flex-shrink-0">{int.icon}</div>
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <span className="text-[15px] font-semibold text-slate-900">
+                <span className="text-body-sm font-semibold text-slate-900">
                   {int.name}
                 </span>
                 <span className="text-[10px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">
                   COMING SOON
                 </span>
               </div>
-              <p className="text-[13px] text-slate-500 mt-0.5">
+              <p className="text-caption text-slate-500 mt-0.5">
                 {int.description}
               </p>
             </div>

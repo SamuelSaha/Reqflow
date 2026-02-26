@@ -63,10 +63,10 @@ export function CompanySetupStep({ defaultValues, onNext }: Props) {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
       <div>
-        <h2 className="text-[24px] font-bold text-slate-900">
+        <h2 className="text-h4 font-bold text-slate-900">
           Set up your company
         </h2>
-        <p className="text-[15px] text-slate-500 mt-1">
+        <p className="text-body-sm text-slate-500 mt-1">
           Tell us about your organization so Reqflow can tailor your experience.
         </p>
       </div>
@@ -129,7 +129,7 @@ export function CompanySetupStep({ defaultValues, onNext }: Props) {
             placeholder="acme.com"
             className="mt-1.5"
           />
-          <p className="text-[12px] text-slate-400 mt-1">
+          <p className="text-caption text-slate-400 mt-1">
             Used for auto-joining — teammates with this domain can join automatically.
           </p>
         </div>

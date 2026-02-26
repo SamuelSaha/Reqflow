@@ -12,14 +12,14 @@ export function ComingSoon({
     <section className="min-h-[calc(100vh-72px)] px-20 flex flex-col items-center justify-center gap-6 text-center">
       <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-slate-200 bg-white shadow-sm">
         <span className="w-2 h-2 bg-amber-500 rounded-full" />
-        <span className="text-[13px] font-medium text-slate-700">
+        <span className="text-caption font-medium text-slate-700">
           Coming Soon
         </span>
       </div>
-      <h1 className="text-[52px] font-extrabold tracking-[-1.5px] text-slate-900">
+      <h1 className="text-hero font-extrabold tracking-[-1.5px] text-slate-900">
         {title}
       </h1>
-      <p className="text-[18px] text-slate-600 max-w-[500px]">{description}</p>
+      <p className="text-body-lg text-slate-600 max-w-[500px]">{description}</p>
       <Link
         href="/"
         className="inline-flex items-center gap-2 text-blue-600 font-semibold no-underline hover:text-blue-700 transition-colors"

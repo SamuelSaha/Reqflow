@@ -124,10 +124,10 @@ export function BudgetSetupStep({ onNext }: Props) {
     return (
       <div className="flex flex-col gap-6">
         <div>
-          <h2 className="text-[24px] font-bold text-slate-900">
+          <h2 className="text-h4 font-bold text-slate-900">
             Set up your budgets
           </h2>
-          <p className="text-[15px] text-slate-500 mt-1">
+          <p className="text-body-sm text-slate-500 mt-1">
             Budgets help track spending against approved limits. You can import
             from a CSV or create one manually.
           </p>
@@ -139,10 +139,10 @@ export function BudgetSetupStep({ onNext }: Props) {
             className="flex flex-col items-center gap-3 p-6 rounded-xl border-2 border-dashed border-slate-200 hover:border-blue-300 hover:bg-blue-50/50 transition-all"
           >
             <Upload className="w-8 h-8 text-slate-400" />
-            <span className="text-[14px] font-semibold text-slate-700">
+            <span className="text-body-sm font-semibold text-slate-700">
               Import CSV
             </span>
-            <span className="text-[12px] text-slate-400 text-center">
+            <span className="text-caption text-slate-400 text-center">
               Upload a spreadsheet with budget data
             </span>
           </button>
@@ -152,10 +152,10 @@ export function BudgetSetupStep({ onNext }: Props) {
             className="flex flex-col items-center gap-3 p-6 rounded-xl border-2 border-dashed border-slate-200 hover:border-blue-300 hover:bg-blue-50/50 transition-all"
           >
             <Plus className="w-8 h-8 text-slate-400" />
-            <span className="text-[14px] font-semibold text-slate-700">
+            <span className="text-body-sm font-semibold text-slate-700">
               Add manually
             </span>
-            <span className="text-[12px] text-slate-400 text-center">
+            <span className="text-caption text-slate-400 text-center">
               Create a budget line by line
             </span>
           </button>
@@ -179,14 +179,14 @@ export function BudgetSetupStep({ onNext }: Props) {
     return (
       <div className="flex flex-col gap-6">
         <div>
-          <h2 className="text-[24px] font-bold text-slate-900">
+          <h2 className="text-h4 font-bold text-slate-900">
             Import budgets from CSV
           </h2>
-          <p className="text-[15px] text-slate-500 mt-1">
-            Upload a CSV with columns: <code className="text-xs bg-slate-100 px-1 py-0.5 rounded">name</code>,{" "}
-            <code className="text-xs bg-slate-100 px-1 py-0.5 rounded">allocated</code>,{" "}
-            <code className="text-xs bg-slate-100 px-1 py-0.5 rounded">period</code>,{" "}
-            <code className="text-xs bg-slate-100 px-1 py-0.5 rounded">category</code>
+          <p className="text-body-sm text-slate-500 mt-1">
+            Upload a CSV with columns: <code className="text-caption bg-slate-100 px-1 py-0.5 rounded">name</code>,{" "}
+            <code className="text-caption bg-slate-100 px-1 py-0.5 rounded">allocated</code>,{" "}
+            <code className="text-caption bg-slate-100 px-1 py-0.5 rounded">period</code>,{" "}
+            <code className="text-caption bg-slate-100 px-1 py-0.5 rounded">category</code>
           </p>
         </div>
 
@@ -200,7 +200,7 @@ export function BudgetSetupStep({ onNext }: Props) {
         </div>
 
         {csvError && (
-          <p className="text-[13px] text-red-600 bg-red-50 px-3 py-2 rounded-lg">
+          <p className="text-caption text-red-600 bg-red-50 px-3 py-2 rounded-lg">
             {csvError}
           </p>
         )}
@@ -208,12 +208,12 @@ export function BudgetSetupStep({ onNext }: Props) {
         {csvData.length > 0 && (
           <div className="border border-slate-200 rounded-lg overflow-hidden">
             <div className="px-4 py-2 bg-slate-50 border-b border-slate-200">
-              <span className="text-[13px] font-semibold text-slate-700">
+              <span className="text-caption font-semibold text-slate-700">
                 {csvData.length} budget{csvData.length > 1 ? "s" : ""} found
               </span>
             </div>
             <div className="max-h-[240px] overflow-y-auto">
-              <table className="w-full text-[13px]">
+              <table className="w-full text-caption">
                 <thead className="bg-slate-50 sticky top-0">
                   <tr>
                     <th className="text-left px-4 py-2 font-medium text-slate-500">Name</th>
@@ -268,10 +268,10 @@ export function BudgetSetupStep({ onNext }: Props) {
   return (
     <form onSubmit={handleManualSubmit} className="flex flex-col gap-6">
       <div>
-        <h2 className="text-[24px] font-bold text-slate-900">
+        <h2 className="text-h4 font-bold text-slate-900">
           Create a budget
         </h2>
-        <p className="text-[15px] text-slate-500 mt-1">
+        <p className="text-body-sm text-slate-500 mt-1">
           Start with one budget — you can always add more from the dashboard.
         </p>
       </div>

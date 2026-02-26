@@ -44,7 +44,7 @@ const resourcesDropdown = [
 function FeaturesMegaMenu() {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="flex items-center gap-1.5 text-[15px] font-medium text-slate-600 hover:text-slate-900 transition-colors outline-none">
+      <DropdownMenuTrigger className="flex items-center gap-1.5 text-body-sm font-medium text-slate-600 hover:text-slate-900 transition-colors outline-none">
         Features
         <ChevronDown className="w-4 h-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
       </DropdownMenuTrigger>
@@ -56,17 +56,17 @@ function FeaturesMegaMenu() {
         <div className="grid grid-cols-2 gap-6">
           {/* By Role Column */}
           <div>
-            <DropdownMenuLabel className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">
+            <DropdownMenuLabel className="text-caption font-semibold text-slate-500 uppercase tracking-wider mb-3">
               By Role
             </DropdownMenuLabel>
             <div className="space-y-1">
               {featuresDropdown.byRole.map((item) => (
                 <Link key={item.href} href={item.href}>
                   <DropdownMenuItem className="flex flex-col items-start gap-0.5 p-3 cursor-pointer transition-all duration-200 ease-out hover:-translate-y-0.5 hover:bg-slate-50/80 hover:shadow-sm rounded-lg">
-                    <span className="text-sm font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
+                    <span className="text-body-sm font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
                       {item.label}
                     </span>
-                    <span className="text-xs text-slate-600">
+                    <span className="text-caption text-slate-600">
                       {item.description}
                     </span>
                   </DropdownMenuItem>
@@ -77,17 +77,17 @@ function FeaturesMegaMenu() {
 
           {/* By Use Case Column */}
           <div>
-            <DropdownMenuLabel className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">
+            <DropdownMenuLabel className="text-caption font-semibold text-slate-500 uppercase tracking-wider mb-3">
               By Use Case
             </DropdownMenuLabel>
             <div className="space-y-1">
               {featuresDropdown.byUseCase.map((item) => (
                 <Link key={item.href} href={item.href}>
                   <DropdownMenuItem className="flex flex-col items-start gap-0.5 p-3 cursor-pointer transition-all duration-200 ease-out hover:-translate-y-0.5 hover:bg-slate-50/80 hover:shadow-sm rounded-lg">
-                    <span className="text-sm font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
+                    <span className="text-body-sm font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
                       {item.label}
                     </span>
-                    <span className="text-xs text-slate-600">
+                    <span className="text-caption text-slate-600">
                       {item.description}
                     </span>
                   </DropdownMenuItem>
@@ -108,7 +108,7 @@ function FeaturesMegaMenu() {
 function ResourcesDropdown() {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="flex items-center gap-1.5 text-[15px] font-medium text-slate-600 hover:text-slate-900 transition-colors outline-none">
+      <DropdownMenuTrigger className="flex items-center gap-1.5 text-body-sm font-medium text-slate-600 hover:text-slate-900 transition-colors outline-none">
         Resources
         <ChevronDown className="w-4 h-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
       </DropdownMenuTrigger>
@@ -119,7 +119,7 @@ function ResourcesDropdown() {
       >
         {resourcesDropdown.map((item) => (
           <Link key={item.href} href={item.href}>
-            <DropdownMenuItem className="text-sm cursor-pointer transition-all duration-150 ease-out hover:bg-slate-50 hover:text-blue-600">
+            <DropdownMenuItem className="text-body-sm cursor-pointer transition-all duration-150 ease-out hover:bg-slate-50 hover:text-blue-600">
               {item.label}
             </DropdownMenuItem>
           </Link>
@@ -140,7 +140,7 @@ export function DesktopNav() {
 
       <Link
         href="/pricing"
-        className="relative text-[15px] font-medium text-slate-600 hover:text-blue-600 transition-colors duration-150 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-blue-600 after:transition-all after:duration-150 hover:after:w-full"
+        className="relative text-body-sm font-medium text-slate-600 hover:text-blue-600 transition-colors duration-150 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-blue-600 after:transition-all after:duration-150 hover:after:w-full"
       >
         Pricing
       </Link>
@@ -149,7 +149,7 @@ export function DesktopNav() {
 
       <Link
         href="/about"
-        className="relative text-[15px] font-medium text-slate-600 hover:text-blue-600 transition-colors duration-150 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-blue-600 after:transition-all after:duration-150 hover:after:w-full"
+        className="relative text-body-sm font-medium text-slate-600 hover:text-blue-600 transition-colors duration-150 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-blue-600 after:transition-all after:duration-150 hover:after:w-full"
       >
         About
       </Link>

@@ -95,12 +95,12 @@ export function ApprovalCard({
         <div className="flex items-start justify-between">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <CardTitle className="text-lg">{req.title}</CardTitle>
-              <Badge variant="outline" className="text-xs">
+              <CardTitle className="text-body-lg">{req.title}</CardTitle>
+              <Badge variant="outline" className="text-caption">
                 {req.requestNumber}
               </Badge>
             </div>
-            <p className="text-sm text-slate-600">
+            <p className="text-body-sm text-slate-600">
               {req.requester.name} &middot; {req.department.name} &middot;{" "}
               {new Date(req.createdAt).toLocaleDateString()}
             </p>
@@ -120,19 +120,19 @@ export function ApprovalCard({
         {/* Financial details */}
         <div className="flex items-center gap-6 p-3 bg-slate-50 rounded-lg">
           <div>
-            <p className="text-xs text-slate-500 uppercase tracking-wider">Amount</p>
+            <p className="text-caption text-slate-500 uppercase tracking-wider">Amount</p>
             <p className="text-xl font-bold text-slate-900">
               €{parseFloat(req.amount).toLocaleString("en", { minimumFractionDigits: 2 })}
             </p>
           </div>
           <div>
-            <p className="text-xs text-slate-500 uppercase tracking-wider">Frequency</p>
-            <p className="text-sm font-medium text-slate-700">{req.frequency}</p>
+            <p className="text-caption text-slate-500 uppercase tracking-wider">Frequency</p>
+            <p className="text-body-sm font-medium text-slate-700">{req.frequency}</p>
           </div>
           {req.vendorName && (
             <div>
-              <p className="text-xs text-slate-500 uppercase tracking-wider">Vendor</p>
-              <p className="text-sm font-medium text-slate-700">{req.vendorName}</p>
+              <p className="text-caption text-slate-500 uppercase tracking-wider">Vendor</p>
+              <p className="text-body-sm font-medium text-slate-700">{req.vendorName}</p>
             </div>
           )}
         </div>
@@ -140,8 +140,8 @@ export function ApprovalCard({
         {/* Description */}
         {req.description && (
           <div className="p-3 bg-slate-50 rounded-lg">
-            <p className="text-xs text-slate-500 uppercase tracking-wider mb-1">Justification</p>
-            <p className="text-sm text-slate-700">{req.description}</p>
+            <p className="text-caption text-slate-500 uppercase tracking-wider mb-1">Justification</p>
+            <p className="text-body-sm text-slate-700">{req.description}</p>
           </div>
         )}
 
@@ -161,7 +161,7 @@ export function ApprovalCard({
         <div className="border border-slate-200 rounded-lg overflow-hidden">
           <div className="flex items-center gap-2 px-4 py-2.5 bg-slate-50 border-b border-slate-200">
             <Sparkles className="h-4 w-4 text-violet-500" />
-            <span className="text-sm font-semibold text-slate-700">AI Analysis</span>
+            <span className="text-body-sm font-semibold text-slate-700">AI Analysis</span>
             {analysis && (
               <Badge
                 variant="outline"
@@ -181,7 +181,7 @@ export function ApprovalCard({
 
           <div className="p-4">
             {analysisLoading && (
-              <div className="flex items-center gap-2 text-sm text-slate-500">
+              <div className="flex items-center gap-2 text-body-sm text-slate-500">
                 <Loader2 className="h-4 w-4 animate-spin" />
                 Analyzing request...
               </div>
@@ -190,11 +190,11 @@ export function ApprovalCard({
             {analysis && (
               <div className="space-y-3">
                 {/* Summary */}
-                <p className="text-sm text-slate-700">{analysis.summary}</p>
+                <p className="text-body-sm text-slate-700">{analysis.summary}</p>
 
                 {/* Risk score bar */}
                 <div className="space-y-1">
-                  <div className="flex justify-between text-xs text-slate-500">
+                  <div className="flex justify-between text-caption text-slate-500">
                     <span>Risk Score</span>
                     <span>{analysis.riskScore}/100</span>
                   </div>
@@ -224,8 +224,8 @@ export function ApprovalCard({
                         >
                           <Icon className="h-4 w-4 mt-0.5 flex-shrink-0" />
                           <div>
-                            <p className="text-sm font-medium">{signal.title}</p>
-                            <p className="text-xs opacity-80">{signal.detail}</p>
+                            <p className="text-body-sm font-medium">{signal.title}</p>
+                            <p className="text-caption opacity-80">{signal.detail}</p>
                           </div>
                         </div>
                       );
@@ -236,9 +236,9 @@ export function ApprovalCard({
                 {/* Similar requests */}
                 {analysis.similarRequests.length > 0 && (
                   <div className="space-y-1">
-                    <p className="text-xs text-slate-500 uppercase tracking-wider">Similar Requests</p>
+                    <p className="text-caption text-slate-500 uppercase tracking-wider">Similar Requests</p>
                     {analysis.similarRequests.map((sr) => (
-                      <div key={sr.id} className="flex items-center gap-2 text-xs text-slate-600">
+                      <div key={sr.id} className="flex items-center gap-2 text-caption text-slate-600">
                         <FileText className="h-3 w-3" />
                         <span>"{sr.title}"</span>
                         <span className="text-slate-400">€{parseFloat(sr.amount).toFixed(2)}</span>
@@ -253,8 +253,8 @@ export function ApprovalCard({
                 {/* Budget impact */}
                 {analysis.budgetImpact && (
                   <div className="space-y-1">
-                    <p className="text-xs text-slate-500 uppercase tracking-wider">Budget Impact</p>
-                    <div className="flex items-center gap-4 text-xs text-slate-600">
+                    <p className="text-caption text-slate-500 uppercase tracking-wider">Budget Impact</p>
+                    <div className="flex items-center gap-4 text-caption text-slate-600">
                       <span>Current: {(analysis.budgetImpact.currentUtilization * 100).toFixed(0)}%</span>
                       <span>→</span>
                       <span
@@ -276,7 +276,7 @@ export function ApprovalCard({
             )}
 
             {!analysisLoading && !analysis && (
-              <p className="text-sm text-slate-500">Analysis not available</p>
+              <p className="text-body-sm text-slate-500">Analysis not available</p>
             )}
           </div>
         </div>

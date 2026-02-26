@@ -60,10 +60,10 @@ export default function RequestsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+          <h1 className="text-h3 font-bold tracking-tight text-slate-900">
             My Requests
           </h1>
-          <p className="text-slate-600 mt-2">
+          <p className="text-body text-slate-600 mt-2">
             View and manage your purchase requests
           </p>
         </div>
@@ -97,7 +97,7 @@ export default function RequestsPage() {
         <Card className="border-red-200 bg-red-50">
           <CardContent className="flex flex-col items-center justify-center py-12">
             <AlertCircle className="h-12 w-12 text-red-400 mb-4" />
-            <p className="text-lg font-medium text-slate-900 mb-2">
+            <p className="text-body-lg font-medium text-slate-900 mb-2">
               {getErrorMessage(requestList.error)}
             </p>
             <Button onClick={() => requestList.refetch()} variant="outline" className="mt-2">
@@ -112,12 +112,12 @@ export default function RequestsPage() {
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
             <FileText className="h-12 w-12 text-slate-300 mb-4" />
-            <p className="text-lg font-medium text-slate-900">
+            <p className="text-body-lg font-medium text-slate-900">
               {statusFilter === "all"
                 ? "No requests yet"
                 : `No ${statusFilter} requests`}
             </p>
-            <p className="text-sm text-slate-600 mt-1">
+            <p className="text-body-sm text-slate-600 mt-1">
               {statusFilter === "all"
                 ? "Create your first purchase request to get started"
                 : `You don't have any ${statusFilter} requests`}
@@ -138,7 +138,7 @@ export default function RequestsPage() {
       {requestList.data && requestList.data.length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">
+            <CardTitle className="text-body">
               {requestList.data.length} request{requestList.data.length !== 1 ? "s" : ""}
             </CardTitle>
           </CardHeader>
@@ -164,14 +164,14 @@ export default function RequestsPage() {
 
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
-                        <p className="text-sm font-medium text-slate-900 truncate group-hover:text-blue-600">
+                        <p className="text-body-sm font-medium text-slate-900 truncate group-hover:text-blue-600">
                           {req.title}
                         </p>
                         <Badge variant="outline" className="text-[10px] py-0 flex-shrink-0">
                           {req.requestNumber}
                         </Badge>
                       </div>
-                      <p className="text-xs text-slate-500 mt-0.5">
+                      <p className="text-caption text-slate-500 mt-0.5">
                         {req.department?.name ?? "—"} &middot;{" "}
                         {req.category} &middot;{" "}
                         {new Date(req.createdAt).toLocaleDateString()}
@@ -181,7 +181,7 @@ export default function RequestsPage() {
 
                     <div className="flex items-center gap-3 flex-shrink-0">
                       <div className="text-right">
-                        <p className="text-sm font-semibold text-slate-900">
+                        <p className="text-body-sm font-semibold text-slate-900">
                           €{parseFloat(req.amount).toLocaleString("en", { minimumFractionDigits: 2 })}
                         </p>
                         {req.frequency !== "one-time" && (

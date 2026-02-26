@@ -73,7 +73,7 @@ export default function RequestDetailPage({
       <div className="space-y-6">
         <Link
           href="/dashboard/requests"
-          className="inline-flex items-center text-sm text-slate-500 hover:text-slate-900"
+          className="inline-flex items-center text-body-sm text-slate-500 hover:text-slate-900"
         >
           <ArrowLeft className="mr-1 h-4 w-4" />
           Back to requests
@@ -81,7 +81,7 @@ export default function RequestDetailPage({
         <Card className="border-red-200 bg-red-50">
           <CardContent className="flex flex-col items-center justify-center py-12">
             <AlertCircle className="h-12 w-12 text-red-400 mb-4" />
-            <p className="text-lg font-medium text-slate-900 mb-2">
+            <p className="text-body-lg font-medium text-slate-900 mb-2">
               {getErrorMessage(request.error)}
             </p>
             <div className="flex gap-2 mt-4">
@@ -110,7 +110,7 @@ export default function RequestDetailPage({
       <div>
         <Link
           href="/dashboard/requests"
-          className="inline-flex items-center text-sm text-slate-500 hover:text-slate-900 mb-4"
+          className="inline-flex items-center text-body-sm text-slate-500 hover:text-slate-900 mb-4"
         >
           <ArrowLeft className="mr-1 h-4 w-4" />
           Back to requests
@@ -119,10 +119,10 @@ export default function RequestDetailPage({
         <div className="flex items-start justify-between">
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-bold text-slate-900">{req.title}</h1>
+              <h1 className="text-h4 font-bold text-slate-900">{req.title}</h1>
               <Badge className={status.className}>{status.label}</Badge>
             </div>
-            <p className="text-sm text-slate-500 mt-1">
+            <p className="text-body-sm text-slate-500 mt-1">
               {req.requestNumber} &middot; Created{" "}
               {new Date(req.createdAt).toLocaleDateString("en-US", {
                 month: "short",
@@ -132,11 +132,11 @@ export default function RequestDetailPage({
             </p>
           </div>
           <div className="text-right">
-            <p className="text-2xl font-bold text-slate-900">
+            <p className="text-h4 font-bold text-slate-900">
               €{parseFloat(req.amount).toLocaleString("en", { minimumFractionDigits: 2 })}
             </p>
             {req.frequency !== "one-time" && (
-              <p className="text-sm text-slate-500">{req.frequency}</p>
+              <p className="text-body-sm text-slate-500">{req.frequency}</p>
             )}
           </div>
         </div>
@@ -149,13 +149,13 @@ export default function RequestDetailPage({
           {req.description && (
             <Card>
               <CardHeader>
-                <CardTitle className="text-base flex items-center gap-2">
+                <CardTitle className="text-body flex items-center gap-2">
                   <FileText className="h-4 w-4" />
                   Justification
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-slate-700 whitespace-pre-wrap">{req.description}</p>
+                <p className="text-body-sm text-slate-700 whitespace-pre-wrap">{req.description}</p>
               </CardContent>
             </Card>
           )}
@@ -163,7 +163,7 @@ export default function RequestDetailPage({
           {/* Details grid */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">Request Details</CardTitle>
+              <CardTitle className="text-body">Request Details</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-4">
@@ -193,14 +193,14 @@ export default function RequestDetailPage({
           {req.budget && (
             <Card>
               <CardHeader>
-                <CardTitle className="text-base flex items-center gap-2">
+                <CardTitle className="text-body flex items-center gap-2">
                   <DollarSign className="h-4 w-4" />
                   Budget
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  <div className="flex justify-between text-sm">
+                  <div className="flex justify-between text-body-sm">
                     <span className="text-slate-600">
                       {req.budget.name} ({req.budget.period})
                     </span>
@@ -219,7 +219,7 @@ export default function RequestDetailPage({
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2">
+              <CardTitle className="text-body flex items-center gap-2">
                 <ShieldCheck className="h-4 w-4" />
                 Approval Chain
               </CardTitle>
@@ -240,15 +240,15 @@ export default function RequestDetailPage({
                             <Icon className={`h-4 w-4 ${config.color}`} />
                           </div>
                           <div className="flex-1 min-w-0 pt-0.5">
-                            <p className="text-sm font-medium text-slate-900">
+                            <p className="text-body-sm font-medium text-slate-900">
                               {approval.approver?.name ?? "Unknown"}
                             </p>
-                            <p className="text-xs text-slate-500">
+                            <p className="text-caption text-slate-500">
                               Step {approval.step} &middot;{" "}
                               {approval.required === "required" ? "Required" : "Optional"}
                             </p>
                             {approval.decision !== "pending" && (
-                              <p className="text-xs mt-1">
+                              <p className="text-caption mt-1">
                                 <span className={approval.decision === "approved" ? "text-green-600" : "text-red-600"}>
                                   {approval.decision === "approved" ? "Approved" : "Rejected"}
                                 </span>
@@ -260,7 +260,7 @@ export default function RequestDetailPage({
                               </p>
                             )}
                             {approval.comments && (
-                              <p className="text-xs text-slate-600 mt-1 italic">
+                              <p className="text-caption text-slate-600 mt-1 italic">
                                 "{approval.comments}"
                               </p>
                             )}
@@ -283,7 +283,7 @@ export default function RequestDetailPage({
               ) : (
                 <div className="text-center py-4">
                   <Clock className="h-8 w-8 text-slate-300 mx-auto mb-2" />
-                  <p className="text-sm text-slate-500">
+                  <p className="text-body-sm text-slate-500">
                     {req.status === "draft"
                       ? "Submit to start the approval process"
                       : "No approval chain found"}
@@ -297,7 +297,7 @@ export default function RequestDetailPage({
           {req.status === "approved" && (
             <Card>
               <CardHeader>
-                <CardTitle className="text-base flex items-center gap-2">
+                <CardTitle className="text-body flex items-center gap-2">
                   <Receipt className="h-4 w-4" />
                   Accounting Sync
                 </CardTitle>
@@ -308,16 +308,16 @@ export default function RequestDetailPage({
                     <div className="flex items-start gap-2">
                       <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5" />
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-green-700">
+                        <p className="text-body-sm font-medium text-green-700">
                           Synced to {req.accountingSyncProvider === "quickbooks" ? "QuickBooks" : "Xero"}
                         </p>
                         {req.accountingSyncRef && (
-                          <p className="text-xs text-slate-600 mt-1">
+                          <p className="text-caption text-slate-600 mt-1">
                             PO #{req.accountingSyncRef}
                           </p>
                         )}
                         {req.lastSyncAttempt && (
-                          <p className="text-xs text-slate-500 mt-1">
+                          <p className="text-caption text-slate-500 mt-1">
                             {new Date(req.lastSyncAttempt).toLocaleString()}
                           </p>
                         )}
@@ -329,14 +329,14 @@ export default function RequestDetailPage({
                     <div className="flex items-start gap-2">
                       <AlertTriangle className="h-5 w-5 text-red-600 mt-0.5" />
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-red-700">
+                        <p className="text-body-sm font-medium text-red-700">
                           Sync failed
                         </p>
-                        <p className="text-xs text-red-600 mt-1">
+                        <p className="text-caption text-red-600 mt-1">
                           {req.accountingSyncError}
                         </p>
                         {req.lastSyncAttempt && (
-                          <p className="text-xs text-slate-500 mt-1">
+                          <p className="text-caption text-slate-500 mt-1">
                             Last attempt: {new Date(req.lastSyncAttempt).toLocaleString()}
                           </p>
                         )}
@@ -357,10 +357,10 @@ export default function RequestDetailPage({
                   <div className="flex items-start gap-2">
                     <Clock className="h-5 w-5 text-amber-600 mt-0.5" />
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-amber-700">
+                      <p className="text-body-sm font-medium text-amber-700">
                         Sync pending
                       </p>
-                      <p className="text-xs text-slate-600 mt-1">
+                      <p className="text-caption text-slate-600 mt-1">
                         Will sync automatically or{" "}
                         <button
                           onClick={() => retrySync.mutate({ requestId: id })}
@@ -380,7 +380,7 @@ export default function RequestDetailPage({
           {/* Timeline */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">Timeline</CardTitle>
+              <CardTitle className="text-body">Timeline</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
@@ -440,8 +440,8 @@ function DetailItem({
     <div className="flex items-start gap-2">
       <Icon className="h-4 w-4 text-slate-400 mt-0.5" />
       <div>
-        <p className="text-xs text-slate-500">{label}</p>
-        <p className="text-sm font-medium text-slate-900 capitalize">{value}</p>
+        <p className="text-caption text-slate-500">{label}</p>
+        <p className="text-body-sm font-medium text-slate-900 capitalize">{value}</p>
       </div>
     </div>
   );
@@ -473,7 +473,7 @@ function BudgetBar({
           style={{ width: `${Math.min(requestPct, 100 - utilization)}%` }}
         />
       </div>
-      <div className="flex justify-between text-xs text-slate-500 mt-1">
+      <div className="flex justify-between text-caption text-slate-500 mt-1">
         <span>{utilization.toFixed(0)}% used</span>
         <span>+{requestPct.toFixed(1)}% this request</span>
         <span>€{(allocated - used).toLocaleString("en", { minimumFractionDigits: 0 })} remaining</span>
@@ -507,11 +507,11 @@ function TimelineEvent({
         }`}
       />
       <div className="flex-1 flex justify-between">
-        <span className={`text-sm ${active ? "text-slate-900" : "text-slate-400"}`}>
+        <span className={`text-body-sm ${active ? "text-slate-900" : "text-slate-400"}`}>
           {label}
         </span>
         {date && (
-          <span className="text-xs text-slate-500">
+          <span className="text-caption text-slate-500">
             {new Date(date).toLocaleDateString("en-US", {
               month: "short",
               day: "numeric",

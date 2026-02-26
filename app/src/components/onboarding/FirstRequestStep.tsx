@@ -53,10 +53,10 @@ export function FirstRequestStep({ onNext }: Props) {
           <CheckCircle2 className="w-8 h-8 text-green-600" />
         </div>
         <div className="text-center">
-          <h2 className="text-[24px] font-bold text-slate-900">
+          <h2 className="text-h4 font-bold text-slate-900">
             First request created!
           </h2>
-          <p className="text-[15px] text-slate-500 mt-1">
+          <p className="text-body-sm text-slate-500 mt-1">
             Your request has been saved as a draft. You can review and submit it
             from the dashboard.
           </p>
@@ -70,12 +70,12 @@ export function FirstRequestStep({ onNext }: Props) {
     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
       <div>
         <div className="flex items-center gap-2 mb-1">
-          <h2 className="text-[24px] font-bold text-slate-900">
+          <h2 className="text-h4 font-bold text-slate-900">
             Create your first request
           </h2>
           <Sparkles className="w-5 h-5 text-amber-500" />
         </div>
-        <p className="text-[15px] text-slate-500">
+        <p className="text-body-sm text-slate-500">
           Try submitting a purchase request — this is how your team will request
           new tools and services.
         </p>

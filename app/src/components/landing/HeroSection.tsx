@@ -45,11 +45,11 @@ export function HeroSection() {
             <div className="flex justify-center">
               <div className="group inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-emerald-200 bg-emerald-50/80 backdrop-blur-sm shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 hover:border-emerald-300">
                 <Sparkles className="w-4 h-4 text-emerald-600 transition-all duration-200 group-hover:scale-110 group-hover:rotate-12" />
-                <span className="text-sm font-semibold text-emerald-900">
+                <span className="text-body-sm font-semibold text-emerald-900">
                   Free during early access
                 </span>
-                <span className="text-sm text-emerald-600">•</span>
-                <span className="text-sm text-emerald-700">
+                <span className="text-body-sm text-emerald-600">•</span>
+                <span className="text-body-sm text-emerald-700">
                   No credit card required
                 </span>
               </div>
@@ -74,7 +74,7 @@ export function HeroSection() {
             </div>
 
             {/* Quick wins - Value props - NO ANIMATION DELAY */}
-            <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 text-sm">
+            <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 text-body-sm">
               <div className="group flex items-center gap-2 text-slate-700 transition-colors duration-150 hover:text-emerald-600">
                 <CheckCircle2 className="w-5 h-5 text-emerald-600 transition-transform duration-200 group-hover:scale-110" />
                 <span className="font-medium">2-minute setup</span>
@@ -143,7 +143,7 @@ export function ProductShowcaseSection() {
                 </div>
                 <div className="hidden sm:flex items-center gap-2 bg-slate-100 rounded-lg h-7 md:h-8 px-3 md:px-4">
                   <Shield className="w-3 h-3 md:w-3.5 md:h-3.5 text-green-600" />
-                  <span className="text-[11px] md:text-xs font-medium text-slate-600">
+                  <span className="text-[11px] md:text-caption font-medium text-slate-600">
                     app.reqflow.com/dashboard
                   </span>
                 </div>
@@ -160,7 +160,7 @@ export function ProductShowcaseSection() {
                         <div className="text-2xl md:text-3xl font-bold text-slate-900 mb-0.5 md:mb-1">
                           €127K
                         </div>
-                        <div className="text-xs md:text-sm font-medium text-slate-600">
+                        <div className="text-caption md:text-body-sm font-medium text-slate-600">
                           Monthly Spend
                         </div>
                       </div>
@@ -169,7 +169,7 @@ export function ProductShowcaseSection() {
                       </div>
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <div className="text-[11px] md:text-xs font-semibold text-green-600">
+                      <div className="text-[11px] md:text-caption font-semibold text-green-600">
                         ↓ 12% vs last month
                       </div>
                     </div>
@@ -181,7 +181,7 @@ export function ProductShowcaseSection() {
                         <div className="text-2xl md:text-3xl font-bold text-slate-900 mb-0.5 md:mb-1">
                           3.2h
                         </div>
-                        <div className="text-xs md:text-sm font-medium text-slate-600">
+                        <div className="text-caption md:text-body-sm font-medium text-slate-600">
                           Avg. Approval Time
                         </div>
                       </div>
@@ -190,7 +190,7 @@ export function ProductShowcaseSection() {
                       </div>
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <div className="text-[11px] md:text-xs font-semibold text-green-600">
+                      <div className="text-[11px] md:text-caption font-semibold text-green-600">
                         ↓ 40% improvement
                       </div>
                     </div>
@@ -202,7 +202,7 @@ export function ProductShowcaseSection() {
                         <div className="text-2xl md:text-3xl font-bold text-slate-900 mb-0.5 md:mb-1">
                           94%
                         </div>
-                        <div className="text-xs md:text-sm font-medium text-slate-600">
+                        <div className="text-caption md:text-body-sm font-medium text-slate-600">
                           Budget Compliance
                         </div>
                       </div>
@@ -211,7 +211,7 @@ export function ProductShowcaseSection() {
                       </div>
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <div className="text-[11px] md:text-xs font-semibold text-green-600">
+                      <div className="text-[11px] md:text-caption font-semibold text-green-600">
                         ✓ On target
                       </div>
                     </div>
@@ -221,7 +221,7 @@ export function ProductShowcaseSection() {
                 {/* Recent Requests Table Preview - Responsive */}
                 <div className="bg-white rounded-lg md:rounded-xl border border-slate-200 overflow-hidden shadow-sm">
                   <div className="px-4 md:px-6 py-3 md:py-4 border-b border-slate-200 bg-slate-50/50">
-                    <h3 className="text-sm md:text-base font-semibold text-slate-900">
+                    <h3 className="text-body-sm md:text-body font-semibold text-slate-900">
                       Recent Requests
                     </h3>
                   </div>
@@ -232,16 +232,16 @@ export function ProductShowcaseSection() {
                           GH
                         </div>
                         <div className="min-w-0">
-                          <div className="font-semibold text-slate-900 text-sm md:text-base truncate">GitHub Copilot</div>
-                          <div className="text-xs md:text-sm text-slate-600 truncate">GitHub • Engineering</div>
+                          <div className="font-semibold text-slate-900 text-body-sm md:text-body truncate">GitHub Copilot</div>
+                          <div className="text-caption md:text-body-sm text-slate-600 truncate">GitHub • Engineering</div>
                         </div>
                       </div>
                       <div className="flex items-center gap-3 md:gap-6 flex-shrink-0">
                         <div className="text-right">
-                          <div className="font-semibold text-slate-900 text-sm md:text-base">€2.7K/yr</div>
-                          <div className="text-[10px] md:text-xs text-slate-600">20 seats</div>
+                          <div className="font-semibold text-slate-900 text-body-sm md:text-body">€2.7K/yr</div>
+                          <div className="text-[10px] md:text-caption text-slate-600">20 seats</div>
                         </div>
-                        <span className="px-2 md:px-3 py-1 bg-green-100 text-green-800 text-[10px] md:text-xs font-semibold rounded-full whitespace-nowrap">
+                        <span className="px-2 md:px-3 py-1 bg-green-100 text-green-800 text-[10px] md:text-caption font-semibold rounded-full whitespace-nowrap">
                           Approved
                         </span>
                       </div>
@@ -252,16 +252,16 @@ export function ProductShowcaseSection() {
                           FG
                         </div>
                         <div className="min-w-0">
-                          <div className="font-semibold text-slate-900 text-sm md:text-base truncate">Figma Enterprise</div>
-                          <div className="text-xs md:text-sm text-slate-600 truncate">Figma • Design</div>
+                          <div className="font-semibold text-slate-900 text-body-sm md:text-body truncate">Figma Enterprise</div>
+                          <div className="text-caption md:text-body-sm text-slate-600 truncate">Figma • Design</div>
                         </div>
                       </div>
                       <div className="flex items-center gap-3 md:gap-6 flex-shrink-0">
                         <div className="text-right">
-                          <div className="font-semibold text-slate-900 text-sm md:text-base">€8.4K/yr</div>
-                          <div className="text-[10px] md:text-xs text-slate-600">15 seats</div>
+                          <div className="font-semibold text-slate-900 text-body-sm md:text-body">€8.4K/yr</div>
+                          <div className="text-[10px] md:text-caption text-slate-600">15 seats</div>
                         </div>
-                        <span className="px-2 md:px-3 py-1 bg-amber-100 text-amber-800 text-[10px] md:text-xs font-semibold rounded-full whitespace-nowrap">
+                        <span className="px-2 md:px-3 py-1 bg-amber-100 text-amber-800 text-[10px] md:text-caption font-semibold rounded-full whitespace-nowrap">
                           Pending
                         </span>
                       </div>
@@ -288,14 +288,14 @@ export function TrustLogos() {
 
   return (
     <section className="bg-white py-10 md:py-12 px-6 md:px-12 lg:px-20 flex flex-col items-center gap-6">
-      <span className="text-[12px] font-semibold text-slate-400 tracking-[1.5px] uppercase">
+      <span className="text-caption font-semibold text-slate-400 tracking-[1.5px] uppercase">
         TRUSTED BY STARTUPS AND SCALE-UPS WHO MOVE TOO FAST FOR TRADITIONAL PROCUREMENT
       </span>
       <div className="flex items-center justify-center gap-16">
         {logos.map((name) => (
           <span
             key={name}
-            className="text-[18px] font-bold text-slate-300 select-none"
+            className="text-body-lg font-bold text-slate-300 select-none"
           >
             {name}
           </span>
@@ -340,7 +340,7 @@ export function ProblemSection() {
       <div className="max-w-[700px] flex flex-col items-center gap-6 text-center">
         <div className="inline-flex items-center gap-1.5 bg-red-50 rounded-full px-3.5 py-1.5">
           <TriangleAlert className="w-3.5 h-3.5 text-red-600" />
-          <span className="text-[13px] font-semibold text-red-600">
+          <span className="text-caption font-semibold text-red-600">
             The Problem
           </span>
         </div>
@@ -362,7 +362,7 @@ export function ProblemSection() {
             <div className="w-5 h-5 rounded-full bg-red-100 flex items-center justify-center">
               <X className="w-3 h-3 text-red-600" />
             </div>
-            <span className="text-[13px] font-semibold text-red-600">
+            <span className="text-caption font-semibold text-red-600">
               Without Reqflow
             </span>
           </div>
@@ -373,7 +373,7 @@ export function ProblemSection() {
             {beforeSteps.map((step, i) => (
               <div key={i} className="flex items-start gap-3">
                 <div className="w-7 h-7 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
-                  <span className="text-[13px] font-semibold text-red-600">
+                  <span className="text-caption font-semibold text-red-600">
                     {i + 1}
                   </span>
                 </div>
@@ -391,7 +391,7 @@ export function ProblemSection() {
             <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center">
               <Check className="w-3 h-3 text-green-600" />
             </div>
-            <span className="text-[13px] font-semibold text-green-600">
+            <span className="text-caption font-semibold text-green-600">
               With Reqflow
             </span>
           </div>
@@ -404,7 +404,7 @@ export function ProblemSection() {
               return (
                 <div key={i} className="flex items-start gap-3">
                   <div className="w-7 h-7 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                    <span className="text-[13px] font-semibold text-green-600">
+                    <span className="text-caption font-semibold text-green-600">
                       {i + 1}
                     </span>
                   </div>
@@ -431,7 +431,7 @@ export function ProblemSection() {
             <span className="text-[28px] font-bold text-red-600 tracking-tight">
               {stat.value}
             </span>
-            <span className="text-[13px] font-medium text-slate-600 text-center">
+            <span className="text-caption font-medium text-slate-600 text-center">
               {stat.label}
             </span>
           </div>

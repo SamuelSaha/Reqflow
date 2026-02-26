@@ -28,7 +28,7 @@ export function OnboardingWizard() {
     return (
       <div className="flex flex-col items-center justify-center py-20 gap-4">
         <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
-        <p className="text-sm text-slate-500">Loading your setup...</p>
+        <p className="text-body-sm text-slate-500">Loading your setup...</p>
       </div>
     );
   }
@@ -60,7 +60,7 @@ export function OnboardingWizard() {
                 }`}
               >
                 <div
-                  className={`w-7 h-7 rounded-full flex items-center justify-center text-[12px] font-bold ${
+                  className={`w-7 h-7 rounded-full flex items-center justify-center text-caption font-bold ${
                     isActive
                       ? "bg-blue-600 text-white"
                       : isCompleted
@@ -76,7 +76,7 @@ export function OnboardingWizard() {
                     <Icon className="w-3.5 h-3.5" />
                   )}
                 </div>
-                <span className="text-[12px] font-semibold hidden sm:block">
+                <span className="text-caption font-semibold hidden sm:block">
                   {s.label}
                 </span>
               </button>

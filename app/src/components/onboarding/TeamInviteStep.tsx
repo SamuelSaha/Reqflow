@@ -65,10 +65,10 @@ export function TeamInviteStep({ onNext }: Props) {
           <CheckCircle2 className="w-8 h-8 text-green-600" />
         </div>
         <div className="text-center">
-          <h2 className="text-[24px] font-bold text-slate-900">
+          <h2 className="text-h4 font-bold text-slate-900">
             Invites sent!
           </h2>
-          <p className="text-[15px] text-slate-500 mt-1">
+          <p className="text-body-sm text-slate-500 mt-1">
             Your teammates will receive an email with a link to join.
           </p>
         </div>
@@ -80,10 +80,10 @@ export function TeamInviteStep({ onNext }: Props) {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
       <div>
-        <h2 className="text-[24px] font-bold text-slate-900">
+        <h2 className="text-h4 font-bold text-slate-900">
           Invite your team
         </h2>
-        <p className="text-[15px] text-slate-500 mt-1">
+        <p className="text-body-sm text-slate-500 mt-1">
           Add teammates who should be able to submit or approve purchase
           requests. They&apos;ll get an email invite.
         </p>
@@ -139,7 +139,7 @@ export function TeamInviteStep({ onNext }: Props) {
           type="button"
           variant="ghost"
           onClick={addRow}
-          className="w-fit text-[13px]"
+          className="w-fit text-caption"
         >
           <Plus className="w-4 h-4 mr-1" />
           Add another
