@@ -130,6 +130,11 @@ export const AuditAction = {
   // Organization actions
   ORG_SETTINGS_UPDATED: "org.settings.updated",
   ORG_PLAN_CHANGED: "org.plan.changed",
+
+  // File actions
+  FILE_UPLOADED: "file.uploaded",
+  FILE_DOWNLOADED: "file.downloaded",
+  FILE_DELETED: "file.deleted",
 } as const;
 
 /**

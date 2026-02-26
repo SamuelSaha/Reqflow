@@ -15,6 +15,7 @@ import { workflowsRouter } from "./routers/workflows";
 import { analyticsRouter } from "./routers/analytics";
 import { vendorsRouter } from "./routers/vendors";
 import { integrationsRouter } from "./routers/integrations";
+import { filesRouter } from "./routers/files";
 
 export const appRouter = router({
   requests: requestsRouter,
@@ -28,6 +29,7 @@ export const appRouter = router({
   analytics: analyticsRouter,
   vendors: vendorsRouter,
   integrations: integrationsRouter,
+  files: filesRouter,
 });
 
 export type AppRouter = typeof appRouter;
