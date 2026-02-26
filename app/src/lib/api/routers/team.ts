@@ -12,6 +12,22 @@ import { sendEmail, EmailTemplate } from "@/lib/queue/queues/email";
 import { createAuditLog, AuditAction } from "@/lib/monitoring/audit";
 import { env } from "@/lib/env";
 
+/**
+ * Generate cryptographically secure invite token
+ * Uses 32 bytes (256 bits) of entropy, base64url encoded
+ * Provides ~10^77 possible tokens (collision/brute-force resistant)
+ */
+function generateSecureToken(): string {
+  const bytes = new Uint8Array(32);
+  crypto.getRandomValues(bytes);
+  // Convert to base64url (URL-safe, no padding)
+  return Buffer.from(bytes)
+    .toString("base64")
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=/g, "");
+}
+
 export const teamRouter = router({
   /**
    * List all users in the organization
@@ -129,7 +145,7 @@ export const teamRouter = router({
         }
 
         // Create invite
-        const token = crypto.randomUUID();
+        const token = generateSecureToken();
         const expiresAt = new Date();
         expiresAt.setDate(expiresAt.getDate() + 7); // 7-day expiry
 
