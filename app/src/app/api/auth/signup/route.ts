@@ -16,7 +16,8 @@ import { env } from "@/lib/env";
 import { checkSignupRateLimit } from "@/lib/security/rate-limit";
 import { createVerificationToken } from "@/lib/auth/email-verification";
 
-const COOKIE_NAME = "reqflow_session";
+// Use __Host- prefix for enhanced security (requires secure=true, path="/")
+const COOKIE_NAME = "__Host-reqflow_session";
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
 
 /**
@@ -156,11 +157,12 @@ export async function POST(request: Request) {
 
       const cookieStore = await cookies();
       cookieStore.set(COOKIE_NAME, token, {
-        httpOnly: true,
-        secure: env.NODE_ENV === "production",
-        sameSite: "lax",
+        httpOnly: true, // Prevent XSS access
+        secure: true, // Require HTTPS (always, even in dev)
+        sameSite: "strict", // Prevent CSRF attacks
         maxAge: COOKIE_MAX_AGE,
-        path: "/",
+        path: "/", // Required for __Host- prefix
+        // No domain attribute (required for __Host- prefix)
       });
 
       return NextResponse.json({
@@ -220,11 +222,12 @@ export async function POST(request: Request) {
 
     const cookieStore = await cookies();
     cookieStore.set(COOKIE_NAME, token, {
-      httpOnly: true,
-      secure: env.NODE_ENV === "production",
-      sameSite: "lax",
+      httpOnly: true, // Prevent XSS access
+      secure: true, // Require HTTPS (always, even in dev)
+      sameSite: "strict", // Prevent CSRF attacks
       maxAge: COOKIE_MAX_AGE,
-      path: "/",
+      path: "/", // Required for __Host- prefix
+      // No domain attribute (required for __Host- prefix)
     });
 
     return NextResponse.json({

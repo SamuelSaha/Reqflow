@@ -14,7 +14,8 @@ import { env } from "../env";
 
 const JWT_SECRET = new TextEncoder().encode(env.AUTH_SECRET);
 
-const COOKIE_NAME = "reqflow_session";
+// Use __Host- prefix for enhanced security (requires secure=true, path="/")
+const COOKIE_NAME = "__Host-reqflow_session";
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
 
 export interface SessionPayload {
@@ -124,14 +125,15 @@ export async function signIn(
     onboardingCompleted: org?.onboardingCompleted ?? true,
   });
 
-  // Set cookie
+  // Set cookie with enhanced security
   const cookieStore = await cookies();
   cookieStore.set(COOKIE_NAME, token, {
-    httpOnly: true,
-    secure: env.NODE_ENV === "production",
-    sameSite: "lax",
+    httpOnly: true, // Prevent XSS access
+    secure: true, // Require HTTPS (always, even in dev)
+    sameSite: "strict", // Prevent CSRF attacks
     maxAge: COOKIE_MAX_AGE,
-    path: "/",
+    path: "/", // Required for __Host- prefix
+    // No domain attribute (required for __Host- prefix)
   });
 
   return { user, token };
@@ -173,11 +175,12 @@ export async function refreshSession(userId: string): Promise<void> {
 
   const cookieStore = await cookies();
   cookieStore.set(COOKIE_NAME, token, {
-    httpOnly: true,
-    secure: env.NODE_ENV === "production",
-    sameSite: "lax",
+    httpOnly: true, // Prevent XSS access
+    secure: true, // Require HTTPS (always, even in dev)
+    sameSite: "strict", // Prevent CSRF attacks
     maxAge: COOKIE_MAX_AGE,
-    path: "/",
+    path: "/", // Required for __Host- prefix
+    // No domain attribute (required for __Host- prefix)
   });
 }
 
