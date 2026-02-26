@@ -63,10 +63,10 @@ function FeaturesMegaMenu() {
               {featuresDropdown.byRole.map((item) => (
                 <Link key={item.href} href={item.href}>
                   <DropdownMenuItem className="flex flex-col items-start gap-0.5 p-3 cursor-pointer transition-all duration-200 ease-out hover:-translate-y-0.5 hover:bg-slate-50/80 hover:shadow-sm rounded-lg">
-                    <span className="text-body-sm font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
+                    <span className="text-body font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
                       {item.label}
                     </span>
-                    <span className="text-caption text-slate-600">
+                    <span className="text-body-sm text-slate-500">
                       {item.description}
                     </span>
                   </DropdownMenuItem>
@@ -84,10 +84,10 @@ function FeaturesMegaMenu() {
               {featuresDropdown.byUseCase.map((item) => (
                 <Link key={item.href} href={item.href}>
                   <DropdownMenuItem className="flex flex-col items-start gap-0.5 p-3 cursor-pointer transition-all duration-200 ease-out hover:-translate-y-0.5 hover:bg-slate-50/80 hover:shadow-sm rounded-lg">
-                    <span className="text-body-sm font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
+                    <span className="text-body font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
                       {item.label}
                     </span>
-                    <span className="text-caption text-slate-600">
+                    <span className="text-body-sm text-slate-500">
                       {item.description}
                     </span>
                   </DropdownMenuItem>
