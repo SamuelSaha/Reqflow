@@ -20,6 +20,8 @@ import {
   Edit3,
   ArrowUpRight,
   AlertCircle,
+  Receipt,
+  AlertTriangle,
 } from "lucide-react";
 import { RequestListSkeleton } from "@/components/dashboard/LoadingSkeletons";
 import { getErrorMessage } from "@/lib/utils/error-messages";
@@ -186,7 +188,21 @@ export default function RequestsPage() {
                           <p className="text-[10px] text-slate-500">{req.frequency}</p>
                         )}
                       </div>
-                      <Badge className={config.className}>{config.label}</Badge>
+                      <div className="flex flex-col gap-1.5">
+                        <Badge className={config.className}>{config.label}</Badge>
+                        {req.status === "approved" && req.syncedToAccounting && (
+                          <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 text-[10px]">
+                            <Receipt className="h-3 w-3 mr-1" />
+                            Synced
+                          </Badge>
+                        )}
+                        {req.status === "approved" && req.accountingSyncError && (
+                          <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200 text-[10px]">
+                            <AlertTriangle className="h-3 w-3 mr-1" />
+                            Sync failed
+                          </Badge>
+                        )}
+                      </div>
                       <ArrowUpRight className="h-4 w-4 text-slate-300 group-hover:text-blue-500 transition-colors" />
                     </div>
                   </Link>

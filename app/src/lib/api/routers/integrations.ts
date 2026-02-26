@@ -197,4 +197,83 @@ export const integrationsRouter = router({
         provider: input.provider,
       };
     }),
+
+  /**
+   * Manually retry sync for a failed request
+   */
+  retrySync: adminProcedure
+    .input(z.object({ requestId: z.string().uuid() }))
+    .mutation(async ({ ctx, input }) => {
+      const { requests } = await import("@/lib/db/schema");
+      const { eq } = await import("drizzle-orm");
+
+      // Get request
+      const request = await ctx.db.query.requests.findFirst({
+        where: eq(requests.id, input.requestId),
+      });
+
+      if (!request) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Request not found",
+        });
+      }
+
+      if (request.tenantId !== ctx.tenantId) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Request does not belong to your organization",
+        });
+      }
+
+      if (request.status !== "approved") {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Only approved requests can be synced",
+        });
+      }
+
+      // Get active integration with auto-sync
+      const integration = await ctx.db.query.accountingIntegrations.findFirst({
+        where: and(
+          eq(accountingIntegrations.tenantId, ctx.tenantId),
+          eq(accountingIntegrations.isActive, true)
+        ),
+      });
+
+      if (!integration) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "No active accounting integration found",
+        });
+      }
+
+      // Queue sync job
+      const { queueSync } = await import("@/lib/queue/queues/sync");
+      await queueSync({
+        tenantId: ctx.tenantId,
+        provider: integration.provider as "quickbooks" | "xero",
+        entity: "purchase_order",
+        entityId: input.requestId,
+        action: "create",
+        data: {},
+      });
+
+      await createAuditLog({
+        tenantId: ctx.tenantId,
+        userId: ctx.user.id,
+        userEmail: ctx.user.email,
+        userName: ctx.user.name,
+        action: AuditAction.ORG_SETTINGS_UPDATED,
+        entityType: "request",
+        entityId: input.requestId,
+        description: `Manually triggered sync retry for request ${request.requestNumber}`,
+        metadata: {
+          provider: integration.provider,
+          requestNumber: request.requestNumber,
+        },
+      });
+
+      return { success: true, provider: integration.provider };
+    }),
 });

@@ -23,9 +23,13 @@ import {
   FileText,
   AlertCircle,
   ShieldCheck,
+  RefreshCw,
+  Receipt,
+  AlertTriangle,
 } from "lucide-react";
 import { RequestDetailSkeleton } from "@/components/dashboard/LoadingSkeletons";
 import { getErrorMessage } from "@/lib/utils/error-messages";
+import { toast } from "sonner";
 
 export const dynamic = "force-dynamic";
 
@@ -50,6 +54,15 @@ export default function RequestDetailPage({
 }) {
   const { id } = use(params);
   const request = trpc.requests.getById.useQuery({ id });
+  const utils = trpc.useUtils();
+
+  const retrySync = trpc.integrations.retrySync.useMutation({
+    onSuccess: () => {
+      toast.success("Sync queued successfully");
+      utils.requests.getById.invalidate({ id });
+    },
+    onError: (error) => toast.error(error.message),
+  });
 
   if (request.isLoading) {
     return <RequestDetailSkeleton />;
@@ -280,6 +293,90 @@ export default function RequestDetailPage({
             </CardContent>
           </Card>
 
+          {/* Accounting Sync Status - Only show for approved requests */}
+          {req.status === "approved" && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base flex items-center gap-2">
+                  <Receipt className="h-4 w-4" />
+                  Accounting Sync
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {req.syncedToAccounting ? (
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-2">
+                      <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5" />
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-green-700">
+                          Synced to {req.accountingSyncProvider === "quickbooks" ? "QuickBooks" : "Xero"}
+                        </p>
+                        {req.accountingSyncRef && (
+                          <p className="text-xs text-slate-600 mt-1">
+                            PO #{req.accountingSyncRef}
+                          </p>
+                        )}
+                        {req.lastSyncAttempt && (
+                          <p className="text-xs text-slate-500 mt-1">
+                            {new Date(req.lastSyncAttempt).toLocaleString()}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ) : req.accountingSyncError ? (
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-2">
+                      <AlertTriangle className="h-5 w-5 text-red-600 mt-0.5" />
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-red-700">
+                          Sync failed
+                        </p>
+                        <p className="text-xs text-red-600 mt-1">
+                          {req.accountingSyncError}
+                        </p>
+                        {req.lastSyncAttempt && (
+                          <p className="text-xs text-slate-500 mt-1">
+                            Last attempt: {new Date(req.lastSyncAttempt).toLocaleString()}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="w-full"
+                      onClick={() => retrySync.mutate({ requestId: id })}
+                      disabled={retrySync.isPending}
+                    >
+                      <RefreshCw className={`mr-2 h-3.5 w-3.5 ${retrySync.isPending ? "animate-spin" : ""}`} />
+                      {retrySync.isPending ? "Retrying..." : "Retry Sync"}
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="flex items-start gap-2">
+                    <Clock className="h-5 w-5 text-amber-600 mt-0.5" />
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-amber-700">
+                        Sync pending
+                      </p>
+                      <p className="text-xs text-slate-600 mt-1">
+                        Will sync automatically or{" "}
+                        <button
+                          onClick={() => retrySync.mutate({ requestId: id })}
+                          disabled={retrySync.isPending}
+                          className="text-blue-600 hover:text-blue-700 underline"
+                        >
+                          sync now
+                        </button>
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          )}
+
           {/* Timeline */}
           <Card>
             <CardHeader>
@@ -311,6 +408,14 @@ export default function RequestDetailPage({
                     date={req.rejectedAt}
                     active={!!req.rejectedAt}
                     variant="error"
+                  />
+                )}
+                {req.status === "approved" && req.syncedToAccounting && (
+                  <TimelineEvent
+                    label="Synced to Accounting"
+                    date={req.lastSyncAttempt}
+                    active={true}
+                    variant="success"
                   />
                 )}
               </div>
