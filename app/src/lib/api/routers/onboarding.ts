@@ -34,6 +34,56 @@ function generateSecureToken(): string {
     .replace(/=/g, "");
 }
 
+/**
+ * Create invite with token collision retry
+ * Handles unique constraint violations (astronomically unlikely with 256-bit tokens)
+ * Defense-in-depth: retries up to 3 times on collision
+ */
+async function createInviteWithRetry(
+  db: any,
+  data: {
+    tenantId: string;
+    email: string;
+    role: string;
+    invitedBy: string;
+    status: string;
+    expiresAt: Date;
+  },
+  maxAttempts = 3
+): Promise<string> {
+  let lastError: any;
+
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    const token = generateSecureToken();
+
+    try {
+      await db.insert(invites).values({
+        ...data,
+        token,
+      });
+      return token; // Success!
+    } catch (err: any) {
+      lastError = err;
+
+      // Check for unique constraint violation (PostgreSQL error code 23505)
+      if (err.code === "23505" && err.constraint?.includes("token")) {
+        // Token collision - retry with new token
+        continue;
+      }
+
+      // Other error - rethrow immediately
+      throw err;
+    }
+  }
+
+  // Exhausted retries (astronomically unlikely)
+  throw new TRPCError({
+    code: "INTERNAL_SERVER_ERROR",
+    message: "Failed to generate unique invite token after multiple attempts",
+    cause: lastError,
+  });
+}
+
 export const onboardingRouter = router({
   /** Get current onboarding state */
   getState: protectedProcedure.query(async ({ ctx }) => {
@@ -188,16 +238,15 @@ export const onboardingRouter = router({
       const results = [];
 
       for (const inv of input.invites) {
-        const token = generateSecureToken();
+        // Create invite with collision retry
         const expiresAt = new Date();
         expiresAt.setDate(expiresAt.getDate() + 7); // 7-day expiry
 
-        await ctx.db.insert(invites).values({
+        const token = await createInviteWithRetry(ctx.db, {
           tenantId: ctx.tenantId,
           email: inv.email.toLowerCase(),
           role: inv.role,
           invitedBy: ctx.user.id,
-          token,
           status: "pending",
           expiresAt,
         });
