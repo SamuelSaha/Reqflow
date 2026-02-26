@@ -44,6 +44,32 @@ export const signupRateLimiter = redis
   : null;
 
 /**
+ * tRPC API rate limiter - 100 requests per minute per user
+ * Prevents API abuse while allowing normal usage
+ */
+export const apiRateLimiter = redis
+  ? new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(100, "1 m"),
+      analytics: true,
+      prefix: "ratelimit:api",
+    })
+  : null;
+
+/**
+ * tRPC mutation rate limiter - 20 mutations per minute per user
+ * More restrictive for write operations (create, update, delete)
+ */
+export const mutationRateLimiter = redis
+  ? new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(20, "1 m"),
+      analytics: true,
+      prefix: "ratelimit:mutation",
+    })
+  : null;
+
+/**
  * Extract client IP address from request headers
  * Checks common proxy headers in order of preference
  */
@@ -244,4 +270,60 @@ export async function clearFailedAttempts(email: string): Promise<void> {
   await redis.del(key);
 
   logger.info("Failed login attempts cleared", { email });
+}
+
+/**
+ * Check rate limit for tRPC API calls (queries)
+ * Uses user ID or IP address as identifier
+ */
+export async function checkApiRateLimit(
+  identifier: string
+): Promise<{ success: boolean; limit: number; remaining: number; reset: number }> {
+  // If rate limiting is not configured, allow all requests
+  if (!apiRateLimiter) {
+    logger.warn("API rate limiting is disabled - Upstash Redis not configured");
+    return {
+      success: true,
+      limit: 999,
+      remaining: 999,
+      reset: Date.now() + 60000,
+    };
+  }
+
+  const result = await apiRateLimiter.limit(identifier);
+
+  return {
+    success: result.success,
+    limit: result.limit,
+    remaining: result.remaining,
+    reset: result.reset,
+  };
+}
+
+/**
+ * Check rate limit for tRPC mutations (create, update, delete)
+ * More restrictive than query rate limiting
+ */
+export async function checkMutationRateLimit(
+  identifier: string
+): Promise<{ success: boolean; limit: number; remaining: number; reset: number }> {
+  // If rate limiting is not configured, allow all requests
+  if (!mutationRateLimiter) {
+    logger.warn("Mutation rate limiting is disabled - Upstash Redis not configured");
+    return {
+      success: true,
+      limit: 999,
+      remaining: 999,
+      reset: Date.now() + 60000,
+    };
+  }
+
+  const result = await mutationRateLimiter.limit(identifier);
+
+  return {
+    success: result.success,
+    limit: result.limit,
+    remaining: result.remaining,
+    reset: result.reset,
+  };
 }

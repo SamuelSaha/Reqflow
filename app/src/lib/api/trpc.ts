@@ -10,6 +10,10 @@ import { getCurrentUser, getCurrentTenantId } from "../auth/session";
 import type { User } from "../db/schema";
 import { logger } from "../monitoring/logger";
 import { captureError } from "../monitoring/sentry";
+import {
+  checkApiRateLimit,
+  checkMutationRateLimit,
+} from "../security/rate-limit";
 
 /**
  * Context for all tRPC procedures
@@ -60,26 +64,66 @@ const t = initTRPC.context<Context>().create({
 });
 
 /**
+ * Smart rate limiting middleware
+ * - Queries: 100 per minute per user
+ * - Mutations: 20 per minute per user
+ */
+const rateLimitMiddleware = t.middleware(async ({ ctx, next, path, type }) => {
+  // Only apply to authenticated users
+  if (ctx.user) {
+    const identifier = `${ctx.user.id}:${path}`;
+
+    // Use stricter rate limit for mutations
+    const isMutation = type === "mutation";
+    const result = isMutation
+      ? await checkMutationRateLimit(identifier)
+      : await checkApiRateLimit(identifier);
+
+    if (!result.success) {
+      logger.warn(`${isMutation ? "Mutation" : "Query"} rate limit exceeded`, {
+        userId: ctx.user.id,
+        path,
+        type,
+        remaining: result.remaining,
+        reset: new Date(result.reset).toISOString(),
+      });
+
+      throw new TRPCError({
+        code: "TOO_MANY_REQUESTS",
+        message: `Rate limit exceeded. Try again in ${Math.ceil((result.reset - Date.now()) / 1000)}s.`,
+      });
+    }
+  }
+
+  return next();
+});
+
+/**
  * Public procedure - no authentication required
  */
 export const publicProcedure = t.procedure;
 
 /**
- * Protected procedure - requires authentication
+ * Protected procedure - requires authentication + rate limiting
+ * Automatically applies appropriate rate limits based on operation type:
+ * - Queries: 100 per minute
+ * - Mutations: 20 per minute
  */
-export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
-  if (!ctx.user || !ctx.tenantId) {
-    throw new TRPCError({ code: "UNAUTHORIZED" });
-  }
+export const protectedProcedure = t.procedure
+  .use(rateLimitMiddleware)
+  .use(async ({ ctx, next }) => {
+    if (!ctx.user || !ctx.tenantId) {
+      throw new TRPCError({ code: "UNAUTHORIZED" });
+    }
 
-  return next({
-    ctx: {
-      ...ctx,
-      user: ctx.user as User,
-      tenantId: ctx.tenantId as string,
-    },
+    return next({
+      ctx: {
+        ...ctx,
+        user: ctx.user as User,
+        tenantId: ctx.tenantId as string,
+      },
+    });
   });
-});
 
 /**
  * Admin procedure - requires admin role
