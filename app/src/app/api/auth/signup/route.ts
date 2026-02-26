@@ -14,6 +14,7 @@ import { logger } from "@/lib/monitoring/logger";
 import { captureError } from "@/lib/monitoring/sentry";
 import { env } from "@/lib/env";
 import { checkSignupRateLimit } from "@/lib/security/rate-limit";
+import { createVerificationToken } from "@/lib/auth/email-verification";
 
 const COOKIE_NAME = "reqflow_session";
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
@@ -137,9 +138,12 @@ export async function POST(request: Request) {
           tenantId: invite.tenantId,
           departmentId: dept?.id,
           isActive: true,
-          emailVerified: true,
+          emailVerified: false, // Require email verification
         })
         .returning();
+
+      // Send verification email
+      await createVerificationToken(user.id, user.email);
 
       // Mark invite as accepted
       await db
@@ -204,9 +208,12 @@ export async function POST(request: Request) {
         tenantId: org.id,
         departmentId: dept.id,
         isActive: true,
-        emailVerified: true,
+        emailVerified: false, // Require email verification
       })
       .returning();
+
+    // Send verification email
+    await createVerificationToken(user.id, user.email);
 
     // Set session cookie
     const token = await createSession(user, { onboardingCompleted: false });
