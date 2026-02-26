@@ -74,11 +74,11 @@ export function FeaturesGrid() {
           </span>
         </span>
 
-        <h2 className="text-[44px] font-bold leading-[1.15] tracking-tight text-white whitespace-pre-line">
+        <h2 className="text-h2 text-white whitespace-pre-line">
           {"The full procurement lifecycle.\nNot just another form."}
         </h2>
 
-        <p className="text-[18px] leading-relaxed text-slate-400 max-w-[620px]">
+        <p className="text-body-lg text-slate-400 max-w-[620px]">
           From intake to renewal, every tool purchase is tracked, connected, and
           auditable. The story of why you bought it, who owns it, and when you
           can leave — captured automatically.
@@ -94,8 +94,8 @@ export function FeaturesGrid() {
             <div className="w-[52px] h-[52px] bg-[#1E3A5F] rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:bg-[#2563EB] transition-all duration-200">
               <Icon className="text-blue-500 group-hover:text-blue-300 transition-colors duration-200" size={26} />
             </div>
-            <h3 className="text-[22px] font-bold text-white group-hover:text-blue-300 transition-colors duration-200">{title}</h3>
-            <p className="text-[15px] text-slate-400 leading-relaxed">{desc}</p>
+            <h3 className="text-h4 text-white group-hover:text-blue-300 transition-colors duration-200">{title}</h3>
+            <p className="text-body-sm text-slate-400">{desc}</p>
           </div>
         ))}
       </div>
@@ -109,8 +109,8 @@ export function FeaturesGrid() {
             <div className="w-[44px] h-[44px] bg-[#1E3A5F] rounded-[10px] flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-200">
               <Icon className="text-blue-500 group-hover:text-blue-300 transition-colors duration-200" size={22} />
             </div>
-            <h3 className="text-[18px] font-bold text-white group-hover:text-blue-300 transition-colors duration-200">{title}</h3>
-            <p className="text-[14px] text-slate-400 leading-relaxed">{desc}</p>
+            <h3 className="text-h5 text-white group-hover:text-blue-300 transition-colors duration-200">{title}</h3>
+            <p className="text-body-sm text-slate-400">{desc}</p>
           </div>
         ))}
       </div>
@@ -155,7 +155,7 @@ export function SocialProof() {
           </span>
         </span>
 
-        <h2 className="text-[44px] font-bold leading-[1.15] tracking-tight text-slate-900 whitespace-pre-line">
+        <h2 className="text-h2 text-slate-900 whitespace-pre-line">
           {"What happens when buying\nstops being a mess."}
         </h2>
       </div>
@@ -169,10 +169,10 @@ export function SocialProof() {
             <span className="text-[40px] font-bold text-blue-600 tracking-tight group-hover:scale-110 transition-transform duration-200">
               {value}
             </span>
-            <span className="text-[15px] font-medium text-slate-600 text-center">
+            <span className="text-body-sm font-medium text-slate-600 text-center">
               {label}
             </span>
-            <span className="text-[13px] font-medium text-slate-400">
+            <span className="text-caption font-medium text-slate-400 normal-case tracking-normal">
               {sub}
             </span>
           </div>
@@ -205,11 +205,11 @@ export function Integrations() {
           </span>
         </span>
 
-        <h2 className="text-[44px] font-bold leading-[1.15] tracking-tight text-slate-900 whitespace-pre-line">
+        <h2 className="text-h2 text-slate-900 whitespace-pre-line">
           {"Plugs into the tools\nyour team already uses."}
         </h2>
 
-        <p className="text-[18px] leading-relaxed text-slate-600 max-w-[620px]">
+        <p className="text-body-lg text-slate-600 max-w-[620px]">
           One-click integrations with your accounting, chat, and identity tools.
           Data flows both ways, so nothing needs manual entry.
         </p>
@@ -229,7 +229,7 @@ export function Integrations() {
                 {letter}
               </span>
             </div>
-            <span className="text-[14px] font-semibold text-slate-900">
+            <span className="text-body-sm font-semibold text-slate-900">
               {name}
             </span>
           </div>

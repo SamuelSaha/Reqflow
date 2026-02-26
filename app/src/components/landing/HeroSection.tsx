@@ -345,11 +345,11 @@ export function ProblemSection() {
           </span>
         </div>
 
-        <h2 className="text-[44px] font-bold leading-[1.15] tracking-tight text-slate-900">
+        <h2 className="text-h2 text-slate-900">
           Your team buys SaaS tools on a shared card and you find out when the invoice arrives.
         </h2>
 
-        <p className="text-[18px] leading-relaxed text-slate-600 max-w-[620px]">
+        <p className="text-body-lg text-slate-600 max-w-[620px]">
           You're not big enough for a procurement team, but you're too big to track everything in your head.
           Slack threads, shared cards, surprise renewals. Every founder's been there.
         </p>
@@ -366,7 +366,7 @@ export function ProblemSection() {
               Without Reqflow
             </span>
           </div>
-          <h3 className="text-[22px] font-bold text-slate-900 mb-6">
+          <h3 className="text-h4 text-slate-900 mb-6">
             Approving a $20/month tool takes a week and three Slack threads
           </h3>
           <div className="flex flex-col gap-4">
@@ -377,7 +377,7 @@ export function ProblemSection() {
                     {i + 1}
                   </span>
                 </div>
-                <span className="text-[15px] leading-relaxed text-slate-600 pt-0.5">
+                <span className="text-body-sm text-slate-600 pt-0.5">
                   {step}
                 </span>
               </div>
@@ -395,7 +395,7 @@ export function ProblemSection() {
               With Reqflow
             </span>
           </div>
-          <h3 className="text-[22px] font-bold text-slate-900 mb-6">
+          <h3 className="text-h4 text-slate-900 mb-6">
             Same request gets approved in under 2 hours. Every single time.
           </h3>
           <div className="flex flex-col gap-4">
@@ -409,7 +409,7 @@ export function ProblemSection() {
                     </span>
                   </div>
                   <span
-                    className={`text-[15px] leading-relaxed pt-0.5 ${
+                    className={`text-body-sm pt-0.5 ${
                       isLast ? "font-bold text-green-600" : "text-slate-600"
                     }`}
                   >
@@ -474,10 +474,10 @@ export function FaqSection() {
       <div className="max-w-[800px] w-full flex flex-col gap-12">
         {/* Header */}
         <div className="flex flex-col items-center gap-4 text-center">
-          <h2 className="text-[40px] md:text-[44px] font-bold leading-[1.15] tracking-tight text-slate-900">
+          <h2 className="text-h2 text-slate-900">
             Common questions about procurement software for small teams
           </h2>
-          <p className="text-[17px] md:text-[18px] text-slate-600 max-w-[600px]">
+          <p className="text-body-lg text-slate-600 max-w-[600px]">
             Everything you need to know about managing SaaS spend without a procurement department.
           </p>
         </div>
@@ -486,10 +486,10 @@ export function FaqSection() {
         <div className="flex flex-col gap-8">
           {faqs.map((faq, index) => (
             <div key={index} className="flex flex-col gap-3">
-              <h3 className="text-[19px] md:text-[20px] font-bold text-slate-900 leading-snug">
+              <h3 className="text-h5 text-slate-900">
                 {faq.question}
               </h3>
-              <p className="text-[16px] md:text-[17px] leading-relaxed text-slate-600">
+              <p className="text-body text-slate-600">
                 {faq.answer}
               </p>
             </div>
@@ -498,7 +498,7 @@ export function FaqSection() {
 
         {/* CTA after FAQ */}
         <div className="flex flex-col items-center gap-6 pt-8 border-t border-slate-200">
-          <p className="text-[17px] md:text-[18px] text-slate-700 font-medium">
+          <p className="text-body-lg text-slate-700 font-medium">
             Still have questions? See how it works in 2 minutes.
           </p>
           <CtaGroup alignment="center">
