@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { PageShell } from "@/components/layout";
 import { Section } from "@/components/layout/Section";
 import { Container } from "@/components/layout/Container";
-import { Building2, FileText, TrendingUp, AlertTriangle, ArrowRight, Check } from "lucide-react";
+import { Building2, FileText, TrendingUp, AlertTriangle, ArrowRight, Check, Bell, Shield } from "lucide-react";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Vendor Management Software - Track Contracts & Spend",
@@ -32,7 +33,7 @@ export default function VendorTrackingPage() {
               Manage vendor relationships
             </h1>
             <p className="text-body-lg text-slate-600 leading-relaxed">
-              Keep all vendor data in one place: contracts, contacts, performance, and spending. Know who you work with and how they're performing.
+              Built for teams of 5-50: Keep all vendor data in one place—contracts, contacts, performance, and spending. Track renewals automatically and link contracts to budgets.
             </p>
           </div>
 
@@ -161,6 +162,29 @@ export default function VendorTrackingPage() {
                   ))}
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* Cross-link to related features */}
+          <div className="bg-blue-50 rounded-xl border border-blue-200 p-6 mb-16">
+            <h3 className="text-h5 font-bold text-slate-900 mb-4">
+              Vendor tracking connects to everything
+            </h3>
+            <div className="grid md:grid-cols-2 gap-4">
+              <Link href="/features/renewals" className="flex items-start gap-3 p-4 bg-white rounded-lg border border-blue-200 hover:shadow-md transition-shadow group">
+                <Bell className="w-5 h-5 text-orange-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <div className="text-body font-semibold text-slate-900 group-hover:text-blue-600">Renewal Tracking →</div>
+                  <div className="text-body-sm text-slate-600">Never miss a vendor contract renewal deadline</div>
+                </div>
+              </Link>
+              <Link href="/features/budgets" className="flex items-start gap-3 p-4 bg-white rounded-lg border border-blue-200 hover:shadow-md transition-shadow group">
+                <Shield className="w-5 h-5 text-violet-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <div className="text-body font-semibold text-slate-900 group-hover:text-blue-600">Budget Control →</div>
+                  <div className="text-body-sm text-slate-600">Track vendor spending against department budgets</div>
+                </div>
+              </Link>
             </div>
           </div>
 

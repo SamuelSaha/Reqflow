@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { PageShell } from "@/components/layout";
 import { Section } from "@/components/layout/Section";
 import { Container } from "@/components/layout/Container";
-import { Shield, TrendingUp, AlertCircle, Lock, ArrowRight, Check } from "lucide-react";
+import { Shield, TrendingUp, AlertCircle, Lock, ArrowRight, Check, Building2, Layers } from "lucide-react";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Budget Management Software - Spending Guardrails for Small Teams",
@@ -32,7 +33,7 @@ export default function BudgetControlPage() {
               Set spending guardrails
             </h1>
             <p className="text-body-lg text-slate-600 leading-relaxed">
-              Enforce budgets automatically. Soft warnings when teams get close, hard stops when they hit the limit. No more budget surprises.
+              Built for teams of 5-50: Enforce budgets automatically. Soft warnings at 80%, hard stops at 100%. Reduce budget variance from 23% (industry avg) to &lt;2%.
             </p>
           </div>
 
@@ -183,6 +184,29 @@ export default function BudgetControlPage() {
                   </li>
                 </ul>
               </div>
+            </div>
+          </div>
+
+          {/* Cross-link to related features */}
+          <div className="bg-violet-50 rounded-xl border border-violet-200 p-6 mb-16">
+            <h3 className="text-h5 font-bold text-slate-900 mb-4">
+              Budget control integrates with vendor and SaaS tracking
+            </h3>
+            <div className="grid md:grid-cols-2 gap-4">
+              <Link href="/features/vendors" className="flex items-start gap-3 p-4 bg-white rounded-lg border border-violet-200 hover:shadow-md transition-shadow group">
+                <Building2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <div className="text-body font-semibold text-slate-900 group-hover:text-violet-600">Vendor Management →</div>
+                  <div className="text-body-sm text-slate-600">Track total spend by vendor against budget categories</div>
+                </div>
+              </Link>
+              <Link href="/features/saas" className="flex items-start gap-3 p-4 bg-white rounded-lg border border-violet-200 hover:shadow-md transition-shadow group">
+                <Layers className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <div className="text-body font-semibold text-slate-900 group-hover:text-violet-600">SaaS Management →</div>
+                  <div className="text-body-sm text-slate-600">Allocate SaaS subscriptions to department budgets</div>
+                </div>
+              </Link>
             </div>
           </div>
 

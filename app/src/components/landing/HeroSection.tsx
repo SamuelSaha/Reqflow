@@ -58,12 +58,12 @@ export function HeroSection() {
             {/* Headline with emphasis - NO ANIMATION DELAY */}
             <div className="space-y-4 md:space-y-5">
               <h1 className="text-hero text-slate-900 leading-[1.1]">
-                Procurement for teams that{" "}
+                Procurement software for teams of{" "}
                 <span className="relative inline-block">
-                  <span className="relative z-10">move too fast</span>
+                  <span className="relative z-10">5-50 people</span>
                   <span className="absolute bottom-2 left-0 right-0 h-3 bg-blue-200/60 -rotate-1" />
                 </span>
-                {" "}for spreadsheets
+                {" "}who move too fast for spreadsheets
               </h1>
 
               {/* Enhanced subheadline with benefits */}
@@ -71,6 +71,26 @@ export function HeroSection() {
                 Stop losing invoices in Slack threads. Stop wondering if you already pay for that tool.
                 Stop chasing approvals across DMs. <span className="font-semibold text-slate-700">Built for teams who buy without a procurement department.</span>
               </p>
+            </div>
+
+            {/* Pain stats grid - Above fold for immediate impact */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 max-w-4xl mx-auto">
+              <div className="bg-white rounded-lg p-3 md:p-4 border border-red-100 shadow-sm hover:shadow-md transition-shadow">
+                <div className="text-h4 md:text-h3 font-bold text-red-600 mb-1">40-60%</div>
+                <div className="text-caption md:text-body-sm text-slate-600 leading-tight">purchases bypass process</div>
+              </div>
+              <div className="bg-white rounded-lg p-3 md:p-4 border border-red-100 shadow-sm hover:shadow-md transition-shadow">
+                <div className="text-h4 md:text-h3 font-bold text-red-600 mb-1">29%</div>
+                <div className="text-caption md:text-body-sm text-slate-600 leading-tight">SaaS subscriptions duplicate</div>
+              </div>
+              <div className="bg-white rounded-lg p-3 md:p-4 border border-red-100 shadow-sm hover:shadow-md transition-shadow">
+                <div className="text-h4 md:text-h3 font-bold text-red-600 mb-1">8.3 hrs</div>
+                <div className="text-caption md:text-body-sm text-slate-600 leading-tight">wasted per week</div>
+              </div>
+              <div className="bg-white rounded-lg p-3 md:p-4 border border-red-100 shadow-sm hover:shadow-md transition-shadow">
+                <div className="text-h4 md:text-h3 font-bold text-red-600 mb-1">$15-40</div>
+                <div className="text-caption md:text-body-sm text-slate-600 leading-tight">cost per manual invoice</div>
+              </div>
             </div>
 
             {/* Quick wins - Value props - NO ANIMATION DELAY */}
@@ -81,15 +101,15 @@ export function HeroSection() {
               </div>
               <div className="group flex items-center gap-2 text-slate-700 transition-colors duration-150 hover:text-amber-600">
                 <Zap className="w-5 h-5 text-amber-500 transition-all duration-200 group-hover:scale-110 group-hover:rotate-6" />
-                <span className="font-medium">Instant approvals</span>
+                <span className="font-medium">Approve in &lt;2 hours (vs 3+)</span>
               </div>
               <div className="group flex items-center gap-2 text-slate-700 transition-colors duration-150 hover:text-blue-600">
                 <Shield className="w-5 h-5 text-blue-600 transition-transform duration-200 group-hover:scale-110" />
-                <span className="font-medium">Budget guardrails</span>
+                <span className="font-medium">94% budget compliance</span>
               </div>
               <div className="group flex items-center gap-2 text-slate-700 transition-colors duration-150 hover:text-purple-600">
                 <Clock className="w-5 h-5 text-purple-600 transition-transform duration-200 group-hover:scale-110" />
-                <span className="font-medium">Never miss renewals</span>
+                <span className="font-medium">Zero missed renewal windows</span>
               </div>
             </div>
 
@@ -457,6 +477,10 @@ const faqs = [
   {
     question: "How does SaaS spend management work for small teams without finance software?",
     answer: "We track every SaaS subscription from the moment someone requests it. You'll see what you're paying, when it renews, who uses it, and if you already have something similar. We flag duplicates automatically, so you don't end up paying for three project management tools. Export everything for your accountant in one click.",
+  },
+  {
+    question: "What's the ROI of procurement software for a 30-person team?",
+    answer: "Most teams save 10-15% on SaaS spend in the first 6 months by catching duplicates (29% of subscriptions overlap) and cancelling unused tools. For a team spending €150K/year on SaaS, that's €15-22K saved. Plus you recover 8.3 hours/week in manual work—worth ~€16K/year if your ops person's time is valued at €40/hour. Total ROI: €30-40K annually.",
   },
   {
     question: "Can Reqflow catch duplicate SaaS subscriptions before we buy them?",

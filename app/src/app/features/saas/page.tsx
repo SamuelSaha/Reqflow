@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { PageShell } from "@/components/layout";
 import { Section } from "@/components/layout/Section";
 import { Container } from "@/components/layout/Container";
-import { Layers, Eye, DollarSign, Calendar, ArrowRight, Check } from "lucide-react";
+import { Layers, Eye, DollarSign, Calendar, ArrowRight, Check, Shield, Bell } from "lucide-react";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "SaaS Spend Management - Track Software Subscriptions",
@@ -32,7 +33,7 @@ export default function SaaSManagementPage() {
               Track all software subscriptions
             </h1>
             <p className="text-body-lg text-slate-600 leading-relaxed">
-              Know exactly what SaaS tools you're paying for, who owns them, and when renewals hit. The connected record for every subscription.
+              Built for teams of 5-50: Know exactly what SaaS tools you're paying for, who owns them, and when renewals hit. The connected record for every subscription.
             </p>
           </div>
 
@@ -140,6 +141,29 @@ export default function SaaSManagementPage() {
                   ))}
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* Cross-link to related features */}
+          <div className="bg-blue-50 rounded-xl border border-blue-200 p-6 mb-16">
+            <h3 className="text-h5 font-bold text-slate-900 mb-4">
+              SaaS management connects to budgets and renewals
+            </h3>
+            <div className="grid md:grid-cols-2 gap-4">
+              <Link href="/features/budgets" className="flex items-start gap-3 p-4 bg-white rounded-lg border border-blue-200 hover:shadow-md transition-shadow group">
+                <Shield className="w-5 h-5 text-violet-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <div className="text-body font-semibold text-slate-900 group-hover:text-blue-600">Budget Control →</div>
+                  <div className="text-body-sm text-slate-600">Track SaaS spend against department budgets automatically</div>
+                </div>
+              </Link>
+              <Link href="/features/renewals" className="flex items-start gap-3 p-4 bg-white rounded-lg border border-blue-200 hover:shadow-md transition-shadow group">
+                <Bell className="w-5 h-5 text-orange-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <div className="text-body font-semibold text-slate-900 group-hover:text-blue-600">Renewal Tracking →</div>
+                  <div className="text-body-sm text-slate-600">Get alerted before SaaS subscriptions auto-renew</div>
+                </div>
+              </Link>
             </div>
           </div>
 

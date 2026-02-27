@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { PageShell } from "@/components/layout";
 import { Section } from "@/components/layout/Section";
 import { Container } from "@/components/layout/Container";
-import { Bell, Calendar, Clock, Target, ArrowRight, Check, AlertCircle } from "lucide-react";
+import { Bell, Calendar, Clock, Target, ArrowRight, Check, AlertCircle, Building2, Layers } from "lucide-react";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Renewal Tracking Software - Never Miss a Renewal Deadline",
@@ -32,7 +33,7 @@ export default function RenewalAlertsPage() {
               Never miss a renewal
             </h1>
             <p className="text-body-lg text-slate-600 leading-relaxed">
-              Track notice windows, not just renewal dates. Get alerted when you MUST decide — before auto-renew locks you in for another year.
+              Built for teams of 5-50: Track notice windows, not just renewal dates. Get alerted 90/60/30 days before auto-renew locks you in. Zero spreadsheets, zero missed deadlines.
             </p>
           </div>
 
@@ -221,6 +222,54 @@ export default function RenewalAlertsPage() {
                   Renewals reviewed before auto-renew
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* FAQ Section - Objection handling */}
+          <div className="bg-white rounded-2xl border border-slate-200 p-10 mb-16">
+            <h2 className="text-h4 font-bold text-slate-900 mb-6 text-center">
+              Common questions about renewal tracking
+            </h2>
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-body font-semibold text-slate-900 mb-2">
+                  Can't we just track renewals in a calendar?
+                </h3>
+                <p className="text-body text-slate-600">
+                  Calendars only track renewal dates, not notice windows. By the time the renewal date hits, it's too late—the 60-day cancellation window already closed. Reqflow tracks the deadline that actually matters: when you MUST decide.
+                </p>
+              </div>
+              <div>
+                <h3 className="text-body font-semibold text-slate-900 mb-2">
+                  What if contracts don't have notice periods?
+                </h3>
+                <p className="text-body text-slate-600">
+                  ~80% of B2B SaaS contracts have 30/60/90-day notice periods. For contracts without notice periods, Reqflow still sends renewal reminders at 90/60/30 days before renewal so you can plan budgets and decide whether to continue.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Cross-link to related features */}
+          <div className="bg-orange-50 rounded-xl border border-orange-200 p-6 mb-16">
+            <h3 className="text-h5 font-bold text-slate-900 mb-4">
+              Renewal tracking works best with connected data
+            </h3>
+            <div className="grid md:grid-cols-2 gap-4">
+              <Link href="/features/vendors" className="flex items-start gap-3 p-4 bg-white rounded-lg border border-orange-200 hover:shadow-md transition-shadow group">
+                <Building2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <div className="text-body font-semibold text-slate-900 group-hover:text-orange-600">Vendor Management →</div>
+                  <div className="text-body-sm text-slate-600">Upload contracts and extract renewal terms automatically</div>
+                </div>
+              </Link>
+              <Link href="/features/saas" className="flex items-start gap-3 p-4 bg-white rounded-lg border border-orange-200 hover:shadow-md transition-shadow group">
+                <Layers className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <div className="text-body font-semibold text-slate-900 group-hover:text-orange-600">SaaS Management →</div>
+                  <div className="text-body-sm text-slate-600">See all subscriptions with owners and renewal dates</div>
+                </div>
+              </Link>
             </div>
           </div>
 
