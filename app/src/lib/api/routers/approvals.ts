@@ -7,30 +7,56 @@ import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { router, protectedProcedure } from "../trpc";
 import { approvals, requests } from "../../db/schema";
-import { eq, and, desc } from "drizzle-orm";
+import { eq, and, desc, asc, or, ilike, gte, lte } from "drizzle-orm";
 import { analyzeRequest } from "../../ai/request-analyzer";
 import { createAuditLog, AuditAction } from "../../monitoring/audit";
 
 export const approvalsRouter = router({
   /**
-   * List approvals assigned to the current user
+   * List approvals assigned to the current user with search and filters
    */
   myQueue: protectedProcedure
     .input(
       z.object({
         status: z.enum(["pending", "approved", "rejected"]).default("pending"),
+        search: z.string().optional(),
+        category: z.string().optional(),
+        urgency: z.enum(["low", "normal", "urgent"]).optional(),
+        minAmount: z.string().optional(),
+        maxAmount: z.string().optional(),
+        dateFrom: z.string().optional(),
+        dateTo: z.string().optional(),
+        sortBy: z.enum(["createdAt", "amount", "title"]).default("createdAt"),
+        sortOrder: z.enum(["asc", "desc"]).default("desc"),
       }).optional()
     )
     .query(async ({ ctx, input }) => {
       const status = input?.status ?? "pending";
 
-      const items = await ctx.db.query.approvals.findMany({
-        where: and(
-          eq(approvals.tenantId, ctx.tenantId),
-          eq(approvals.approverId, ctx.user.id),
-          eq(approvals.decision, status)
-        ),
-        orderBy: [desc(approvals.createdAt)],
+      // Build WHERE conditions for approvals
+      const approvalConditions = [
+        eq(approvals.tenantId, ctx.tenantId),
+        eq(approvals.approverId, ctx.user.id),
+        eq(approvals.decision, status),
+      ];
+
+      // Date range filter on approvals
+      if (input?.dateFrom) {
+        approvalConditions.push(gte(approvals.createdAt, new Date(input.dateFrom)));
+      }
+      if (input?.dateTo) {
+        approvalConditions.push(lte(approvals.createdAt, new Date(input.dateTo)));
+      }
+
+      // Determine sort order (only use createdAt for approvals, sort by other fields in-memory)
+      const sortDirection = input?.sortOrder ?? "desc";
+      const orderBy = sortDirection === "asc"
+        ? [asc(approvals.createdAt)]
+        : [desc(approvals.createdAt)];
+
+      let items = await ctx.db.query.approvals.findMany({
+        where: and(...approvalConditions),
+        orderBy,
         with: {
           request: {
             with: {
@@ -41,6 +67,48 @@ export const approvalsRouter = router({
           },
         },
       });
+
+      // Apply request-level filters (search, category, urgency, amount)
+      // Note: These are applied in-memory since we can't easily join in Drizzle query builder
+      if (input?.search) {
+        const searchLower = input.search.toLowerCase();
+        items = items.filter(
+          (item) =>
+            item.request.requestNumber.toLowerCase().includes(searchLower) ||
+            item.request.title.toLowerCase().includes(searchLower) ||
+            (item.request.vendorName?.toLowerCase().includes(searchLower) ?? false)
+        );
+      }
+
+      if (input?.category) {
+        items = items.filter((item) => item.request.category === input.category);
+      }
+
+      if (input?.urgency) {
+        items = items.filter((item) => item.request.urgency === input.urgency);
+      }
+
+      if (input?.minAmount) {
+        items = items.filter((item) => parseFloat(item.request.amount) >= parseFloat(input.minAmount!));
+      }
+
+      if (input?.maxAmount) {
+        items = items.filter((item) => parseFloat(item.request.amount) <= parseFloat(input.maxAmount!));
+      }
+
+      // Apply in-memory sorting for request fields (title, amount)
+      const sortField = input?.sortBy ?? "createdAt";
+      if (sortField === "title") {
+        items.sort((a, b) => {
+          const comparison = a.request.title.localeCompare(b.request.title);
+          return sortDirection === "asc" ? comparison : -comparison;
+        });
+      } else if (sortField === "amount") {
+        items.sort((a, b) => {
+          const comparison = parseFloat(a.request.amount) - parseFloat(b.request.amount);
+          return sortDirection === "asc" ? comparison : -comparison;
+        });
+      }
 
       return items;
     }),

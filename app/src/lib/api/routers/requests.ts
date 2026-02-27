@@ -6,7 +6,7 @@ import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { router, protectedProcedure } from "../trpc";
 import { requests, approvals, insertRequestSchema } from "../../db/schema";
-import { eq, and, desc, count, sql } from "drizzle-orm";
+import { eq, and, desc, asc, count, sql, or, ilike, gte, lte, between } from "drizzle-orm";
 import { createAuditLog, AuditAction } from "../../monitoring/audit";
 
 export const requestsRouter = router({
@@ -68,24 +68,95 @@ export const requestsRouter = router({
   }),
 
   /**
-   * List current user's own requests
+   * List current user's own requests with search and filters
    */
   myList: protectedProcedure
     .input(
       z.object({
         limit: z.number().min(1).max(100).default(50),
+        search: z.string().optional(),
         status: z.enum(["draft", "pending", "approved", "rejected", "cancelled"]).optional(),
+        category: z.string().optional(),
+        urgency: z.enum(["low", "normal", "urgent"]).optional(),
+        minAmount: z.string().optional(),
+        maxAmount: z.string().optional(),
+        dateFrom: z.string().optional(),
+        dateTo: z.string().optional(),
+        sortBy: z.enum(["createdAt", "amount", "status", "title"]).default("createdAt"),
+        sortOrder: z.enum(["asc", "desc"]).default("desc"),
       }).optional()
     )
     .query(async ({ ctx, input }) => {
+      // Build WHERE conditions
+      const conditions = [
+        eq(requests.tenantId, ctx.tenantId),
+        eq(requests.requesterId, ctx.user.id),
+      ];
+
+      // Status filter
+      if (input?.status) {
+        conditions.push(eq(requests.status, input.status));
+      }
+
+      // Category filter
+      if (input?.category) {
+        conditions.push(eq(requests.category, input.category));
+      }
+
+      // Urgency filter
+      if (input?.urgency) {
+        conditions.push(eq(requests.urgency, input.urgency));
+      }
+
+      // Amount range filter
+      if (input?.minAmount) {
+        conditions.push(gte(requests.amount, input.minAmount));
+      }
+      if (input?.maxAmount) {
+        conditions.push(lte(requests.amount, input.maxAmount));
+      }
+
+      // Date range filter
+      if (input?.dateFrom) {
+        conditions.push(gte(requests.createdAt, new Date(input.dateFrom)));
+      }
+      if (input?.dateTo) {
+        conditions.push(lte(requests.createdAt, new Date(input.dateTo)));
+      }
+
+      // Search filter (request number, title, vendor name)
+      if (input?.search) {
+        conditions.push(
+          or(
+            ilike(requests.requestNumber, `%${input.search}%`),
+            ilike(requests.title, `%${input.search}%`),
+            ilike(requests.vendorName, `%${input.search}%`)
+          )!
+        );
+      }
+
+      // Determine sort order
+      const sortField = input?.sortBy ?? "createdAt";
+      const sortDirection = input?.sortOrder ?? "desc";
+
+      // Map sort fields to actual columns
+      let orderBy;
+      if (sortField === "createdAt") {
+        orderBy = sortDirection === "asc" ? [asc(requests.createdAt)] : [desc(requests.createdAt)];
+      } else if (sortField === "amount") {
+        orderBy = sortDirection === "asc" ? [asc(requests.amount)] : [desc(requests.amount)];
+      } else if (sortField === "status") {
+        orderBy = sortDirection === "asc" ? [asc(requests.status)] : [desc(requests.status)];
+      } else if (sortField === "title") {
+        orderBy = sortDirection === "asc" ? [asc(requests.title)] : [desc(requests.title)];
+      } else {
+        orderBy = [desc(requests.createdAt)];
+      }
+
       const items = await ctx.db.query.requests.findMany({
-        where: and(
-          eq(requests.tenantId, ctx.tenantId),
-          eq(requests.requesterId, ctx.user.id),
-          input?.status ? eq(requests.status, input.status) : undefined
-        ),
+        where: and(...conditions),
         limit: input?.limit ?? 50,
-        orderBy: [desc(requests.createdAt)],
+        orderBy,
         with: {
           department: true,
         },

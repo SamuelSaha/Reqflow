@@ -10,6 +10,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { trpc } from "@/lib/api/react";
 import {
   Plus,
@@ -21,6 +29,9 @@ import {
   AlertCircle,
   Receipt,
   AlertTriangle,
+  Search,
+  Filter,
+  X,
 } from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
 import { EmptyRequestsIllustration, NoResultsIllustration } from "@/components/ui/illustrations";
@@ -30,6 +41,7 @@ import { getErrorMessage } from "@/lib/utils/error-messages";
 export const dynamic = "force-dynamic";
 
 type StatusFilter = "all" | "draft" | "pending" | "approved" | "rejected";
+type SortOption = "createdAt" | "amount" | "status" | "title";
 
 const statusConfig: Record<
   string,
@@ -52,10 +64,61 @@ const filters: { key: StatusFilter; label: string }[] = [
 
 export default function RequestsPage() {
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
+  const [category, setCategory] = useState<string>("");
+  const [urgency, setUrgency] = useState<"low" | "normal" | "urgent" | "">("");
+  const [amountRange, setAmountRange] = useState<string>("");
+  const [dateRange, setDateRange] = useState<string>("");
+  const [sortBy, setSortBy] = useState<SortOption>("createdAt");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
-  const requestList = trpc.requests.myList.useQuery(
-    statusFilter === "all" ? {} : { status: statusFilter }
-  );
+  // Build query parameters
+  const queryParams: any = {};
+  if (statusFilter !== "all") queryParams.status = statusFilter;
+  if (searchTerm) queryParams.search = searchTerm;
+  if (category) queryParams.category = category;
+  if (urgency) queryParams.urgency = urgency;
+  if (sortBy) queryParams.sortBy = sortBy;
+  if (sortOrder) queryParams.sortOrder = sortOrder;
+
+  // Amount range mapping
+  if (amountRange === "< €1K") {
+    queryParams.maxAmount = "1000";
+  } else if (amountRange === "€1K-€10K") {
+    queryParams.minAmount = "1000";
+    queryParams.maxAmount = "10000";
+  } else if (amountRange === "> €10K") {
+    queryParams.minAmount = "10000";
+  }
+
+  // Date range mapping
+  const now = new Date();
+  if (dateRange === "7d") {
+    const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    queryParams.dateFrom = sevenDaysAgo.toISOString();
+  } else if (dateRange === "30d") {
+    const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+    queryParams.dateFrom = thirtyDaysAgo.toISOString();
+  } else if (dateRange === "90d") {
+    const ninetyDaysAgo = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
+    queryParams.dateFrom = ninetyDaysAgo.toISOString();
+  }
+
+  const requestList = trpc.requests.myList.useQuery(queryParams);
+
+  const hasActiveFilters = searchTerm || category || urgency || amountRange || dateRange || statusFilter !== "all";
+
+  const clearAllFilters = () => {
+    setSearchTerm("");
+    setStatusFilter("all");
+    setCategory("");
+    setUrgency("");
+    setAmountRange("");
+    setDateRange("");
+    setSortBy("createdAt");
+    setSortOrder("desc");
+  };
 
   return (
     <div className="space-y-6">
@@ -76,18 +139,163 @@ export default function RequestsPage() {
         </Link>
       </div>
 
+      {/* Search Bar */}
+      <Card>
+        <CardContent className="pt-6">
+          <div className="flex flex-col gap-4">
+            <div className="flex gap-2">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                <Input
+                  placeholder="Search by request number, title, or vendor..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-9"
+                />
+              </div>
+              <Button
+                variant="outline"
+                onClick={() => setShowFilters(!showFilters)}
+                className="flex-shrink-0"
+              >
+                <Filter className="mr-2 h-4 w-4" />
+                Filters
+                {hasActiveFilters && (
+                  <Badge variant="default" className="ml-2 px-1.5 py-0 text-xs">
+                    {[category, urgency, amountRange, dateRange, statusFilter !== "all" ? "status" : ""].filter(Boolean).length}
+                  </Badge>
+                )}
+              </Button>
+            </div>
+
+            {/* Advanced Filters */}
+            {showFilters && (
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-3 pt-2 border-t">
+                <div>
+                  <label className="text-sm font-medium text-slate-700 mb-1.5 block">
+                    Category
+                  </label>
+                  <Select value={category} onValueChange={setCategory}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="All categories" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">All categories</SelectItem>
+                      <SelectItem value="saas">SaaS</SelectItem>
+                      <SelectItem value="services">Services</SelectItem>
+                      <SelectItem value="hardware">Hardware</SelectItem>
+                      <SelectItem value="software">Software</SelectItem>
+                      <SelectItem value="marketing">Marketing</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-slate-700 mb-1.5 block">
+                    Urgency
+                  </label>
+                  <Select value={urgency} onValueChange={(v) => setUrgency(v as any)}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="All urgency levels" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">All urgency levels</SelectItem>
+                      <SelectItem value="low">Low</SelectItem>
+                      <SelectItem value="normal">Normal</SelectItem>
+                      <SelectItem value="urgent">Urgent</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-slate-700 mb-1.5 block">
+                    Amount
+                  </label>
+                  <Select value={amountRange} onValueChange={setAmountRange}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="All amounts" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">All amounts</SelectItem>
+                      <SelectItem value="< €1K">Less than €1K</SelectItem>
+                      <SelectItem value="€1K-€10K">€1K - €10K</SelectItem>
+                      <SelectItem value="> €10K">More than €10K</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <label className="text-sm font-medium text-slate-700 mb-1.5 block">
+                    Date Range
+                  </label>
+                  <Select value={dateRange} onValueChange={setDateRange}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="All time" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">All time</SelectItem>
+                      <SelectItem value="7d">Last 7 days</SelectItem>
+                      <SelectItem value="30d">Last 30 days</SelectItem>
+                      <SelectItem value="90d">Last 90 days</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Filter tabs */}
-      <div className="flex gap-2">
-        {filters.map(({ key, label }) => (
+      <div className="flex items-center justify-between">
+        <div className="flex gap-2">
+          {filters.map(({ key, label }) => (
+            <Button
+              key={key}
+              variant={statusFilter === key ? "default" : "outline"}
+              size="sm"
+              onClick={() => setStatusFilter(key)}
+            >
+              {label}
+            </Button>
+          ))}
+        </div>
+
+        {hasActiveFilters && (
           <Button
-            key={key}
-            variant={statusFilter === key ? "default" : "outline"}
+            variant="ghost"
             size="sm"
-            onClick={() => setStatusFilter(key)}
+            onClick={clearAllFilters}
+            className="text-slate-600"
           >
-            {label}
+            <X className="mr-1 h-3 w-3" />
+            Clear all filters
           </Button>
-        ))}
+        )}
+
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-slate-600">Sort:</span>
+          <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
+            <SelectTrigger className="w-[140px] h-8">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="createdAt">Date</SelectItem>
+              <SelectItem value="amount">Amount</SelectItem>
+              <SelectItem value="title">Title</SelectItem>
+              <SelectItem value="status">Status</SelectItem>
+            </SelectContent>
+          </Select>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+            className="h-8 px-2"
+          >
+            {sortOrder === "asc" ? "↑" : "↓"}
+          </Button>
+        </div>
       </div>
 
       {/* Loading */}
