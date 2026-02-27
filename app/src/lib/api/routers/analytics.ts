@@ -6,7 +6,7 @@
 import { z } from "zod";
 import { router, adminProcedure } from "../trpc";
 import { requests, users, auditLogs, authEvents } from "@/lib/db/schema";
-import { eq, and, gte, desc, sql, count, inArray } from "drizzle-orm";
+import { eq, and, gte, lte, desc, sql, count, inArray } from "drizzle-orm";
 import { subDays } from "date-fns";
 
 export const analyticsRouter = router({
@@ -176,32 +176,151 @@ export const analyticsRouter = router({
   }),
 
   /**
-   * Recent audit logs
-   * Last 50 audit log entries with filtering
+   * Audit logs with advanced filtering and pagination
+   * Supports date range, user, action, entity type, and entity ID search
    */
   auditLogs: adminProcedure
     .input(
       z.object({
+        // Pagination
+        page: z.number().min(1).default(1),
+        pageSize: z.number().min(1).max(100).default(50),
+
+        // Filters
+        dateFrom: z.date().optional(),
+        dateTo: z.date().optional(),
+        userId: z.string().uuid().optional(),
         action: z.string().optional(),
         entityType: z.string().optional(),
-        limit: z.number().min(1).max(100).default(50),
+        entityId: z.string().optional(),
+
+        // Search
+        search: z.string().optional(), // Searches entity ID and description
       })
     )
     .query(async ({ ctx, input }) => {
       const conditions = [eq(auditLogs.tenantId, ctx.tenantId)];
 
+      // Date range filtering
+      if (input.dateFrom) {
+        conditions.push(gte(auditLogs.createdAt, input.dateFrom));
+      }
+      if (input.dateTo) {
+        conditions.push(lte(auditLogs.createdAt, input.dateTo));
+      }
+
+      // User filtering
+      if (input.userId) {
+        conditions.push(eq(auditLogs.userId, input.userId));
+      }
+
+      // Action filtering
       if (input.action) {
         conditions.push(eq(auditLogs.action, input.action));
       }
 
+      // Entity type filtering
       if (input.entityType) {
         conditions.push(eq(auditLogs.entityType, input.entityType));
       }
 
+      // Entity ID filtering
+      if (input.entityId) {
+        conditions.push(eq(auditLogs.entityId, input.entityId));
+      }
+
+      // Search in entity ID and description
+      if (input.search) {
+        conditions.push(
+          sql`(${auditLogs.entityId}::text ILIKE ${`%${input.search}%`} OR ${auditLogs.description} ILIKE ${`%${input.search}%`})`
+        );
+      }
+
+      // Get total count for pagination
+      const [{ value: totalCount }] = await ctx.db
+        .select({ value: count() })
+        .from(auditLogs)
+        .where(and(...conditions));
+
+      // Get paginated logs with user details
+      const offset = (input.page - 1) * input.pageSize;
       const logs = await ctx.db.query.auditLogs.findMany({
         where: and(...conditions),
         orderBy: [desc(auditLogs.createdAt)],
-        limit: input.limit,
+        limit: input.pageSize,
+        offset,
+        with: {
+          user: {
+            columns: {
+              id: true,
+              name: true,
+              email: true,
+              role: true,
+            },
+          },
+        },
+      });
+
+      return {
+        logs,
+        pagination: {
+          page: input.page,
+          pageSize: input.pageSize,
+          totalCount: Number(totalCount),
+          totalPages: Math.ceil(Number(totalCount) / input.pageSize),
+        },
+      };
+    }),
+
+  /**
+   * Export audit logs to CSV
+   * Returns CSV string with all filtered audit logs
+   */
+  exportAuditLogs: adminProcedure
+    .input(
+      z.object({
+        dateFrom: z.date().optional(),
+        dateTo: z.date().optional(),
+        userId: z.string().uuid().optional(),
+        action: z.string().optional(),
+        entityType: z.string().optional(),
+        entityId: z.string().optional(),
+        search: z.string().optional(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const conditions = [eq(auditLogs.tenantId, ctx.tenantId)];
+
+      // Apply same filters as main query
+      if (input.dateFrom) {
+        conditions.push(gte(auditLogs.createdAt, input.dateFrom));
+      }
+      if (input.dateTo) {
+        conditions.push(lte(auditLogs.createdAt, input.dateTo));
+      }
+      if (input.userId) {
+        conditions.push(eq(auditLogs.userId, input.userId));
+      }
+      if (input.action) {
+        conditions.push(eq(auditLogs.action, input.action));
+      }
+      if (input.entityType) {
+        conditions.push(eq(auditLogs.entityType, input.entityType));
+      }
+      if (input.entityId) {
+        conditions.push(eq(auditLogs.entityId, input.entityId));
+      }
+      if (input.search) {
+        conditions.push(
+          sql`(${auditLogs.entityId}::text ILIKE ${`%${input.search}%`} OR ${auditLogs.description} ILIKE ${`%${input.search}%`})`
+        );
+      }
+
+      // Get all matching logs (up to 10,000 for export safety)
+      const logs = await ctx.db.query.auditLogs.findMany({
+        where: and(...conditions),
+        orderBy: [desc(auditLogs.createdAt)],
+        limit: 10000,
       });
 
       return logs;

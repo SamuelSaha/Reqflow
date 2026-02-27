@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Users, Workflow, Wallet, BarChart, Plug, Activity } from "lucide-react";
+import { Users, Workflow, Wallet, BarChart, Plug, Activity, FileText } from "lucide-react";
 
 const settingsTabs = [
   { href: "/dashboard/settings/team", label: "Team", icon: Users },
   { href: "/dashboard/settings/workflows", label: "Workflows", icon: Workflow },
   { href: "/dashboard/settings/budgets", label: "Budgets", icon: Wallet },
   { href: "/dashboard/settings/analytics", label: "Analytics", icon: BarChart },
+  { href: "/dashboard/settings/audit-logs", label: "Audit Logs", icon: FileText },
   { href: "/dashboard/settings/integrations", label: "Integrations", icon: Plug },
   { href: "/dashboard/admin/health", label: "Admin", icon: Activity },
 ];

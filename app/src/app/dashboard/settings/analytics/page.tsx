@@ -226,8 +226,8 @@ export default function AnalyticsPage() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {auditLogs.data && auditLogs.data.length > 0 ? (
-                      auditLogs.data.slice(0, 20).map((log) => (
+                    {auditLogs.data && auditLogs.data.logs.length > 0 ? (
+                      auditLogs.data.logs.slice(0, 20).map((log: any) => (
                         <TableRow key={log.id}>
                           <TableCell className="text-xs text-slate-500">
                             {format(new Date(log.createdAt), "MMM d, h:mm a")}
