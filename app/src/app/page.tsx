@@ -52,6 +52,14 @@ const FeatureGrid = dynamic(
   }
 );
 
+const Testimonials = dynamic(
+  () => import("@/components/landing/Testimonials").then((mod) => mod.Testimonials),
+  {
+    loading: () => <SectionSkeleton height={450} />,
+    ssr: false,
+  }
+);
+
 const CaseBuilderSpotlight = dynamic(
   () => import("@/components/landing/CaseBuilderSection").then((mod) => mod.CaseBuilderSpotlight),
   {
@@ -186,6 +194,9 @@ export default function ReqflowLanding() {
       </Suspense>
       <Suspense fallback={<SectionSkeleton height={500} />}>
         <FeatureGrid />
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton height={450} />}>
+        <Testimonials />
       </Suspense>
       <Suspense fallback={<SectionSkeleton height={400} />}>
         <CaseBuilderSpotlight />

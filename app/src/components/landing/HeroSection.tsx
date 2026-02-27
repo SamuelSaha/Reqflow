@@ -41,15 +41,19 @@ export function HeroSection() {
         <div className="flex flex-col items-center py-16 md:py-20 lg:py-24">
           {/* Content Section - Instant paint, no animation delays */}
           <div className="grid grid-cols-1 gap-6 md:gap-7 text-center max-w-4xl mx-auto w-full">
-            {/* Trust Badge with Icon - NO ANIMATION DELAY */}
+            {/* Trust Badge with Icon - NO ANIMATION DELAY - Warm colors */}
             <div className="flex justify-center">
-              <div className="group inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-emerald-200 bg-emerald-50/80 backdrop-blur-sm shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 hover:border-emerald-300">
-                <Sparkles className="w-4 h-4 text-emerald-600 transition-all duration-200 group-hover:scale-110 group-hover:rotate-12" />
-                <span className="text-body-sm font-semibold text-emerald-900">
+              <div
+                className="group inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-amber-200 bg-gradient-to-r from-amber-50 to-teal-50 backdrop-blur-sm shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 hover:border-amber-300"
+                role="status"
+                aria-label="Free early access - No credit card required"
+              >
+                <Sparkles className="w-4 h-4 text-amber-600 transition-all duration-200 group-hover:scale-110 group-hover:rotate-12" aria-hidden="true" />
+                <span className="text-body-sm font-semibold text-amber-900">
                   Free during early access
                 </span>
-                <span className="text-body-sm text-emerald-600">•</span>
-                <span className="text-body-sm text-emerald-700">
+                <span className="text-body-sm text-amber-600" aria-hidden="true">•</span>
+                <span className="text-body-sm text-amber-700">
                   No credit card required
                 </span>
               </div>
@@ -93,22 +97,22 @@ export function HeroSection() {
               </div>
             </div>
 
-            {/* Quick wins - Value props - NO ANIMATION DELAY */}
+            {/* Quick wins - Value props - NO ANIMATION DELAY - Warm colors */}
             <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 text-body-sm">
-              <div className="group flex items-center gap-2 text-slate-700 transition-colors duration-150 hover:text-emerald-600">
-                <CheckCircle2 className="w-5 h-5 text-emerald-600 transition-transform duration-200 group-hover:scale-110" />
+              <div className="group flex items-center gap-2 text-slate-700 transition-colors duration-150 hover:text-teal-600">
+                <CheckCircle2 className="w-5 h-5 text-teal-600 transition-transform duration-200 group-hover:scale-110" aria-hidden="true" />
                 <span className="font-medium">2-minute setup</span>
               </div>
               <div className="group flex items-center gap-2 text-slate-700 transition-colors duration-150 hover:text-amber-600">
-                <Zap className="w-5 h-5 text-amber-500 transition-all duration-200 group-hover:scale-110 group-hover:rotate-6" />
+                <Zap className="w-5 h-5 text-amber-500 transition-all duration-200 group-hover:scale-110 group-hover:rotate-6" aria-hidden="true" />
                 <span className="font-medium">Approve in &lt;2 hours (vs 3+)</span>
               </div>
-              <div className="group flex items-center gap-2 text-slate-700 transition-colors duration-150 hover:text-blue-600">
-                <Shield className="w-5 h-5 text-blue-600 transition-transform duration-200 group-hover:scale-110" />
+              <div className="group flex items-center gap-2 text-slate-700 transition-colors duration-150 hover:text-teal-600">
+                <Shield className="w-5 h-5 text-teal-600 transition-transform duration-200 group-hover:scale-110" aria-hidden="true" />
                 <span className="font-medium">94% budget compliance</span>
               </div>
-              <div className="group flex items-center gap-2 text-slate-700 transition-colors duration-150 hover:text-purple-600">
-                <Clock className="w-5 h-5 text-purple-600 transition-transform duration-200 group-hover:scale-110" />
+              <div className="group flex items-center gap-2 text-slate-700 transition-colors duration-150 hover:text-amber-600">
+                <Clock className="w-5 h-5 text-amber-600 transition-transform duration-200 group-hover:scale-110" aria-hidden="true" />
                 <span className="font-medium">Zero missed renewal windows</span>
               </div>
             </div>

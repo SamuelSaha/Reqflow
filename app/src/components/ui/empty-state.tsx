@@ -103,3 +103,67 @@ export function EmptyState({
     </div>
   );
 }
+
+/**
+ * LoadingSkeleton Component
+ * Skeleton screen for loading states
+ */
+export function LoadingSkeleton({ rows = 3 }: { rows?: number }) {
+  return (
+    <div className="space-y-3 animate-pulse" role="status" aria-label="Loading...">
+      {Array.from({ length: rows }).map((_, i) => (
+        <div key={i} className="flex items-center gap-4">
+          <div className="w-12 h-12 bg-slate-200 rounded-lg flex-shrink-0" />
+          <div className="flex-1 space-y-2">
+            <div className="h-4 bg-slate-200 rounded w-3/4" />
+            <div className="h-3 bg-slate-100 rounded w-1/2" />
+          </div>
+          <div className="w-20 h-8 bg-slate-200 rounded-full" />
+        </div>
+      ))}
+      <span className="sr-only">Loading...</span>
+    </div>
+  );
+}
+
+/**
+ * ErrorState Component
+ * Error state with retry action
+ */
+export function ErrorState({
+  title = "Something went wrong",
+  description = "We couldn't load this data. Please try again.",
+  onRetry,
+}: {
+  title?: string;
+  description?: string;
+  onRetry?: () => void;
+}) {
+  return (
+    <div className="flex flex-col items-center justify-center py-12 px-6 text-center" role="alert">
+      <div className="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center mb-4">
+        <svg
+          className="w-8 h-8 text-red-600"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+          />
+        </svg>
+      </div>
+      <h3 className="text-h5 text-slate-900 mb-2">{title}</h3>
+      <p className="text-body text-slate-600 max-w-md mb-6">{description}</p>
+      {onRetry && (
+        <Button onClick={onRetry} variant="default">
+          Try Again
+        </Button>
+      )}
+    </div>
+  );
+}
