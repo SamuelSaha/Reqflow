@@ -16,28 +16,24 @@ const features = [
     id: "connected-records",
     icon: Workflow,
     title: "Connected Records",
-    label: "The Full Story",
-    description: "Every purchase tells its complete story—from request to renewal. Tool → Contract → Subscription → Invoice → Owner. No more spreadsheet archaeology.",
+    description: "Every purchase tells its complete story—from request to renewal. Tool → Contract → Subscription → Invoice → Owner.",
     benefits: [
       "Auto-link requests to contracts and invoices",
       "Track ownership changes over time",
-      "See complete spend history per tool",
-      "Export audit trail for compliance"
+      "See complete spend history per tool"
     ],
     link: "/features/vendors",
-    image: "/screenshots/connected-records.png", // TODO: Add real screenshots
+    image: "/screenshots/connected-records.png",
   },
   {
     id: "budget-intelligence",
     icon: PieChart,
     title: "Budget Intelligence",
-    label: "Auto-Enforcement",
-    description: "Set department budgets with automatic enforcement. Soft warnings at 80%, hard stops at 100%. Reduce budget variance from 23% to <2%.",
+    description: "Set department budgets with automatic enforcement. Soft warnings at 80%, hard stops at 100%.",
     benefits: [
-      "Hierarchical budgets (company → dept → project)",
       "Real-time spend tracking vs budget",
       "Automatic alerts at 80% threshold",
-      "CFO override for critical purchases"
+      "Reduce budget variance from 23% to <2%"
     ],
     link: "/features/budgets",
     image: "/screenshots/budget-dashboard.png",
@@ -46,31 +42,14 @@ const features = [
     id: "renewal-tracking",
     icon: Bell,
     title: "Renewal Tracking",
-    label: "Notice Windows",
-    description: "Track the deadline that matters—when you MUST decide, not when it renews. Get alerted 90/60/30 days before notice windows close.",
+    description: "Track when you MUST decide, not when it renews. Get alerted 90/60/30 days before notice windows close.",
     benefits: [
       "Notice window tracking (not just renewal dates)",
       "Multi-stage alerts (90/60/30 days)",
-      "Centralized renewal calendar",
       "Zero missed cancellation windows"
     ],
     link: "/features/renewals",
     image: "/screenshots/renewal-calendar.png",
-  },
-  {
-    id: "vendor-management",
-    icon: Building2,
-    title: "Vendor Management",
-    label: "Complete Profiles",
-    description: "Centralized vendor database with contracts, contacts, and spend analytics. Know who you work with, what you pay, and when contracts end.",
-    benefits: [
-      "Upload contracts, AI extracts terms",
-      "Track total spend by vendor",
-      "Store payment terms and contacts",
-      "Identify consolidation opportunities"
-    ],
-    link: "/features/vendors",
-    image: "/screenshots/vendor-profile.png",
   },
 ];
 
@@ -85,10 +64,10 @@ export function FeatureTabs() {
           {/* Header */}
           <div className="text-center max-w-3xl mx-auto mb-12">
             <h2 className="text-h2 text-slate-900 mb-4">
-              Built for teams who move too fast for spreadsheets
+              Three core capabilities
             </h2>
             <p className="text-body-lg text-slate-600">
-              Four core capabilities that work together. Click each tab to see how it works.
+              Track every purchase from request to renewal.
             </p>
           </div>
 
@@ -125,9 +104,6 @@ export function FeatureTabs() {
                 >
                   <Icon className={`w-5 h-5 ${isActive ? 'text-amber-400' : 'text-slate-400'}`} aria-hidden="true" />
                   <span>{feature.title}</span>
-                  <span className={`text-caption ${isActive ? 'text-slate-400' : 'text-slate-400'}`}>
-                    {feature.label}
-                  </span>
                 </button>
               );
             })}

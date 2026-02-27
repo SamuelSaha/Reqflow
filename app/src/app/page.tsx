@@ -12,34 +12,10 @@ const HeroSection = dynamic(
 );
 
 // Below-fold sections lazy-loaded with Suspense
-const ProductShowcaseSection = dynamic(
-  () => import("@/components/landing/HeroSection").then((mod) => mod.ProductShowcaseSection),
-  {
-    loading: () => <SectionSkeleton height={400} />,
-    ssr: false,
-  }
-);
-
 const TrustLogos = dynamic(
   () => import("@/components/landing/HeroSection").then((mod) => mod.TrustLogos),
   {
     loading: () => <SectionSkeleton height={120} />,
-    ssr: false,
-  }
-);
-
-const ProblemSection = dynamic(
-  () => import("@/components/landing/HeroSection").then((mod) => mod.ProblemSection),
-  {
-    loading: () => <SectionSkeleton height={300} />,
-    ssr: false,
-  }
-);
-
-const ProductScreenshots = dynamic(
-  () => import("@/components/landing/ProductScreenshots").then((mod) => mod.ProductScreenshots),
-  {
-    loading: () => <SectionSkeleton height={600} />,
     ssr: false,
   }
 );
@@ -64,22 +40,6 @@ const Testimonials = dynamic(
   () => import("@/components/landing/Testimonials").then((mod) => mod.Testimonials),
   {
     loading: () => <SectionSkeleton height={450} />,
-    ssr: false,
-  }
-);
-
-const CaseBuilderSpotlight = dynamic(
-  () => import("@/components/landing/CaseBuilderSection").then((mod) => mod.CaseBuilderSpotlight),
-  {
-    loading: () => <SectionSkeleton height={400} />,
-    ssr: false,
-  }
-);
-
-const SocialProof = dynamic(
-  () => import("@/components/landing/GridSection").then((mod) => mod.SocialProof),
-  {
-    loading: () => <SectionSkeleton height={300} />,
     ssr: false,
   }
 );
@@ -200,17 +160,8 @@ export default function ReqflowLanding() {
       <Suspense fallback={<SectionSkeleton height={600} />}>
         <HeroSection />
       </Suspense>
-      <Suspense fallback={<SectionSkeleton height={400} />}>
-        <ProductShowcaseSection />
-      </Suspense>
       <Suspense fallback={<SectionSkeleton height={120} />}>
         <TrustLogos />
-      </Suspense>
-      <Suspense fallback={<SectionSkeleton height={300} />}>
-        <ProblemSection />
-      </Suspense>
-      <Suspense fallback={<SectionSkeleton height={600} />}>
-        <ProductScreenshots />
       </Suspense>
       <Suspense fallback={<SectionSkeleton height={600} />}>
         <FeatureTabs />
@@ -220,12 +171,6 @@ export default function ReqflowLanding() {
       </Suspense>
       <Suspense fallback={<SectionSkeleton height={450} />}>
         <Testimonials />
-      </Suspense>
-      <Suspense fallback={<SectionSkeleton height={400} />}>
-        <CaseBuilderSpotlight />
-      </Suspense>
-      <Suspense fallback={<SectionSkeleton height={300} />}>
-        <SocialProof />
       </Suspense>
       <Suspense fallback={<SectionSkeleton height={200} />}>
         <FinalCTA />

@@ -17,69 +17,29 @@ const useCases = [
     title: "Finance",
     scenario: "Month-end close with zero invoice surprises",
     challenge: "Finance team spent 6 hours reconciling invoices that didn't match purchase orders.",
-    solution: "With Reqflow, every invoice is pre-approved. POs are auto-generated. Reconciliation takes 20 minutes.",
+    solution: "Every invoice is pre-approved. POs are auto-generated. Reconciliation takes 20 minutes.",
     outcome: "94% of invoices match POs perfectly",
-    savings: "€16K/year in finance labor saved",
-  },
-  {
-    id: "operations",
-    icon: Briefcase,
-    title: "Operations",
-    scenario: "Onboarding new employees without procurement chaos",
-    challenge: "New hire needs laptop, software, phone. Ops lead chases approvals across Slack for 3 days.",
-    solution: "Reqflow has pre-approved 'New Hire Package' template. One-click submission, auto-routed approval, done in 2 hours.",
-    outcome: "<2 hour approval time for standard requests",
-    savings: "Zero onboarding delays",
+    savings: "€16K/year saved",
   },
   {
     id: "engineering",
     icon: Code,
     title: "Engineering",
-    scenario: "Engineers buying tools without budget surprises",
-    challenge: "Engineering blew through Q1 budget in 6 weeks buying dev tools. No one knew until month-end.",
-    solution: "Reqflow tracks engineering budget in real-time. Soft warning at 80%, hard stop at 100%. Duplicate tool detection.",
-    outcome: "<2% budget variance (vs 23% industry avg)",
-    savings: "€25K saved by catching duplicate tools",
+    scenario: "Prevent budget overruns from tool sprawl",
+    challenge: "Engineering blew through Q1 budget in 6 weeks buying dev tools. No visibility until month-end.",
+    solution: "Real-time budget tracking. Soft warning at 80%, hard stop at 100%. Automatic duplicate detection.",
+    outcome: "<2% budget variance",
+    savings: "€25K saved by catching duplicates",
   },
   {
-    id: "legal",
-    icon: Scale,
-    title: "Legal",
-    scenario: "Contract renewal tracking without missed deadlines",
-    challenge: "Legal team missed 60-day cancellation window on €50K contract. Locked in for another year.",
-    solution: "Reqflow tracks notice windows (not just renewal dates). Legal gets alerted 90/60/30 days before window closes.",
-    outcome: "Zero missed cancellation windows",
-    savings: "€50K saved from unwanted auto-renewals",
-  },
-  {
-    id: "sales",
-    icon: TrendingUp,
-    title: "Sales",
-    scenario: "Sales tools procurement without finance bottlenecks",
-    challenge: "Sales leader wants to buy €12K/year CRM seats. Approval takes 5 days, deal momentum lost.",
-    solution: "Reqflow routes to CFO automatically (>€10K threshold). CFO approves in Slack in 20 minutes.",
-    outcome: "Same-day approval for time-sensitive deals",
-    savings: "Faster deal closure, happier sales team",
-  },
-  {
-    id: "hr",
-    icon: Users,
-    title: "HR",
-    scenario: "Managing employee benefit subscriptions at scale",
-    challenge: "HR manages 15 different SaaS tools for benefits. Can't track who owns what or when things renew.",
-    solution: "Reqflow centralizes all HR SaaS subscriptions. Ownership, renewal dates, and spend in one dashboard.",
-    outcome: "100% of tools have an owner and renewal date",
-    savings: "€8K saved by consolidating duplicate tools",
-  },
-  {
-    id: "procurement",
-    icon: Package,
-    title: "Procurement",
-    scenario: "Professional procurement for teams without a procurement department",
-    challenge: "You're the 'procurement team' but also the ops lead. Tracking everything in spreadsheets.",
-    solution: "Reqflow IS your procurement department. Automated workflows, budget tracking, vendor management—all in one place.",
-    outcome: "95% of purchases tracked, zero spreadsheets",
-    savings: "8.3 hours/week recovered (€16K/year value)",
+    id: "operations",
+    icon: Briefcase,
+    title: "Operations",
+    scenario: "Onboard new employees without approval chaos",
+    challenge: "New hire needs laptop, software, phone. Ops lead chases approvals across Slack for 3 days.",
+    solution: "Pre-approved 'New Hire Package' template. One-click submission, auto-routed approval.",
+    outcome: "<2 hour approval time",
+    savings: "Zero onboarding delays",
   },
 ];
 
@@ -94,10 +54,10 @@ export function UseCaseTabs() {
           {/* Header */}
           <div className="text-center max-w-3xl mx-auto mb-12">
             <h2 className="text-h2 text-slate-900 mb-4">
-              Built for every team
+              Built for your team
             </h2>
             <p className="text-body-lg text-slate-600">
-              See how different departments use Reqflow to solve their specific procurement challenges.
+              Real results from Finance, Engineering, and Operations teams.
             </p>
           </div>
 
