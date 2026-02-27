@@ -62,12 +62,7 @@ export function HeroSection() {
             {/* Headline with emphasis - NO ANIMATION DELAY */}
             <div className="space-y-4 md:space-y-5">
               <h1 className="text-hero text-slate-900 leading-[1.1]">
-                Procurement software for teams of{" "}
-                <span className="relative inline-block">
-                  <span className="relative z-10">5-50 people</span>
-                  <span className="absolute bottom-2 left-0 right-0 h-3 bg-blue-200/60 -rotate-1" />
-                </span>
-                {" "}who move too fast for spreadsheets
+                Procurement software for teams who move too fast for spreadsheets
               </h1>
 
               {/* Enhanced subheadline with benefits */}
