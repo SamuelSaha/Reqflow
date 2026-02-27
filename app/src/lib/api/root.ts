@@ -17,6 +17,7 @@ import { vendorsRouter } from "./routers/vendors";
 import { integrationsRouter } from "./routers/integrations";
 import { filesRouter } from "./routers/files";
 import { templatesRouter } from "./routers/templates";
+import { contractsRouter } from "./routers/contracts";
 
 export const appRouter = router({
   requests: requestsRouter,
@@ -32,6 +33,7 @@ export const appRouter = router({
   integrations: integrationsRouter,
   files: filesRouter,
   templates: templatesRouter,
+  contracts: contractsRouter,
 });
 
 export type AppRouter = typeof appRouter;

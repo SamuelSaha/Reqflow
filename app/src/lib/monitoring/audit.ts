@@ -141,6 +141,13 @@ export const AuditAction = {
   TEMPLATE_UPDATED: "template.updated",
   TEMPLATE_DELETED: "template.deleted",
   TEMPLATE_USED: "template.used",
+
+  // Contract actions
+  CONTRACT_CREATED: "contract.created",
+  CONTRACT_UPDATED: "contract.updated",
+  CONTRACT_DELETED: "contract.deleted",
+  CONTRACT_RENEWED: "contract.renewed",
+  CONTRACT_CANCELLED: "contract.cancelled",
 } as const;
 
 /**
