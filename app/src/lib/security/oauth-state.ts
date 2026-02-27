@@ -1,97 +1,139 @@
 /**
- * OAuth State Parameter Management
- * Prevents CSRF attacks during OAuth flows
- * 🔒 SECURITY FIX: Implements cryptographically secure state validation
+ * OAuth State Parameter Validation
+ * Prevents CSRF attacks by generating and validating random state tokens
+ *
+ * Security Requirements:
+ * - 32-byte cryptographically random state tokens
+ * - 10-minute expiry window
+ * - Single-use tokens (deleted after validation)
+ * - Provider-specific validation
  */
 
-import { cookies } from "next/headers";
-import { randomBytes, timingSafeEqual } from "crypto";
-
-const STATE_COOKIE_PREFIX = "__Host-oauth_state_";
-const STATE_MAX_AGE = 60 * 10; // 10 minutes
+import { randomBytes } from "crypto";
+import { db } from "../db";
+import { oauthStates } from "../db/schema";
+import { eq, and, gt, lt } from "drizzle-orm";
+import { logger } from "../monitoring/logger";
 
 /**
- * Generate cryptographically secure OAuth state token
- * Uses 32 bytes (256 bits) of entropy
+ * Generate a secure random OAuth state token
+ * Returns a 32-byte hex string (64 characters)
  */
-export function generateOAuthState(provider: string): string {
-  return randomBytes(32).toString("base64url");
+export function generateOAuthState(): string {
+  return randomBytes(32).toString("hex");
 }
 
 /**
- * Store OAuth state in httpOnly cookie
- * State is bound to the session and expires in 10 minutes
+ * Store OAuth state in database with 10-minute expiry
+ *
+ * @param provider - OAuth provider ('quickbooks' | 'xero')
+ * @param state - Random state token
+ * @param tenantId - Tenant ID
+ * @param userId - User ID
  */
-export async function setOAuthState(provider: string, state: string): Promise<void> {
-  const cookieStore = await cookies();
-  const cookieName = `${STATE_COOKIE_PREFIX}${provider}`;
+export async function storeOAuthState(
+  provider: string,
+  state: string,
+  tenantId: string,
+  userId: string
+): Promise<void> {
+  const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
-  cookieStore.set(cookieName, state, {
-    httpOnly: true,
-    secure: true, // Always require HTTPS
-    sameSite: "lax", // Allow OAuth redirects
-    maxAge: STATE_MAX_AGE,
-    path: "/",
+  await db.insert(oauthStates).values({
+    provider,
+    state,
+    tenantId,
+    userId,
+    expiresAt,
+  });
+
+  logger.info("OAuth state stored", {
+    provider,
+    tenantId,
+    userId,
+    expiresAt,
   });
 }
 
 /**
- * Validate OAuth state parameter from callback
- * Uses timing-safe comparison to prevent timing attacks
- * Returns true if state is valid, false otherwise
+ * Validate OAuth state parameter
+ *
+ * Security checks:
+ * 1. State token exists in database
+ * 2. Token has not expired (10 min window)
+ * 3. Token matches the provider
+ *
+ * After successful validation, the token is deleted to prevent replay attacks
+ *
+ * @param provider - OAuth provider ('quickbooks' | 'xero')
+ * @param state - State token from callback
+ * @returns true if valid, false otherwise
  */
 export async function validateOAuthState(
   provider: string,
-  providedState: string | null
+  state: string | null
 ): Promise<boolean> {
-  if (!providedState) {
+  if (!state) {
+    logger.warn("OAuth state validation failed: missing state parameter", {
+      provider,
+    });
     return false;
   }
 
-  const cookieStore = await cookies();
-  const cookieName = `${STATE_COOKIE_PREFIX}${provider}`;
-  const storedState = cookieStore.get(cookieName)?.value;
-
-  if (!storedState) {
-    return false;
-  }
-
-  // Delete the state cookie after reading (one-time use)
-  cookieStore.delete(cookieName);
-
-  // Timing-safe comparison to prevent timing attacks
   try {
-    const providedBuffer = Buffer.from(providedState);
-    const storedBuffer = Buffer.from(storedState);
+    // Find unexpired state token for this provider
+    const stateRecord = await db.query.oauthStates.findFirst({
+      where: and(
+        eq(oauthStates.state, state),
+        eq(oauthStates.provider, provider),
+        gt(oauthStates.expiresAt, new Date())
+      ),
+    });
 
-    // Buffers must be same length
-    if (providedBuffer.length !== storedBuffer.length) {
+    if (!stateRecord) {
+      logger.warn("OAuth state validation failed: invalid or expired state", {
+        provider,
+        hasState: !!state,
+      });
       return false;
     }
 
-    return timingSafeEqual(providedBuffer, storedBuffer);
-  } catch {
+    // Delete the state token to prevent replay attacks
+    await db.delete(oauthStates).where(eq(oauthStates.id, stateRecord.id));
+
+    logger.info("OAuth state validated successfully", {
+      provider,
+      tenantId: stateRecord.tenantId,
+      userId: stateRecord.userId,
+    });
+
+    return true;
+  } catch (error) {
+    logger.error("OAuth state validation error", error as Error, {
+      provider,
+    });
     return false;
   }
 }
 
 /**
- * Create OAuth authorization URL with state parameter
- * Helper that ensures state is generated and stored correctly
+ * Cleanup expired OAuth state tokens
+ * Should be run periodically (e.g., via cron job)
  */
-export async function createOAuthUrl(
-  provider: string,
-  baseUrl: string,
-  params: Record<string, string>
-): Promise<string> {
-  const state = generateOAuthState(provider);
-  await setOAuthState(provider, state);
+export async function cleanupExpiredOAuthStates(): Promise<number> {
+  try {
+    const deleted = await db
+      .delete(oauthStates)
+      .where(lt(oauthStates.expiresAt, new Date()))
+      .returning({ id: oauthStates.id });
 
-  const url = new URL(baseUrl);
-  for (const [key, value] of Object.entries(params)) {
-    url.searchParams.set(key, value);
+    logger.info("Cleaned up expired OAuth states", {
+      count: deleted.length,
+    });
+
+    return deleted.length;
+  } catch (error) {
+    logger.error("Failed to cleanup expired OAuth states", error as Error);
+    return 0;
   }
-  url.searchParams.set("state", state);
-
-  return url.toString();
 }

@@ -20,6 +20,7 @@ export * from "./approval-workflows";
 // Audit & Security
 export * from "./audit-logs";
 export * from "./verification-tokens";
+export * from "./oauth-states";
 
 // Integrations
 export * from "./slack-workspaces";
