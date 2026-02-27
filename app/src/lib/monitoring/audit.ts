@@ -135,6 +135,12 @@ export const AuditAction = {
   FILE_UPLOADED: "file.uploaded",
   FILE_DOWNLOADED: "file.downloaded",
   FILE_DELETED: "file.deleted",
+
+  // Template actions
+  TEMPLATE_CREATED: "template.created",
+  TEMPLATE_UPDATED: "template.updated",
+  TEMPLATE_DELETED: "template.deleted",
+  TEMPLATE_USED: "template.used",
 } as const;
 
 /**

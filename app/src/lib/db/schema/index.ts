@@ -13,6 +13,7 @@ export * from "./budgets";
 
 // Requests & Approvals
 export * from "./requests";
+export * from "./request-templates";
 export * from "./approvals";
 export * from "./approval-workflows";
 

@@ -28,8 +28,11 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { trpc } from "@/lib/api/react";
-import { Loader2, FlaskConical, Plus, X } from "lucide-react";
+import { Loader2, FlaskConical, Plus, X, FileText, Save } from "lucide-react";
 import { addDays, format } from "date-fns";
+import { TemplatePickerDialog } from "./TemplatePickerDialog";
+import { SaveTemplateDialog } from "./SaveTemplateDialog";
+import type { RequestTemplateData } from "@/lib/db/schema/request-templates";
 
 const requestFormSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters"),
@@ -54,6 +57,9 @@ type RequestFormValues = z.infer<typeof requestFormSchema>;
 
 export function RequestForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [templatePickerOpen, setTemplatePickerOpen] = useState(false);
+  const [saveTemplateOpen, setSaveTemplateOpen] = useState(false);
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
   const router = useRouter();
 
   const form = useForm<RequestFormValues>({
@@ -77,10 +83,56 @@ export function RequestForm() {
   const createRequest = trpc.requests.create.useMutation();
   const submitRequest = trpc.requests.submit.useMutation();
   const createTrial = trpc.trials.createFromRequest.useMutation();
+  const incrementTemplateUse = trpc.templates.incrementUseCount.useMutation();
+
+  // Handle template selection - pre-fill form with template data
+  const handleSelectTemplate = (templateData: RequestTemplateData, templateId: string) => {
+    setSelectedTemplateId(templateId);
+
+    // Pre-fill form fields from template
+    if (templateData.title) form.setValue("title", templateData.title);
+    if (templateData.description) form.setValue("description", templateData.description);
+    if (templateData.category) form.setValue("category", templateData.category);
+    if (templateData.vendorName) form.setValue("vendorName", templateData.vendorName);
+    if (templateData.amount) form.setValue("amount", templateData.amount);
+    if (templateData.frequency) form.setValue("frequency", templateData.frequency);
+    if (templateData.quantity) form.setValue("quantity", templateData.quantity);
+    if (templateData.urgency) form.setValue("urgency", templateData.urgency);
+    if (templateData.isTrial !== undefined) form.setValue("isTrial", templateData.isTrial);
+    if (templateData.trialEndDate) form.setValue("trialEndDate", templateData.trialEndDate);
+    if (templateData.trialSuccessCriteria) form.setValue("trialSuccessCriteria", templateData.trialSuccessCriteria);
+    if (templateData.trialEstimatedAnnualCost) form.setValue("trialEstimatedAnnualCost", templateData.trialEstimatedAnnualCost);
+
+    toast.success("Template loaded", {
+      description: "Form pre-filled with template data",
+    });
+  };
+
+  // Handle saving current form as template
+  const handleSaveAsTemplate = () => {
+    const currentValues = form.getValues();
+
+    // Generate suggested name from title + vendor
+    const suggestedName = [
+      currentValues.category,
+      currentValues.vendorName,
+      currentValues.title,
+    ]
+      .filter(Boolean)
+      .join(" - ")
+      .slice(0, 50);
+
+    setSaveTemplateOpen(true);
+  };
 
   async function onSubmit(data: RequestFormValues) {
     setIsSubmitting(true);
     try {
+      // Increment template use count if template was used
+      if (selectedTemplateId) {
+        incrementTemplateUse.mutate({ id: selectedTemplateId });
+      }
+
       if (data.isTrial) {
         // Trial mode: Create trial with request
         if (!data.trialEndDate) {
@@ -146,9 +198,30 @@ export function RequestForm() {
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <Card>
+    <>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          {/* Template actions */}
+          <div className="flex gap-2 justify-end">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setTemplatePickerOpen(true)}
+            >
+              <FileText className="h-4 w-4 mr-2" />
+              Use Template
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleSaveAsTemplate}
+            >
+              <Save className="h-4 w-4 mr-2" />
+              Save as Template
+            </Button>
+          </div>
+
+          <Card>
           <CardHeader>
             <CardTitle>Request Details</CardTitle>
             <CardDescription>
@@ -463,5 +536,30 @@ export function RequestForm() {
         </div>
       </form>
     </Form>
+
+    {/* Template Picker Dialog */}
+    <TemplatePickerDialog
+      open={templatePickerOpen}
+      onOpenChange={setTemplatePickerOpen}
+      onSelectTemplate={handleSelectTemplate}
+    />
+
+    {/* Save Template Dialog */}
+    <SaveTemplateDialog
+      open={saveTemplateOpen}
+      onOpenChange={setSaveTemplateOpen}
+      templateData={form.getValues()}
+      suggestedName={
+        [
+          form.watch("category"),
+          form.watch("vendorName"),
+          form.watch("title"),
+        ]
+          .filter(Boolean)
+          .join(" - ")
+          .slice(0, 50)
+      }
+    />
+  </>
   );
 }
