@@ -44,10 +44,18 @@ const ProductScreenshots = dynamic(
   }
 );
 
-const FeatureGrid = dynamic(
-  () => import("@/components/landing/FeatureGrid").then((mod) => mod.FeatureGrid),
+const FeatureTabs = dynamic(
+  () => import("@/components/landing/FeatureTabs").then((mod) => mod.FeatureTabs),
   {
-    loading: () => <SectionSkeleton height={500} />,
+    loading: () => <SectionSkeleton height={600} />,
+    ssr: false,
+  }
+);
+
+const UseCaseTabs = dynamic(
+  () => import("@/components/landing/UseCaseTabs").then((mod) => mod.UseCaseTabs),
+  {
+    loading: () => <SectionSkeleton height={550} />,
     ssr: false,
   }
 );
@@ -192,8 +200,11 @@ export default function ReqflowLanding() {
       <Suspense fallback={<SectionSkeleton height={600} />}>
         <ProductScreenshots />
       </Suspense>
-      <Suspense fallback={<SectionSkeleton height={500} />}>
-        <FeatureGrid />
+      <Suspense fallback={<SectionSkeleton height={600} />}>
+        <FeatureTabs />
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton height={550} />}>
+        <UseCaseTabs />
       </Suspense>
       <Suspense fallback={<SectionSkeleton height={450} />}>
         <Testimonials />
