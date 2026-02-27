@@ -15,6 +15,7 @@ import { organizations } from "./organizations";
 import { users } from "./users";
 import { departments } from "./departments";
 import { budgets } from "./budgets";
+import { categories } from "./categories";
 import { z } from "zod";
 
 /**
@@ -43,7 +44,8 @@ export const requests = pgTable(
     // What's being requested
     title: text("title").notNull(), // Brief description
     description: text("description"), // Detailed justification
-    category: text("category").notNull(), // saas, services, office, travel, hardware, other
+    category: text("category"), // DEPRECATED: Legacy text field, use categoryId instead
+    categoryId: uuid("category_id").references(() => categories.id, { onDelete: "set null" }), // FK to categories table
 
     // Vendor info
     vendorName: text("vendor_name"),
@@ -113,6 +115,10 @@ export const requestsRelations = relations(requests, ({ one }) => ({
     fields: [requests.budgetId],
     references: [budgets.id],
   }),
+  category: one(categories, {
+    fields: [requests.categoryId],
+    references: [categories.id],
+  }),
 }));
 
 // Zod schemas with input validation
@@ -126,8 +132,9 @@ export const insertRequestSchema = createInsertSchema(requests, {
   accountingSyncError: z.string().max(1000).optional(),
   aiCategory: z.string().max(50).optional(),
 
-  // Enum validations
-  category: z.enum(["saas", "services", "office", "travel", "hardware", "other"]),
+  // Enum validations (category is now optional - use categoryId instead)
+  category: z.enum(["saas", "services", "office", "travel", "hardware", "other"]).optional(),
+  categoryId: z.string().uuid().optional(),
   status: z.enum(["draft", "pending", "approved", "rejected", "cancelled"]).optional(),
   urgency: z.enum(["low", "normal", "urgent"]).optional(),
   frequency: z.enum(["one-time", "monthly", "annually"]).optional(),

@@ -74,8 +74,20 @@ export default function RequestsPage() {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
   // Build query parameters
-  const queryParams: any = {};
-  if (statusFilter !== "all") queryParams.status = statusFilter;
+  type QueryParams = {
+    status?: "draft" | "pending" | "approved" | "rejected" | "cancelled";
+    search?: string;
+    category?: string;
+    urgency?: "low" | "normal" | "urgent";
+    minAmount?: string;
+    maxAmount?: string;
+    dateFrom?: string;
+    dateTo?: string;
+    sortBy?: SortOption;
+    sortOrder?: "asc" | "desc";
+  };
+  const queryParams: QueryParams = {};
+  if (statusFilter !== "all") queryParams.status = statusFilter as Exclude<StatusFilter, "all">;
   if (searchTerm) queryParams.search = searchTerm;
   if (category) queryParams.category = category;
   if (urgency) queryParams.urgency = urgency;
@@ -195,7 +207,7 @@ export default function RequestsPage() {
                   <label className="text-sm font-medium text-slate-700 mb-1.5 block">
                     Urgency
                   </label>
-                  <Select value={urgency} onValueChange={(v) => setUrgency(v as any)}>
+                  <Select value={urgency} onValueChange={(v) => setUrgency(v as "low" | "normal" | "urgent" | "")}>
                     <SelectTrigger>
                       <SelectValue placeholder="All urgency levels" />
                     </SelectTrigger>

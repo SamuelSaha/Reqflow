@@ -181,7 +181,8 @@ export async function analyzeRequest(
 function detectAmountAnomalies(request: Request): RiskSignal[] {
   const signals: RiskSignal[] = [];
   const amount = parseFloat(request.amount);
-  const benchmark = CATEGORY_BENCHMARKS[request.category] ?? CATEGORY_BENCHMARKS.other;
+  const category = request.category || "other";
+  const benchmark = CATEGORY_BENCHMARKS[category as keyof typeof CATEGORY_BENCHMARKS] ?? CATEGORY_BENCHMARKS.other;
 
   // Unusually high for category
   if (amount > benchmark.maxTypical * 2) {
@@ -189,14 +190,14 @@ function detectAmountAnomalies(request: Request): RiskSignal[] {
       type: "anomaly",
       severity: "high",
       title: "Unusually high amount",
-      detail: `€${amount.toFixed(2)} is ${(amount / benchmark.avgAmount).toFixed(1)}x the average ${request.category} purchase`,
+      detail: `€${amount.toFixed(2)} is ${(amount / benchmark.avgAmount).toFixed(1)}x the average ${category} purchase`,
     });
   } else if (amount > benchmark.maxTypical) {
     signals.push({
       type: "anomaly",
       severity: "medium",
       title: "Above typical range",
-      detail: `€${amount.toFixed(2)} exceeds the typical max (€${benchmark.maxTypical.toFixed(2)}) for ${request.category}`,
+      detail: `€${amount.toFixed(2)} exceeds the typical max (€${benchmark.maxTypical.toFixed(2)}) for ${category}`,
     });
   }
 
@@ -348,6 +349,8 @@ async function computeSpendingContext(
   request: Request
 ): Promise<RequestAnalysis["spendingContext"]> {
   // Get all approved requests in this category for this tenant
+  if (!request.category) return null; // No category to compare against
+
   const categoryRequests = await db.query.requests.findMany({
     where: and(
       eq(requests.tenantId, tenantId),

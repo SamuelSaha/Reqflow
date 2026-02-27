@@ -12,6 +12,7 @@ export * from "./departments";
 export * from "./budgets";
 
 // Requests & Approvals
+export * from "./categories";
 export * from "./requests";
 export * from "./request-templates";
 export * from "./approvals";

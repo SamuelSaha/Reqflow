@@ -134,7 +134,7 @@ function findMatchingWorkflow(
 
     // Category check
     if (conditions.categories && conditions.categories.length > 0) {
-      if (conditions.categories.includes(request.category)) {
+      if (request.category && conditions.categories.includes(request.category)) {
         score += 2; // Category match is worth more
       } else {
         disqualified = true;
@@ -334,14 +334,14 @@ function addDynamicApprovers(
   // Security review: flag for approver awareness, don't add separate step
   if (needsSecurityReview(context.request)) {
     flags.securityReview = true;
-    warnings.push(`Security review recommended: ${context.request.category} purchase`);
+    warnings.push(`Security review recommended: ${context.request.category || 'this'} purchase`);
   }
 
   // Legal review: flag for approver awareness, don't add separate step
   if (needsLegalReview(context.request)) {
     flags.legalReview = true;
     const reasons: string[] = [];
-    if (LEGAL_REVIEW_CATEGORIES.includes(context.request.category)) reasons.push("service contract");
+    if (context.request.category && LEGAL_REVIEW_CATEGORIES.includes(context.request.category)) reasons.push("service contract");
     if (parseFloat(context.request.amount) >= LEGAL_REVIEW_AMOUNT) reasons.push(`amount ≥ €${LEGAL_REVIEW_AMOUNT.toLocaleString()}`);
     if (context.request.frequency !== "one-time") reasons.push("recurring commitment");
     warnings.push(`Legal review recommended: ${reasons.join(", ")}`);
@@ -622,11 +622,11 @@ function getBudgetUtilization(budget: Budget): number {
 }
 
 function needsSecurityReview(request: Request): boolean {
-  return SECURITY_REVIEW_CATEGORIES.includes(request.category);
+  return request.category ? SECURITY_REVIEW_CATEGORIES.includes(request.category) : false;
 }
 
 function needsLegalReview(request: Request): boolean {
-  if (LEGAL_REVIEW_CATEGORIES.includes(request.category)) return true;
+  if (request.category && LEGAL_REVIEW_CATEGORIES.includes(request.category)) return true;
   if (parseFloat(request.amount) >= LEGAL_REVIEW_AMOUNT) return true;
   if (request.frequency !== "one-time") return true;
   return false;

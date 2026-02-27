@@ -179,7 +179,7 @@ export default function RequestDetailPage({
             <CardContent>
               <div className="grid grid-cols-2 gap-4">
                 <DetailItem icon={Building2} label="Department" value={req.department?.name ?? "—"} />
-                <DetailItem icon={FileText} label="Category" value={req.category} />
+                <DetailItem icon={FileText} label="Category" value={(req as any).category?.name ?? req.category ?? "—"} />
                 <DetailItem icon={DollarSign} label="Amount" value={`€${parseFloat(req.amount).toLocaleString("en", { minimumFractionDigits: 2 })}`} />
                 <DetailItem icon={Calendar} label="Frequency" value={req.frequency} />
                 {req.vendorName && (
