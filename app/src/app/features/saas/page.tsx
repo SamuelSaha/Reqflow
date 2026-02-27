@@ -1,7 +1,22 @@
+import type { Metadata } from "next";
 import { PageShell } from "@/components/layout";
 import { Section } from "@/components/layout/Section";
 import { Container } from "@/components/layout/Container";
 import { Layers, Eye, DollarSign, Calendar, ArrowRight, Check } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "SaaS Spend Management - Track Software Subscriptions",
+  description: "Track all SaaS subscriptions in one place. Know what you pay, who owns it, when renewals hit. Catch duplicate tools before you buy. Built for small teams.",
+  alternates: {
+    canonical: "/features/saas",
+  },
+  openGraph: {
+    title: "SaaS Spend Management Software - Reqflow",
+    description: "Track all software subscriptions. Know what you pay and when renewals hit.",
+    url: "/features/saas",
+    type: "website",
+  },
+};
 
 export default function SaaSManagementPage() {
   return (

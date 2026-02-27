@@ -16,8 +16,52 @@ const dmMono = DM_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Reqflow - Procurement for companies without procurement teams",
-  description: "Request from Slack. Approve from email. Synced to your books.",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://reqflow.com"),
+  title: {
+    default: "Reqflow - Procurement Software for Small Teams",
+    template: "%s | Reqflow",
+  },
+  description: "Procurement software for teams of 5-50. Track SaaS spend, catch duplicates, never miss renewals. Free during early access. No credit card required.",
+  keywords: ["procurement software", "saas spend management", "vendor management", "renewal tracking", "purchase order system", "procurement for startups"],
+  authors: [{ name: "Reqflow" }],
+  creator: "Reqflow",
+  publisher: "Reqflow",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "/",
+    siteName: "Reqflow",
+    title: "Reqflow - Procurement Software for Small Teams",
+    description: "Track SaaS spend, catch duplicates, never miss renewals. Built for teams of 5-50 people.",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Reqflow - Procurement Software",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Reqflow - Procurement Software for Small Teams",
+    description: "Track SaaS spend, catch duplicates, never miss renewals. Built for teams of 5-50 people.",
+    images: ["/og-image.jpg"],
+  },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+  },
 };
 
 export default function RootLayout({

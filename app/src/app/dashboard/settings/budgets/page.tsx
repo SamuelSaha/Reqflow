@@ -26,6 +26,8 @@ import {
 import { toast } from "sonner";
 import { getErrorMessage } from "@/lib/utils/error-messages";
 import { CreateBudgetDialog } from "@/components/settings/lazy-components";
+import { EmptyState } from "@/components/ui/empty-state";
+import { EmptyBudgetsIllustration } from "@/components/ui/illustrations";
 
 export const dynamic = "force-dynamic";
 
@@ -37,12 +39,35 @@ export default function BudgetsSettingsPage() {
   const utils = trpc.useUtils();
 
   const deleteBudget = trpc.budgets.delete.useMutation({
+    onMutate: async (variables) => {
+      await utils.budgets.list.cancel();
+      await utils.budgets.getAnalytics.cancel();
+
+      const previousList = utils.budgets.list.getData();
+      const previousAnalytics = utils.budgets.getAnalytics.getData();
+
+      utils.budgets.list.setData(undefined, (old) =>
+        old?.filter((b) => b.id !== variables.budgetId) ?? []
+      );
+
+      return { previousList, previousAnalytics };
+    },
+    onError: (error, variables, context) => {
+      if (context?.previousList) {
+        utils.budgets.list.setData(undefined, context.previousList);
+      }
+      if (context?.previousAnalytics) {
+        utils.budgets.getAnalytics.setData(undefined, context.previousAnalytics);
+      }
+      toast.error(error.message);
+    },
     onSuccess: () => {
       toast.success("Budget deleted");
+    },
+    onSettled: () => {
       utils.budgets.list.invalidate();
       utils.budgets.getAnalytics.invalidate();
     },
-    onError: (error) => toast.error(error.message),
   });
 
   function formatCurrency(amount: string | number): string {
@@ -193,18 +218,16 @@ export default function BudgetsSettingsPage() {
       {/* Empty State */}
       {budgets.data && budgets.data.length === 0 && (
         <Card>
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <Wallet className="h-12 w-12 text-slate-300 mb-4" />
-            <p className="text-lg font-medium text-slate-900 mb-2">
-              No budgets configured
-            </p>
-            <p className="text-slate-600 mb-6">
-              Create your first budget to start tracking spending
-            </p>
-            <Button onClick={() => setCreateDialogOpen(true)}>
-              <Plus className="mr-2 h-4 w-4" />
-              Create Budget
-            </Button>
+          <CardContent>
+            <EmptyState
+              illustration={<EmptyBudgetsIllustration className="w-32 h-32" />}
+              title="No budgets configured"
+              description="Set up budgets to track spending by team, department, or category. Monitor utilization and get alerts when limits are approached."
+              action={{
+                label: "Create Budget",
+                onClick: () => setCreateDialogOpen(true),
+              }}
+            />
           </CardContent>
         </Card>
       )}

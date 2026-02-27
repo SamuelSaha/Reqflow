@@ -9,6 +9,8 @@ import { trpc } from "@/lib/api/react";
 import { CheckSquare, Clock, XCircle, AlertCircle } from "lucide-react";
 import { ApprovalCardSkeleton } from "@/components/dashboard/LoadingSkeletons";
 import { getErrorMessage } from "@/lib/utils/error-messages";
+import { EmptyState } from "@/components/ui/empty-state";
+import { NoApprovalsIllustration } from "@/components/ui/illustrations";
 
 export const dynamic = "force-dynamic";
 
@@ -137,18 +139,16 @@ export default function ApprovalsPage() {
       {/* Empty state */}
       {queue.data && queue.data.length === 0 && (
         <Card>
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <CheckSquare className="h-12 w-12 text-slate-300 mb-4" />
-            <p className="text-lg font-medium text-slate-900">
-              {activeTab === "pending"
-                ? "All caught up!"
-                : `No ${activeTab} approvals`}
-            </p>
-            <p className="text-sm text-slate-600 mt-1">
-              {activeTab === "pending"
-                ? "No requests waiting for your review"
-                : `You haven't ${activeTab} any requests yet`}
-            </p>
+          <CardContent>
+            <EmptyState
+              illustration={<NoApprovalsIllustration className="w-28 h-28" />}
+              title={activeTab === "pending" ? "All caught up!" : `No ${activeTab} approvals`}
+              description={
+                activeTab === "pending"
+                  ? "No requests waiting for your review. Great work staying on top of approvals!"
+                  : `You haven't ${activeTab} any requests yet. They'll appear here once you take action.`
+              }
+            />
           </CardContent>
         </Card>
       )}

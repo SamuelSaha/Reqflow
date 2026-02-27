@@ -1,7 +1,22 @@
+import type { Metadata } from "next";
 import { PageShell } from "@/components/layout";
 import { Section } from "@/components/layout/Section";
 import { Container } from "@/components/layout/Container";
 import { Bell, Calendar, Clock, Target, ArrowRight, Check, AlertCircle } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Renewal Tracking Software - Never Miss a Renewal Deadline",
+  description: "Track notice windows, not just renewal dates. Get alerted when you must decide—before auto-renew locks you in. Built for small teams managing SaaS subscriptions.",
+  alternates: {
+    canonical: "/features/renewals",
+  },
+  openGraph: {
+    title: "Renewal Tracking Software - Reqflow",
+    description: "Track notice windows and renewal deadlines. Get alerted before auto-renew traps you.",
+    url: "/features/renewals",
+    type: "website",
+  },
+};
 
 export default function RenewalAlertsPage() {
   return (

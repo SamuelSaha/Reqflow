@@ -86,8 +86,89 @@ function SectionSkeleton({ height }: { height: number }) {
 }
 
 export default function ReqflowLanding() {
+  const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://reqflow.com';
+
+  // FAQ data for structured data schema
+  const faqs = [
+    {
+      question: "How is Reqflow different from using spreadsheets for procurement?",
+      answer: "Spreadsheets break down when your team hits 10-15 people. They live outside your workflow—nobody updates them, nobody checks them before buying, and they're always out of date. Reqflow lives where your team already works (Slack, email, web) and automatically captures every purchase request, duplicate check, and approval. The data stays current without anyone doing extra work.",
+    },
+    {
+      question: "Do I need a procurement team to use procurement software?",
+      answer: "No. That's exactly who we built Reqflow for—teams without procurement departments. If you're the founder, ops lead, or finance person handling purchases while also doing your actual job, this replaces the manual work. Set it up once (takes 2 minutes), and it runs itself. No training, no procurement expertise needed.",
+    },
+    {
+      question: "Can Reqflow catch duplicate SaaS subscriptions before we buy them?",
+      answer: "Yes. When someone submits a request, we check your existing tools and flag potential overlaps before the purchase happens. For example, if your design team already uses Figma and someone requests Sketch, we'll surface that immediately. Saves you from discovering duplicates months later when renewals hit.",
+    },
+  ];
+
   return (
     <PageShell>
+      {/* Organization Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: "Reqflow",
+            url: baseUrl,
+            logo: `${baseUrl}/logo.png`,
+            description: "Procurement software for teams of 5-50. Track SaaS spend, catch duplicates, never miss renewals.",
+          }),
+        }}
+      />
+
+      {/* SoftwareApplication Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            name: "Reqflow",
+            applicationCategory: "BusinessApplication",
+            applicationSubCategory: "Procurement Software",
+            operatingSystem: "Web",
+            offers: {
+              "@type": "Offer",
+              price: "0",
+              priceCurrency: "USD",
+              description: "Free during early access",
+              availability: "https://schema.org/InStock",
+            },
+            description: "Procurement software for teams of 5-50. Track SaaS spend, catch duplicates, never miss renewals.",
+            featureList: [
+              "Connected Records - Tool to Contract to Subscription to Invoice",
+              "Smart Approvals with Slack integration",
+              "Budget Intelligence with auto-alerts",
+              "Renewal Tracking with notice-window alerts",
+            ],
+          }),
+        }}
+      />
+
+      {/* FAQ Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: faqs.map((faq) => ({
+              "@type": "Question",
+              name: faq.question,
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: faq.answer,
+              },
+            })),
+          }),
+        }}
+      />
+
       <Suspense fallback={<SectionSkeleton height={600} />}>
         <HeroSection />
       </Suspense>

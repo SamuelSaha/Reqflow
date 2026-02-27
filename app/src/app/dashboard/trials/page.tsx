@@ -20,6 +20,8 @@ import {
 import { format, differenceInDays } from "date-fns";
 import { ApprovalCardSkeleton } from "@/components/dashboard/LoadingSkeletons";
 import { getErrorMessage } from "@/lib/utils/error-messages";
+import { EmptyState } from "@/components/ui/empty-state";
+import { EmptyTrialsIllustration, NoResultsIllustration } from "@/components/ui/illustrations";
 
 export const dynamic = "force-dynamic";
 
@@ -110,26 +112,42 @@ export default function TrialsPage() {
       {/* Empty state */}
       {trials.data && trials.data.length === 0 && (
         <Card>
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <FlaskConical className="h-12 w-12 text-slate-300 mb-4" />
-            <p className="text-lg font-medium text-slate-900">
-              {statusFilter === "all"
-                ? "No trials yet"
-                : `No ${statusFilter} trials`}
-            </p>
-            <p className="text-sm text-slate-600 mt-1">
-              {statusFilter === "all"
-                ? "Create a trial to track tool evaluations"
-                : `You don't have any ${statusFilter} trials`}
-            </p>
-            {statusFilter === "all" && (
-              <Link href="/dashboard/requests/new" className="mt-4">
-                <Button>
-                  <Plus className="mr-2 h-4 w-4" />
-                  Create Trial
-                </Button>
-              </Link>
-            )}
+          <CardContent>
+            <EmptyState
+              illustration={
+                statusFilter === "all" ? (
+                  <EmptyTrialsIllustration className="w-32 h-32" />
+                ) : (
+                  <NoResultsIllustration className="w-32 h-32" />
+                )
+              }
+              title={
+                statusFilter === "all"
+                  ? "No trials yet"
+                  : `No ${statusFilter} trials`
+              }
+              description={
+                statusFilter === "all"
+                  ? "Start evaluating new tools with structured trials. Track success metrics and make data-driven decisions."
+                  : `No ${statusFilter} trials found. Try adjusting your filters or start a new trial.`
+              }
+              action={
+                statusFilter === "all"
+                  ? {
+                      label: "Start a Trial",
+                      href: "/dashboard/requests/new",
+                    }
+                  : undefined
+              }
+              secondaryAction={
+                statusFilter !== "all"
+                  ? {
+                      label: "Clear Filters",
+                      onClick: () => setStatusFilter("all"),
+                    }
+                  : undefined
+              }
+            />
           </CardContent>
         </Card>
       )}

@@ -1,7 +1,22 @@
+import type { Metadata } from "next";
 import { PageShell } from "@/components/layout";
 import { Section } from "@/components/layout/Section";
 import { Container } from "@/components/layout/Container";
 import { Building2, FileText, TrendingUp, AlertTriangle, ArrowRight, Check } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Vendor Management Software - Track Contracts & Spend",
+  description: "Centralize vendor data, track contracts, and analyze spending in one place. Know who you work with and what you pay them. Built for teams of 5-50.",
+  alternates: {
+    canonical: "/features/vendors",
+  },
+  openGraph: {
+    title: "Vendor Management Software - Reqflow",
+    description: "Centralize vendor data, track contracts, and analyze spending. Know who you work with.",
+    url: "/features/vendors",
+    type: "website",
+  },
+};
 
 export default function VendorTrackingPage() {
   return (

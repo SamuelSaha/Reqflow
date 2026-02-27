@@ -25,6 +25,8 @@ import {
 import { StatsCardSkeleton, RequestListSkeleton } from "@/components/dashboard/LoadingSkeletons";
 import { getErrorMessage } from "@/lib/utils/error-messages";
 import { STATUS_STYLES } from "@/lib/design/tokens";
+import { EmptyState } from "@/components/ui/empty-state";
+import { EmptyRequestsIllustration } from "@/components/ui/illustrations";
 
 export const dynamic = "force-dynamic";
 
@@ -154,15 +156,16 @@ export default function DashboardPage() {
             )}
 
             {recentRequests.data && recentRequests.data.length === 0 && (
-              <div className="text-center py-6">
-                <FileText className="h-8 w-8 text-slate-300 mx-auto mb-2" />
-                <p className="text-sm text-slate-600">No requests yet</p>
-                <Link href="/dashboard/requests/new">
-                  <Button variant="link" size="sm" className="mt-1">
-                    Create your first request
-                  </Button>
-                </Link>
-              </div>
+              <EmptyState
+                illustration={<EmptyRequestsIllustration className="w-24 h-24" />}
+                title="No requests yet"
+                description="Create your first purchase request to start tracking company spend."
+                action={{
+                  label: "Create Request",
+                  href: "/dashboard/requests/new",
+                }}
+                compact
+              />
             )}
 
             {recentRequests.data && recentRequests.data.length > 0 && (

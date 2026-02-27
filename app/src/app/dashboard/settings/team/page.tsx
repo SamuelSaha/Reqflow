@@ -27,6 +27,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { TeamListSkeleton } from "@/components/dashboard/LoadingSkeletons";
+import { EmptyState } from "@/components/ui/empty-state";
+import { EmptyTeamIllustration } from "@/components/ui/illustrations";
 
 export const dynamic = "force-dynamic";
 
@@ -136,18 +138,16 @@ export default function TeamPage() {
 
           {userList.data && userList.data.length === 0 && (
             <Card>
-              <CardContent className="flex flex-col items-center justify-center py-12">
-                <Users className="h-12 w-12 text-slate-300 mb-4" />
-                <p className="text-lg font-medium text-slate-900 mb-2">
-                  No team members yet
-                </p>
-                <p className="text-slate-600 mb-6">
-                  Invite your first team member to get started
-                </p>
-                <Button onClick={() => setInviteDialogOpen(true)}>
-                  <Plus className="mr-2 h-4 w-4" />
-                  Invite Users
-                </Button>
+              <CardContent>
+                <EmptyState
+                  illustration={<EmptyTeamIllustration className="w-32 h-32" />}
+                  title="No team members yet"
+                  description="Build your team to collaborate on purchase requests. Invite colleagues to join, set roles, and streamline approvals."
+                  action={{
+                    label: "Invite Team Members",
+                    onClick: () => setInviteDialogOpen(true),
+                  }}
+                />
               </CardContent>
             </Card>
           )}

@@ -1,7 +1,22 @@
+import type { Metadata } from "next";
 import { PageShell } from "@/components/layout";
 import { Section } from "@/components/layout/Section";
 import { Container } from "@/components/layout/Container";
 import { Shield, TrendingUp, AlertCircle, Lock, ArrowRight, Check } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Budget Management Software - Spending Guardrails for Small Teams",
+  description: "Set department budgets with automatic enforcement. Soft warnings at 80%, hard stops at 100%. No more budget surprises. Built for teams of 5-50.",
+  alternates: {
+    canonical: "/features/budgets",
+  },
+  openGraph: {
+    title: "Budget Management Software - Reqflow",
+    description: "Enforce budgets automatically. Soft warnings when close, hard stops at limit.",
+    url: "/features/budgets",
+    type: "website",
+  },
+};
 
 export default function BudgetControlPage() {
   return (

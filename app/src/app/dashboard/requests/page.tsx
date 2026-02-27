@@ -13,7 +13,6 @@ import { Badge } from "@/components/ui/badge";
 import { trpc } from "@/lib/api/react";
 import {
   Plus,
-  FileText,
   Clock,
   CheckCircle2,
   XCircle,
@@ -23,6 +22,8 @@ import {
   Receipt,
   AlertTriangle,
 } from "lucide-react";
+import { EmptyState } from "@/components/ui/empty-state";
+import { EmptyRequestsIllustration, NoResultsIllustration } from "@/components/ui/illustrations";
 import { RequestListSkeleton } from "@/components/dashboard/LoadingSkeletons";
 import { getErrorMessage } from "@/lib/utils/error-messages";
 
@@ -110,26 +111,44 @@ export default function RequestsPage() {
       {/* Empty state */}
       {requestList.data && requestList.data.length === 0 && (
         <Card>
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <FileText className="h-12 w-12 text-slate-300 mb-4" />
-            <p className="text-body-lg font-medium text-slate-900">
-              {statusFilter === "all"
-                ? "No requests yet"
-                : `No ${statusFilter} requests`}
-            </p>
-            <p className="text-body-sm text-slate-600 mt-1">
-              {statusFilter === "all"
-                ? "Create your first purchase request to get started"
-                : `You don't have any ${statusFilter} requests`}
-            </p>
-            {statusFilter === "all" && (
-              <Link href="/dashboard/requests/new" className="mt-4">
-                <Button>
-                  <Plus className="mr-2 h-4 w-4" />
-                  New Request
-                </Button>
-              </Link>
-            )}
+          <CardContent>
+            <EmptyState
+              illustration={
+                statusFilter === "all" ? (
+                  <EmptyRequestsIllustration className="w-32 h-32" />
+                ) : (
+                  <NoResultsIllustration className="w-32 h-32" />
+                )
+              }
+              title={
+                statusFilter === "all"
+                  ? "No requests yet"
+                  : `No ${statusFilter} requests`
+              }
+              description={
+                statusFilter === "all"
+                  ? "Create your first purchase request to start tracking company spend."
+                  : statusFilter === "draft"
+                  ? "You don't have any draft requests. Start a new one or check other filters."
+                  : `No ${statusFilter} requests found. Try adjusting your filters.`
+              }
+              action={
+                statusFilter === "all"
+                  ? {
+                      label: "Create Request",
+                      href: "/dashboard/requests/new",
+                    }
+                  : undefined
+              }
+              secondaryAction={
+                statusFilter !== "all"
+                  ? {
+                      label: "Clear Filters",
+                      onClick: () => setStatusFilter("all"),
+                    }
+                  : undefined
+              }
+            />
           </CardContent>
         </Card>
       )}
