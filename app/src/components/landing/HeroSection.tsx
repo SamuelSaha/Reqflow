@@ -65,72 +65,37 @@ export function HeroSection() {
                 Procurement software for teams who move too fast for spreadsheets
               </h1>
 
-              {/* Enhanced subheadline with benefits */}
-              <p className="text-body-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
-                Stop losing invoices in Slack threads. Stop wondering if you already pay for that tool.
-                Stop chasing approvals across DMs. <span className="font-semibold text-slate-700">Built for teams who buy without a procurement department.</span>
+              {/* Simplified subheadline - One clear benefit */}
+              <p className="text-body-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+                Built for teams who buy without a procurement department. Track purchases, catch duplicates, never miss a renewal.
               </p>
             </div>
 
-            {/* Pain stats grid - Above fold for immediate impact */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 max-w-4xl mx-auto">
-              <div className="bg-white rounded-lg p-3 md:p-4 border border-red-100 shadow-sm hover:shadow-md transition-shadow">
-                <div className="text-h4 md:text-h3 font-bold text-red-600 mb-1">40-60%</div>
-                <div className="text-caption md:text-body-sm text-slate-600 leading-tight">purchases bypass process</div>
+            {/* Focused value props - 2 key benefits only */}
+            <div className="flex items-center justify-center gap-8 text-body-sm">
+              <div className="flex items-center gap-2 text-slate-700">
+                <CheckCircle2 className="w-5 h-5 text-teal-600" aria-hidden="true" />
+                <span className="font-medium">Setup in 2 minutes</span>
               </div>
-              <div className="bg-white rounded-lg p-3 md:p-4 border border-red-100 shadow-sm hover:shadow-md transition-shadow">
-                <div className="text-h4 md:text-h3 font-bold text-red-600 mb-1">29%</div>
-                <div className="text-caption md:text-body-sm text-slate-600 leading-tight">SaaS subscriptions duplicate</div>
-              </div>
-              <div className="bg-white rounded-lg p-3 md:p-4 border border-red-100 shadow-sm hover:shadow-md transition-shadow">
-                <div className="text-h4 md:text-h3 font-bold text-red-600 mb-1">8.3 hrs</div>
-                <div className="text-caption md:text-body-sm text-slate-600 leading-tight">wasted per week</div>
-              </div>
-              <div className="bg-white rounded-lg p-3 md:p-4 border border-red-100 shadow-sm hover:shadow-md transition-shadow">
-                <div className="text-h4 md:text-h3 font-bold text-red-600 mb-1">$15-40</div>
-                <div className="text-caption md:text-body-sm text-slate-600 leading-tight">cost per manual invoice</div>
+              <div className="flex items-center gap-2 text-slate-700">
+                <Zap className="w-5 h-5 text-amber-500" aria-hidden="true" />
+                <span className="font-medium">Approve in &lt;2 hours</span>
               </div>
             </div>
 
-            {/* Quick wins - Value props - NO ANIMATION DELAY - Warm colors */}
-            <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 text-body-sm">
-              <div className="group flex items-center gap-2 text-slate-700 transition-colors duration-150 hover:text-teal-600">
-                <CheckCircle2 className="w-5 h-5 text-teal-600 transition-transform duration-200 group-hover:scale-110" aria-hidden="true" />
-                <span className="font-medium">2-minute setup</span>
-              </div>
-              <div className="group flex items-center gap-2 text-slate-700 transition-colors duration-150 hover:text-amber-600">
-                <Zap className="w-5 h-5 text-amber-500 transition-all duration-200 group-hover:scale-110 group-hover:rotate-6" aria-hidden="true" />
-                <span className="font-medium">Approve in &lt;2 hours (vs 3+)</span>
-              </div>
-              <div className="group flex items-center gap-2 text-slate-700 transition-colors duration-150 hover:text-teal-600">
-                <Shield className="w-5 h-5 text-teal-600 transition-transform duration-200 group-hover:scale-110" aria-hidden="true" />
-                <span className="font-medium">94% budget compliance</span>
-              </div>
-              <div className="group flex items-center gap-2 text-slate-700 transition-colors duration-150 hover:text-amber-600">
-                <Clock className="w-5 h-5 text-amber-600 transition-transform duration-200 group-hover:scale-110" aria-hidden="true" />
-                <span className="font-medium">Zero missed renewal windows</span>
-              </div>
-            </div>
-
-            {/* CTAs with enhanced spacing - NO ANIMATION DELAY */}
-            <div className="space-y-4 md:space-y-5">
-              <CtaGroup alignment="center">
-                <PrimaryCta
-                  href="/signup"
-                  size="large"
-                  icon="arrow"
-                  analyticsEvent="hero_primary_click"
-                >
-                  Start Free Trial
-                </PrimaryCta>
-                <SecondaryCta
-                  href="/contact"
-                  size="large"
-                  analyticsEvent="hero_secondary_click"
-                >
-                  Book a Demo
-                </SecondaryCta>
-              </CtaGroup>
+            {/* Single dominant CTA */}
+            <div className="space-y-3">
+              <PrimaryCta
+                href="/signup"
+                size="large"
+                icon="arrow"
+                analyticsEvent="hero_primary_click"
+              >
+                Start Free Trial
+              </PrimaryCta>
+              <p className="text-caption text-slate-500">
+                No credit card • Free forever
+              </p>
             </div>
           </div>
         </div>
