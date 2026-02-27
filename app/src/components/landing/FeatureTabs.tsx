@@ -101,7 +101,16 @@ export function FeatureTabs() {
               return (
                 <button
                   key={feature.id}
-                  onClick={() => setActiveTab(feature.id)}
+                  onClick={() => {
+                    setActiveTab(feature.id);
+                    // Track feature tab engagement
+                    if (typeof window !== 'undefined' && window.gtag) {
+                      window.gtag('event', 'feature_tab_click', {
+                        feature_name: feature.title,
+                        feature_id: feature.id,
+                      });
+                    }
+                  }}
                   className={`
                     inline-flex items-center gap-2.5 px-6 py-3 rounded-lg font-semibold text-body-sm
                     transition-all duration-150 ease-out

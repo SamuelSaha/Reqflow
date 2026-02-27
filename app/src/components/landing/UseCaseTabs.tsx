@@ -113,7 +113,16 @@ export function UseCaseTabs() {
                   return (
                     <button
                       key={useCase.id}
-                      onClick={() => setActiveTab(useCase.id)}
+                      onClick={() => {
+                        setActiveTab(useCase.id);
+                        // Track use case tab engagement
+                        if (typeof window !== 'undefined' && window.gtag) {
+                          window.gtag('event', 'use_case_tab_click', {
+                            department: useCase.title,
+                            use_case_id: useCase.id,
+                          });
+                        }
+                      }}
                       className={`
                         flex items-center gap-3 px-4 py-3 rounded-lg font-semibold text-body-sm
                         transition-all duration-150 ease-out whitespace-nowrap lg:whitespace-normal
