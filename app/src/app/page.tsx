@@ -125,6 +125,10 @@ export default function ReqflowLanding() {
       question: "Can Reqflow catch duplicate SaaS subscriptions before we buy them?",
       answer: "Yes. When someone submits a request, we check your existing tools and flag potential overlaps before the purchase happens. For example, if your design team already uses Figma and someone requests Sketch, we'll surface that immediately. Saves you from discovering duplicates months later when renewals hit.",
     },
+    {
+      question: "What's the ROI of procurement software for a 30-person team?",
+      answer: "Most teams save 10-15% on SaaS spend in first 6 months by catching duplicates (29% overlap) and cancelling unused tools. For €150K/year SaaS spend, that's €15-22K saved. Plus recover 8.3 hours/week in manual work (~€16K/year at €40/hour). Total ROI: €30-40K annually. Reqflow pays for itself in the first month.",
+    },
   ];
 
   return (
