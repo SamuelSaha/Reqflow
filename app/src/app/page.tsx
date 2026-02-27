@@ -92,6 +92,13 @@ const FinalCTA = dynamic(
   }
 );
 
+const MobileStickyCTA = dynamic(
+  () => import("@/components/landing/MobileStickyCTA").then((mod) => mod.MobileStickyCTA),
+  {
+    ssr: false,
+  }
+);
+
 function SectionSkeleton({ height }: { height: number }) {
   return (
     <div
@@ -121,8 +128,9 @@ export default function ReqflowLanding() {
   ];
 
   return (
-    <PageShell>
-      {/* Organization Schema */}
+    <>
+      <PageShell>
+        {/* Organization Schema */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -218,6 +226,10 @@ export default function ReqflowLanding() {
       <Suspense fallback={<SectionSkeleton height={200} />}>
         <FinalCTA />
       </Suspense>
-    </PageShell>
+      </PageShell>
+
+      {/* Mobile Sticky CTA - Shows on scroll for mobile users */}
+      <MobileStickyCTA />
+    </>
   );
 }
