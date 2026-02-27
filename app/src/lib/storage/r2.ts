@@ -111,6 +111,9 @@ export function generateFileKey(params: {
 
 /**
  * Validate file type
+ * 🔒 SECURITY NOTE: This validates extension + MIME type before upload.
+ * For complete security, magic bytes should also be validated after upload.
+ * TODO: Implement post-upload magic bytes validation via R2 webhook or Lambda
  */
 export function validateFileType(filename: string, contentType: string): boolean {
   const allowedTypes = [
@@ -126,6 +129,33 @@ export function validateFileType(filename: string, contentType: string): boolean
   const ext = filename.toLowerCase().slice(filename.lastIndexOf("."));
 
   return allowedTypes.includes(contentType) && allowedExtensions.includes(ext);
+}
+
+/**
+ * 🔒 SECURITY FIX: Validate file magic bytes (file signature)
+ * Prevents malicious files disguised with fake extensions
+ * Call this AFTER file is uploaded to verify actual file type
+ */
+export function validateFileMagicBytes(buffer: Buffer, expectedType: string): boolean {
+  // Magic bytes signatures for allowed file types
+  const signatures: Record<string, number[][]> = {
+    pdf: [[0x25, 0x50, 0x44, 0x46]], // %PDF
+    png: [[0x89, 0x50, 0x4e, 0x47]], // .PNG
+    jpg: [[0xff, 0xd8, 0xff]], // JPEG
+    jpeg: [[0xff, 0xd8, 0xff]], // JPEG
+    xlsx: [[0x50, 0x4b, 0x03, 0x04]], // ZIP (Excel uses ZIP format)
+    xls: [[0xd0, 0xcf, 0x11, 0xe0]], // OLE2 (old Excel format)
+  };
+
+  const fileSignatures = signatures[expectedType.toLowerCase()];
+  if (!fileSignatures) {
+    return false; // Unknown type
+  }
+
+  // Check if buffer starts with any of the valid signatures
+  return fileSignatures.some((signature) =>
+    signature.every((byte, index) => buffer[index] === byte)
+  );
 }
 
 /**

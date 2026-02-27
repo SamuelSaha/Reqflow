@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/lib/utils/error-messages";
-import { TestWorkflowDialog } from "@/components/settings/TestWorkflowDialog";
+import { TestWorkflowDialog } from "@/components/settings/lazy-components";
 
 export const dynamic = "force-dynamic";
 

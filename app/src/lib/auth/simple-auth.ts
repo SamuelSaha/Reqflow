@@ -11,6 +11,7 @@ import { users, organizations } from "../db/schema";
 import { eq } from "drizzle-orm";
 import type { User } from "../db/schema";
 import { env } from "../env";
+import { setCSRFToken } from "../security/csrf";
 
 const JWT_SECRET = new TextEncoder().encode(env.AUTH_SECRET);
 
@@ -129,12 +130,14 @@ export async function signIn(
   const cookieStore = await cookies();
   cookieStore.set(COOKIE_NAME, token, {
     httpOnly: true, // Prevent XSS access
-    secure: true, // Require HTTPS (always, even in dev)
-    sameSite: "strict", // Prevent CSRF attacks
+    secure: true, // ALWAYS require HTTPS (fixed security issue)
+    sameSite: "lax", // Allow cookie on GET requests (like OAuth callbacks)
     maxAge: COOKIE_MAX_AGE,
-    path: "/", // Required for __Host- prefix
-    // No domain attribute (required for __Host- prefix)
+    path: "/",
   });
+
+  // Set CSRF token for mutation protection
+  await setCSRFToken();
 
   return { user, token };
 }
@@ -176,12 +179,14 @@ export async function refreshSession(userId: string): Promise<void> {
   const cookieStore = await cookies();
   cookieStore.set(COOKIE_NAME, token, {
     httpOnly: true, // Prevent XSS access
-    secure: true, // Require HTTPS (always, even in dev)
-    sameSite: "strict", // Prevent CSRF attacks
+    secure: true, // ALWAYS require HTTPS (fixed security issue)
+    sameSite: "lax", // Allow cookie on GET requests
     maxAge: COOKIE_MAX_AGE,
-    path: "/", // Required for __Host- prefix
-    // No domain attribute (required for __Host- prefix)
+    path: "/",
   });
+
+  // Refresh CSRF token on session refresh
+  await setCSRFToken();
 }
 
 /**

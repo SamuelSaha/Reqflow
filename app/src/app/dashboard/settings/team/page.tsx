@@ -18,8 +18,7 @@ import {
   Edit,
 } from "lucide-react";
 import { getErrorMessage } from "@/lib/utils/error-messages";
-import { InviteUsersDialog } from "@/components/settings/InviteUsersDialog";
-import { EditUserDialog } from "@/components/settings/EditUserDialog";
+import { InviteUsersDialog, EditUserDialog } from "@/components/settings/lazy-components";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,6 +26,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
+import { TeamListSkeleton } from "@/components/dashboard/LoadingSkeletons";
 
 export const dynamic = "force-dynamic";
 
@@ -121,18 +121,7 @@ export default function TeamPage() {
       {/* Users Tab */}
       {activeTab === "users" && (
         <>
-          {userList.isLoading && (
-            <div className="space-y-3">
-              {[...Array(5)].map((_, i) => (
-                <Card key={i} className="animate-pulse">
-                  <CardContent className="p-6">
-                    <div className="h-4 bg-slate-200 rounded w-1/3 mb-2"></div>
-                    <div className="h-3 bg-slate-100 rounded w-1/2"></div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
+          {userList.isLoading && <TeamListSkeleton count={5} />}
 
           {userList.error && (
             <Card className="border-red-200 bg-red-50">
@@ -216,18 +205,7 @@ export default function TeamPage() {
       {/* Invites Tab */}
       {activeTab === "invites" && (
         <>
-          {inviteList.isLoading && (
-            <div className="space-y-3">
-              {[...Array(3)].map((_, i) => (
-                <Card key={i} className="animate-pulse">
-                  <CardContent className="p-6">
-                    <div className="h-4 bg-slate-200 rounded w-1/3 mb-2"></div>
-                    <div className="h-3 bg-slate-100 rounded w-1/2"></div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
+          {inviteList.isLoading && <TeamListSkeleton count={3} />}
 
           {inviteList.error && (
             <Card className="border-red-200 bg-red-50">
@@ -334,18 +312,7 @@ export default function TeamPage() {
       {/* Departments Tab */}
       {activeTab === "departments" && (
         <>
-          {departmentList.isLoading && (
-            <div className="space-y-3">
-              {[...Array(3)].map((_, i) => (
-                <Card key={i} className="animate-pulse">
-                  <CardContent className="p-6">
-                    <div className="h-4 bg-slate-200 rounded w-1/3 mb-2"></div>
-                    <div className="h-3 bg-slate-100 rounded w-1/2"></div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
+          {departmentList.isLoading && <TeamListSkeleton count={3} />}
 
           {departmentList.data && departmentList.data.length === 0 && (
             <Card>

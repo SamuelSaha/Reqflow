@@ -128,6 +128,10 @@ export const approvalsRouter = router({
         a.id === input.approvalId ? true : a.decision !== "pending"
       );
 
+      // Track sync status for toast notification
+      let syncQueued = false;
+      let syncProvider: string | null = null;
+
       if (allRequiredDecided) {
         // If any required approval was rejected, reject the request
         const anyRejected =
@@ -166,6 +170,8 @@ export const approvalsRouter = router({
               action: "create",
               data: {},
             });
+            syncQueued = true;
+            syncProvider = activeIntegration.provider;
           }
         }
 
@@ -267,6 +273,8 @@ export const approvalsRouter = router({
             ? "rejected"
             : "approved"
           : "pending",
+        syncQueued,
+        syncProvider,
       };
     }),
 });

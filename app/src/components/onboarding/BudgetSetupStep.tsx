@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2, Upload, Plus, Trash2 } from "lucide-react";
 import Papa from "papaparse";
+import { toast } from "sonner";
 
 interface ParsedBudget {
   name: string;
@@ -37,11 +38,40 @@ export function BudgetSetupStep({ onNext }: Props) {
   const [manualCategory, setManualCategory] = useState<string>("saas");
 
   const importMutation = trpc.onboarding.importBudgets.useMutation({
-    onSuccess: () => onNext(),
+    onMutate: () => {
+      toast.loading(`Importing ${csvData.length} budget${csvData.length > 1 ? "s" : ""}...`, {
+        id: "csv-import",
+      });
+    },
+    onSuccess: (data) => {
+      toast.success("Budgets imported successfully", {
+        id: "csv-import",
+        description: `${data.imported} budget${data.imported > 1 ? "s" : ""} added to your account`,
+      });
+      onNext();
+    },
+    onError: (error) => {
+      toast.error("Failed to import budgets", {
+        id: "csv-import",
+        description: error.message || "Please check your CSV format and try again",
+      });
+    },
   });
 
   const manualMutation = trpc.onboarding.createManualBudget.useMutation({
-    onSuccess: () => onNext(),
+    onMutate: () => {
+      toast.loading("Creating budget...", { id: "manual-budget" });
+    },
+    onSuccess: () => {
+      toast.success("Budget created successfully", { id: "manual-budget" });
+      onNext();
+    },
+    onError: (error) => {
+      toast.error("Failed to create budget", {
+        id: "manual-budget",
+        description: error.message,
+      });
+    },
   });
 
   const skipMutation = trpc.onboarding.skipStep.useMutation({
@@ -53,6 +83,8 @@ export function BudgetSetupStep({ onNext }: Props) {
     if (!file) return;
 
     setCsvError(null);
+    toast.loading("Parsing CSV file...", { id: "csv-parse" });
+
     Papa.parse(file, {
       header: true,
       skipEmptyLines: true,
@@ -78,13 +110,25 @@ export function BudgetSetupStep({ onNext }: Props) {
         }
 
         if (parsed.length === 0) {
+          toast.error("No valid budget rows found", {
+            id: "csv-parse",
+            description: "Ensure your CSV has 'name' and 'allocated' columns",
+          });
           setCsvError("No valid budget rows found. Ensure your CSV has 'name' and 'allocated' columns.");
           return;
         }
 
+        toast.success(`Found ${parsed.length} budget${parsed.length > 1 ? "s" : ""}`, {
+          id: "csv-parse",
+          description: "Review the data below and click Import",
+        });
         setCsvData(parsed);
       },
       error() {
+        toast.error("Failed to parse CSV file", {
+          id: "csv-parse",
+          description: "Please check the file format and try again",
+        });
         setCsvError("Failed to parse CSV file.");
       },
     });

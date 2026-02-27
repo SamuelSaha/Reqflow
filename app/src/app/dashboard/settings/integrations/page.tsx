@@ -67,22 +67,44 @@ export default function IntegrationsPage() {
   const utils = trpc.useUtils();
 
   const disconnect = trpc.integrations.disconnect.useMutation({
+    onMutate: () => {
+      toast.loading("Disconnecting...", { id: "disconnect" });
+    },
     onSuccess: () => {
-      toast.success("Integration disconnected");
+      toast.success("Integration disconnected", {
+        id: "disconnect",
+        description: "Automatic syncing has been stopped",
+      });
       utils.integrations.list.invalidate();
       setDisconnectDialog({ open: false, provider: null });
     },
-    onError: (error) => toast.error(error.message),
+    onError: (error) => {
+      toast.error("Failed to disconnect", {
+        id: "disconnect",
+        description: error.message,
+      });
+    },
   });
 
   const toggleAutoSync = trpc.integrations.toggleAutoSync.useMutation({
+    onMutate: () => {
+      toast.loading("Updating settings...", { id: "toggle-sync" });
+    },
     onSuccess: (data) => {
-      toast.success(
-        data.autoSync ? "Auto-sync enabled" : "Auto-sync disabled"
-      );
+      toast.success(data.autoSync ? "Auto-sync enabled" : "Auto-sync disabled", {
+        id: "toggle-sync",
+        description: data.autoSync
+          ? "Approved requests will automatically sync to accounting"
+          : "You'll need to manually sync approved requests",
+      });
       utils.integrations.list.invalidate();
     },
-    onError: (error) => toast.error(error.message),
+    onError: (error) => {
+      toast.error("Failed to update settings", {
+        id: "toggle-sync",
+        description: error.message,
+      });
+    },
   });
 
   const connectUrlQuery = trpc.integrations.getConnectUrl.useQuery;

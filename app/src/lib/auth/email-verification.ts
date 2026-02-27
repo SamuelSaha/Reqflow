@@ -7,6 +7,8 @@ import { db } from "../db";
 import { verificationTokens } from "../db/schema";
 import { sendEmail, EmailTemplate } from "../queue/queues/email";
 import { env } from "../env";
+import { checkEmailVerificationRateLimit } from "../security/rate-limit";
+import { logger } from "../monitoring/logger";
 
 /**
  * Generate cryptographically secure verification token
@@ -24,11 +26,21 @@ function generateVerificationToken(): string {
 
 /**
  * Create verification token and send email
+ * 🔒 SECURITY FIX: Added rate limiting to prevent email bombing
  */
 export async function createVerificationToken(
   userId: string,
   email: string
 ): Promise<string> {
+  // 🔒 Rate limit check: Prevent email bombing (3 emails per hour)
+  const rateLimitResult = await checkEmailVerificationRateLimit(email);
+  if (!rateLimitResult.success) {
+    const waitMinutes = Math.ceil((rateLimitResult.reset - Date.now()) / 60000);
+    throw new Error(
+      `Too many verification emails requested. Please try again in ${waitMinutes} minutes.`
+    );
+  }
+
   // Generate secure token
   const token = generateVerificationToken();
 
@@ -55,6 +67,8 @@ export async function createVerificationToken(
       verificationUrl,
     },
   });
+
+  logger.info("Verification email sent", { userId, email });
 
   return token;
 }

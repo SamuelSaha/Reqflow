@@ -14,6 +14,7 @@ import {
 import { eq } from "drizzle-orm";
 import type { z } from "zod";
 import { logger } from "@/lib/monitoring/logger";
+import { sanitizeObject, sanitizeCurrency } from "@/lib/security/sanitize";
 
 export interface RequestInput {
   title: string;
@@ -48,6 +49,16 @@ export async function createSlackRequest(
   departmentId: string,
   input: RequestInput
 ): Promise<RequestResult> {
+  // 🔒 SECURITY FIX: Sanitize all inputs from Slack to prevent XSS/injection
+  const sanitizedInput = sanitizeObject(input);
+
+  // Parse amount as currency to ensure it's a valid number
+  try {
+    sanitizedInput.amount = sanitizeCurrency(input.amount).toString();
+  } catch (error) {
+    throw new Error("Invalid amount format");
+  }
+
   // 1. Validate input using same schema as web app
   const validationSchema = insertRequestSchema.pick({
     title: true,
@@ -62,7 +73,7 @@ export async function createSlackRequest(
 
   let validated: z.infer<typeof validationSchema>;
   try {
-    validated = validationSchema.parse(input);
+    validated = validationSchema.parse(sanitizedInput);
   } catch (error: unknown) {
     // Re-throw with clearer message for Slack users
     const zodError = error as { errors?: Array<{ path: string[]; message: string }> };

@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/lib/utils/error-messages";
-import { CreateBudgetDialog } from "@/components/settings/CreateBudgetDialog";
+import { CreateBudgetDialog } from "@/components/settings/lazy-components";
 
 export const dynamic = "force-dynamic";
 

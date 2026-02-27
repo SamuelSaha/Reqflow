@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
+import { useNavigationPrefetch } from "@/hooks/useNavigationPrefetch";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -42,6 +43,8 @@ const resourcesDropdown = [
    ================================================================ */
 
 function FeaturesMegaMenu() {
+  const { createHoverHandler } = useNavigationPrefetch();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex items-center gap-1.5 text-body-sm font-medium text-slate-600 hover:text-slate-900 transition-colors outline-none">
@@ -60,15 +63,18 @@ function FeaturesMegaMenu() {
               By Role
             </DropdownMenuLabel>
             <div className="space-y-1">
-              {featuresDropdown.byRole.map((item) => (
-                <Link key={item.href} href={item.href}>
-                  <DropdownMenuItem className="p-3 cursor-pointer transition-all duration-200 ease-out hover:-translate-y-0.5 hover:bg-slate-50/80 hover:shadow-sm rounded-lg">
-                    <span className="text-body font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
-                      {item.label}
-                    </span>
-                  </DropdownMenuItem>
-                </Link>
-              ))}
+              {featuresDropdown.byRole.map((item) => {
+                const hoverProps = createHoverHandler(item.href, 50);
+                return (
+                  <Link key={item.href} href={item.href} {...hoverProps}>
+                    <DropdownMenuItem className="p-3 cursor-pointer transition-all duration-200 ease-out hover:-translate-y-0.5 hover:bg-slate-50/80 hover:shadow-sm rounded-lg">
+                      <span className="text-body font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
+                        {item.label}
+                      </span>
+                    </DropdownMenuItem>
+                  </Link>
+                );
+              })}
             </div>
           </div>
 
@@ -78,15 +84,18 @@ function FeaturesMegaMenu() {
               By Use Case
             </DropdownMenuLabel>
             <div className="space-y-1">
-              {featuresDropdown.byUseCase.map((item) => (
-                <Link key={item.href} href={item.href}>
-                  <DropdownMenuItem className="p-3 cursor-pointer transition-all duration-200 ease-out hover:-translate-y-0.5 hover:bg-slate-50/80 hover:shadow-sm rounded-lg">
-                    <span className="text-body font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
-                      {item.label}
-                    </span>
-                  </DropdownMenuItem>
-                </Link>
-              ))}
+              {featuresDropdown.byUseCase.map((item) => {
+                const hoverProps = createHoverHandler(item.href, 50);
+                return (
+                  <Link key={item.href} href={item.href} {...hoverProps}>
+                    <DropdownMenuItem className="p-3 cursor-pointer transition-all duration-200 ease-out hover:-translate-y-0.5 hover:bg-slate-50/80 hover:shadow-sm rounded-lg">
+                      <span className="text-body font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
+                        {item.label}
+                      </span>
+                    </DropdownMenuItem>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -100,6 +109,8 @@ function FeaturesMegaMenu() {
    ================================================================ */
 
 function ResourcesDropdown() {
+  const { createHoverHandler } = useNavigationPrefetch();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex items-center gap-1.5 text-body-sm font-medium text-slate-600 hover:text-slate-900 transition-colors outline-none">
@@ -111,13 +122,16 @@ function ResourcesDropdown() {
         align="start"
         sideOffset={8}
       >
-        {resourcesDropdown.map((item) => (
-          <Link key={item.href} href={item.href}>
-            <DropdownMenuItem className="text-body-sm cursor-pointer transition-all duration-150 ease-out hover:bg-slate-50 hover:text-blue-600">
-              {item.label}
-            </DropdownMenuItem>
-          </Link>
-        ))}
+        {resourcesDropdown.map((item) => {
+          const hoverProps = createHoverHandler(item.href, 50);
+          return (
+            <Link key={item.href} href={item.href} {...hoverProps}>
+              <DropdownMenuItem className="text-body-sm cursor-pointer transition-all duration-150 ease-out hover:bg-slate-50 hover:text-blue-600">
+                {item.label}
+              </DropdownMenuItem>
+            </Link>
+          );
+        })}
       </DropdownMenuContent>
     </DropdownMenu>
   );
@@ -128,12 +142,17 @@ function ResourcesDropdown() {
    ================================================================ */
 
 export function DesktopNav() {
+  const { createHoverHandler } = useNavigationPrefetch();
+  const pricingHover = createHoverHandler("/pricing", 100);
+  const aboutHover = createHoverHandler("/about", 100);
+
   return (
     <nav className="hidden lg:flex items-center gap-8">
       <FeaturesMegaMenu />
 
       <Link
         href="/pricing"
+        {...pricingHover}
         className="relative text-body-sm font-medium text-slate-600 hover:text-blue-600 transition-colors duration-150 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-blue-600 after:transition-all after:duration-150 hover:after:w-full"
       >
         Pricing
@@ -143,6 +162,7 @@ export function DesktopNav() {
 
       <Link
         href="/about"
+        {...aboutHover}
         className="relative text-body-sm font-medium text-slate-600 hover:text-blue-600 transition-colors duration-150 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-blue-600 after:transition-all after:duration-150 hover:after:w-full"
       >
         About

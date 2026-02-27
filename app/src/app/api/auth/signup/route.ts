@@ -13,8 +13,9 @@ import { hashPassword, createSession } from "@/lib/auth/simple-auth";
 import { logger } from "@/lib/monitoring/logger";
 import { captureError } from "@/lib/monitoring/sentry";
 import { env } from "@/lib/env";
-import { checkSignupRateLimit } from "@/lib/security/rate-limit";
+import { checkSignupRateLimit, checkInviteTokenRateLimit } from "@/lib/security/rate-limit";
 import { createVerificationToken } from "@/lib/auth/email-verification";
+import { setCSRFToken } from "@/lib/security/csrf";
 
 // Use __Host- prefix for enhanced security (requires secure=true, path="/")
 const COOKIE_NAME = "__Host-reqflow_session";
@@ -94,15 +95,17 @@ export async function POST(request: Request) {
       );
     }
 
-    // Check if user already exists
+    // 🔒 SECURITY FIX: Don't reveal if email exists (prevents user enumeration)
+    // Check if user already exists - log for security audit but return generic message
     const existingUser = await db.query.users.findFirst({
       where: eq(users.email, email.toLowerCase()),
     });
 
     if (existingUser) {
+      logger.warn("Signup attempt with existing email", { email: email.toLowerCase() });
       return NextResponse.json(
-        { error: "User with this email already exists" },
-        { status: 409 }
+        { error: "Unable to complete signup. Please check your email or try a different address." },
+        { status: 400 }
       );
     }
 
@@ -110,6 +113,24 @@ export async function POST(request: Request) {
 
     // --- Invite flow: join existing org ---
     if (inviteToken) {
+      // 🔒 SECURITY FIX: Rate limit invite token validation to prevent brute-force
+      const inviteRateLimit = await checkInviteTokenRateLimit(request);
+      if (!inviteRateLimit.success) {
+        logger.warn("Invite token validation rate limit exceeded");
+        return NextResponse.json(
+          {
+            error: "Too many invite validation attempts. Please try again later.",
+            retryAfter: Math.ceil((inviteRateLimit.reset - Date.now()) / 1000),
+          },
+          {
+            status: 429,
+            headers: {
+              "Retry-After": Math.ceil((inviteRateLimit.reset - Date.now()) / 1000).toString(),
+            },
+          }
+        );
+      }
+
       const invite = await db.query.invites.findFirst({
         where: and(
           eq(invites.token, inviteToken),
@@ -118,6 +139,9 @@ export async function POST(request: Request) {
       });
 
       if (!invite || new Date() > invite.expiresAt) {
+        logger.warn("Invalid or expired invite token attempt", {
+          token: inviteToken.substring(0, 8) + "...",
+        });
         return NextResponse.json(
           { error: "Invalid or expired invite" },
           { status: 400 }
@@ -164,6 +188,9 @@ export async function POST(request: Request) {
         path: "/", // Required for __Host- prefix
         // No domain attribute (required for __Host- prefix)
       });
+
+      // Set CSRF token for mutation protection
+      await setCSRFToken();
 
       return NextResponse.json({
         success: true,
@@ -230,6 +257,9 @@ export async function POST(request: Request) {
       // No domain attribute (required for __Host- prefix)
     });
 
+    // Set CSRF token for mutation protection
+    await setCSRFToken();
+
     return NextResponse.json({
       success: true,
       redirect: "/onboarding",
@@ -238,8 +268,9 @@ export async function POST(request: Request) {
   } catch (error: unknown) {
     logger.error("Signup failed", error as Error, { route: "/api/auth/signup" });
     captureError(error as Error, { route: "/api/auth/signup" });
+    // 🔒 SECURITY FIX: Generic error message, don't leak system details
     return NextResponse.json(
-      { error: "An error occurred during signup" },
+      { error: "Unable to complete signup. Please try again later." },
       { status: 500 }
     );
   }

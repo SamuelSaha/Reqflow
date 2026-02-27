@@ -6,11 +6,15 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { useState } from "react";
+import Link from "next/link";
+import { useNavigationPrefetch } from "@/hooks/useNavigationPrefetch";
 
 /* ------------------------------------------------------------------ */
 /*  Pricing Section                                                    */
 /* ------------------------------------------------------------------ */
 export function Pricing() {
+  const { prefetch } = useNavigationPrefetch();
+
   return (
     <section className="bg-gradient-to-b from-slate-50 via-white to-slate-50 py-20 px-20 flex flex-col items-center gap-16">
       <div className="max-w-[700px] text-center flex flex-col items-center gap-4">
@@ -67,10 +71,14 @@ export function Pricing() {
 
           <div className="w-full h-px bg-slate-200" />
 
-          <button className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white px-12 py-3.5 rounded-[10px] text-body font-semibold hover:bg-blue-700 transition-colors">
+          <Link
+            href="/signup"
+            onMouseEnter={() => prefetch("/signup")}
+            className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white px-12 py-3.5 rounded-[10px] text-body font-semibold hover:bg-blue-700 transition-colors"
+          >
             Get Started Free
             <ArrowRight className="w-[18px] h-[18px]" />
-          </button>
+          </Link>
 
           <p className="text-body-sm font-medium text-slate-400 text-center">
             Paid plans will come later. Early users get locked-in pricing.
@@ -168,6 +176,8 @@ export function FAQ() {
 /*  Final CTA Section                                                  */
 /* ------------------------------------------------------------------ */
 export function FinalCTA() {
+  const { prefetch } = useNavigationPrefetch();
+
   return (
     <section className="bg-blue-600 py-16 md:py-20 lg:py-24 px-6 md:px-12 lg:px-20 flex flex-col items-center gap-8">
       <h2 className="text-h2 text-white text-center max-w-[700px] whitespace-pre-line">
@@ -180,13 +190,21 @@ export function FinalCTA() {
       </p>
 
       <div className="flex items-center gap-4">
-        <button className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-3.5 rounded-[10px] text-body font-semibold hover:bg-blue-50 transition-colors">
+        <Link
+          href="/signup"
+          onMouseEnter={() => prefetch("/signup")}
+          className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-3.5 rounded-[10px] text-body font-semibold hover:bg-blue-50 transition-colors"
+        >
           Get Started Free
           <ArrowRight className="w-[18px] h-[18px]" />
-        </button>
-        <button className="inline-flex items-center gap-2 border-[1.5px] border-white/25 text-white px-8 py-3.5 rounded-[10px] text-body font-semibold hover:bg-white/10 transition-colors">
+        </Link>
+        <Link
+          href="/demo"
+          onMouseEnter={() => prefetch("/demo")}
+          className="inline-flex items-center gap-2 border-[1.5px] border-white/25 text-white px-8 py-3.5 rounded-[10px] text-body font-semibold hover:bg-white/10 transition-colors"
+        >
           See How It Works
-        </button>
+        </Link>
       </div>
 
       <p className="text-body-sm font-medium text-white/60">

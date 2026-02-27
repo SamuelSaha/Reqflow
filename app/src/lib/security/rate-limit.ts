@@ -70,6 +70,32 @@ export const mutationRateLimiter = redis
   : null;
 
 /**
+ * 🔒 SECURITY FIX: Email verification rate limiter - 3 emails per hour per email
+ * Prevents email bombing and token brute-forcing
+ */
+export const emailVerificationRateLimiter = redis
+  ? new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(3, "1 h"),
+      analytics: true,
+      prefix: "ratelimit:email-verify",
+    })
+  : null;
+
+/**
+ * 🔒 SECURITY FIX: Invite token rate limiter - 10 attempts per hour per IP
+ * Prevents brute-force attacks on invite tokens
+ */
+export const inviteTokenRateLimiter = redis
+  ? new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(10, "1 h"),
+      analytics: true,
+      prefix: "ratelimit:invite-token",
+    })
+  : null;
+
+/**
  * Extract client IP address from request headers
  * Checks common proxy headers in order of preference
  */
@@ -319,6 +345,81 @@ export async function checkMutationRateLimit(
   }
 
   const result = await mutationRateLimiter.limit(identifier);
+
+  return {
+    success: result.success,
+    limit: result.limit,
+    remaining: result.remaining,
+    reset: result.reset,
+  };
+}
+
+/**
+ * 🔒 SECURITY FIX: Check rate limit for email verification requests
+ * Prevents email bombing attacks - 3 emails per hour per email address
+ */
+export async function checkEmailVerificationRateLimit(
+  email: string
+): Promise<{ success: boolean; limit: number; remaining: number; reset: number }> {
+  // If rate limiting is not configured, allow all requests
+  if (!emailVerificationRateLimiter) {
+    logger.warn("Email verification rate limiting is disabled - Upstash Redis not configured");
+    return {
+      success: true,
+      limit: 999,
+      remaining: 999,
+      reset: Date.now() + 60000,
+    };
+  }
+
+  const identifier = `email-verify:${email.toLowerCase()}`;
+  const result = await emailVerificationRateLimiter.limit(identifier);
+
+  if (!result.success) {
+    logger.warn("Email verification rate limit exceeded", {
+      email,
+      remaining: result.remaining,
+      reset: new Date(result.reset).toISOString(),
+    });
+  }
+
+  return {
+    success: result.success,
+    limit: result.limit,
+    remaining: result.remaining,
+    reset: result.reset,
+  };
+}
+
+/**
+ * 🔒 SECURITY FIX: Check rate limit for invite token validation attempts
+ * Prevents brute-force attacks on invite tokens - 10 attempts per hour per IP
+ */
+export async function checkInviteTokenRateLimit(
+  request: Request
+): Promise<{ success: boolean; limit: number; remaining: number; reset: number }> {
+  // If rate limiting is not configured, allow all requests
+  if (!inviteTokenRateLimiter) {
+    logger.warn("Invite token rate limiting is disabled - Upstash Redis not configured");
+    return {
+      success: true,
+      limit: 999,
+      remaining: 999,
+      reset: Date.now() + 60000,
+    };
+  }
+
+  const ip = getClientIp(request);
+  const identifier = `invite-token:${ip}`;
+  const result = await inviteTokenRateLimiter.limit(identifier);
+
+  if (!result.success) {
+    logger.warn("Invite token validation rate limit exceeded", {
+      ip,
+      remaining: result.remaining,
+      reset: new Date(result.reset).toISOString(),
+    });
+  }
 
   return {
     success: result.success,

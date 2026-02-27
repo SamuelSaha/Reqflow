@@ -12,6 +12,7 @@ import { db } from "@/lib/db";
 import { accountingIntegrations } from "@/lib/db/schema";
 import { eq, and } from "drizzle-orm";
 import { getSession } from "@/lib/auth/session";
+import { validateOAuthState } from "@/lib/security/oauth-state";
 
 export async function GET(request: Request) {
   try {
@@ -31,6 +32,18 @@ export async function GET(request: Request) {
       logger.warn("QuickBooks OAuth denied by user", { userId: session.userId });
       return NextResponse.redirect(
         `${env.NEXT_PUBLIC_APP_URL}/dashboard/settings/integrations?error=access_denied`
+      );
+    }
+
+    // 🔒 SECURITY FIX: Validate OAuth state parameter to prevent CSRF attacks
+    const isValidState = await validateOAuthState("quickbooks", state);
+    if (!isValidState) {
+      logger.warn("QuickBooks OAuth state validation failed", {
+        userId: session.userId,
+        hasState: !!state,
+      });
+      return NextResponse.redirect(
+        `${env.NEXT_PUBLIC_APP_URL}/dashboard/settings/integrations?error=invalid_state`
       );
     }
 

@@ -22,7 +22,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Building2, Search, Plus, Loader2 } from "lucide-react";
+import { Building2, Search, Plus } from "lucide-react";
+import { VendorTableSkeleton } from "@/components/dashboard/LoadingSkeletons";
 
 export default function VendorsPage() {
   const router = useRouter();
@@ -123,10 +124,7 @@ export default function VendorsPage() {
       {/* Table */}
       <Card>
         {isLoading ? (
-          <div className="p-12 text-center">
-            <Loader2 className="w-8 h-8 animate-spin mx-auto text-slate-400" />
-            <p className="text-slate-600 mt-2">Loading vendors...</p>
-          </div>
+          <VendorTableSkeleton rows={5} />
         ) : data && data.vendors.length > 0 ? (
           <Table>
             <TableHeader>

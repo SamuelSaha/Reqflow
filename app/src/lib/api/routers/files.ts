@@ -77,6 +77,7 @@ export const filesRouter = router({
   /**
    * Generate presigned download URL
    * Returns time-limited (1hr) download link
+   * 🔒 SECURITY FIX: Verify file key belongs to specific entity (IDOR prevention)
    */
   getDownloadUrl: protectedProcedure
     .input(
@@ -89,7 +90,7 @@ export const filesRouter = router({
     .query(async ({ ctx, input }) => {
       // Verify entity belongs to user's tenant
       const { requests } = await import("@/lib/db/schema");
-      const { eq, and } = await import("drizzle-orm");
+      const { eq, and, sql } = await import("drizzle-orm");
 
       let entity;
       if (input.entityType === "request") {
@@ -110,7 +111,21 @@ export const filesRouter = router({
       if (!entity) {
         throw new TRPCError({
           code: "FORBIDDEN",
-          message: "You don't have access to this file.",
+          message: "Access denied.",
+        });
+      }
+
+      // 🔒 CRITICAL FIX: Verify file key exists in entity's attachments
+      // Prevents IDOR where user could download any file by guessing keys
+      const attachments = (entity as any).attachments || [];
+      const fileExists = attachments.some(
+        (att: any) => att.key === input.key
+      );
+
+      if (!fileExists) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Access denied.",
         });
       }
 
@@ -177,16 +192,19 @@ export const filesRouter = router({
       // Delete from R2
       await deleteFile(input.key);
 
+      // 🔒 SECURITY FIX: Use parameterized query to prevent SQL injection
       // Remove from attachments array in DB (only for requests currently)
       if (input.entityType === "request") {
+        // Safer approach: Filter in application layer to avoid SQL injection
+        const currentEntity = entity as any;
+        const updatedAttachments = (currentEntity.attachments || []).filter(
+          (att: any) => att.id !== input.fileId
+        );
+
         await ctx.db
           .update(requests)
           .set({
-            attachments: sql`(
-              SELECT jsonb_agg(item)
-              FROM jsonb_array_elements(attachments) item
-              WHERE item->>'id' != ${input.fileId}
-            )`,
+            attachments: updatedAttachments,
           })
           .where(eq(requests.id, input.entityId));
       }

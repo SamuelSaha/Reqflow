@@ -49,10 +49,20 @@ export default function ApprovalsPage() {
 
     onSuccess: (data, variables) => {
       const action = variables.decision === "approved" ? "approved" : "rejected";
-      toast.success(`Request ${action}`, {
-        description: `Successfully ${action} the purchase request`,
-        duration: 4000,
-      });
+
+      // Show enhanced toast with sync info for approved requests
+      if (data.requestStatus === "approved" && data.syncQueued) {
+        const providerName = data.syncProvider === "quickbooks" ? "QuickBooks" : "Xero";
+        toast.success("Request approved", {
+          description: `Syncing to ${providerName} in the background...`,
+          duration: 5000,
+        });
+      } else {
+        toast.success(`Request ${action}`, {
+          description: `Successfully ${action} the purchase request`,
+          duration: 4000,
+        });
+      }
     },
 
     onSettled: () => {

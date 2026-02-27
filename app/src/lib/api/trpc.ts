@@ -14,6 +14,7 @@ import {
   checkApiRateLimit,
   checkMutationRateLimit,
 } from "../security/rate-limit";
+import { validateCSRFToken, getCSRFTokenFromRequest } from "../security/csrf";
 
 /**
  * Context for all tRPC procedures
@@ -99,18 +100,46 @@ const rateLimitMiddleware = t.middleware(async ({ ctx, next, path, type }) => {
 });
 
 /**
+ * CSRF protection middleware
+ * Validates CSRF token on all mutations to prevent cross-site attacks
+ */
+const csrfMiddleware = t.middleware(async ({ ctx, next, type }) => {
+  // Only validate mutations (state-changing operations)
+  if (type === "mutation") {
+    const csrfToken = await getCSRFTokenFromRequest();
+    const isValid = await validateCSRFToken(csrfToken);
+
+    if (!isValid) {
+      logger.warn("CSRF validation failed", {
+        userId: ctx.user?.id,
+        hasToken: !!csrfToken,
+      });
+
+      throw new TRPCError({
+        code: "FORBIDDEN",
+        message: "Invalid CSRF token. Please refresh the page and try again.",
+      });
+    }
+  }
+
+  return next({ ctx });
+});
+
+/**
  * Public procedure - no authentication required
  */
 export const publicProcedure = t.procedure;
 
 /**
- * Protected procedure - requires authentication + rate limiting
+ * Protected procedure - requires authentication + rate limiting + CSRF protection
  * Automatically applies appropriate rate limits based on operation type:
  * - Queries: 100 per minute
  * - Mutations: 20 per minute
+ * - Mutations also require valid CSRF token
  */
 export const protectedProcedure = t.procedure
   .use(rateLimitMiddleware)
+  .use(csrfMiddleware)
   .use(async ({ ctx, next }) => {
     if (!ctx.user || !ctx.tenantId) {
       throw new TRPCError({ code: "UNAUTHORIZED" });

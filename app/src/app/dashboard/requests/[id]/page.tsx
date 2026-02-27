@@ -57,11 +57,22 @@ export default function RequestDetailPage({
   const utils = trpc.useUtils();
 
   const retrySync = trpc.integrations.retrySync.useMutation({
+    onMutate: () => {
+      toast.loading("Queuing sync...", { id: "sync-retry" });
+    },
     onSuccess: () => {
-      toast.success("Sync queued successfully");
+      toast.success("Sync queued successfully", {
+        id: "sync-retry",
+        description: "The request will sync to your accounting system shortly",
+      });
       utils.requests.getById.invalidate({ id });
     },
-    onError: (error) => toast.error(error.message),
+    onError: (error) => {
+      toast.error("Failed to queue sync", {
+        id: "sync-retry",
+        description: error.message,
+      });
+    },
   });
 
   if (request.isLoading) {

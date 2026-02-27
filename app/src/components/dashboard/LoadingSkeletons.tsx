@@ -5,6 +5,143 @@
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Loader2 } from "lucide-react";
+import React from "react";
+
+/**
+ * Generic loading boundary component
+ * Wraps any component and shows skeleton while loading
+ */
+export function LoadingBoundary<T>({
+  isLoading,
+  fallback,
+  children,
+  data,
+}: {
+  isLoading: boolean;
+  fallback: React.ReactNode;
+  children: React.ReactNode | ((data: T) => React.ReactNode);
+  data?: T;
+}) {
+  if (isLoading) {
+    return <>{fallback}</>;
+  }
+  if (typeof children === "function" && data !== undefined) {
+    return <>{children(data)}</>;
+  }
+  return <>{children}</>;
+}
+
+/**
+ * Inline loading spinner for buttons and small spaces
+ */
+export function InlineLoader({ className = "" }: { className?: string }) {
+  return <Loader2 className={`h-4 w-4 animate-spin ${className}`} />;
+}
+
+/**
+ * Table row skeleton for data tables
+ */
+export function TableRowSkeleton({
+  columns = 4,
+  rows = 5,
+}: {
+  columns?: number;
+  rows?: number;
+}) {
+  return (
+    <>
+      {Array.from({ length: rows }).map((_, i) => (
+        <tr key={i} className="border-b">
+          {Array.from({ length: columns }).map((_, j) => (
+            <td key={j} className="p-4">
+              <Skeleton className="h-4 w-full max-w-[120px]" />
+            </td>
+          ))}
+        </tr>
+      ))}
+    </>
+  );
+}
+
+/**
+ * Chart skeleton for analytics charts
+ */
+export function ChartSkeleton({ height = 300 }: { height?: number }) {
+  return (
+    <div className="flex items-end justify-center gap-2" style={{ height }}>
+      {Array.from({ length: 12 }).map((_, i) => (
+        <Skeleton
+          key={i}
+          className="w-8 rounded-t"
+          style={{ height: `${Math.random() * 60 + 40}%` }}
+        />
+      ))}
+    </div>
+  );
+}
+
+/**
+ * Analytics stat card skeleton
+ */
+export function AnalyticsStatSkeleton({ count = 4 }: { count?: number }) {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      {Array.from({ length: count }).map((_, i) => (
+        <Card key={i}>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <Skeleton className="h-4 w-24" />
+            <Skeleton className="h-4 w-4 rounded" />
+          </CardHeader>
+          <CardContent>
+            <Skeleton className="h-8 w-20 mb-1" />
+            <Skeleton className="h-3 w-16" />
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  );
+}
+
+/**
+ * Tab content skeleton for analytics tabs
+ */
+export function TabContentSkeleton({ variant = "table" }: { variant?: "table" | "chart" }) {
+  if (variant === "chart") {
+    return (
+      <Card>
+        <CardHeader>
+          <Skeleton className="h-6 w-48" />
+        </CardHeader>
+        <CardContent>
+          <ChartSkeleton height={300} />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <Skeleton className="h-6 w-48" />
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-3">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div key={i} className="flex items-center gap-4 py-2">
+              <Skeleton className="h-10 w-10 rounded-full" />
+              <div className="flex-1 space-y-2">
+                <Skeleton className="h-4 w-32" />
+                <Skeleton className="h-3 w-48" />
+              </div>
+              <Skeleton className="h-6 w-16 rounded-full" />
+            </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
 
 /**
  * Stats card skeleton for dashboard metrics
@@ -186,6 +323,57 @@ export function BudgetCardSkeleton({ count = 3 }: { count?: number }) {
             </div>
           </CardContent>
         </Card>
+      ))}
+    </div>
+  );
+}
+
+/**
+ * Vendor table skeleton for vendors page
+ */
+export function VendorTableSkeleton({ rows = 5 }: { rows?: number }) {
+  return (
+    <div className="divide-y">
+      {Array.from({ length: rows }).map((_, i) => (
+        <div key={i} className="flex items-center gap-4 p-4">
+          <Skeleton className="h-10 w-10 rounded-lg" />
+          <div className="flex-1 space-y-2">
+            <Skeleton className="h-4 w-32" />
+            <Skeleton className="h-3 w-48" />
+          </div>
+          <Skeleton className="h-5 w-20 rounded-full" />
+          <Skeleton className="h-4 w-16" />
+          <Skeleton className="h-4 w-20" />
+          <Skeleton className="h-5 w-16 rounded-full" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/**
+ * Team member list skeleton for team page
+ */
+export function TeamListSkeleton({ count = 5 }: { count?: number }) {
+  return (
+    <div className="space-y-3">
+      {Array.from({ length: count }).map((_, i) => (
+        <div
+          key={i}
+          className="flex items-center justify-between p-4 rounded-lg border"
+        >
+          <div className="flex items-center gap-4">
+            <Skeleton className="h-10 w-10 rounded-full" />
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-32" />
+              <Skeleton className="h-3 w-48" />
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <Skeleton className="h-5 w-20 rounded-full" />
+            <Skeleton className="h-8 w-8 rounded" />
+          </div>
+        </div>
       ))}
     </div>
   );

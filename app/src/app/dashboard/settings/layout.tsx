@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Users, Workflow, Wallet, BarChart, Plug } from "lucide-react";
+import { Users, Workflow, Wallet, BarChart, Plug, Activity } from "lucide-react";
 
 const settingsTabs = [
   { href: "/dashboard/settings/team", label: "Team", icon: Users },
@@ -10,6 +10,7 @@ const settingsTabs = [
   { href: "/dashboard/settings/budgets", label: "Budgets", icon: Wallet },
   { href: "/dashboard/settings/analytics", label: "Analytics", icon: BarChart },
   { href: "/dashboard/settings/integrations", label: "Integrations", icon: Plug },
+  { href: "/dashboard/admin/health", label: "Admin", icon: Activity },
 ];
 
 export default function SettingsLayout({

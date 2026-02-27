@@ -42,19 +42,33 @@ export function InviteUsersDialog({ open, onOpenChange }: Props) {
   const utils = trpc.useUtils();
 
   const mutation = trpc.team.inviteUsers.useMutation({
+    onMutate: () => {
+      toast.loading("Sending invites...", { id: "send-invites" });
+    },
     onSuccess: (data) => {
       const sentCount = data.results.filter((r) => r.sent).length;
       const failedCount = data.results.filter((r) => !r.sent).length;
 
-      if (sentCount > 0) {
-        toast.success(`${sentCount} invite${sentCount > 1 ? "s" : ""} sent successfully`);
-      }
-      if (failedCount > 0) {
+      if (sentCount > 0 && failedCount === 0) {
+        toast.success(`${sentCount} invite${sentCount > 1 ? "s" : ""} sent successfully`, {
+          id: "send-invites",
+          description: "Team members will receive an email to join your workspace",
+        });
+      } else if (sentCount > 0 && failedCount > 0) {
+        toast.success(`${sentCount} invite${sentCount > 1 ? "s" : ""} sent, ${failedCount} failed`, {
+          id: "send-invites",
+          description: "Some invites couldn't be delivered",
+        });
         data.results
           .filter((r) => !r.sent)
           .forEach((r) => {
             toast.error(`${r.email}: ${r.error}`);
           });
+      } else if (failedCount > 0) {
+        toast.error("Failed to send invites", {
+          id: "send-invites",
+          description: "Please check the email addresses and try again",
+        });
       }
 
       // Refresh user list and invites
@@ -65,7 +79,10 @@ export function InviteUsersDialog({ open, onOpenChange }: Props) {
       onOpenChange(false);
     },
     onError: (error) => {
-      toast.error(error.message || "Failed to send invites");
+      toast.error("Failed to send invites", {
+        id: "send-invites",
+        description: error.message,
+      });
     },
   });
 
