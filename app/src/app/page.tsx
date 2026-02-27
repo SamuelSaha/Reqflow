@@ -20,26 +20,10 @@ const TrustLogos = dynamic(
   }
 );
 
-const FeatureTabs = dynamic(
-  () => import("@/components/landing/FeatureTabs").then((mod) => mod.FeatureTabs),
+const Features = dynamic(
+  () => import("@/components/landing/Features").then((mod) => mod.Features),
   {
-    loading: () => <SectionSkeleton height={600} />,
-    ssr: false,
-  }
-);
-
-const UseCaseTabs = dynamic(
-  () => import("@/components/landing/UseCaseTabs").then((mod) => mod.UseCaseTabs),
-  {
-    loading: () => <SectionSkeleton height={550} />,
-    ssr: false,
-  }
-);
-
-const Testimonials = dynamic(
-  () => import("@/components/landing/Testimonials").then((mod) => mod.Testimonials),
-  {
-    loading: () => <SectionSkeleton height={450} />,
+    loading: () => <SectionSkeleton height={400} />,
     ssr: false,
   }
 );
@@ -164,14 +148,8 @@ export default function ReqflowLanding() {
       <Suspense fallback={<SectionSkeleton height={120} />}>
         <TrustLogos />
       </Suspense>
-      <Suspense fallback={<SectionSkeleton height={600} />}>
-        <FeatureTabs />
-      </Suspense>
-      <Suspense fallback={<SectionSkeleton height={550} />}>
-        <UseCaseTabs />
-      </Suspense>
-      <Suspense fallback={<SectionSkeleton height={450} />}>
-        <Testimonials />
+      <Suspense fallback={<SectionSkeleton height={400} />}>
+        <Features />
       </Suspense>
       <Suspense fallback={<SectionSkeleton height={200} />}>
         <FinalCTA />

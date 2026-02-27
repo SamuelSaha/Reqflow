@@ -59,44 +59,25 @@ export function HeroSection() {
               </div>
             </div>
 
-            {/* Headline with emphasis - NO ANIMATION DELAY */}
-            <div className="space-y-4 md:space-y-5">
-              <h1 className="text-hero text-slate-900 leading-[1.1]">
-                Procurement software for teams who move too fast for spreadsheets
-              </h1>
+            {/* Headline - What is this? */}
+            <h1 className="text-hero text-slate-900 leading-[1.1]">
+              Procurement software for teams who move too fast for spreadsheets
+            </h1>
 
-              {/* Simplified subheadline - One clear benefit */}
-              <p className="text-body-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-                Built for teams who buy without a procurement department. Track purchases, catch duplicates, never miss a renewal.
-              </p>
-            </div>
-
-            {/* Focused value props - 2 key benefits only */}
-            <div className="flex items-center justify-center gap-8 text-body-sm">
-              <div className="flex items-center gap-2 text-slate-700">
-                <CheckCircle2 className="w-5 h-5 text-teal-600" aria-hidden="true" />
-                <span className="font-medium">Setup in 2 minutes</span>
-              </div>
-              <div className="flex items-center gap-2 text-slate-700">
-                <Zap className="w-5 h-5 text-amber-500" aria-hidden="true" />
-                <span className="font-medium">Approve in &lt;2 hours</span>
-              </div>
-            </div>
+            {/* Subheadline - Who + Transformation */}
+            <p className="text-body-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+              Track every purchase. Catch duplicates before buying. Never miss a renewal deadline.
+            </p>
 
             {/* Single dominant CTA */}
-            <div className="space-y-3">
-              <PrimaryCta
-                href="/signup"
-                size="large"
-                icon="arrow"
-                analyticsEvent="hero_primary_click"
-              >
-                Start Free Trial
-              </PrimaryCta>
-              <p className="text-caption text-slate-500">
-                No credit card • Free forever
-              </p>
-            </div>
+            <PrimaryCta
+              href="/signup"
+              size="large"
+              icon="arrow"
+              analyticsEvent="hero_primary_click"
+            >
+              Start Free Trial
+            </PrimaryCta>
           </div>
         </div>
       </Container>

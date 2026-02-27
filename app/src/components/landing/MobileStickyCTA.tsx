@@ -39,7 +39,7 @@ export function MobileStickyCTA() {
       {/* CTA Bar */}
       <div className="bg-white border-t border-slate-200 shadow-lg px-4 py-3">
         <div className="flex items-center gap-3">
-          {/* Primary CTA */}
+          {/* Primary CTA - Consistent wording */}
           <Link
             href="/signup"
             className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-sm touch-target"
@@ -53,25 +53,8 @@ export function MobileStickyCTA() {
               }
             }}
           >
-            Start free
+            Start Free Trial
             <ArrowRight className="w-4 h-4" />
-          </Link>
-
-          {/* Secondary CTA - Optional */}
-          <Link
-            href="/contact"
-            className="px-4 py-3 text-body-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors touch-target whitespace-nowrap"
-            onClick={() => {
-              // Track mobile sticky CTA click
-              if (typeof window !== 'undefined' && window.gtag) {
-                window.gtag('event', 'mobile_sticky_cta_click', {
-                  cta_type: 'contact',
-                  location: 'sticky_bottom',
-                });
-              }
-            }}
-          >
-            Talk to us
           </Link>
         </div>
       </div>
