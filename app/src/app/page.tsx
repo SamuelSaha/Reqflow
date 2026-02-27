@@ -69,7 +69,8 @@ function SectionSkeleton({ height }: { height: number }) {
 }
 
 export default function ReqflowLanding() {
-  const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://reqflow.com';
+  // Use static URL for SSR consistency (prevents hydration errors)
+  const baseUrl = 'https://reqflow.com';
 
   // FAQ data for structured data schema
   const faqs = [
