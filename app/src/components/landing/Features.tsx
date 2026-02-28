@@ -32,35 +32,36 @@ export function Features() {
   return (
     <Section background="white" className="relative">
       <Container size="default">
-        <div className="py-16 md:py-20">
-          {/* No header - let features speak for themselves */}
-
-          {/* Scannable grid - all visible at once */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+        <div className="py-20 md:py-28">
+          {/* Scannable grid - premium spacing */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16">
             {features.map((feature) => {
               const Icon = feature.icon;
 
               return (
-                <div key={feature.title} className="space-y-4">
-                  {/* Icon + Title */}
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-lg bg-slate-900 flex items-center justify-center flex-shrink-0">
-                      <Icon className="w-6 h-6 text-amber-400" aria-hidden="true" />
+                <div key={feature.title} className="group">
+                  {/* Premium card with subtle shadow */}
+                  <div className="h-full p-8 rounded-2xl border border-slate-100 bg-white shadow-sm hover:shadow-md transition-shadow duration-300">
+                    {/* Icon - minimal, monochrome */}
+                    <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center mb-6 group-hover:bg-slate-100 transition-colors duration-300">
+                      <Icon className="w-6 h-6 text-slate-700" aria-hidden="true" strokeWidth={1.5} />
                     </div>
-                    <h3 className="text-h4 text-slate-900 font-semibold">
+
+                    {/* Title */}
+                    <h3 className="text-h4 text-slate-900 font-semibold mb-4">
                       {feature.title}
                     </h3>
+
+                    {/* Mechanism */}
+                    <p className="text-body text-slate-600 mb-4 leading-relaxed">
+                      {feature.mechanism}
+                    </p>
+
+                    {/* Outcome - visual emphasis with color for signaling */}
+                    <p className="text-body-sm text-blue-600 font-semibold">
+                      {feature.outcome}
+                    </p>
                   </div>
-
-                  {/* Mechanism (how it works) */}
-                  <p className="text-body text-slate-600 leading-relaxed">
-                    {feature.mechanism}
-                  </p>
-
-                  {/* Outcome (result) */}
-                  <p className="text-body-sm text-slate-900 font-semibold">
-                    → {feature.outcome}
-                  </p>
                 </div>
               );
             })}

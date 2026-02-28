@@ -58,17 +58,17 @@ export function PrimaryCta({
     "focus:bg-blue-700",
     "active:bg-blue-800",
 
-    // Effects
-    "transition-all duration-150 ease-in-out",
-    "hover:scale-105 hover:shadow-lg",
-    "active:scale-95",
+    // Effects - Subtle, premium hover (no scale, just shadow)
+    "shadow-sm",
+    "transition-all duration-200 ease-out",
+    "hover:shadow-md",
     "focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2",
 
-    // Spacing
-    size === "large" ? "px-8 py-4" : "px-6 py-3",
+    // Spacing - Generous padding
+    size === "large" ? "px-9 py-4" : "px-7 py-3",
 
-    // Shape
-    "rounded-lg",
+    // Shape - Slightly more rounded for premium feel
+    "rounded-xl",
 
     // Width
     fullWidth && "w-full",

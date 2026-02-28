@@ -41,19 +41,18 @@ export function HeroSection() {
         <div className="flex flex-col items-center py-16 md:py-20 lg:py-24">
           {/* Content Section - Instant paint, no animation delays */}
           <div className="grid grid-cols-1 gap-6 md:gap-7 text-center max-w-4xl mx-auto w-full">
-            {/* Trust Badge with Icon - NO ANIMATION DELAY - Warm colors */}
+            {/* Trust Badge - Clean, professional */}
             <div className="flex justify-center">
               <div
-                className="group inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-amber-200 bg-gradient-to-r from-amber-50 to-teal-50 backdrop-blur-sm shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 hover:border-amber-300"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200 bg-white shadow-sm"
                 role="status"
                 aria-label="Free early access - No credit card required"
               >
-                <Sparkles className="w-4 h-4 text-amber-600 transition-all duration-200 group-hover:scale-110 group-hover:rotate-12" aria-hidden="true" />
-                <span className="text-body-sm font-semibold text-amber-900">
+                <span className="text-body-sm font-medium text-slate-700">
                   Free during early access
                 </span>
-                <span className="text-body-sm text-amber-600" aria-hidden="true">•</span>
-                <span className="text-body-sm text-amber-700">
+                <span className="text-body-sm text-slate-300" aria-hidden="true">•</span>
+                <span className="text-body-sm text-slate-600">
                   No credit card required
                 </span>
               </div>
