@@ -168,13 +168,13 @@ export default function ForFoundersPage() {
               Get procurement off your plate
             </h2>
             <p className="text-body text-slate-600 mb-6 max-w-[600px] mx-auto">
-              Join 7 other founders in our beta program. €99/mo locked forever, 10-minute setup, cancel anytime.
+              Free during early access. 2-minute setup, no credit card required.
             </p>
             <a
-              href="/beta"
+              href="/signup"
               className="inline-flex items-center gap-2 bg-blue-600 text-white px-8 py-4 rounded-lg text-body font-semibold hover:bg-blue-700 transition-colors no-underline"
             >
-              Apply for beta access
+              Get Started Free
               <ArrowRight className="w-5 h-5" />
             </a>
           </div>

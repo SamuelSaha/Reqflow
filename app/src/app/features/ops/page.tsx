@@ -143,10 +143,10 @@ export default function ForOpsTeamsPage() {
               Set up workflows once, let them run automatically. Get 8 hours back every week.
             </p>
             <a
-              href="/beta"
-              className="inline-flex items-center gap-2 bg-green-600 text-white px-8 py-4 rounded-lg text-body font-semibold hover:bg-green-700 transition-colors no-underline"
+              href="/signup"
+              className="inline-flex items-center gap-2 bg-blue-600 text-white px-8 py-4 rounded-lg text-body font-semibold hover:bg-blue-700 transition-colors no-underline"
             >
-              Apply for beta access
+              Get Started Free
               <ArrowRight className="w-5 h-5" />
             </a>
           </div>

@@ -331,7 +331,7 @@ export default function IntegrationsPage() {
       {/* Disconnect Confirmation Dialog */}
       <Dialog
         open={disconnectDialog.open}
-        onOpenChange={(open) =>
+        onOpenChange={(open: boolean) =>
           !open && setDisconnectDialog({ open: false, provider: null })
         }
       >
@@ -366,7 +366,7 @@ export default function IntegrationsPage() {
       {/* Sync Logs Dialog */}
       <Dialog
         open={logsDialog.open}
-        onOpenChange={(open) =>
+        onOpenChange={(open: boolean) =>
           !open && setLogsDialog({ open: false, provider: null })
         }
       >

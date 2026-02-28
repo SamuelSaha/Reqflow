@@ -163,13 +163,13 @@ export default function ForFinancePage() {
               Get control without becoming a bottleneck
             </h2>
             <p className="text-body text-slate-600 mb-6 max-w-[600px] mx-auto">
-              Real-time budgets, complete audit trails, and accounting sync that actually works. Join 7 finance teams in beta.
+              Real-time budgets, complete audit trails, and accounting sync that actually works. Free during early access.
             </p>
             <a
-              href="/beta"
-              className="inline-flex items-center gap-2 bg-violet-600 text-white px-8 py-4 rounded-lg text-body font-semibold hover:bg-violet-700 transition-colors no-underline"
+              href="/signup"
+              className="inline-flex items-center gap-2 bg-blue-600 text-white px-8 py-4 rounded-lg text-body font-semibold hover:bg-blue-700 transition-colors no-underline"
             >
-              Apply for beta access
+              Get Started Free
               <ArrowRight className="w-5 h-5" />
             </a>
           </div>

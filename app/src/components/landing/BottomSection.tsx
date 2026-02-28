@@ -116,6 +116,11 @@ const faqs = [
     answer:
       "Not at all. Reqflow was built specifically for teams of 5 to 50. The smaller you are, the less you can afford to waste time on manual procurement. Most of our early users are under 30 people.",
   },
+  {
+    question: "Do we need to switch from QuickBooks/Xero to use Reqflow?",
+    answer:
+      "No. Reqflow integrates with QuickBooks and Xero — we sync invoices and vendors automatically. Keep your existing accounting software and add Reqflow for procurement workflows on top.",
+  },
 ];
 
 export function FAQ() {

@@ -61,7 +61,7 @@ export function HeroSection() {
 
             {/* Headline */}
             <h1 className="text-hero text-slate-900 leading-[1.1]">
-              Procurement for teams that move too fast for spreadsheets
+              Procurement software for teams of 5–50 who move too fast for spreadsheets
             </h1>
 
             {/* Subheadline */}
@@ -79,15 +79,15 @@ export function HeroSection() {
               </div>
               <div className="flex items-center gap-2">
                 <Zap className="w-5 h-5 text-amber-500" strokeWidth={2} />
-                <span className="text-slate-700 font-medium">Instant approvals</span>
+                <span className="text-slate-700 font-medium">Approve in under 2 hours</span>
               </div>
               <div className="flex items-center gap-2">
                 <Shield className="w-5 h-5 text-blue-600" strokeWidth={2} />
-                <span className="text-slate-700 font-medium">Budget guardrails</span>
+                <span className="text-slate-700 font-medium">94% budget compliance</span>
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="w-5 h-5 text-purple-600" strokeWidth={2} />
-                <span className="text-slate-700 font-medium">Never miss renewals</span>
+                <span className="text-slate-700 font-medium">Zero missed renewals</span>
               </div>
             </div>
 
