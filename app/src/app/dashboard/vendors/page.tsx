@@ -67,16 +67,16 @@ export default function VendorsPage() {
   }
 
   return (
-    <div className="p-8 space-y-6">
+    <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-semibold text-slate-900">Vendors</h1>
-          <p className="text-slate-600 mt-1">
+          <h1 className="text-2xl md:text-3xl font-semibold text-slate-900">Vendors</h1>
+          <p className="text-slate-600 mt-1 text-sm md:text-base">
             Manage your vendor directory and compliance
           </p>
         </div>
-        <Button onClick={() => router.push("/dashboard/vendors/new")}>
+        <Button className="w-full sm:w-auto" onClick={() => router.push("/dashboard/vendors/new")}>
           <Plus className="w-4 h-4 mr-2" />
           Add Vendor
         </Button>
@@ -84,7 +84,7 @@ export default function VendorsPage() {
 
       {/* Filters */}
       <Card className="p-4">
-        <div className="flex gap-4">
+        <div className="flex flex-col gap-3 md:flex-row md:gap-4">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <Input
@@ -94,30 +94,32 @@ export default function VendorsPage() {
               className="pl-10"
             />
           </div>
-          <Select value={industry} onValueChange={setIndustry}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Industry" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Industries</SelectItem>
-              <SelectItem value="saas">SaaS</SelectItem>
-              <SelectItem value="services">Services</SelectItem>
-              <SelectItem value="infrastructure">Infrastructure</SelectItem>
-              <SelectItem value="hardware">Hardware</SelectItem>
-            </SelectContent>
-          </Select>
-          <Select value={complianceTier} onValueChange={setComplianceTier}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Compliance" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Tiers</SelectItem>
-              <SelectItem value="none">None</SelectItem>
-              <SelectItem value="basic">Basic</SelectItem>
-              <SelectItem value="customer_data">Customer Data</SelectItem>
-              <SelectItem value="regulated">Regulated</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="grid grid-cols-2 gap-3 md:flex md:gap-4">
+            <Select value={industry} onValueChange={setIndustry}>
+              <SelectTrigger className="md:w-[180px]">
+                <SelectValue placeholder="Industry" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Industries</SelectItem>
+                <SelectItem value="saas">SaaS</SelectItem>
+                <SelectItem value="services">Services</SelectItem>
+                <SelectItem value="infrastructure">Infrastructure</SelectItem>
+                <SelectItem value="hardware">Hardware</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select value={complianceTier} onValueChange={setComplianceTier}>
+              <SelectTrigger className="md:w-[180px]">
+                <SelectValue placeholder="Compliance" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Tiers</SelectItem>
+                <SelectItem value="none">None</SelectItem>
+                <SelectItem value="basic">Basic</SelectItem>
+                <SelectItem value="customer_data">Customer Data</SelectItem>
+                <SelectItem value="regulated">Regulated</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </Card>
 
@@ -126,6 +128,7 @@ export default function VendorsPage() {
         {isLoading ? (
           <VendorTableSkeleton rows={5} />
         ) : data && data.vendors.length > 0 ? (
+          <div className="overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
@@ -215,6 +218,7 @@ export default function VendorsPage() {
               ))}
             </TableBody>
           </Table>
+          </div>
         ) : (
           <div className="p-12 text-center">
             <Building2 className="w-12 h-12 mx-auto text-slate-300" />

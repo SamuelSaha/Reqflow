@@ -1,11 +1,20 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FileText, CheckSquare, LayoutDashboard, Wallet, FlaskConical, Calendar, Settings, Building2 } from "lucide-react";
+import { FileText, CheckSquare, LayoutDashboard, Wallet, FlaskConical, Calendar, Settings, Building2, Menu } from "lucide-react";
 import { Toaster } from "sonner";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { useNavigationPrefetch } from "@/hooks/useNavigationPrefetch";
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 export const dynamic = "force-dynamic";
 
@@ -27,6 +36,7 @@ export default function DashboardLayout({
 }) {
   const pathname = usePathname();
   const { prefetch } = useNavigationPrefetch();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Prefetch likely next pages on mount
   useNavigationPrefetchOnMount(prefetch, pathname);
@@ -35,12 +45,14 @@ export default function DashboardLayout({
     <div className="min-h-screen bg-[var(--warm-50)]">
       {/* Top nav */}
       <header className="border-b border-slate-200 bg-white/95 backdrop-blur-md sticky top-0 z-50 shadow-sm">
-        <div className="mx-auto max-w-7xl px-6 py-4">
+        <div className="mx-auto max-w-7xl px-4 py-3 md:px-6 md:py-4">
           <div className="flex items-center justify-between">
             <Link href="/dashboard" className="text-xl font-bold text-slate-900">
               Reqflow
             </Link>
-            <nav className="flex items-center gap-1">
+
+            {/* Desktop nav */}
+            <nav className="hidden md:flex items-center gap-1">
               {navItems.map(({ href, label, icon: Icon, exact }) => {
                 const isActive = exact
                   ? pathname === href
@@ -62,12 +74,49 @@ export default function DashboardLayout({
                 );
               })}
             </nav>
+
+            {/* Mobile hamburger */}
+            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="sm" className="md:hidden h-10 w-10 p-0">
+                  <Menu className="h-5 w-5" />
+                  <span className="sr-only">Open menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-72">
+                <SheetHeader>
+                  <SheetTitle className="text-left">Navigation</SheetTitle>
+                </SheetHeader>
+                <nav className="flex flex-col gap-1 mt-4">
+                  {navItems.map(({ href, label, icon: Icon, exact }) => {
+                    const isActive = exact
+                      ? pathname === href
+                      : pathname.startsWith(href);
+                    return (
+                      <Link
+                        key={href}
+                        href={href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className={`flex items-center gap-3 text-sm font-medium px-3 py-3 rounded-lg transition-colors ${
+                          isActive
+                            ? "bg-blue-50 text-blue-700 font-semibold"
+                            : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                        }`}
+                      >
+                        <Icon className="h-5 w-5" />
+                        {label}
+                      </Link>
+                    );
+                  })}
+                </nav>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </header>
 
       {/* Main content */}
-      <main className="mx-auto max-w-7xl px-6 py-8">
+      <main className="mx-auto max-w-7xl px-4 py-6 md:px-6 md:py-8">
         <ErrorBoundary>{children}</ErrorBoundary>
       </main>
 

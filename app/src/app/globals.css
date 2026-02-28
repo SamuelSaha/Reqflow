@@ -403,3 +403,17 @@ a[role="button"],
 .link-underline:hover::after {
   width: 100%;
 }
+
+/* ========================================
+   SCROLLBAR UTILITIES
+   ======================================== */
+
+/* Hide scrollbar but keep scrolling */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

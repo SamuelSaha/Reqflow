@@ -63,15 +63,15 @@ export default function ContractsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">Contracts</h1>
-          <p className="text-slate-600 mt-2">
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-900">Contracts</h1>
+          <p className="text-slate-600 mt-1 md:mt-2 text-sm md:text-base">
             Manage contracts and track notice deadlines
           </p>
         </div>
         <Link href="/dashboard/contracts/new">
-          <Button>
+          <Button className="w-full sm:w-auto">
             <Plus className="mr-2 h-4 w-4" />
             New Contract
           </Button>
@@ -80,7 +80,7 @@ export default function ContractsPage() {
 
       {/* Stats */}
       {activeContracts.length > 0 && (
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 md:gap-4">
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">

@@ -118,7 +118,7 @@ export function ApprovalCard({
 
       <CardContent className="space-y-4">
         {/* Financial details */}
-        <div className="flex items-center gap-6 p-3 bg-slate-50 rounded-lg">
+        <div className="grid grid-cols-2 gap-3 sm:flex sm:items-center sm:gap-6 p-3 bg-slate-50 rounded-lg">
           <div>
             <p className="text-caption text-slate-500 uppercase tracking-wider">Amount</p>
             <p className="text-xl font-bold text-slate-900">

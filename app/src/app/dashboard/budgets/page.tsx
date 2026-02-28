@@ -21,10 +21,10 @@ export default function BudgetsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">
           Budgets
         </h1>
-        <p className="text-slate-600 mt-2">
+        <p className="text-slate-600 mt-1 md:mt-2 text-sm md:text-base">
           Department budget utilization and tracking
         </p>
       </div>
@@ -60,7 +60,7 @@ export default function BudgetsPage() {
       )}
 
       {budgets.data && budgets.data.length > 0 && (
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-4 md:gap-6 md:grid-cols-2">
           {budgets.data.map((budget) => {
             const allocated = parseFloat(budget.allocated);
             const committed = parseFloat(budget.committed);

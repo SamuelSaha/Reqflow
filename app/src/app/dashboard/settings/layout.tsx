@@ -25,22 +25,22 @@ export default function SettingsLayout({
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-slate-900">Settings</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-slate-900">Settings</h1>
         <p className="text-slate-600 mt-2">
           Manage your team, workflows, and budget allocation
         </p>
       </div>
 
       {/* Tab Navigation */}
-      <div className="border-b border-slate-200">
-        <nav className="flex gap-8">
+      <div className="border-b border-slate-200 -mx-4 px-4 md:mx-0 md:px-0">
+        <nav className="flex gap-4 md:gap-8 overflow-x-auto scrollbar-hide pb-px">
           {settingsTabs.map(({ href, label, icon: Icon }) => {
             const isActive = pathname.startsWith(href);
             return (
               <Link
                 key={href}
                 href={href}
-                className={`flex items-center gap-2 pb-3 border-b-2 transition-colors ${
+                className={`flex items-center gap-2 pb-3 border-b-2 transition-colors whitespace-nowrap text-sm md:text-base ${
                   isActive
                     ? "border-blue-600 text-blue-600 font-medium"
                     : "border-transparent text-slate-600 hover:text-slate-900"

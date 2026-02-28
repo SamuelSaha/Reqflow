@@ -48,12 +48,12 @@ export default function RenewalsPage() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">
             Renewals
           </h1>
-          <p className="text-slate-600 mt-2">
+          <p className="text-slate-600 mt-1 md:mt-2 text-sm md:text-base">
             Track contract renewals and notice deadlines
           </p>
         </div>
@@ -80,7 +80,7 @@ export default function RenewalsPage() {
       </div>
 
       {/* Filters */}
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         <Button
           variant={!statusFilter ? "default" : "outline"}
           size="sm"
@@ -172,19 +172,19 @@ export default function RenewalsPage() {
               <Link key={renewal.id} href={`/dashboard/renewals/${renewal.id}`}>
                 <Card className="hover:shadow-md transition-shadow cursor-pointer">
                   <CardHeader>
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
+                    <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                      <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                          <Building2 className="h-5 w-5 text-slate-400" />
-                          <CardTitle className="text-lg">
+                          <Building2 className="h-5 w-5 text-slate-400 flex-shrink-0" />
+                          <CardTitle className="text-base md:text-lg truncate">
                             {vendor?.name || "Unknown Vendor"}
                           </CardTitle>
                         </div>
-                        <CardDescription className="mt-1">
+                        <CardDescription className="mt-1 truncate">
                           {contract?.title || "Contract"}
                         </CardDescription>
                       </div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 flex-shrink-0">
                         <Badge className={getUrgencyBadgeClass(renewal.urgencyColor)}>
                           {renewal.daysUntilDeadline < 0
                             ? "Overdue"
@@ -201,7 +201,7 @@ export default function RenewalsPage() {
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid gap-4 md:grid-cols-4">
+                    <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
                       <div>
                         <p className="text-xs text-slate-500 uppercase tracking-wider">
                           Notice Deadline

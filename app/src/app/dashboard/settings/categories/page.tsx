@@ -99,16 +99,16 @@ export default function CategoriesSettingsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">
             Spend Categories
           </h1>
-          <p className="text-slate-600 mt-2">
+          <p className="text-slate-600 mt-1 md:mt-2 text-sm md:text-base">
             Manage custom categories for spend classification and GL mapping
           </p>
         </div>
-        <Button onClick={() => setIsCreateDialogOpen(true)}>
+        <Button className="w-full sm:w-auto" onClick={() => setIsCreateDialogOpen(true)}>
           <Plus className="mr-2 h-4 w-4" />
           New Category
         </Button>
@@ -140,7 +140,7 @@ export default function CategoriesSettingsPage() {
 
       {/* Categories List */}
       {categoriesList.data && (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 md:gap-4">
           {categoriesList.data.map((category) => (
             <Card key={category.id} className="relative">
               <CardHeader>

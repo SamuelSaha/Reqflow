@@ -134,17 +134,17 @@ export default function RequestsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-h3 font-bold tracking-tight text-slate-900">
+          <h1 className="text-2xl md:text-h3 font-bold tracking-tight text-slate-900">
             My Requests
           </h1>
-          <p className="text-body text-slate-600 mt-2">
+          <p className="text-body text-slate-600 mt-1 md:mt-2">
             View and manage your purchase requests
           </p>
         </div>
         <Link href="/dashboard/requests/new">
-          <Button>
+          <Button className="w-full sm:w-auto">
             <Plus className="mr-2 h-4 w-4" />
             New Request
           </Button>
@@ -182,7 +182,7 @@ export default function RequestsPage() {
 
             {/* Advanced Filters */}
             {showFilters && (
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-3 pt-2 border-t">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-2 border-t">
                 <div>
                   <label className="text-sm font-medium text-slate-700 mb-1.5 block">
                     Category
@@ -259,9 +259,9 @@ export default function RequestsPage() {
         </CardContent>
       </Card>
 
-      {/* Filter tabs */}
-      <div className="flex items-center justify-between">
-        <div className="flex gap-2">
+      {/* Filter tabs + sort controls */}
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-wrap gap-2">
           {filters.map(({ key, label }) => (
             <Button
               key={key}
@@ -274,39 +274,40 @@ export default function RequestsPage() {
           ))}
         </div>
 
-        {hasActiveFilters && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={clearAllFilters}
-            className="text-slate-600"
-          >
-            <X className="mr-1 h-3 w-3" />
-            Clear all filters
-          </Button>
-        )}
-
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-slate-600">Sort:</span>
-          <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
-            <SelectTrigger className="w-[140px] h-8">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="createdAt">Date</SelectItem>
-              <SelectItem value="amount">Amount</SelectItem>
-              <SelectItem value="title">Title</SelectItem>
-              <SelectItem value="status">Status</SelectItem>
-            </SelectContent>
-          </Select>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
-            className="h-8 px-2"
-          >
-            {sortOrder === "asc" ? "↑" : "↓"}
-          </Button>
+        <div className="flex items-center justify-between gap-2">
+          {hasActiveFilters && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={clearAllFilters}
+              className="text-slate-600"
+            >
+              <X className="mr-1 h-3 w-3" />
+              Clear
+            </Button>
+          )}
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-slate-600 hidden sm:inline">Sort:</span>
+            <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
+              <SelectTrigger className="w-[110px] md:w-[140px] h-8">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="createdAt">Date</SelectItem>
+                <SelectItem value="amount">Amount</SelectItem>
+                <SelectItem value="title">Title</SelectItem>
+                <SelectItem value="status">Status</SelectItem>
+              </SelectContent>
+            </Select>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+              className="h-8 px-2"
+            >
+              {sortOrder === "asc" ? "↑" : "↓"}
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -390,36 +391,37 @@ export default function RequestsPage() {
                   <Link
                     key={req.id}
                     href={`/dashboard/requests/${req.id}`}
-                    className="flex items-center gap-4 px-6 py-4 hover:bg-slate-50 transition-colors group"
+                    className="flex flex-col gap-2 px-4 py-3 md:flex-row md:items-center md:gap-4 md:px-6 md:py-4 hover:bg-slate-50 transition-colors group"
                   >
-                    <div className="flex-shrink-0">
-                      <StatusIcon className={`h-5 w-5 ${
-                        req.status === "approved" ? "text-green-500" :
-                        req.status === "rejected" ? "text-red-500" :
-                        req.status === "pending" ? "text-amber-500" :
-                        "text-slate-400"
-                      }`} />
-                    </div>
-
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        <p className="text-body-sm font-medium text-slate-900 truncate group-hover:text-blue-600">
-                          {req.title}
-                        </p>
-                        <Badge variant="outline" className="text-[10px] py-0 flex-shrink-0">
-                          {req.requestNumber}
-                        </Badge>
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
+                      <div className="flex-shrink-0">
+                        <StatusIcon className={`h-5 w-5 ${
+                          req.status === "approved" ? "text-green-500" :
+                          req.status === "rejected" ? "text-red-500" :
+                          req.status === "pending" ? "text-amber-500" :
+                          "text-slate-400"
+                        }`} />
                       </div>
-                      <p className="text-caption text-slate-500 mt-0.5">
-                        {req.department?.name ?? "—"} &middot;{" "}
-                        {req.category} &middot;{" "}
-                        {new Date(req.createdAt).toLocaleDateString()}
-                        {req.vendorName ? ` · ${req.vendorName}` : ""}
-                      </p>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <p className="text-body-sm font-medium text-slate-900 truncate group-hover:text-blue-600">
+                            {req.title}
+                          </p>
+                          <Badge variant="outline" className="text-[10px] py-0 flex-shrink-0 hidden sm:inline-flex">
+                            {req.requestNumber}
+                          </Badge>
+                        </div>
+                        <p className="text-caption text-slate-500 mt-0.5 truncate">
+                          {req.department?.name ?? "—"} &middot;{" "}
+                          {req.category} &middot;{" "}
+                          {new Date(req.createdAt).toLocaleDateString()}
+                          {req.vendorName ? ` · ${req.vendorName}` : ""}
+                        </p>
+                      </div>
                     </div>
 
-                    <div className="flex items-center gap-3 flex-shrink-0">
-                      <div className="text-right">
+                    <div className="flex items-center justify-between gap-3 pl-8 md:pl-0 md:flex-shrink-0">
+                      <div className="md:text-right">
                         <p className="text-body-sm font-semibold text-slate-900">
                           €{parseFloat(req.amount).toLocaleString("en", { minimumFractionDigits: 2 })}
                         </p>
@@ -427,7 +429,7 @@ export default function RequestsPage() {
                           <p className="text-[10px] text-slate-500">{req.frequency}</p>
                         )}
                       </div>
-                      <div className="flex flex-col gap-1.5">
+                      <div className="flex items-center gap-2 md:flex-col md:gap-1.5">
                         <Badge className={config.className}>{config.label}</Badge>
                         {req.status === "approved" && req.syncedToAccounting && (
                           <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 text-[10px]">
@@ -442,7 +444,7 @@ export default function RequestsPage() {
                           </Badge>
                         )}
                       </div>
-                      <ArrowUpRight className="h-4 w-4 text-slate-300 group-hover:text-blue-500 transition-colors" />
+                      <ArrowUpRight className="h-4 w-4 text-slate-300 group-hover:text-blue-500 transition-colors hidden md:block" />
                     </div>
                   </Link>
                 );

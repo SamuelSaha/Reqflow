@@ -41,7 +41,19 @@ export default function ApprovalsPage() {
   const utils = trpc.useUtils();
 
   // Build query parameters
-  const queryParams: any = { status: activeTab };
+  type QueryParams = {
+    status: Tab;
+    search?: string;
+    category?: string;
+    urgency?: "low" | "normal" | "urgent";
+    minAmount?: string;
+    maxAmount?: string;
+    dateFrom?: string;
+    dateTo?: string;
+    sortBy?: SortOption;
+    sortOrder?: "asc" | "desc";
+  };
+  const queryParams: QueryParams = { status: activeTab };
   if (searchTerm) queryParams.search = searchTerm;
   if (category) queryParams.category = category;
   if (urgency) queryParams.urgency = urgency;
@@ -196,7 +208,7 @@ export default function ApprovalsPage() {
 
             {/* Advanced Filters */}
             {showFilters && (
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-3 pt-2 border-t">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-2 border-t">
                 <div>
                   <label className="text-sm font-medium text-slate-700 mb-1.5 block">
                     Category
@@ -221,7 +233,7 @@ export default function ApprovalsPage() {
                   <label className="text-sm font-medium text-slate-700 mb-1.5 block">
                     Urgency
                   </label>
-                  <Select value={urgency} onValueChange={(v) => setUrgency(v as any)}>
+                  <Select value={urgency} onValueChange={(v) => setUrgency(v as "low" | "normal" | "urgent" | "")}>
                     <SelectTrigger>
                       <SelectValue placeholder="All urgency levels" />
                     </SelectTrigger>
@@ -273,9 +285,9 @@ export default function ApprovalsPage() {
         </CardContent>
       </Card>
 
-      {/* Tabs */}
-      <div className="flex items-center justify-between">
-        <div className="flex gap-2">
+      {/* Tabs + sort controls */}
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-wrap gap-2">
           {tabs.map(({ key, label, icon: Icon }) => (
             <Button
               key={key}
@@ -289,38 +301,39 @@ export default function ApprovalsPage() {
           ))}
         </div>
 
-        {hasActiveFilters && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={clearAllFilters}
-            className="text-slate-600"
-          >
-            <X className="mr-1 h-3 w-3" />
-            Clear all filters
-          </Button>
-        )}
-
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-slate-600">Sort:</span>
-          <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
-            <SelectTrigger className="w-[140px] h-8">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="createdAt">Date</SelectItem>
-              <SelectItem value="amount">Amount</SelectItem>
-              <SelectItem value="title">Title</SelectItem>
-            </SelectContent>
-          </Select>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
-            className="h-8 px-2"
-          >
-            {sortOrder === "asc" ? "↑" : "↓"}
-          </Button>
+        <div className="flex items-center justify-between gap-2">
+          {hasActiveFilters && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={clearAllFilters}
+              className="text-slate-600"
+            >
+              <X className="mr-1 h-3 w-3" />
+              Clear
+            </Button>
+          )}
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-slate-600 hidden sm:inline">Sort:</span>
+            <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
+              <SelectTrigger className="w-[110px] md:w-[140px] h-8">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="createdAt">Date</SelectItem>
+                <SelectItem value="amount">Amount</SelectItem>
+                <SelectItem value="title">Title</SelectItem>
+              </SelectContent>
+            </Select>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+              className="h-8 px-2"
+            >
+              {sortOrder === "asc" ? "↑" : "↓"}
+            </Button>
+          </div>
         </div>
       </div>
 

@@ -46,18 +46,18 @@ export default function DashboardPage() {
   const urgentRenewalsCount = renewalsStats.data?.red || 0;
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 md:space-y-8">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">
             Dashboard
           </h1>
-          <p className="text-slate-600 mt-2">
+          <p className="text-slate-600 mt-1 md:mt-2 text-sm md:text-base">
             Manage your purchase requests and approvals
           </p>
         </div>
         <Link href="/dashboard/requests/new">
-          <Button>
+          <Button className="w-full sm:w-auto">
             <Plus className="mr-2 h-4 w-4" />
             New Request
           </Button>
@@ -82,7 +82,7 @@ export default function DashboardPage() {
       )}
 
       {stats.data && activeTrials.data && renewalsStats.data && (
-        <div className="grid gap-6 md:grid-cols-3 lg:grid-cols-6">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-6 lg:grid-cols-6">
           <StatCard
             title="Pending Requests"
             value={stats.data.myPending}
@@ -126,7 +126,7 @@ export default function DashboardPage() {
       )}
 
       {/* Two-column: recent requests + action required */}
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-4 md:gap-6 md:grid-cols-2">
         {/* Recent Requests */}
         <Card className="shadow-sm hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between">
@@ -278,15 +278,15 @@ function StatCard({
 }) {
   return (
     <Card className={highlight ? "ring-2 ring-blue-200 bg-blue-50/30 shadow-md" : "shadow-sm hover:shadow-md transition-shadow"}>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 md:pb-2 p-4 md:p-6">
+        <CardTitle className="text-xs md:text-sm font-medium">{title}</CardTitle>
         <Icon className={`h-4 w-4 ${highlight ? "text-blue-600" : "text-slate-600"}`} />
       </CardHeader>
-      <CardContent>
-        <div className={`text-2xl font-bold ${highlight ? "text-blue-700" : ""}`}>
+      <CardContent className="p-4 pt-0 md:p-6 md:pt-0">
+        <div className={`text-xl md:text-2xl font-bold ${highlight ? "text-blue-700" : ""}`}>
           {value}
         </div>
-        <p className="text-xs text-slate-600 mt-1">{subtitle}</p>
+        <p className="text-[10px] md:text-xs text-slate-600 mt-1">{subtitle}</p>
       </CardContent>
     </Card>
   );

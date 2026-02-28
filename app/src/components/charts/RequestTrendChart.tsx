@@ -25,7 +25,7 @@ export function RequestTrendChart({
         <CardTitle className="text-body">Request Volume (Last 6 Months)</CardTitle>
       </CardHeader>
       <CardContent>
-        <div style={{ height }}>
+        <div className="h-[200px] md:h-[300px]" style={height !== 300 ? { height } : undefined}>
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={data}>
               <CartesianGrid strokeDasharray="3 3" />

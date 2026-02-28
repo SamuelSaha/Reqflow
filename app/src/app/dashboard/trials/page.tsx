@@ -60,17 +60,17 @@ export default function TrialsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">
             Trials
           </h1>
-          <p className="text-slate-600 mt-2">
+          <p className="text-slate-600 mt-1 md:mt-2 text-sm md:text-base">
             Track tool trials and prevent shadow IT
           </p>
         </div>
         <Link href="/dashboard/requests/new">
-          <Button>
+          <Button className="w-full sm:w-auto">
             <Plus className="mr-2 h-4 w-4" />
             New Trial
           </Button>
@@ -78,7 +78,7 @@ export default function TrialsPage() {
       </div>
 
       {/* Filter tabs */}
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         {filters.map(({ key, label }) => (
           <Button
             key={key}

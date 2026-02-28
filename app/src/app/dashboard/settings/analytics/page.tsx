@@ -84,7 +84,7 @@ export default function AnalyticsPage() {
       {overview.isLoading ? (
         <AnalyticsStatSkeleton count={4} />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
           {statCards.map((stat) => {
             const Icon = stat.icon;
             return (
@@ -162,6 +162,7 @@ export default function AnalyticsPage() {
               {topUsers.isLoading ? (
                 <TableSkeleton columns={4} rows={5} />
               ) : (
+                <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -201,6 +202,7 @@ export default function AnalyticsPage() {
                     )}
                   </TableBody>
                 </Table>
+                </div>
               )}
             </CardContent>
           </Card>
@@ -216,6 +218,7 @@ export default function AnalyticsPage() {
               {auditLogs.isLoading ? (
                 <TableSkeleton columns={4} rows={5} />
               ) : (
+                <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -257,6 +260,7 @@ export default function AnalyticsPage() {
                     )}
                   </TableBody>
                 </Table>
+                </div>
               )}
             </CardContent>
           </Card>
@@ -272,6 +276,7 @@ export default function AnalyticsPage() {
               {authEvents.isLoading ? (
                 <TableSkeleton columns={4} rows={5} />
               ) : (
+                <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -312,6 +317,7 @@ export default function AnalyticsPage() {
                     )}
                   </TableBody>
                 </Table>
+                </div>
               )}
             </CardContent>
           </Card>
@@ -327,6 +333,7 @@ export default function AnalyticsPage() {
               {queueStats.isLoading ? (
                 <TableSkeleton columns={5} rows={3} />
               ) : (
+                <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -369,6 +376,7 @@ export default function AnalyticsPage() {
                     )}
                   </TableBody>
                 </Table>
+                </div>
               )}
             </CardContent>
           </Card>
