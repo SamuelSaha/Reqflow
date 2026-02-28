@@ -50,7 +50,7 @@ export function PrimaryCta({
 
     // Typography
     "font-manrope font-semibold", // Manrope 600
-    size === "large" ? "text-base" : "text-sm",
+    "text-sm",
 
     // Colors
     "bg-blue-600 text-white",
@@ -64,11 +64,11 @@ export function PrimaryCta({
     "hover:shadow-md",
     "focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2",
 
-    // Spacing - Refined padding
-    size === "large" ? "px-8 py-3.5" : "px-6 py-2.5",
+    // Spacing - Standard sizing
+    size === "large" ? "px-6 py-2" : "px-5 py-2",
 
-    // Shape - Slightly more rounded for premium feel
-    "rounded-xl",
+    // Shape
+    "rounded-lg",
 
     // Width
     fullWidth && "w-full",
