@@ -41,42 +41,72 @@ export function HeroSection() {
         <div className="flex flex-col items-center py-16 md:py-20 lg:py-24">
           {/* Content Section - Instant paint, no animation delays */}
           <div className="grid grid-cols-1 gap-6 md:gap-7 text-center max-w-4xl mx-auto w-full">
-            {/* Trust Badge - Clean, professional */}
+            {/* Trust Badge with sparkle icon */}
             <div className="flex justify-center">
               <div
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200 bg-white shadow-sm"
+                className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200/60"
                 role="status"
                 aria-label="Free early access - No credit card required"
               >
-                <span className="text-body-sm font-medium text-slate-700">
+                <Sparkles className="w-4 h-4 text-green-600" strokeWidth={2} />
+                <span className="text-body-sm font-medium text-green-900">
                   Free during early access
                 </span>
-                <span className="text-body-sm text-slate-300" aria-hidden="true">•</span>
-                <span className="text-body-sm text-slate-600">
+                <span className="text-body-sm text-green-400" aria-hidden="true">•</span>
+                <span className="text-body-sm text-green-700">
                   No credit card required
                 </span>
               </div>
             </div>
 
-            {/* Headline - What is this? */}
+            {/* Headline */}
             <h1 className="text-hero text-slate-900 leading-[1.1]">
-              Procurement software for teams who move too fast for spreadsheets
+              Procurement for teams that move too fast for spreadsheets
             </h1>
 
-            {/* Subheadline - Who + Transformation */}
-            <p className="text-body-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-              Track every purchase. Catch duplicates before buying. Never miss a renewal deadline.
+            {/* Subheadline - Detailed */}
+            <p className="text-body-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
+              Stop losing invoices in Slack threads. Stop wondering if you already pay for that tool. Stop chasing approvals across DMs. <span className="font-semibold text-slate-900">Built for teams who buy without a procurement department.</span>
             </p>
 
-            {/* Single dominant CTA */}
-            <PrimaryCta
-              href="/signup"
-              size="large"
-              icon="arrow"
-              analyticsEvent="hero_primary_click"
-            >
-              Start Free Trial
-            </PrimaryCta>
+            {/* Value Props with Icons */}
+            <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 text-sm">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-5 h-5 text-green-600" strokeWidth={2} />
+                <span className="text-slate-700 font-medium">2-minute setup</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Zap className="w-5 h-5 text-amber-500" strokeWidth={2} />
+                <span className="text-slate-700 font-medium">Instant approvals</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Shield className="w-5 h-5 text-blue-600" strokeWidth={2} />
+                <span className="text-slate-700 font-medium">Budget guardrails</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Clock className="w-5 h-5 text-purple-600" strokeWidth={2} />
+                <span className="text-slate-700 font-medium">Never miss renewals</span>
+              </div>
+            </div>
+
+            {/* Dual CTAs */}
+            <CtaGroup alignment="center">
+              <PrimaryCta
+                href="/signup"
+                size="large"
+                icon="arrow"
+                analyticsEvent="hero_primary_click"
+              >
+                Start Free Trial
+              </PrimaryCta>
+              <SecondaryCta
+                href="/contact"
+                size="large"
+                analyticsEvent="hero_secondary_click"
+              >
+                Book a Demo
+              </SecondaryCta>
+            </CtaGroup>
           </div>
         </div>
       </Container>
