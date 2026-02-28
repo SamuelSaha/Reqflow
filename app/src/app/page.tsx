@@ -68,6 +68,22 @@ const DarkFeatures = dynamic(
   }
 );
 
+const Integrations = dynamic(
+  () => import("@/components/landing/Integrations").then((mod) => mod.Integrations),
+  {
+    loading: () => <SectionSkeleton height={500} />,
+    ssr: false,
+  }
+);
+
+const Pricing = dynamic(
+  () => import("@/components/landing/Pricing").then((mod) => mod.Pricing),
+  {
+    loading: () => <SectionSkeleton height={600} />,
+    ssr: false,
+  }
+);
+
 const FinalCTA = dynamic(
   () => import("@/components/landing/BottomSection").then((mod) => mod.FinalCTA),
   {
@@ -205,6 +221,12 @@ export default function ReqflowLanding() {
       </Suspense>
       <Suspense fallback={<SectionSkeleton height={400} />}>
         <DarkFeatures />
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton height={500} />}>
+        <Integrations />
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton height={600} />}>
+        <Pricing />
       </Suspense>
       <Suspense fallback={<SectionSkeleton height={200} />}>
         <FinalCTA />
