@@ -16,6 +16,13 @@ const problems = [
   "Multiply this by 50+ tools",
 ];
 
+const metrics = [
+  { value: "40-60%", label: "purchases bypass process" },
+  { value: "29%", label: "SaaS subscriptions duplicate" },
+  { value: "8.3 hrs", label: "wasted per week" },
+  { value: "$15-40", label: "cost per manual invoice" },
+];
+
 export function PainPoints() {
   return (
     <Section background="white" className="relative">
@@ -32,7 +39,7 @@ export function PainPoints() {
           </div>
 
           {/* Checklist - Centered */}
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-2xl mx-auto mb-16">
             <div className="space-y-4">
               {problems.map((problem, index) => (
                 <div
@@ -48,6 +55,20 @@ export function PainPoints() {
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* Embedded Metrics */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+            {metrics.map((metric, index) => (
+              <div key={index} className="text-center">
+                <div className="text-4xl md:text-5xl font-bold text-red-600 mb-2">
+                  {metric.value}
+                </div>
+                <div className="text-body-sm text-slate-600">
+                  {metric.label}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </Container>

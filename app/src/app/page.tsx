@@ -28,14 +28,6 @@ const PainPoints = dynamic(
   }
 );
 
-const MetricsRow = dynamic(
-  () => import("@/components/landing/MetricsRow").then((mod) => mod.MetricsRow),
-  {
-    loading: () => <SectionSkeleton height={300} />,
-    ssr: false,
-  }
-);
-
 const ProductPreview = dynamic(
   () => import("@/components/landing/ProductPreview").then((mod) => mod.ProductPreview),
   {
@@ -56,30 +48,6 @@ const RolePerspectives = dynamic(
   () => import("@/components/landing/RolePerspectives").then((mod) => mod.RolePerspectives),
   {
     loading: () => <SectionSkeleton height={500} />,
-    ssr: false,
-  }
-);
-
-const DarkFeatures = dynamic(
-  () => import("@/components/landing/DarkFeatures").then((mod) => mod.DarkFeatures),
-  {
-    loading: () => <SectionSkeleton height={400} />,
-    ssr: false,
-  }
-);
-
-const Integrations = dynamic(
-  () => import("@/components/landing/Integrations").then((mod) => mod.Integrations),
-  {
-    loading: () => <SectionSkeleton height={500} />,
-    ssr: false,
-  }
-);
-
-const Pricing = dynamic(
-  () => import("@/components/landing/Pricing").then((mod) => mod.Pricing),
-  {
-    loading: () => <SectionSkeleton height={600} />,
     ssr: false,
   }
 );
@@ -204,11 +172,8 @@ export default function ReqflowLanding() {
       <Suspense fallback={<SectionSkeleton height={120} />}>
         <TrustLogos />
       </Suspense>
-      <Suspense fallback={<SectionSkeleton height={500} />}>
+      <Suspense fallback={<SectionSkeleton height={700} />}>
         <PainPoints />
-      </Suspense>
-      <Suspense fallback={<SectionSkeleton height={300} />}>
-        <MetricsRow />
       </Suspense>
       <Suspense fallback={<SectionSkeleton height={600} />}>
         <ProductPreview />
@@ -216,17 +181,8 @@ export default function ReqflowLanding() {
       <Suspense fallback={<SectionSkeleton height={400} />}>
         <Features />
       </Suspense>
-      <Suspense fallback={<SectionSkeleton height={500} />}>
-        <RolePerspectives />
-      </Suspense>
       <Suspense fallback={<SectionSkeleton height={400} />}>
-        <DarkFeatures />
-      </Suspense>
-      <Suspense fallback={<SectionSkeleton height={500} />}>
-        <Integrations />
-      </Suspense>
-      <Suspense fallback={<SectionSkeleton height={600} />}>
-        <Pricing />
+        <RolePerspectives />
       </Suspense>
       <Suspense fallback={<SectionSkeleton height={200} />}>
         <FinalCTA />

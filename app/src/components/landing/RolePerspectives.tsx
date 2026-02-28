@@ -12,34 +12,19 @@ const roles = [
     icon: DollarSign,
     color: "bg-blue-50 text-blue-600",
     title: "CFO / Finance",
-    benefits: [
-      "Real-time budget tracking",
-      "Automatic PO generation",
-      "Invoice reconciliation in minutes",
-      "Complete audit trail",
-    ],
+    benefit: "Real-time budget tracking with automatic alerts at 80% and 100%",
   },
   {
     icon: Briefcase,
     color: "bg-green-50 text-green-600",
     title: "Operations Lead",
-    benefits: [
-      "2-hour approval time (vs 3 days)",
-      "Pre-approved request templates",
-      "Zero onboarding delays",
-      "Vendor relationship management",
-    ],
+    benefit: "Approve requests in <2 hours instead of 3+ days",
   },
   {
     icon: Users,
     color: "bg-purple-50 text-purple-600",
     title: "Team Member",
-    benefits: [
-      "Request any tool in 2 minutes",
-      "Slack-native approvals",
-      "Know exactly what's approved",
-      "No more email archaeology",
-    ],
+    benefit: "Request any tool via Slack in under 2 minutes",
   },
 ];
 
@@ -74,21 +59,14 @@ export function RolePerspectives() {
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-h4 text-slate-900 font-semibold mb-6">
+                  <h3 className="text-h4 text-slate-900 font-semibold mb-4">
                     {role.title}
                   </h3>
 
-                  {/* Benefits */}
-                  <ul className="space-y-3">
-                    {role.benefits.map((benefit, i) => (
-                      <li key={i} className="flex items-start gap-3">
-                        <div className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-2.5 flex-shrink-0"></div>
-                        <span className="text-body text-slate-600 leading-relaxed">
-                          {benefit}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
+                  {/* Single Key Benefit */}
+                  <p className="text-body text-slate-600 leading-relaxed">
+                    {role.benefit}
+                  </p>
                 </div>
               );
             })}
