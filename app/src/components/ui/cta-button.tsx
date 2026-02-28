@@ -49,8 +49,8 @@ export function PrimaryCta({
     "touch-target", // 44px minimum from responsive system
 
     // Typography
-    "font-manrope font-semibold", // Manrope 600
-    "text-sm",
+    "font-manrope font-medium", // Manrope 500
+    size === "large" ? "text-base" : "text-sm",
 
     // Colors
     "bg-blue-600 text-white",
@@ -64,11 +64,11 @@ export function PrimaryCta({
     "hover:shadow-md",
     "focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2",
 
-    // Spacing - Standard sizing
-    size === "large" ? "px-6 py-2" : "px-5 py-2",
+    // Spacing - Balanced sizing
+    size === "large" ? "px-8 py-3.5" : "px-6 py-2.5",
 
-    // Shape
-    "rounded-lg",
+    // Shape - Generously rounded
+    "rounded-2xl",
 
     // Width
     fullWidth && "w-full",
