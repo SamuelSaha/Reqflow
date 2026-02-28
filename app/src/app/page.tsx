@@ -20,6 +20,14 @@ const TrustLogos = dynamic(
   }
 );
 
+const ProductPreview = dynamic(
+  () => import("@/components/landing/ProductPreview").then((mod) => mod.ProductPreview),
+  {
+    loading: () => <SectionSkeleton height={600} />,
+    ssr: false,
+  }
+);
+
 const Features = dynamic(
   () => import("@/components/landing/Features").then((mod) => mod.Features),
   {
@@ -147,6 +155,9 @@ export default function ReqflowLanding() {
       </Suspense>
       <Suspense fallback={<SectionSkeleton height={120} />}>
         <TrustLogos />
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton height={600} />}>
+        <ProductPreview />
       </Suspense>
       <Suspense fallback={<SectionSkeleton height={400} />}>
         <Features />
