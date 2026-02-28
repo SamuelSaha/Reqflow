@@ -1,17 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Rocket, Settings, DollarSign, Shield, Bell, BookOpen, PenLine, Building2, Code } from "lucide-react";
 import { useNavigationPrefetch } from "@/hooks/useNavigationPrefetch";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
 
 /* ================================================================
    NAVIGATION DATA
@@ -19,27 +17,25 @@ import { cn } from "@/lib/utils";
 
 const featuresDropdown = {
   byRole: [
-    { label: "For Founders", href: "/features/founders", description: "Take control of company spend" },
-    { label: "For Ops Teams", href: "/features/ops", description: "Streamline procurement workflows" },
-    { label: "For Finance", href: "/features/finance", description: "Budget tracking & compliance" },
+    { label: "For Founders", href: "/features/founders", description: "Move fast without losing control", icon: Rocket, iconBg: "bg-blue-50", iconColor: "text-blue-600" },
+    { label: "For Ops Teams", href: "/features/ops", description: "Streamline every purchase request", icon: Settings, iconBg: "bg-green-50", iconColor: "text-green-600" },
+    { label: "For Finance", href: "/features/finance", description: "Full visibility on every dollar spent", icon: DollarSign, iconBg: "bg-amber-50", iconColor: "text-amber-600" },
   ],
-  byUseCase: [
-    { label: "SaaS Management", href: "/features/saas", description: "Track all software subscriptions" },
-    { label: "Vendor Tracking", href: "/features/vendors", description: "Manage vendor relationships" },
-    { label: "Budget Control", href: "/features/budgets", description: "Set spending guardrails" },
-    { label: "Renewal Alerts", href: "/features/renewals", description: "Never miss a renewal" },
+  byFeature: [
+    { label: "Budget Control", href: "/features/budgets", description: "Set guardrails before money goes out", icon: Shield, iconBg: "bg-orange-50", iconColor: "text-orange-600" },
+    { label: "Renewal Alerts", href: "/features/renewals", description: "Never miss a contract renewal again", icon: Bell, iconBg: "bg-yellow-50", iconColor: "text-yellow-600" },
   ],
 };
 
 const resourcesDropdown = [
-  { label: "Documentation", href: "/documentation" },
-  { label: "Blog", href: "/blog" },
-  { label: "Case Studies", href: "/about#case-studies" },
-  { label: "API Reference", href: "/api-reference" },
+  { label: "Documentation", href: "/documentation", icon: BookOpen },
+  { label: "Blog", href: "/blog", icon: PenLine },
+  { label: "Case Studies", href: "/about#case-studies", icon: Building2 },
+  { label: "API Reference", href: "/api-reference", icon: Code },
 ];
 
 /* ================================================================
-   FEATURES MEGA MENU (Grid Layout)
+   FEATURES MEGA MENU
    ================================================================ */
 
 function FeaturesMegaMenu() {
@@ -52,11 +48,11 @@ function FeaturesMegaMenu() {
         <ChevronDown className="w-4 h-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className="w-[560px] p-6 z-[60]"
+        className="w-[600px] p-6 z-[60]"
         align="start"
         sideOffset={8}
       >
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-2 gap-8">
           {/* By Role Column */}
           <div>
             <DropdownMenuLabel className="text-caption font-semibold text-slate-500 uppercase tracking-wider mb-3">
@@ -65,12 +61,21 @@ function FeaturesMegaMenu() {
             <div className="space-y-1">
               {featuresDropdown.byRole.map((item) => {
                 const hoverProps = createHoverHandler(item.href, 50);
+                const Icon = item.icon;
                 return (
                   <Link key={item.href} href={item.href} {...hoverProps}>
-                    <DropdownMenuItem className="p-3 cursor-pointer transition-all duration-200 ease-out hover:-translate-y-0.5 hover:bg-slate-50/80 hover:shadow-sm rounded-lg">
-                      <span className="text-body font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
-                        {item.label}
-                      </span>
+                    <DropdownMenuItem className="p-3 cursor-pointer hover:bg-slate-50 rounded-lg flex items-start gap-3">
+                      <div className={`w-9 h-9 rounded-lg ${item.iconBg} flex items-center justify-center flex-shrink-0 mt-0.5`}>
+                        <Icon className={`w-4 h-4 ${item.iconColor}`} />
+                      </div>
+                      <div>
+                        <span className="text-body-sm font-semibold text-slate-900 block">
+                          {item.label}
+                        </span>
+                        <span className="text-caption text-slate-500">
+                          {item.description}
+                        </span>
+                      </div>
                     </DropdownMenuItem>
                   </Link>
                 );
@@ -78,20 +83,26 @@ function FeaturesMegaMenu() {
             </div>
           </div>
 
-          {/* By Use Case Column */}
+          {/* By Feature Column */}
           <div>
-            <DropdownMenuLabel className="text-caption font-semibold text-slate-500 uppercase tracking-wider mb-3">
-              By Use Case
-            </DropdownMenuLabel>
             <div className="space-y-1">
-              {featuresDropdown.byUseCase.map((item) => {
+              {featuresDropdown.byFeature.map((item) => {
                 const hoverProps = createHoverHandler(item.href, 50);
+                const Icon = item.icon;
                 return (
                   <Link key={item.href} href={item.href} {...hoverProps}>
-                    <DropdownMenuItem className="p-3 cursor-pointer transition-all duration-200 ease-out hover:-translate-y-0.5 hover:bg-slate-50/80 hover:shadow-sm rounded-lg">
-                      <span className="text-body font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
-                        {item.label}
-                      </span>
+                    <DropdownMenuItem className="p-3 cursor-pointer hover:bg-slate-50 rounded-lg flex items-start gap-3">
+                      <div className={`w-9 h-9 rounded-lg ${item.iconBg} flex items-center justify-center flex-shrink-0 mt-0.5`}>
+                        <Icon className={`w-4 h-4 ${item.iconColor}`} />
+                      </div>
+                      <div>
+                        <span className="text-body-sm font-semibold text-slate-900 block">
+                          {item.label}
+                        </span>
+                        <span className="text-caption text-slate-500">
+                          {item.description}
+                        </span>
+                      </div>
                     </DropdownMenuItem>
                   </Link>
                 );
@@ -105,7 +116,7 @@ function FeaturesMegaMenu() {
 }
 
 /* ================================================================
-   RESOURCES SIMPLE DROPDOWN (List)
+   RESOURCES DROPDOWN
    ================================================================ */
 
 function ResourcesDropdown() {
@@ -118,15 +129,17 @@ function ResourcesDropdown() {
         <ChevronDown className="w-4 h-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className="w-48 z-[60]"
+        className="w-52 z-[60]"
         align="start"
         sideOffset={8}
       >
         {resourcesDropdown.map((item) => {
           const hoverProps = createHoverHandler(item.href, 50);
+          const Icon = item.icon;
           return (
             <Link key={item.href} href={item.href} {...hoverProps}>
-              <DropdownMenuItem className="text-body-sm cursor-pointer transition-all duration-150 ease-out hover:bg-slate-50 hover:text-blue-600">
+              <DropdownMenuItem className="text-body-sm cursor-pointer hover:bg-slate-50 flex items-center gap-2.5 p-2.5">
+                <Icon className="w-4 h-4 text-slate-400" />
                 {item.label}
               </DropdownMenuItem>
             </Link>
@@ -144,6 +157,7 @@ function ResourcesDropdown() {
 export function DesktopNav() {
   const { createHoverHandler } = useNavigationPrefetch();
   const pricingHover = createHoverHandler("/pricing", 100);
+  const integrationsHover = createHoverHandler("/integrations", 100);
   const aboutHover = createHoverHandler("/about", 100);
 
   return (
@@ -153,9 +167,17 @@ export function DesktopNav() {
       <Link
         href="/pricing"
         {...pricingHover}
-        className="relative text-body-sm font-medium text-slate-600 hover:text-blue-600 transition-colors duration-150 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-blue-600 after:transition-all after:duration-150 hover:after:w-full"
+        className="text-body-sm font-medium text-slate-600 hover:text-slate-900 transition-colors duration-150"
       >
         Pricing
+      </Link>
+
+      <Link
+        href="/integrations"
+        {...integrationsHover}
+        className="text-body-sm font-medium text-slate-600 hover:text-slate-900 transition-colors duration-150"
+      >
+        Integrations
       </Link>
 
       <ResourcesDropdown />
@@ -163,7 +185,7 @@ export function DesktopNav() {
       <Link
         href="/about"
         {...aboutHover}
-        className="relative text-body-sm font-medium text-slate-600 hover:text-blue-600 transition-colors duration-150 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-blue-600 after:transition-all after:duration-150 hover:after:w-full"
+        className="text-body-sm font-medium text-slate-600 hover:text-slate-900 transition-colors duration-150"
       >
         About
       </Link>

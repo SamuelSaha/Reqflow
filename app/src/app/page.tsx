@@ -4,67 +4,66 @@ import { PageShell } from "@/components/layout";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 
-// Lazy load landing page sections for better initial bundle size
 // Hero section loads immediately (above the fold)
 const HeroSection = dynamic(
   () => import("@/components/landing/HeroSection").then((mod) => mod.HeroSection),
-  { ssr: true } // Keep SSR for SEO-critical hero section
+  { ssr: true }
 );
 
 // Below-fold sections lazy-loaded with Suspense
 const TrustLogos = dynamic(
   () => import("@/components/landing/HeroSection").then((mod) => mod.TrustLogos),
-  {
-    loading: () => <SectionSkeleton height={120} />,
-    ssr: false,
-  }
+  { loading: () => <SectionSkeleton height={100} />, ssr: false }
 );
 
 const PainPoints = dynamic(
   () => import("@/components/landing/PainPoints").then((mod) => mod.PainPoints),
-  {
-    loading: () => <SectionSkeleton height={500} />,
-    ssr: false,
-  }
+  { loading: () => <SectionSkeleton height={700} />, ssr: false }
 );
 
-const ProductPreview = dynamic(
-  () => import("@/components/landing/ProductPreview").then((mod) => mod.ProductPreview),
-  {
-    loading: () => <SectionSkeleton height={600} />,
-    ssr: false,
-  }
+const ProductFlow = dynamic(
+  () => import("@/components/landing/ProductFlow").then((mod) => mod.ProductFlow),
+  { loading: () => <SectionSkeleton height={800} />, ssr: false }
+);
+
+const Personas = dynamic(
+  () => import("@/components/landing/Personas").then((mod) => mod.Personas),
+  { loading: () => <SectionSkeleton height={500} />, ssr: false }
 );
 
 const Features = dynamic(
   () => import("@/components/landing/Features").then((mod) => mod.Features),
-  {
-    loading: () => <SectionSkeleton height={400} />,
-    ssr: false,
-  }
+  { loading: () => <SectionSkeleton height={500} />, ssr: false }
 );
 
-const RolePerspectives = dynamic(
-  () => import("@/components/landing/RolePerspectives").then((mod) => mod.RolePerspectives),
-  {
-    loading: () => <SectionSkeleton height={500} />,
-    ssr: false,
-  }
+const MeasuredOutcomes = dynamic(
+  () => import("@/components/landing/MeasuredOutcomes").then((mod) => mod.MeasuredOutcomes),
+  { loading: () => <SectionSkeleton height={400} />, ssr: false }
+);
+
+const Integrations = dynamic(
+  () => import("@/components/landing/Integrations").then((mod) => mod.Integrations),
+  { loading: () => <SectionSkeleton height={400} />, ssr: false }
+);
+
+const Pricing = dynamic(
+  () => import("@/components/landing/BottomSection").then((mod) => mod.Pricing),
+  { loading: () => <SectionSkeleton height={600} />, ssr: false }
+);
+
+const FAQ = dynamic(
+  () => import("@/components/landing/BottomSection").then((mod) => mod.FAQ),
+  { loading: () => <SectionSkeleton height={500} />, ssr: false }
 );
 
 const FinalCTA = dynamic(
   () => import("@/components/landing/BottomSection").then((mod) => mod.FinalCTA),
-  {
-    loading: () => <SectionSkeleton height={200} />,
-    ssr: false,
-  }
+  { loading: () => <SectionSkeleton height={300} />, ssr: false }
 );
 
 const MobileStickyCTA = dynamic(
   () => import("@/components/landing/MobileStickyCTA").then((mod) => mod.MobileStickyCTA),
-  {
-    ssr: false,
-  }
+  { ssr: false }
 );
 
 function SectionSkeleton({ height }: { height: number }) {
@@ -77,26 +76,28 @@ function SectionSkeleton({ height }: { height: number }) {
 }
 
 export default function ReqflowLanding() {
-  // Use static URL for SSR consistency (prevents hydration errors)
   const baseUrl = 'https://reqflow.com';
 
-  // FAQ data for structured data schema
   const faqs = [
     {
-      question: "How is Reqflow different from using spreadsheets for procurement?",
-      answer: "Spreadsheets break down when your team hits 10-15 people. They live outside your workflow—nobody updates them, nobody checks them before buying, and they're always out of date. Reqflow lives where your team already works (Slack, email, web) and automatically captures every purchase request, duplicate check, and approval. The data stays current without anyone doing extra work.",
+      question: "How fast can we get Reqflow running?",
+      answer: "Most teams go live in under 10 minutes. Connect Slack, set your first approval rule, and start receiving purchase requests. No onboarding call required.",
     },
     {
-      question: "Do I need a procurement team to use procurement software?",
-      answer: "No. That's exactly who we built Reqflow for—teams without procurement departments. If you're the founder, ops lead, or finance person handling purchases while also doing your actual job, this replaces the manual work. Set it up once (takes 2 minutes), and it runs itself. No training, no procurement expertise needed.",
+      question: "Is Reqflow actually free right now?",
+      answer: "Yes. During early access, everything is free with no limits. No credit card, no trial countdown. We want you to use it, stress-test it, and tell us what to build next.",
     },
     {
-      question: "Can Reqflow catch duplicate SaaS subscriptions before we buy them?",
-      answer: "Yes. When someone submits a request, we check your existing tools and flag potential overlaps before the purchase happens. For example, if your design team already uses Figma and someone requests Sketch, we'll surface that immediately. Saves you from discovering duplicates months later when renewals hit.",
+      question: "What tools does Reqflow integrate with?",
+      answer: "Slack, Microsoft Teams, QuickBooks, Xero, Google Workspace, and Pennylane. We add new integrations based on what early users ask for.",
     },
     {
-      question: "What's the ROI of procurement software for a 30-person team?",
-      answer: "Most teams save 10-15% on SaaS spend in first 6 months by catching duplicates (29% overlap) and cancelling unused tools. For €150K/year SaaS spend, that's €15-22K saved. Plus recover 8.3 hours/week in manual work (~€16K/year at €40/hour). Total ROI: €30-40K annually. Reqflow pays for itself in the first month.",
+      question: "Is our data secure and GDPR compliant?",
+      answer: "Yes. All data is encrypted at rest and in transit, hosted in EU data centers, and fully GDPR compliant. We never share your data with third parties.",
+    },
+    {
+      question: "We're only 15 people. Is this overkill for us?",
+      answer: "Not at all. Reqflow was built specifically for teams of 5 to 50. The smaller you are, the less you can afford to waste time on manual procurement.",
     },
   ];
 
@@ -104,92 +105,125 @@ export default function ReqflowLanding() {
     <>
       <PageShell>
         {/* Organization Schema */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            name: "Reqflow",
-            url: baseUrl,
-            logo: `${baseUrl}/logo.png`,
-            description: "Procurement software for teams of 5-50. Track SaaS spend, catch duplicates, never miss renewals.",
-          }),
-        }}
-      />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "Reqflow",
+              url: baseUrl,
+              logo: `${baseUrl}/logo.png`,
+              description: "Procurement software for teams of 5-50. Track SaaS spend, catch duplicates, never miss renewals.",
+            }),
+          }}
+        />
 
-      {/* SoftwareApplication Schema */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "SoftwareApplication",
-            name: "Reqflow",
-            applicationCategory: "BusinessApplication",
-            applicationSubCategory: "Procurement Software",
-            operatingSystem: "Web",
-            offers: {
-              "@type": "Offer",
-              price: "0",
-              priceCurrency: "USD",
-              description: "Free during early access",
-              availability: "https://schema.org/InStock",
-            },
-            description: "Procurement software for teams of 5-50. Track SaaS spend, catch duplicates, never miss renewals.",
-            featureList: [
-              "Connected Records - Tool to Contract to Subscription to Invoice",
-              "Smart Approvals with Slack integration",
-              "Budget Intelligence with auto-alerts",
-              "Renewal Tracking with notice-window alerts",
-            ],
-          }),
-        }}
-      />
-
-      {/* FAQ Schema */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: faqs.map((faq) => ({
-              "@type": "Question",
-              name: faq.question,
-              acceptedAnswer: {
-                "@type": "Answer",
-                text: faq.answer,
+        {/* SoftwareApplication Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "SoftwareApplication",
+              name: "Reqflow",
+              applicationCategory: "BusinessApplication",
+              applicationSubCategory: "Procurement Software",
+              operatingSystem: "Web",
+              offers: {
+                "@type": "Offer",
+                price: "0",
+                priceCurrency: "USD",
+                description: "Free during early access",
+                availability: "https://schema.org/InStock",
               },
-            })),
-          }),
-        }}
-      />
+              description: "Procurement software for teams of 5-50. Track SaaS spend, catch duplicates, never miss renewals.",
+              featureList: [
+                "Smart Intake with AI-powered forms",
+                "Approval Workflows with Slack integration",
+                "Budget Tracking with enforcement",
+                "Renewal Tracking with notice-window alerts",
+              ],
+            }),
+          }}
+        />
 
-      <Suspense fallback={<SectionSkeleton height={600} />}>
-        <HeroSection />
-      </Suspense>
-      <Suspense fallback={<SectionSkeleton height={120} />}>
-        <TrustLogos />
-      </Suspense>
-      <Suspense fallback={<SectionSkeleton height={700} />}>
-        <PainPoints />
-      </Suspense>
-      <Suspense fallback={<SectionSkeleton height={600} />}>
-        <ProductPreview />
-      </Suspense>
-      <Suspense fallback={<SectionSkeleton height={400} />}>
-        <Features />
-      </Suspense>
-      <Suspense fallback={<SectionSkeleton height={400} />}>
-        <RolePerspectives />
-      </Suspense>
-      <Suspense fallback={<SectionSkeleton height={200} />}>
-        <FinalCTA />
-      </Suspense>
+        {/* FAQ Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: faqs.map((faq) => ({
+                "@type": "Question",
+                name: faq.question,
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: faq.answer,
+                },
+              })),
+            }),
+          }}
+        />
+
+        {/* Section 1: Hero */}
+        <Suspense fallback={<SectionSkeleton height={600} />}>
+          <HeroSection />
+        </Suspense>
+
+        {/* Section 2: Trust Logos */}
+        <Suspense fallback={<SectionSkeleton height={100} />}>
+          <TrustLogos />
+        </Suspense>
+
+        {/* Section 3: Problem (Before/After + Metrics) */}
+        <Suspense fallback={<SectionSkeleton height={700} />}>
+          <PainPoints />
+        </Suspense>
+
+        {/* Section 4: Product Flow (3 Steps) */}
+        <Suspense fallback={<SectionSkeleton height={800} />}>
+          <ProductFlow />
+        </Suspense>
+
+        {/* Section 5: Personas */}
+        <Suspense fallback={<SectionSkeleton height={500} />}>
+          <Personas />
+        </Suspense>
+
+        {/* Section 6: Features (Dark Grid) */}
+        <Suspense fallback={<SectionSkeleton height={500} />}>
+          <Features />
+        </Suspense>
+
+        {/* Section 7: Measured Outcomes */}
+        <Suspense fallback={<SectionSkeleton height={400} />}>
+          <MeasuredOutcomes />
+        </Suspense>
+
+        {/* Section 8: Integrations */}
+        <Suspense fallback={<SectionSkeleton height={400} />}>
+          <Integrations />
+        </Suspense>
+
+        {/* Section 9: Pricing */}
+        <Suspense fallback={<SectionSkeleton height={600} />}>
+          <Pricing />
+        </Suspense>
+
+        {/* Section 10: FAQ */}
+        <Suspense fallback={<SectionSkeleton height={500} />}>
+          <FAQ />
+        </Suspense>
+
+        {/* Section 11: Final CTA (Dark) */}
+        <Suspense fallback={<SectionSkeleton height={300} />}>
+          <FinalCTA />
+        </Suspense>
       </PageShell>
 
-      {/* Mobile Sticky CTA - Shows on scroll for mobile users */}
+      {/* Mobile Sticky CTA */}
       <MobileStickyCTA />
     </>
   );

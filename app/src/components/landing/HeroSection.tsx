@@ -64,9 +64,11 @@ export function HeroSection() {
               Procurement for teams that move too fast for spreadsheets
             </h1>
 
-            {/* Subheadline - Detailed */}
+            {/* Subheadline */}
             <p className="text-body-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
-              Stop losing invoices in Slack threads. Stop wondering if you already pay for that tool. Stop chasing approvals across DMs. <span className="font-semibold text-slate-900">Built for teams who buy without a procurement department.</span>
+              Reqflow gives small teams a real purchasing workflow — free to use,
+              ready in minutes, and built to replace the Slack threads your ops lead
+              is drowning in.
             </p>
 
             {/* Value Props with Icons */}

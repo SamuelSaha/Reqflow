@@ -1,92 +1,45 @@
-/**
- * Integrations Section
- * Show key integrations to reduce switching cost objection
- */
-
-import { Section } from "@/components/layout/Section";
-import { Container } from "@/components/layout/Container";
+import { Plug } from "lucide-react";
 
 const integrations = [
-  {
-    name: "Slack",
-    description: "Request approvals without leaving Slack",
-    logo: "/integrations/slack-logo.svg",
-  },
-  {
-    name: "QuickBooks",
-    description: "Sync invoices and vendors automatically",
-    logo: "/integrations/quickbooks-logo.svg",
-  },
-  {
-    name: "Xero",
-    description: "Two-way sync with your accounting system",
-    logo: "/integrations/xero-logo.svg",
-  },
-  {
-    name: "Gmail",
-    description: "Submit requests via email",
-    logo: "/integrations/gmail-logo.svg",
-  },
-  {
-    name: "Google Sheets",
-    description: "Export reports to spreadsheets",
-    logo: "/integrations/sheets-logo.svg",
-  },
-  {
-    name: "Zapier",
-    description: "Connect to 5,000+ other tools",
-    logo: "/integrations/zapier-logo.svg",
-  },
+  { name: "Slack", letter: "S", color: "bg-purple-700" },
+  { name: "Teams", letter: "T", color: "bg-indigo-500" },
+  { name: "QuickBooks", letter: "Q", color: "bg-green-600" },
+  { name: "Xero", letter: "X", color: "bg-teal-500" },
+  { name: "Google", letter: "G", color: "bg-blue-500" },
+  { name: "Pennylane", letter: "P", color: "bg-orange-500" },
 ];
 
 export function Integrations() {
   return (
-    <Section background="slate" className="relative">
-      <Container size="default">
-        <div className="py-20 md:py-28">
-          {/* Header */}
-          <div className="text-center mb-16">
-            <h2 className="text-h2 text-slate-900 mb-4">
-              Plugs into the tools you already use
-            </h2>
-            <p className="text-body-lg text-slate-600 max-w-2xl mx-auto">
-              No need to switch accounting software or change your workflow. Reqflow integrates seamlessly.
-            </p>
+    <section className="bg-slate-50 py-20 md:py-28 px-6 md:px-12 lg:px-20">
+      <div className="max-w-6xl mx-auto">
+        {/* Badge + Header */}
+        <div className="mb-14">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-blue-200 bg-blue-50 mb-5">
+            <Plug className="w-4 h-4 text-blue-600" />
+            <span className="text-caption font-semibold text-blue-600 uppercase tracking-wider">Integrations</span>
           </div>
-
-          {/* Integration Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            {integrations.map((integration, index) => (
-              <div
-                key={index}
-                className="p-6 rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-md transition-shadow duration-300"
-              >
-                {/* Logo placeholder - using text for now */}
-                <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center mb-4">
-                  <span className="text-xl font-semibold text-slate-700">
-                    {integration.name.charAt(0)}
-                  </span>
-                </div>
-
-                {/* Content */}
-                <h3 className="text-body font-semibold text-slate-900 mb-2">
-                  {integration.name}
-                </h3>
-                <p className="text-body-sm text-slate-600 leading-relaxed">
-                  {integration.description}
-                </p>
-              </div>
-            ))}
-          </div>
-
-          {/* Footer note */}
-          <div className="text-center mt-12">
-            <p className="text-body text-slate-600">
-              Plus webhooks and API access for custom integrations
-            </p>
-          </div>
+          <h2 className="text-h2 text-slate-900 mb-4">
+            Plugs into the tools<br />your team already uses.
+          </h2>
+          <p className="text-body-lg text-slate-600 max-w-2xl">
+            One-click integrations with your accounting, chat, and identity tools.
+            Data flows both ways, so nothing needs manual entry.
+          </p>
         </div>
-      </Container>
-    </Section>
+
+        {/* Integration Icons */}
+        <div className="grid grid-cols-3 md:grid-cols-6 gap-6">
+          {integrations.map((integration, i) => (
+            <div key={i} className="rounded-2xl border border-slate-200 bg-white p-6 flex flex-col items-center gap-4 hover:shadow-md transition-shadow duration-200">
+              <div className={`w-14 h-14 rounded-2xl ${integration.color} flex items-center justify-center`}>
+                <span className="text-white font-bold text-xl">{integration.letter}</span>
+              </div>
+              <span className="text-body-sm font-medium text-slate-900">{integration.name}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }

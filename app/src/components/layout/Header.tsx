@@ -45,13 +45,13 @@ export function Header() {
           href="/login"
           className="hidden lg:block text-body-sm font-medium text-slate-600 no-underline hover:text-slate-900 transition-colors"
         >
-          Sign In
+          Log in
         </Link>
         <Link
           href="/signup"
-          className="hidden lg:block bg-blue-600 text-white px-6 py-2.5 rounded-lg text-body-sm font-semibold no-underline hover:bg-blue-700 transition-colors"
+          className="hidden lg:block bg-blue-600 text-white px-6 py-2.5 rounded-2xl text-body-sm font-semibold no-underline hover:bg-blue-700 transition-colors"
         >
-          Start Free Trial
+          Get Started Free
         </Link>
 
         {/* Mobile Menu */}

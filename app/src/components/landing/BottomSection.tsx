@@ -37,7 +37,7 @@ export function Pricing() {
       </div>
 
       <div className="w-[800px]">
-        <div className="bg-white rounded-2xl border-2 border-blue-600 p-10 flex flex-col items-center gap-8">
+        <div className="bg-white rounded-2xl border border-slate-200 p-10 flex flex-col items-center gap-8 shadow-sm">
           <div className="flex flex-col items-center gap-2">
             <span className="text-hero text-slate-900">
               $0
@@ -54,9 +54,6 @@ export function Pricing() {
               "Unlimited users and requests",
               "Full approval workflows",
               "Budget tracking and purchase orders",
-              "Renewal notice-window tracking",
-              "Trial management with auto-reminders",
-              "AI-powered case builder for vendor comparisons",
               "Slack, QuickBooks, Xero integrations",
               "AI copilot for spend analysis",
             ].map((feature) => (
@@ -119,11 +116,6 @@ const faqs = [
     answer:
       "Not at all. Reqflow was built specifically for teams of 5 to 50. The smaller you are, the less you can afford to waste time on manual procurement. Most of our early users are under 30 people.",
   },
-  {
-    question: "Do we need to switch from QuickBooks/Xero to use Reqflow?",
-    answer:
-      "No. Reqflow integrates with QuickBooks and Xero—we sync invoices and vendors automatically. You can keep your existing accounting software and just use Reqflow for procurement and approval workflows. Everything flows into your accounting system with zero manual data entry.",
-  },
 ];
 
 export function FAQ() {
@@ -184,35 +176,35 @@ export function FinalCTA() {
   const { prefetch } = useNavigationPrefetch();
 
   return (
-    <section className="bg-blue-600 py-16 md:py-20 lg:py-24 px-6 md:px-12 lg:px-20 flex flex-col items-center gap-8">
+    <section className="bg-slate-900 py-16 md:py-20 lg:py-24 px-6 md:px-12 lg:px-20 flex flex-col items-center gap-8">
       <h2 className="text-h2 text-white text-center max-w-[700px] whitespace-pre-line">
         {"Stop buying things\nover Slack."}
       </h2>
 
-      <p className="text-body-lg text-white/80 text-center max-w-[600px]">
+      <p className="text-body-lg text-slate-400 text-center max-w-[600px]">
         Reqflow gives your small team a real procurement workflow. Free during
         early access. No credit card, no limits.
       </p>
 
-      <div className="flex items-center gap-4">
+      <div className="flex flex-col sm:flex-row items-center gap-4">
         <Link
           href="/signup"
           onMouseEnter={() => prefetch("/signup")}
-          className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-3.5 rounded-[10px] text-body font-semibold hover:bg-blue-50 transition-colors"
+          className="inline-flex items-center gap-2 bg-blue-600 text-white px-8 py-3.5 rounded-2xl text-body font-medium hover:bg-blue-700 transition-colors"
         >
           Get Started Free
           <ArrowRight className="w-[18px] h-[18px]" />
         </Link>
         <Link
-          href="/demo"
-          onMouseEnter={() => prefetch("/demo")}
-          className="inline-flex items-center gap-2 border-[1.5px] border-white/25 text-white px-8 py-3.5 rounded-[10px] text-body font-semibold hover:bg-white/10 transition-colors"
+          href="/features"
+          onMouseEnter={() => prefetch("/features")}
+          className="inline-flex items-center gap-2 border border-slate-700 text-white px-8 py-3.5 rounded-2xl text-body font-medium hover:bg-slate-800 transition-colors"
         >
           See How It Works
         </Link>
       </div>
 
-      <p className="text-body-sm font-medium text-white/60">
+      <p className="text-body-sm font-medium text-slate-500">
         100% free &nbsp;&middot;&nbsp; No card required &nbsp;&middot;&nbsp;
         Live in under 10 minutes
       </p>
