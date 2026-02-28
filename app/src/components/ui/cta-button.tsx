@@ -64,8 +64,8 @@ export function PrimaryCta({
     "hover:shadow-md",
     "focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2",
 
-    // Spacing - Generous padding
-    size === "large" ? "px-9 py-4" : "px-7 py-3",
+    // Spacing - Refined padding
+    size === "large" ? "px-8 py-3.5" : "px-6 py-2.5",
 
     // Shape - Slightly more rounded for premium feel
     "rounded-xl",
