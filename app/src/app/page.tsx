@@ -20,6 +20,22 @@ const TrustLogos = dynamic(
   }
 );
 
+const PainPoints = dynamic(
+  () => import("@/components/landing/PainPoints").then((mod) => mod.PainPoints),
+  {
+    loading: () => <SectionSkeleton height={500} />,
+    ssr: false,
+  }
+);
+
+const MetricsRow = dynamic(
+  () => import("@/components/landing/MetricsRow").then((mod) => mod.MetricsRow),
+  {
+    loading: () => <SectionSkeleton height={300} />,
+    ssr: false,
+  }
+);
+
 const ProductPreview = dynamic(
   () => import("@/components/landing/ProductPreview").then((mod) => mod.ProductPreview),
   {
@@ -30,6 +46,22 @@ const ProductPreview = dynamic(
 
 const Features = dynamic(
   () => import("@/components/landing/Features").then((mod) => mod.Features),
+  {
+    loading: () => <SectionSkeleton height={400} />,
+    ssr: false,
+  }
+);
+
+const RolePerspectives = dynamic(
+  () => import("@/components/landing/RolePerspectives").then((mod) => mod.RolePerspectives),
+  {
+    loading: () => <SectionSkeleton height={500} />,
+    ssr: false,
+  }
+);
+
+const DarkFeatures = dynamic(
+  () => import("@/components/landing/DarkFeatures").then((mod) => mod.DarkFeatures),
   {
     loading: () => <SectionSkeleton height={400} />,
     ssr: false,
@@ -156,11 +188,23 @@ export default function ReqflowLanding() {
       <Suspense fallback={<SectionSkeleton height={120} />}>
         <TrustLogos />
       </Suspense>
+      <Suspense fallback={<SectionSkeleton height={500} />}>
+        <PainPoints />
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton height={300} />}>
+        <MetricsRow />
+      </Suspense>
       <Suspense fallback={<SectionSkeleton height={600} />}>
         <ProductPreview />
       </Suspense>
       <Suspense fallback={<SectionSkeleton height={400} />}>
         <Features />
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton height={500} />}>
+        <RolePerspectives />
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton height={400} />}>
+        <DarkFeatures />
       </Suspense>
       <Suspense fallback={<SectionSkeleton height={200} />}>
         <FinalCTA />
