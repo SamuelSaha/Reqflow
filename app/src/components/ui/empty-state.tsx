@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * EmptyState Component
  * Consistent empty state pattern with illustrations, clear messaging, and CTAs
