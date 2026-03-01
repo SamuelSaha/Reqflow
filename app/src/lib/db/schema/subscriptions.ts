@@ -6,6 +6,7 @@ import { organizations } from "./organizations";
 import { vendors } from "./vendors";
 import { contracts } from "./contracts";
 import { departments } from "./departments";
+import { requests } from "./requests";
 
 export const subscriptions = pgTable("subscriptions", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -37,7 +38,8 @@ export const subscriptions = pgTable("subscriptions", {
 
   // Ownership
   ownerId: uuid("owner_id"), // Current owner (not necessarily who purchased it)
-  requestedById: uuid("requested_by_id"), // Who originally requested it
+  requestedById: uuid("requested_by_id"), // Who originally requested it (user)
+  sourceRequestId: uuid("source_request_id"), // Original request that was converted to this subscription
 
   // Add-ons and extras
   addOns: jsonb("add_ons").$type<Array<{ name: string; cost: number; description?: string }>>(),
@@ -69,6 +71,10 @@ export const subscriptionRelations = relations(subscriptions, ({ one }) => ({
   department: one(departments, {
     fields: [subscriptions.departmentId],
     references: [departments.id],
+  }),
+  sourceRequest: one(requests, {
+    fields: [subscriptions.sourceRequestId],
+    references: [requests.id],
   }),
 }));
 

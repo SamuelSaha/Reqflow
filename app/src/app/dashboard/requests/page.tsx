@@ -32,11 +32,15 @@ import {
   Search,
   Filter,
   X,
+  Download,
+  Trash2,
 } from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
 import { EmptyRequestsIllustration, NoResultsIllustration } from "@/components/ui/illustrations";
 import { RequestListSkeleton } from "@/components/dashboard/LoadingSkeletons";
 import { getErrorMessage } from "@/lib/utils/error-messages";
+import Papa from "papaparse";
+import { toast } from "sonner";
 
 export const dynamic = "force-dynamic";
 
@@ -118,6 +122,50 @@ export default function RequestsPage() {
   }
 
   const requestList = trpc.requests.myList.useQuery(queryParams);
+  const utils = trpc.useUtils();
+
+  const deleteMutation = trpc.requests.delete.useMutation({
+    onMutate: async ({ id }) => {
+      // Cancel outgoing refetches
+      await utils.requests.myList.cancel();
+
+      // Snapshot current state
+      const previousRequests = utils.requests.myList.getData(queryParams);
+
+      // Optimistically remove
+      utils.requests.myList.setData(queryParams, (old) =>
+        old?.filter((r) => r.id !== id)
+      );
+
+      return { previousRequests };
+    },
+    onError: (err, variables, context) => {
+      // Rollback on error
+      if (context?.previousRequests) {
+        utils.requests.myList.setData(queryParams, context.previousRequests);
+      }
+      toast.error("Failed to delete", { description: err.message });
+    },
+    onSuccess: (data, variables, context) => {
+      // Show undo toast
+      toast.success("Request deleted", {
+        action: {
+          label: "Undo",
+          onClick: () => {
+            // Restore snapshot
+            if (context?.previousRequests) {
+              utils.requests.myList.setData(queryParams, context.previousRequests);
+            }
+          },
+        },
+        duration: 5000,
+      });
+    },
+    onSettled: () => {
+      // Refetch to ensure consistency
+      utils.requests.myList.invalidate(queryParams);
+    },
+  });
 
   const hasActiveFilters = searchTerm || category || urgency || amountRange || dateRange || statusFilter !== "all";
 
@@ -132,6 +180,46 @@ export default function RequestsPage() {
     setSortOrder("desc");
   };
 
+  const exportToCSV = () => {
+    if (!requestList.data || requestList.data.length === 0) {
+      toast.error("No data to export");
+      return;
+    }
+
+    // Format data for CSV
+    const csvData = requestList.data.map((req) => ({
+      "Request Number": req.requestNumber,
+      "Title": req.title,
+      "Vendor": req.vendorName || "N/A",
+      "Department": req.department?.name || "N/A",
+      "Category": req.category || "N/A",
+      "Amount": `€${parseFloat(req.amount).toFixed(2)}`,
+      "Status": req.status,
+      "Urgency": req.urgency,
+      "Frequency": req.frequency,
+      "Created Date": new Date(req.createdAt).toLocaleDateString("en-GB"),
+      "Approved Date": req.approvedAt
+        ? new Date(req.approvedAt).toLocaleDateString("en-GB")
+        : "N/A",
+    }));
+
+    // Generate CSV
+    const csv = Papa.unparse(csvData);
+
+    // Create download
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `requests-export-${new Date().toISOString().split("T")[0]}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    toast.success(`Exported ${requestList.data.length} requests to CSV`);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -143,12 +231,23 @@ export default function RequestsPage() {
             View and manage your purchase requests
           </p>
         </div>
-        <Link href="/dashboard/requests/new">
-          <Button className="w-full sm:w-auto">
-            <Plus className="mr-2 h-4 w-4" />
-            New Request
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            onClick={exportToCSV}
+            disabled={!requestList.data || requestList.data.length === 0}
+            className="w-full sm:w-auto"
+          >
+            <Download className="mr-2 h-4 w-4" />
+            Export CSV
           </Button>
-        </Link>
+          <Link href="/dashboard/requests/new">
+            <Button className="w-full sm:w-auto">
+              <Plus className="mr-2 h-4 w-4" />
+              New Request
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* Search Bar */}
@@ -387,13 +486,17 @@ export default function RequestsPage() {
               {requestList.data.map((req) => {
                 const config = statusConfig[req.status] ?? statusConfig.draft;
                 const StatusIcon = config.icon;
+                const isDraft = req.status === "draft";
+
                 return (
-                  <Link
+                  <div
                     key={req.id}
-                    href={`/dashboard/requests/${req.id}`}
                     className="flex flex-col gap-2 px-4 py-3 md:flex-row md:items-center md:gap-4 md:px-6 md:py-4 hover:bg-slate-50 transition-colors group"
                   >
-                    <div className="flex items-center gap-3 min-w-0 flex-1">
+                    <Link
+                      href={`/dashboard/requests/${req.id}`}
+                      className="flex items-center gap-3 min-w-0 flex-1"
+                    >
                       <div className="flex-shrink-0">
                         <StatusIcon className={`h-5 w-5 ${
                           req.status === "approved" ? "text-green-500" :
@@ -418,7 +521,7 @@ export default function RequestsPage() {
                           {req.vendorName ? ` · ${req.vendorName}` : ""}
                         </p>
                       </div>
-                    </div>
+                    </Link>
 
                     <div className="flex items-center justify-between gap-3 pl-8 md:pl-0 md:flex-shrink-0">
                       <div className="md:text-right">
@@ -444,9 +547,24 @@ export default function RequestsPage() {
                           </Badge>
                         )}
                       </div>
-                      <ArrowUpRight className="h-4 w-4 text-slate-300 group-hover:text-blue-500 transition-colors hidden md:block" />
+                      {isDraft ? (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-slate-400 hover:text-red-600"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            deleteMutation.mutate({ id: req.id });
+                          }}
+                          disabled={deleteMutation.isPending}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      ) : (
+                        <ArrowUpRight className="h-4 w-4 text-slate-300 group-hover:text-blue-500 transition-colors hidden md:block" />
+                      )}
                     </div>
-                  </Link>
+                  </div>
                 );
               })}
             </div>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Manrope, DM_Mono } from "next/font/google";
 import { TRPCProvider } from "@/lib/api/react";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -79,7 +80,9 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
-        <TRPCProvider>{children}</TRPCProvider>
+        <ErrorBoundary>
+          <TRPCProvider>{children}</TRPCProvider>
+        </ErrorBoundary>
       </body>
     </html>
   );

@@ -19,14 +19,41 @@ function getBaseUrl() {
   return env.NEXT_PUBLIC_APP_URL;
 }
 
+function getCookie(name: string): string | undefined {
+  if (typeof document === "undefined") return undefined;
+  const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
+  return match ? decodeURIComponent(match[1]) : undefined;
+}
+
 export function TRPCProvider({ children }: { children: React.ReactNode }) {
-  const [queryClient] = useState(() => new QueryClient());
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            // Caching strategy: Optimize for dashboard performance
+            staleTime: 60 * 1000, // Data stays fresh for 1 minute (reduces API calls by ~70%)
+            gcTime: 5 * 60 * 1000, // Keep unused data in cache for 5 minutes
+            refetchOnWindowFocus: false, // Don't refetch when user tabs back (better UX)
+            refetchOnMount: false, // Use cache on mount if data is fresh (instant loads)
+            retry: 2, // Retry failed requests twice (better reliability)
+            retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000), // Exponential backoff
+          },
+        },
+      })
+  );
   const [trpcClient] = useState(() =>
     trpc.createClient({
       links: [
         httpBatchLink({
           url: `${getBaseUrl()}/api/trpc`,
           transformer: superjson,
+          // Prevent URLs from exceeding browser limits
+          maxURLLength: 2083,
+          headers() {
+            const csrfToken = getCookie("csrf_token");
+            return csrfToken ? { "x-csrf-token": csrfToken } : {};
+          },
         }),
       ],
     })

@@ -14,6 +14,10 @@ import {
   RefreshCw,
   Clock,
   AlertTriangle,
+  Sparkles,
+  Terminal,
+  Copy,
+  Check,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -53,6 +57,7 @@ export default function IntegrationsPage() {
     open: boolean;
     provider: Provider | null;
   }>({ open: false, provider: null });
+  const [copiedConfig, setCopiedConfig] = useState(false);
 
   const integrationsList = trpc.integrations.list.useQuery();
   const syncLogs = trpc.integrations.getSyncLogs.useQuery(
@@ -327,6 +332,154 @@ export default function IntegrationsPage() {
           })}
         </div>
       )}
+
+      {/* AI Integration Section */}
+      <div className="mt-12">
+        <div>
+          <h2 className="text-2xl font-bold text-slate-900">
+            AI Integration (MCP Server)
+          </h2>
+          <p className="text-slate-600 mt-1">
+            Use Claude Desktop, Cursor, or other MCP clients to manage procurement through natural language
+          </p>
+        </div>
+
+        <Card className="mt-6 border-violet-200 bg-gradient-to-br from-violet-50 to-blue-50">
+          <CardHeader>
+            <div className="flex items-start justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-violet-100 rounded-lg">
+                  <Sparkles className="h-6 w-6 text-violet-600" />
+                </div>
+                <div>
+                  <CardTitle className="text-xl">Model Context Protocol</CardTitle>
+                  <p className="text-sm text-slate-600 mt-1">
+                    Expose procurement workflows to AI assistants
+                  </p>
+                </div>
+              </div>
+            </div>
+          </CardHeader>
+
+          <CardContent className="space-y-6">
+            {/* Features */}
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="p-4 bg-white rounded-lg border border-slate-200">
+                <h4 className="font-medium text-sm text-slate-900 mb-2">Available Tools</h4>
+                <ul className="text-xs text-slate-600 space-y-1">
+                  <li>• Create & submit purchase requests</li>
+                  <li>• Approve/reject from anywhere (Slack, voice)</li>
+                  <li>• Search requests & subscriptions</li>
+                  <li>• Get spend analytics & budget status</li>
+                </ul>
+              </div>
+              <div className="p-4 bg-white rounded-lg border border-slate-200">
+                <h4 className="font-medium text-sm text-slate-900 mb-2">Compatible With</h4>
+                <ul className="text-xs text-slate-600 space-y-1">
+                  <li>• Claude Desktop (recommended)</li>
+                  <li>• Cursor IDE</li>
+                  <li>• Any MCP-compatible client</li>
+                  <li>• Custom integrations via stdio</li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Setup Instructions */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <Terminal className="h-4 w-4 text-slate-600" />
+                <h4 className="font-medium text-sm text-slate-900">
+                  Claude Desktop Setup
+                </h4>
+              </div>
+
+              <div className="bg-slate-900 rounded-lg p-4 relative">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="absolute top-2 right-2 text-slate-400 hover:text-white"
+                  onClick={() => {
+                    const config = `{
+  "mcpServers": {
+    "reqflow": {
+      "command": "npx",
+      "args": ["tsx", "src/mcp/server.ts"],
+      "cwd": "/path/to/Reqflow/app",
+      "env": {
+        "DATABASE_URL": "your-database-url",
+        "REQFLOW_USER_EMAIL": "your-email@company.com"
+      }
+    }
+  }
+}`;
+                    navigator.clipboard.writeText(config);
+                    setCopiedConfig(true);
+                    setTimeout(() => setCopiedConfig(false), 2000);
+                    toast.success("Config copied to clipboard");
+                  }}
+                >
+                  {copiedConfig ? (
+                    <Check className="h-4 w-4" />
+                  ) : (
+                    <Copy className="h-4 w-4" />
+                  )}
+                </Button>
+                <pre className="text-xs text-slate-300 overflow-x-auto">
+                  <code>{`{
+  "mcpServers": {
+    "reqflow": {
+      "command": "npx",
+      "args": ["tsx", "src/mcp/server.ts"],
+      "cwd": "/path/to/Reqflow/app",
+      "env": {
+        "DATABASE_URL": "your-database-url",
+        "REQFLOW_USER_EMAIL": "your-email@company.com"
+      }
+    }
+  }
+}`}</code>
+                </pre>
+              </div>
+
+              <div className="flex items-start gap-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <AlertCircle className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                <div className="text-xs text-blue-900">
+                  <p className="font-medium mb-1">Configuration file location:</p>
+                  <p className="text-blue-700">
+                    macOS: <code className="bg-blue-100 px-1 py-0.5 rounded">~/Library/Application Support/Claude/claude_desktop_config.json</code>
+                  </p>
+                  <p className="text-blue-700 mt-1">
+                    Windows: <code className="bg-blue-100 px-1 py-0.5 rounded">%APPDATA%/Claude/claude_desktop_config.json</code>
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-2 p-3 bg-violet-50 border border-violet-200 rounded-lg">
+                <Sparkles className="h-4 w-4 text-violet-600 mt-0.5 flex-shrink-0" />
+                <div className="text-xs text-violet-900">
+                  <p className="font-medium mb-1">Example conversation:</p>
+                  <p className="text-violet-700 italic">
+                    "Show me pending approvals" → "Approve the GitHub Copilot request" → "What's our SaaS spend this quarter?"
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Documentation Link */}
+            <div className="pt-4 border-t">
+              <a
+                href="https://github.com/yourusername/reqflow#mcp-server"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-violet-600 hover:text-violet-700 font-medium inline-flex items-center gap-1"
+              >
+                View full documentation
+                <ExternalLink className="h-3.5 w-3.5" />
+              </a>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
       {/* Disconnect Confirmation Dialog */}
       <Dialog

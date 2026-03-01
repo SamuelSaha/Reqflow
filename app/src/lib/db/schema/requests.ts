@@ -16,6 +16,7 @@ import { users } from "./users";
 import { departments } from "./departments";
 import { budgets } from "./budgets";
 import { categories } from "./categories";
+import { subscriptions } from "./subscriptions";
 import { z } from "zod";
 
 /**
@@ -51,6 +52,9 @@ export const requests = pgTable(
     vendorName: text("vendor_name"),
     vendorId: uuid("vendor_id"), // References vendors.id (will create later)
 
+    // Conversion tracking
+    convertedToSubscriptionId: uuid("converted_to_subscription_id"), // References subscriptions.id when converted
+
     // Financial
     amount: numeric("amount", { precision: 12, scale: 2 }).notNull(), // Total cost
     currency: text("currency").notNull().default("EUR"),
@@ -80,6 +84,9 @@ export const requests = pgTable(
     // Metadata
     customFields: jsonb("custom_fields").$type<Record<string, unknown>>(),
     attachments: jsonb("attachments").$type<Array<{ name: string; url: string }>>(),
+
+    // Full-text search
+    searchVector: text("search_vector"), // tsvector managed by PostgreSQL trigger
 
     // Timestamps
     createdAt: timestamp("created_at").notNull().defaultNow(),
@@ -118,6 +125,10 @@ export const requestsRelations = relations(requests, ({ one }) => ({
   category: one(categories, {
     fields: [requests.categoryId],
     references: [categories.id],
+  }),
+  convertedToSubscription: one(subscriptions, {
+    fields: [requests.convertedToSubscriptionId],
+    references: [subscriptions.id],
   }),
 }));
 

@@ -5,6 +5,16 @@ import { toast } from "sonner";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
@@ -15,7 +25,8 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { ApprovalCard } from "@/components/dashboard/ApprovalCard";
 import { trpc } from "@/lib/api/react";
-import { CheckSquare, Clock, XCircle, AlertCircle, Search, Filter, X } from "lucide-react";
+import { CheckSquare, Clock, XCircle, AlertCircle, Search, Filter, X, RefreshCw, Loader2 } from "lucide-react";
+import { useEffect, useState as useReactState } from "react";
 import { ApprovalCardSkeleton } from "@/components/dashboard/LoadingSkeletons";
 import { getErrorMessage } from "@/lib/utils/error-messages";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -37,6 +48,12 @@ export default function ApprovalsPage() {
   const [dateRange, setDateRange] = useState<string>("");
   const [sortBy, setSortBy] = useState<SortOption>("createdAt");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [lastUpdated, setLastUpdated] = useReactState<Date>(new Date());
+
+  // Bulk selection state
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [rejectDialogOpen, setRejectDialogOpen] = useState(false);
+  const [bulkRejectReason, setBulkRejectReason] = useState("");
 
   const utils = trpc.useUtils();
 
@@ -83,7 +100,37 @@ export default function ApprovalsPage() {
     queryParams.dateFrom = ninetyDaysAgo.toISOString();
   }
 
-  const queue = trpc.approvals.myQueue.useQuery(queryParams);
+  const queue = trpc.approvals.myQueue.useQuery(queryParams, {
+    refetchInterval: 30000, // Poll every 30s for real-time updates
+    refetchIntervalInBackground: false, // Stop polling when tab is inactive
+  });
+
+  // Track last update time
+  useEffect(() => {
+    if (queue.dataUpdatedAt) {
+      setLastUpdated(new Date(queue.dataUpdatedAt));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [queue.dataUpdatedAt]);
+
+  // Format "last updated" text
+  const getLastUpdatedText = () => {
+    const seconds = Math.floor((Date.now() - lastUpdated.getTime()) / 1000);
+    if (seconds < 10) return "Just now";
+    if (seconds < 60) return `${seconds}s ago`;
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes}m ago`;
+    const hours = Math.floor(minutes / 60);
+    return `${hours}h ago`;
+  };
+
+  // Update "last updated" text every 5 seconds
+  const [, forceUpdate] = useReactState({});
+  useEffect(() => {
+    const interval = setInterval(() => forceUpdate({}), 5000);
+    return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const hasActiveFilters = searchTerm || category || urgency || amountRange || dateRange;
 
@@ -123,7 +170,7 @@ export default function ApprovalsPage() {
       });
     },
 
-    onSuccess: (data, variables) => {
+    onSuccess: (data, variables, context) => {
       const action = variables.decision === "approved" ? "approved" : "rejected";
 
       // Show enhanced toast with sync info for approved requests
@@ -131,6 +178,21 @@ export default function ApprovalsPage() {
         const providerName = data.syncProvider === "quickbooks" ? "QuickBooks" : "Xero";
         toast.success("Request approved", {
           description: `Syncing to ${providerName} in the background...`,
+          duration: 5000,
+        });
+      } else if (variables.decision === "rejected") {
+        // Show undo toast for rejections
+        toast.success("Request rejected", {
+          description: "Successfully rejected the purchase request",
+          action: {
+            label: "Undo",
+            onClick: () => {
+              // Restore snapshot
+              if (context?.previousQueue) {
+                utils.approvals.myQueue.setData({ status: activeTab }, context.previousQueue);
+              }
+            },
+          },
           duration: 5000,
         });
       } else {
@@ -160,6 +222,82 @@ export default function ApprovalsPage() {
     }
   }
 
+  // Bulk approve mutation
+  const bulkApproveMutation = trpc.approvals.bulkApprove.useMutation({
+    onMutate: async () => {
+      await utils.approvals.myQueue.cancel();
+      const previous = utils.approvals.myQueue.getData({ status: activeTab });
+
+      // Optimistically remove selected items
+      utils.approvals.myQueue.setData(
+        { status: activeTab },
+        (old) => old?.filter(a => !selectedIds.has(a.id)) ?? []
+      );
+
+      return { previous };
+    },
+    onSuccess: ({ succeeded, failed }) => {
+      const successMsg = `✅ ${succeeded.length} approved`;
+      if (failed.length > 0) {
+        toast.success(successMsg);
+        toast.error(`❌ ${failed.length} failed to approve`);
+      } else {
+        toast.success(successMsg);
+      }
+      setSelectedIds(new Set());
+    },
+    onError: (err, vars, context) => {
+      if (context?.previous) {
+        utils.approvals.myQueue.setData({ status: activeTab }, context.previous);
+      }
+      toast.error("Bulk approve failed", {
+        description: err.message || "Please try again",
+      });
+    },
+    onSettled: () => {
+      utils.approvals.myQueue.invalidate({ status: activeTab });
+    },
+  });
+
+  // Bulk reject mutation
+  const bulkRejectMutation = trpc.approvals.bulkReject.useMutation({
+    onMutate: async () => {
+      await utils.approvals.myQueue.cancel();
+      const previous = utils.approvals.myQueue.getData({ status: activeTab });
+
+      // Optimistically remove selected items
+      utils.approvals.myQueue.setData(
+        { status: activeTab },
+        (old) => old?.filter(a => !selectedIds.has(a.id)) ?? []
+      );
+
+      return { previous };
+    },
+    onSuccess: ({ succeeded, failed }) => {
+      const successMsg = `✅ ${succeeded.length} rejected`;
+      if (failed.length > 0) {
+        toast.success(successMsg);
+        toast.error(`❌ ${failed.length} failed to reject`);
+      } else {
+        toast.success(successMsg);
+      }
+      setSelectedIds(new Set());
+      setRejectDialogOpen(false);
+      setBulkRejectReason("");
+    },
+    onError: (err, vars, context) => {
+      if (context?.previous) {
+        utils.approvals.myQueue.setData({ status: activeTab }, context.previous);
+      }
+      toast.error("Bulk reject failed", {
+        description: err.message || "Please try again",
+      });
+    },
+    onSettled: () => {
+      utils.approvals.myQueue.invalidate({ status: activeTab });
+    },
+  });
+
   const tabs: { key: Tab; label: string; icon: typeof Clock }[] = [
     { key: "pending", label: "Pending", icon: Clock },
     { key: "approved", label: "Approved", icon: CheckSquare },
@@ -168,13 +306,19 @@ export default function ApprovalsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900">
-          Approvals
-        </h1>
-        <p className="text-slate-600 mt-2">
-          Review purchase requests with AI-powered analysis
-        </p>
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+            Approvals
+          </h1>
+          <p className="text-slate-600 mt-2">
+            Review purchase requests with AI-powered analysis
+          </p>
+        </div>
+        <div className="flex items-center gap-2 text-sm text-slate-500">
+          <RefreshCw className={`h-3.5 w-3.5 ${queue.isFetching ? "animate-spin" : ""}`} />
+          <span>{getLastUpdatedText()}</span>
+        </div>
       </div>
 
       {/* Search Bar */}
@@ -372,6 +516,64 @@ export default function ApprovalsPage() {
         </Card>
       )}
 
+      {/* Bulk Action Bar */}
+      {selectedIds.size > 0 && activeTab === "pending" && (
+        <Card className="sticky top-0 z-10 border-blue-200 bg-blue-50">
+          <CardContent className="py-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <Checkbox
+                  checked={selectedIds.size === (queue.data?.length ?? 0)}
+                  onCheckedChange={(checked) => {
+                    if (checked) {
+                      setSelectedIds(new Set(queue.data?.map(a => a.id) ?? []));
+                    } else {
+                      setSelectedIds(new Set());
+                    }
+                  }}
+                />
+                <span className="font-medium text-blue-900">
+                  {selectedIds.size} selected
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  size="sm"
+                  onClick={() => bulkApproveMutation.mutate({
+                    approvalIds: Array.from(selectedIds),
+                  })}
+                  disabled={bulkApproveMutation.isPending}
+                  className="bg-green-600 hover:bg-green-700"
+                >
+                  {bulkApproveMutation.isPending ? (
+                    <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+                  ) : (
+                    <CheckSquare className="h-4 w-4 mr-1" />
+                  )}
+                  Approve ({selectedIds.size})
+                </Button>
+                <Button
+                  size="sm"
+                  variant="destructive"
+                  onClick={() => setRejectDialogOpen(true)}
+                  disabled={bulkRejectMutation.isPending}
+                >
+                  <XCircle className="h-4 w-4 mr-1" />
+                  Reject ({selectedIds.size})
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => setSelectedIds(new Set())}
+                >
+                  Clear
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Approval cards with AI analysis */}
       {queue.data && queue.data.length > 0 && (
         <div className="space-y-4">
@@ -381,10 +583,68 @@ export default function ApprovalsPage() {
               approval={approval}
               onDecide={handleDecide}
               deciding={decidingId === approval.id}
+              isSelected={selectedIds.has(approval.id)}
+              onToggleSelect={activeTab === "pending" ? (id: string) => {
+                setSelectedIds(prev => {
+                  const next = new Set(prev);
+                  if (next.has(id)) next.delete(id);
+                  else next.add(id);
+                  return next;
+                });
+              } : undefined}
             />
           ))}
         </div>
       )}
+
+      {/* Bulk Reject Dialog */}
+      <Dialog open={rejectDialogOpen} onOpenChange={setRejectDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Reject {selectedIds.size} Requests</DialogTitle>
+            <DialogDescription>
+              Provide a reason for rejecting these requests. This will be sent to all requesters.
+            </DialogDescription>
+          </DialogHeader>
+          <Textarea
+            value={bulkRejectReason}
+            onChange={(e) => setBulkRejectReason(e.target.value)}
+            placeholder="Why are these requests being rejected?"
+            rows={4}
+            className="mt-4"
+          />
+          <DialogFooter>
+            <Button
+              variant="ghost"
+              onClick={() => {
+                setRejectDialogOpen(false);
+                setBulkRejectReason("");
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={() => {
+                if (bulkRejectReason.length < 10) {
+                  toast.error("Reason must be at least 10 characters");
+                  return;
+                }
+                bulkRejectMutation.mutate({
+                  approvalIds: Array.from(selectedIds),
+                  reason: bulkRejectReason,
+                });
+              }}
+              disabled={bulkRejectReason.length < 10 || bulkRejectMutation.isPending}
+            >
+              {bulkRejectMutation.isPending && (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              )}
+              Reject {selectedIds.size} Requests
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
@@ -396,11 +656,15 @@ function ApprovalCardWithAnalysis({
   approval,
   onDecide,
   deciding,
+  isSelected,
+  onToggleSelect,
 }: {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   approval: any;
   onDecide: (id: string, decision: "approved" | "rejected", comments?: string) => void;
   deciding: boolean;
+  isSelected?: boolean;
+  onToggleSelect?: (id: string) => void;
 }) {
   const analysis = trpc.approvals.analyze.useQuery(
     { requestId: approval.request.id },
@@ -414,6 +678,8 @@ function ApprovalCardWithAnalysis({
       analysisLoading={analysis.isLoading}
       onDecide={onDecide}
       deciding={deciding}
+      isSelected={isSelected}
+      onToggleSelect={onToggleSelect}
     />
   );
 }

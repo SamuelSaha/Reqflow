@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   AlertTriangle,
   CheckCircle2,
@@ -55,6 +56,8 @@ interface ApprovalCardProps {
   analysisLoading: boolean;
   onDecide: (approvalId: string, decision: "approved" | "rejected", comments?: string) => void;
   deciding: boolean;
+  isSelected?: boolean;
+  onToggleSelect?: (id: string) => void;
 }
 
 const severityColors = {
@@ -84,14 +87,27 @@ export function ApprovalCard({
   analysisLoading,
   onDecide,
   deciding,
+  isSelected = false,
+  onToggleSelect,
 }: ApprovalCardProps) {
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState("");
   const req = approval.request;
 
   return (
-    <Card className="overflow-hidden">
-      <CardHeader className="pb-3">
+    <Card className={`overflow-hidden relative ${isSelected ? "ring-2 ring-blue-500 ring-offset-2" : ""}`}>
+      {/* Bulk selection checkbox */}
+      {onToggleSelect && (
+        <div className="absolute top-4 left-4 z-10">
+          <Checkbox
+            checked={isSelected}
+            onCheckedChange={() => onToggleSelect(approval.id)}
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white border-2"
+          />
+        </div>
+      )}
+      <CardHeader className={`pb-3 ${onToggleSelect ? "pl-14" : ""}`}>
         <div className="flex items-start justify-between">
           <div className="space-y-1">
             <div className="flex items-center gap-2">

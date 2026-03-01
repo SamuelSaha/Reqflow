@@ -14,8 +14,9 @@ import {
   checkApiRateLimit,
   checkMutationRateLimit,
 } from "../security/rate-limit";
-import { validateCSRFToken, getCSRFTokenFromRequest } from "../security/csrf";
+import { validateCSRFToken, getCSRFTokenFromRequest, setCSRFToken } from "../security/csrf";
 import { setRLSContext, clearRLSContext } from "../security/rls-context";
+import { cookies } from "next/headers";
 
 /**
  * Context for all tRPC procedures
@@ -107,6 +108,23 @@ const rateLimitMiddleware = t.middleware(async ({ ctx, next, path, type }) => {
 const csrfMiddleware = t.middleware(async ({ ctx, next, type }) => {
   // Only validate mutations (state-changing operations)
   if (type === "mutation") {
+    // Skip CSRF in development — cross-site attacks don't apply on localhost
+    if (process.env.NODE_ENV === "development") {
+      return next({ ctx });
+    }
+
+    // Auto-provision CSRF cookie if session exists but cookie is missing
+    // (handles users who logged in before CSRF was implemented)
+    const cookieStore = await cookies();
+    if (!cookieStore.get("csrf_token")?.value && ctx.user) {
+      await setCSRFToken();
+      // Still reject this request — client needs to retry with the new cookie
+      throw new TRPCError({
+        code: "FORBIDDEN",
+        message: "CSRF token provisioned. Please retry your request.",
+      });
+    }
+
     const csrfToken = await getCSRFTokenFromRequest();
     const isValid = await validateCSRFToken(csrfToken);
 

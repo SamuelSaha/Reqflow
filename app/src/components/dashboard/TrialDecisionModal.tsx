@@ -133,7 +133,7 @@ export function TrialDecisionModal({
         description: error.message || "Please try again",
       });
     },
-    onSuccess: (result) => {
+    onSuccess: (result, variables, context) => {
       const decision = form.getValues("decision");
 
       if (decision === "convert") {
@@ -156,7 +156,19 @@ export function TrialDecisionModal({
       } else {
         toast.success("Trial cancelled", {
           description: "Trial marked as cancelled",
-          duration: 4000,
+          action: {
+            label: "Undo",
+            onClick: () => {
+              // Restore snapshot
+              if (context?.previousList) {
+                utils.trials.list.setData({}, context.previousList);
+              }
+              if (context?.previousTrial) {
+                utils.trials.getById.setData({ id: trialId }, context.previousTrial);
+              }
+            },
+          },
+          duration: 5000,
         });
         onSuccess();
         onOpenChange(false);

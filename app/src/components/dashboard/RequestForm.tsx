@@ -1,12 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import {
   Form,
   FormControl,
@@ -28,7 +33,7 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { trpc } from "@/lib/api/react";
-import { Loader2, FlaskConical, Plus, X, FileText, Save } from "lucide-react";
+import { Loader2, FlaskConical, Plus, X, FileText, Save, ChevronDown, ChevronRight, CheckCircle2 } from "lucide-react";
 import { addDays, format } from "date-fns";
 import { TemplatePickerDialog } from "./TemplatePickerDialog";
 import { SaveTemplateDialog } from "./SaveTemplateDialog";
@@ -60,6 +65,9 @@ export function RequestForm() {
   const [templatePickerOpen, setTemplatePickerOpen] = useState(false);
   const [saveTemplateOpen, setSaveTemplateOpen] = useState(false);
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
+  const [basicsOpen, setBasicsOpen] = useState(true);
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const [trialOpen, setTrialOpen] = useState(false);
   const router = useRouter();
 
   const form = useForm<RequestFormValues>({
@@ -197,15 +205,27 @@ export function RequestForm() {
     }
   }
 
+  // Auto-open next section when current is complete
+  const basicsComplete = form.watch("title") && form.watch("category") && form.watch("amount");
+  const detailsComplete = true; // Details are optional
+
+  // Auto-expand financial details when basics are complete
+  useEffect(() => {
+    if (basicsComplete && !detailsOpen) {
+      setDetailsOpen(true);
+    }
+  }, [basicsComplete, detailsOpen]);
+
   return (
     <>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           {/* Template actions */}
           <div className="flex gap-2 justify-end">
             <Button
               type="button"
               variant="outline"
+              size="sm"
               onClick={() => setTemplatePickerOpen(true)}
             >
               <FileText className="h-4 w-4 mr-2" />
@@ -214,6 +234,7 @@ export function RequestForm() {
             <Button
               type="button"
               variant="outline"
+              size="sm"
               onClick={handleSaveAsTemplate}
             >
               <Save className="h-4 w-4 mr-2" />
@@ -221,14 +242,31 @@ export function RequestForm() {
             </Button>
           </div>
 
-          <Card>
-          <CardHeader>
-            <CardTitle>Request Details</CardTitle>
-            <CardDescription>
-              What do you need to purchase?
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
+          {/* Section 1: Basics (Always expanded first) */}
+          <Collapsible open={basicsOpen} onOpenChange={setBasicsOpen}>
+            <Card className={basicsComplete ? "border-green-200 bg-green-50/20" : ""}>
+            <CollapsibleTrigger asChild>
+              <CardHeader className="cursor-pointer hover:bg-slate-50/50 transition-colors">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    {basicsComplete && <CheckCircle2 className="h-5 w-5 text-green-600" />}
+                    <div>
+                      <CardTitle className="text-lg">Basic Information</CardTitle>
+                      <CardDescription>
+                        What do you need to purchase?
+                      </CardDescription>
+                    </div>
+                  </div>
+                  {basicsOpen ? (
+                    <ChevronDown className="h-5 w-5 text-slate-400" />
+                  ) : (
+                    <ChevronRight className="h-5 w-5 text-slate-400" />
+                  )}
+                </div>
+              </CardHeader>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <CardContent className="space-y-4 pt-0">
             <FormField
               control={form.control}
               name="title"
@@ -301,17 +339,36 @@ export function RequestForm() {
                 )}
               />
             </div>
-          </CardContent>
-        </Card>
+              </CardContent>
+            </CollapsibleContent>
+            </Card>
+          </Collapsible>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Financial Details</CardTitle>
-            <CardDescription>
-              How much does it cost?
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
+          {/* Section 2: Financial Details */}
+          <Collapsible open={detailsOpen} onOpenChange={setDetailsOpen}>
+            <Card className={detailsComplete ? "border-green-200 bg-green-50/20" : ""}>
+              <CollapsibleTrigger asChild>
+                <CardHeader className="cursor-pointer hover:bg-slate-50/50 transition-colors">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      {detailsComplete && <CheckCircle2 className="h-5 w-5 text-green-600" />}
+                      <div>
+                        <CardTitle className="text-lg">Financial Details</CardTitle>
+                        <CardDescription>
+                          How much does it cost?
+                        </CardDescription>
+                      </div>
+                    </div>
+                    {detailsOpen ? (
+                      <ChevronDown className="h-5 w-5 text-slate-400" />
+                    ) : (
+                      <ChevronRight className="h-5 w-5 text-slate-400" />
+                    )}
+                  </div>
+                </CardHeader>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <CardContent className="space-y-4 pt-0">
             <div className="grid gap-4 md:grid-cols-3">
               <FormField
                 control={form.control}
@@ -374,46 +431,85 @@ export function RequestForm() {
               />
             </div>
 
-            {form.watch("frequency") !== "one-time" && form.watch("amount") && (
-              <p className="text-sm font-medium text-slate-600">
-                Annual cost: €{(parseFloat(form.watch("amount") || "0") * (form.watch("frequency") === "monthly" ? 12 : 1)).toFixed(2)}
-              </p>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Trial Mode Toggle */}
-        <Card className="border-blue-200 bg-blue-50/30">
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <FormField
-                control={form.control}
-                name="isTrial"
-                render={({ field }) => (
-                  <FormItem className="flex items-center space-x-2">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <FormLabel className="!mt-0 flex items-center gap-2 cursor-pointer">
-                      <FlaskConical className="h-4 w-4 text-blue-600" />
-                      <span className="font-semibold text-blue-900">This is a trial</span>
-                    </FormLabel>
-                  </FormItem>
+                {/* Conditional: Show quantity only for hardware */}
+                {form.watch("category") === "hardware" && (
+                  <FormField
+                    control={form.control}
+                    name="quantity"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Quantity</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            min="1"
+                            {...field}
+                            onChange={(e) => field.onChange(parseInt(e.target.value) || 1)}
+                          />
+                        </FormControl>
+                        <FormDescription>Number of units needed</FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 )}
-              />
-            </div>
-            {form.watch("isTrial") && (
-              <CardDescription className="text-blue-700">
-                Track tool trials and get reminders before they expire
-              </CardDescription>
-            )}
-          </CardHeader>
 
-          {form.watch("isTrial") && (
-            <CardContent className="space-y-4">
+                {form.watch("frequency") !== "one-time" && form.watch("amount") && (
+                  <p className="text-sm font-medium text-slate-600">
+                    Annual cost: €{(parseFloat(form.watch("amount") || "0") * (form.watch("frequency") === "monthly" ? 12 : 1)).toFixed(2)}
+                  </p>
+                )}
+              </CardContent>
+            </CollapsibleContent>
+            </Card>
+          </Collapsible>
+
+          {/* Section 3: Trial Mode (Optional) */}
+          <Collapsible open={trialOpen} onOpenChange={setTrialOpen}>
+            <Card className="border-blue-200 bg-blue-50/30">
+              <CollapsibleTrigger asChild>
+                <CardHeader className="cursor-pointer hover:bg-blue-100/50 transition-colors">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <FormField
+                        control={form.control}
+                        name="isTrial"
+                        render={({ field }) => (
+                          <FormItem className="flex items-center space-x-2" onClick={(e) => e.stopPropagation()}>
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value}
+                                onCheckedChange={(checked) => {
+                                  field.onChange(checked);
+                                  setTrialOpen(!!checked);
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="!mt-0 flex items-center gap-2 cursor-pointer">
+                              <FlaskConical className="h-4 w-4 text-blue-600" />
+                              <span className="font-semibold text-blue-900">This is a trial</span>
+                            </FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    {trialOpen ? (
+                      <ChevronDown className="h-5 w-5 text-blue-400" />
+                    ) : (
+                      <ChevronRight className="h-5 w-5 text-blue-400" />
+                    )}
+                  </div>
+                  {form.watch("isTrial") && (
+                    <CardDescription className="text-blue-700">
+                      Track tool trials and get reminders before they expire
+                    </CardDescription>
+                  )}
+                </CardHeader>
+              </CollapsibleTrigger>
+
+              {form.watch("isTrial") && (
+                <CollapsibleContent>
+                  <CardContent className="space-y-4 pt-0">
               <FormField
                 control={form.control}
                 name="trialEndDate"
@@ -511,14 +607,16 @@ export function RequestForm() {
                   className="mt-2"
                 >
                   <Plus className="h-4 w-4 mr-1" />
-                  Add criterion
-                </Button>
-              </div>
-            </CardContent>
-          )}
-        </Card>
+                      Add criterion
+                    </Button>
+                  </div>
+                </CardContent>
+              </CollapsibleContent>
+            )}
+            </Card>
+          </Collapsible>
 
-        <div className="flex gap-3">
+          <div className="flex gap-3">
           <Button
             type="submit"
             disabled={isSubmitting}
