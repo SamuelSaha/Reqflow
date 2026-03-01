@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FileText, CheckSquare, LayoutDashboard, Wallet, FlaskConical, Calendar, Settings, Building2, Menu, Package } from "lucide-react";
+import { FileText, CheckSquare, LayoutDashboard, Wallet, FlaskConical, Calendar, Settings, Building2, Menu, Package, Receipt } from "lucide-react";
 import { Toaster } from "sonner";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { useNavigationPrefetch } from "@/hooks/useNavigationPrefetch";
@@ -26,6 +26,7 @@ const navItems = [
   { href: "/dashboard/renewals", label: "Renewals", icon: Calendar, exact: false },
   { href: "/dashboard/budgets", label: "Budgets", icon: Wallet, exact: false },
   { href: "/dashboard/subscriptions", label: "Subscriptions", icon: Package, exact: false },
+  { href: "/dashboard/invoices", label: "Invoices", icon: Receipt, exact: false },
   { href: "/dashboard/vendors", label: "Vendors", icon: Building2, exact: false },
   { href: "/dashboard/settings", label: "Settings", icon: Settings, exact: false },
 ];
@@ -143,7 +144,8 @@ function useNavigationPrefetchOnMount(
     "/dashboard/trials": ["/dashboard/approvals", "/dashboard/renewals"],
     "/dashboard/renewals": ["/dashboard/trials", "/dashboard/subscriptions"],
     "/dashboard/budgets": ["/dashboard/settings/budgets", "/dashboard/subscriptions"],
-    "/dashboard/subscriptions": ["/dashboard/budgets", "/dashboard/vendors"],
+    "/dashboard/subscriptions": ["/dashboard/budgets", "/dashboard/invoices"],
+    "/dashboard/invoices": ["/dashboard/subscriptions", "/dashboard/vendors"],
     "/dashboard/vendors": ["/dashboard/vendors/new", "/dashboard/requests"],
     "/dashboard/settings": ["/dashboard/settings/team", "/dashboard/settings/workflows"],
   };
