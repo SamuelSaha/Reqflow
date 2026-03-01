@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 import { CheckCheck, Trash2, ExternalLink, Bell } from "lucide-react";
 import { trpc } from "@/lib/api/react";
@@ -122,13 +121,18 @@ export function NotificationList({
             </Button>
           )}
           {compact && (
-            <Link
-              href="/dashboard/notifications"
-              onClick={onClose}
-              className="text-xs font-medium text-blue-600 hover:text-blue-700"
+            <button
+              onClick={() => {
+                onClose?.();
+                // Use window navigation for consistency
+                if (typeof window !== "undefined") {
+                  window.location.href = "/dashboard/notifications";
+                }
+              }}
+              className="text-xs font-medium text-blue-600 hover:text-blue-700 cursor-pointer"
             >
               See all
-            </Link>
+            </button>
           )}
         </div>
       </div>
@@ -199,13 +203,18 @@ export function NotificationList({
       {/* Footer */}
       {compact && data && data.hasMore && (
         <div className="px-4 py-3 border-t border-slate-200 text-center">
-          <Link
-            href="/dashboard/notifications"
-            onClick={onClose}
-            className="text-sm font-medium text-blue-600 hover:text-blue-700"
+          <button
+            onClick={() => {
+              onClose?.();
+              // Use window navigation for consistency
+              if (typeof window !== "undefined") {
+                window.location.href = "/dashboard/notifications";
+              }
+            }}
+            className="text-sm font-medium text-blue-600 hover:text-blue-700 cursor-pointer"
           >
             View all notifications
-          </Link>
+          </button>
         </div>
       )}
     </div>
