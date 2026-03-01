@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FileText, CheckSquare, LayoutDashboard, Wallet, FlaskConical, Calendar, Settings, Building2, Menu, Package, Receipt } from "lucide-react";
@@ -15,9 +16,15 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { NotificationBell } from "@/components/notifications/NotificationBell";
 
-export const dynamic = "force-dynamic";
+// Skip SSR for NotificationBell — Radix DropdownMenu generates mismatched
+// IDs between server and client. No SEO value in a notification bell anyway.
+const NotificationBell = dynamic(
+  () => import("@/components/notifications/NotificationBell").then((m) => m.NotificationBell),
+  { ssr: false }
+);
+
+// Note: route segment config (dynamic = "force-dynamic") only works in Server Components
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, exact: true },
