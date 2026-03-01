@@ -85,6 +85,9 @@ export const requests = pgTable(
     customFields: jsonb("custom_fields").$type<Record<string, unknown>>(),
     attachments: jsonb("attachments").$type<Array<{ name: string; url: string }>>(),
 
+    // Full-text search
+    searchVector: text("search_vector"), // tsvector managed by PostgreSQL trigger
+
     // Timestamps
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),

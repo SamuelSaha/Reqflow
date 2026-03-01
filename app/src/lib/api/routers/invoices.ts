@@ -6,7 +6,7 @@ import { z } from "zod";
 import { router, protectedProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { invoices, requests, subscriptions } from "../../db/schema";
-import { eq, and, desc, or, isNull } from "drizzle-orm";
+import { eq, and, desc, or, isNull, sql } from "drizzle-orm";
 
 /**
  * 3-way matching engine
@@ -65,6 +65,7 @@ export const invoicesRouter = router({
    */
   list: protectedProcedure
     .input(z.object({
+      search: z.string().optional(),
       status: z.enum(["pending", "approved", "paid", "disputed", "overdue", "cancelled"]).optional(),
       matchStatus: z.enum(["unmatched", "auto_matched", "manual_matched", "disputed"]).optional(),
       limit: z.number().min(1).max(100).default(50),
@@ -78,6 +79,14 @@ export const invoicesRouter = router({
 
       if (input?.matchStatus) {
         conditions.push(eq(invoices.matchStatus, input.matchStatus));
+      }
+
+      // Full-text search using PostgreSQL tsvector
+      if (input?.search) {
+        const searchQuery = input.search.trim().split(/\s+/).join(' & ');
+        conditions.push(
+          sql`${invoices.searchVector} @@ to_tsquery('english', ${searchQuery})`
+        );
       }
 
       const items = await ctx.db.query.invoices.findMany({

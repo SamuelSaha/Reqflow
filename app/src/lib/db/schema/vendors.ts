@@ -35,6 +35,9 @@ export const vendors = pgTable("vendors", {
   performanceScore: numeric("performance_score", { precision: 3, scale: 2 }),
   internalNotes: text("internal_notes"),
 
+  // Full-text search
+  searchVector: text("search_vector"), // tsvector managed by PostgreSQL trigger
+
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 }, (table) => [

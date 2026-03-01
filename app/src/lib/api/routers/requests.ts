@@ -124,14 +124,12 @@ export const requestsRouter = router({
         conditions.push(lte(requests.createdAt, new Date(input.dateTo)));
       }
 
-      // Search filter (request number, title, vendor name)
+      // Full-text search using PostgreSQL tsvector
       if (input?.search) {
+        // Clean search query for to_tsquery (replace spaces with & for AND logic)
+        const searchQuery = input.search.trim().split(/\s+/).join(' & ');
         conditions.push(
-          or(
-            ilike(requests.requestNumber, `%${input.search}%`),
-            ilike(requests.title, `%${input.search}%`),
-            ilike(requests.vendorName, `%${input.search}%`)
-          )!
+          sql`${requests.searchVector} @@ to_tsquery('english', ${searchQuery})`
         );
       }
 
