@@ -89,7 +89,7 @@ jobs:
         run: npm install --no-save @tailwindcss/oxide-linux-x64-gnu@4.2.0 lightningcss-linux-x64-gnu@1.31.1 @unrs/resolver-binding-linux-x64-gnu@1.11.1
 
       - name: Push database schema
-        run: npm run db:push --workspace=app
+        run: cd app && npx drizzle-kit push --force
 
       - name: Seed test data
         run: cd app && npx tsx scripts/seed-dev.ts
