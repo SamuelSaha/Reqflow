@@ -497,4 +497,61 @@ export const requestsRouter = router({
         flags: routingResult.flags,
       };
     }),
+
+  /**
+   * Delete a draft request
+   */
+  delete: protectedProcedure
+    .input(z.object({ id: z.string().uuid() }))
+    .mutation(async ({ ctx, input }) => {
+      // First check if request exists and is a draft
+      const request = await ctx.db.query.requests.findFirst({
+        where: and(
+          eq(requests.id, input.id),
+          eq(requests.tenantId, ctx.tenantId),
+          eq(requests.requesterId, ctx.user.id)
+        ),
+      });
+
+      if (!request) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Request not found",
+        });
+      }
+
+      if (request.status !== "draft") {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Only draft requests can be deleted",
+        });
+      }
+
+      // Delete the request
+      await ctx.db
+        .delete(requests)
+        .where(
+          and(
+            eq(requests.id, input.id),
+            eq(requests.tenantId, ctx.tenantId)
+          )
+        );
+
+      // Audit log
+      await createAuditLog({
+        tenantId: ctx.tenantId,
+        userId: ctx.user.id,
+        userEmail: ctx.user.email,
+        userName: ctx.user.name,
+        action: AuditAction.REQUEST_DELETED,
+        entityType: "request",
+        entityId: input.id,
+        description: `Deleted draft request: ${request.title}`,
+        metadata: {
+          requestNumber: request.requestNumber,
+        },
+      });
+
+      return { success: true };
+    }),
 });

@@ -110,6 +110,7 @@ export default function ApprovalsPage() {
     if (queue.dataUpdatedAt) {
       setLastUpdated(new Date(queue.dataUpdatedAt));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queue.dataUpdatedAt]);
 
   // Format "last updated" text
@@ -128,6 +129,7 @@ export default function ApprovalsPage() {
   useEffect(() => {
     const interval = setInterval(() => forceUpdate({}), 5000);
     return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const hasActiveFilters = searchTerm || category || urgency || amountRange || dateRange;
@@ -168,7 +170,7 @@ export default function ApprovalsPage() {
       });
     },
 
-    onSuccess: (data, variables) => {
+    onSuccess: (data, variables, context) => {
       const action = variables.decision === "approved" ? "approved" : "rejected";
 
       // Show enhanced toast with sync info for approved requests
@@ -176,6 +178,21 @@ export default function ApprovalsPage() {
         const providerName = data.syncProvider === "quickbooks" ? "QuickBooks" : "Xero";
         toast.success("Request approved", {
           description: `Syncing to ${providerName} in the background...`,
+          duration: 5000,
+        });
+      } else if (variables.decision === "rejected") {
+        // Show undo toast for rejections
+        toast.success("Request rejected", {
+          description: "Successfully rejected the purchase request",
+          action: {
+            label: "Undo",
+            onClick: () => {
+              // Restore snapshot
+              if (context?.previousQueue) {
+                utils.approvals.myQueue.setData({ status: activeTab }, context.previousQueue);
+              }
+            },
+          },
           duration: 5000,
         });
       } else {

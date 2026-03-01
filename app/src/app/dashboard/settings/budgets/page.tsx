@@ -61,8 +61,22 @@ export default function BudgetsSettingsPage() {
       }
       toast.error(error.message);
     },
-    onSuccess: () => {
-      toast.success("Budget deleted");
+    onSuccess: (data, variables, context) => {
+      toast.success("Budget deleted", {
+        action: {
+          label: "Undo",
+          onClick: () => {
+            // Restore snapshot
+            if (context?.previousList) {
+              utils.budgets.list.setData(undefined, context.previousList);
+            }
+            if (context?.previousAnalytics) {
+              utils.budgets.getAnalytics.setData(undefined, context.previousAnalytics);
+            }
+          },
+        },
+        duration: 5000,
+      });
     },
     onSettled: () => {
       utils.budgets.list.invalidate();
@@ -75,7 +89,7 @@ export default function BudgetsSettingsPage() {
     return `€${num.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   }
 
-  function getUtilization(budget: any): number {
+  function getUtilization(budget: { allocated: string; committed: string; spent: string }): number {
     const allocated = parseFloat(budget.allocated);
     const committed = parseFloat(budget.committed);
     const spent = parseFloat(budget.spent);
