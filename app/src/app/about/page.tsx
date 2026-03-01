@@ -12,7 +12,7 @@ export default function AboutPage() {
           <div className="text-body-lg text-slate-600 leading-[1.8] mb-12 space-y-6">
             <p>Every company with 50-250 employees hits the same wall: procurement becomes a bottleneck, but hiring a dedicated procurement team doesn't make sense yet.</p>
             <p>The finance team ends up spending 8+ hours per week chasing approvals, reconciling purchases, and wondering what subscriptions they're actually paying for.</p>
-            <p>We're building Reqflow to be the procurement "front door" for companies in this stage — structured enough to create visibility and control, simple enough that everyone actually uses it.</p>
+            <p>We're building Reqflow to be the procurement "front door" for companies in this stage - structured enough to create visibility and control, simple enough that everyone actually uses it.</p>
           </div>
 
           <div className="bg-slate-50 border border-slate-200 rounded-xl p-10 mb-12">
@@ -44,7 +44,7 @@ export default function AboutPage() {
           <div className="bg-slate-50 border border-slate-200 rounded-xl p-10 mb-12">
             <h2 className="text-h4 font-bold text-slate-900 mb-5">Who's Building This</h2>
             <div className="space-y-4 text-body text-slate-600 leading-[1.7]">
-              <p>Reqflow is built by a small team who've experienced this problem firsthand — as the finance person drowning in Slack procurement requests, and as the eng manager waiting 11 days for a $500/mo SaaS approval.</p>
+              <p>Reqflow is built by a small team who've experienced this problem firsthand - as the finance person drowning in Slack procurement requests, and as the eng manager waiting 11 days for a $500/mo SaaS approval.</p>
               <p>We're based in Paris, hosting on EU infrastructure, and building for the European market first (though we welcome companies elsewhere).</p>
             </div>
           </div>

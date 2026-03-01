@@ -10,7 +10,7 @@
  *   + Structure ready for Claude API enrichment (Phase 2)
  *
  * The agent runs automatically when an approver views a request.
- * It doesn't make decisions — it surfaces insights so humans decide faster.
+ * It doesn't make decisions - it surfaces insights so humans decide faster.
  */
 
 import { eq, and, gte, desc } from "drizzle-orm";
@@ -215,7 +215,7 @@ function detectAmountAnomalies(request: Request): RiskSignal[] {
       type: "pattern",
       severity: "low",
       title: "Annual commitment",
-      detail: `Annual charge of €${amount.toFixed(2)} — consider negotiating multi-year discount`,
+      detail: `Annual charge of €${amount.toFixed(2)} - consider negotiating multi-year discount`,
     });
   }
 
@@ -225,7 +225,7 @@ function detectAmountAnomalies(request: Request): RiskSignal[] {
       type: "pattern",
       severity: "low",
       title: "Round number amount",
-      detail: `€${amount.toFixed(2)} may be an estimate — consider requesting a formal quote`,
+      detail: `€${amount.toFixed(2)} may be an estimate - consider requesting a formal quote`,
     });
   }
 
@@ -407,7 +407,7 @@ async function detectPatterns(
         type: "vendor",
         severity: "medium",
         title: "First-time vendor",
-        detail: `No previous approved purchases from "${request.vendorName}" — consider additional due diligence`,
+        detail: `No previous approved purchases from "${request.vendorName}" - consider additional due diligence`,
       });
     }
   }
@@ -418,7 +418,7 @@ async function detectPatterns(
       type: "compliance",
       severity: "medium",
       title: "Urgent high-value request",
-      detail: `Urgent requests over €5,000 may bypass normal vendor evaluation — ensure this is justified`,
+      detail: `Urgent requests over €5,000 may bypass normal vendor evaluation - ensure this is justified`,
     });
   }
 
@@ -428,7 +428,7 @@ async function detectPatterns(
       type: "compliance",
       severity: "low",
       title: "No justification provided",
-      detail: `Request over €1,000 has no description — consider asking the requester to explain the business need`,
+      detail: `Request over €1,000 has no description - consider asking the requester to explain the business need`,
     });
   }
 

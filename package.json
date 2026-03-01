@@ -1,0 +1,27 @@
+{
+  "name": "reqflow",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Reqflow - SaaS Procurement Management Platform",
+  "scripts": {
+    "prepare": "husky",
+    "lint": "npm run lint --workspace=app",
+    "type-check": "npm run type-check --workspace=app"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^15.4.3"
+  },
+  "lint-staged": {
+    "app/src/**/*.{ts,tsx}": [
+      "npm run lint --workspace=app -- --fix"
+    ],
+    "SWARM/**/*.py": [
+      "ruff check --fix",
+      "ruff format"
+    ]
+  },
+  "workspaces": [
+    "app"
+  ]
+}

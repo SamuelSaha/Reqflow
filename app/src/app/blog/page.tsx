@@ -7,7 +7,7 @@ export default function BlogPage() {
     {
       slug: "notice-windows-not-renewal-dates",
       title: "Track notice windows, not just renewal dates",
-      excerpt: "Most tools track when subscriptions renew. That's the wrong date. You need to know when you must decide — before auto-renew locks you in for another year.",
+      excerpt: "Most tools track when subscriptions renew. That's the wrong date. You need to know when you must decide - before auto-renew locks you in for another year.",
       author: "Samuel Saha",
       date: "February 20, 2026",
       readTime: "4 min read",
@@ -27,7 +27,7 @@ export default function BlogPage() {
     {
       slug: "when-spreadsheets-stop-working",
       title: "When spreadsheets stop working for procurement",
-      excerpt: "There's a moment between 15 and 50 employees when procurement becomes impossible to manage in spreadsheets — but not complex enough to justify enterprise software.",
+      excerpt: "There's a moment between 15 and 50 employees when procurement becomes impossible to manage in spreadsheets - but not complex enough to justify enterprise software.",
       author: "Samuel Saha",
       date: "February 6, 2026",
       readTime: "5 min read",

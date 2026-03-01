@@ -66,7 +66,7 @@ export function HeroSection() {
 
             {/* Subheadline */}
             <p className="text-body-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
-              Reqflow gives small teams a real purchasing workflow — free to use,
+              Reqflow gives small teams a real purchasing workflow - free to use,
               ready in minutes, and built to replace the Slack threads your ops lead
               is drowning in.
             </p>
@@ -444,11 +444,11 @@ export function ProblemSection() {
 const faqs = [
   {
     question: "How is Reqflow different from using spreadsheets for procurement?",
-    answer: "Spreadsheets break down when your team hits 10-15 people. They live outside your workflow—nobody updates them, nobody checks them before buying, and they're always out of date. Reqflow lives where your team already works (Slack, email, web) and automatically captures every purchase request, duplicate check, and approval. The data stays current without anyone doing extra work.",
+    answer: "Spreadsheets break down when your team hits 10-15 people. They live outside your workflow - nobody updates them, nobody checks them before buying, and they're always out of date. Reqflow lives where your team already works (Slack, email, web) and automatically captures every purchase request, duplicate check, and approval. The data stays current without anyone doing extra work.",
   },
   {
     question: "Do I need a procurement team to use procurement software?",
-    answer: "No. That's exactly who we built Reqflow for—teams without procurement departments. If you're the founder, ops lead, or finance person handling purchases while also doing your actual job, this replaces the manual work. Set it up once (takes 2 minutes), and it runs itself. No training, no procurement expertise needed.",
+    answer: "No. That's exactly who we built Reqflow for - teams without procurement departments. If you're the founder, ops lead, or finance person handling purchases while also doing your actual job, this replaces the manual work. Set it up once (takes 2 minutes), and it runs itself. No training, no procurement expertise needed.",
   },
   {
     question: "How does SaaS spend management work for small teams without finance software?",
@@ -456,7 +456,7 @@ const faqs = [
   },
   {
     question: "What's the ROI of procurement software for a 30-person team?",
-    answer: "Most teams save 10-15% on SaaS spend in the first 6 months by catching duplicates (29% of subscriptions overlap) and cancelling unused tools. For a team spending €150K/year on SaaS, that's €15-22K saved. Plus you recover 8.3 hours/week in manual work—worth ~€16K/year if your ops person's time is valued at €40/hour. Total ROI: €30-40K annually.",
+    answer: "Most teams save 10-15% on SaaS spend in the first 6 months by catching duplicates (29% of subscriptions overlap) and cancelling unused tools. For a team spending €150K/year on SaaS, that's €15-22K saved. Plus you recover 8.3 hours/week in manual work - worth ~€16K/year if your ops person's time is valued at €40/hour. Total ROI: €30-40K annually.",
   },
   {
     question: "Can Reqflow catch duplicate SaaS subscriptions before we buy them?",
@@ -464,7 +464,7 @@ const faqs = [
   },
   {
     question: "What's the fastest way to set up procurement for a startup?",
-    answer: "Connect your Slack workspace or create a web form (2 minutes). Set approval rules—like \"under €500 auto-approve, over €500 needs founder approval.\" That's it. Your team can start submitting requests immediately. No software to install, no training meetings, no complicated setup. Most teams are fully running within their first hour.",
+    answer: "Connect your Slack workspace or create a web form (2 minutes). Set approval rules - like \"under €500 auto-approve, over €500 needs founder approval.\" That's it. Your team can start submitting requests immediately. No software to install, no training meetings, no complicated setup. Most teams are fully running within their first hour.",
   },
 ];
 

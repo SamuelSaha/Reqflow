@@ -53,12 +53,12 @@ export function FeaturesGrid() {
     {
       icon: CalendarClock,
       title: "Renewal Tracking",
-      desc: "Track notice deadlines, not just renewal dates. Know when you must decide — before auto-renew locks you in for another year.",
+      desc: "Track notice deadlines, not just renewal dates. Know when you must decide - before auto-renew locks you in for another year.",
     },
     {
       icon: FlaskConical,
       title: "Trial Management",
-      desc: "Track every trial with success criteria and auto-reminders. No more silent conversions — trials either become purchases or end cleanly.",
+      desc: "Track every trial with success criteria and auto-reminders. No more silent conversions - trials either become purchases or end cleanly.",
     },
   ];
 
@@ -81,7 +81,7 @@ export function FeaturesGrid() {
         <p className="text-body-lg text-slate-400 max-w-[620px]">
           From intake to renewal, every tool purchase is tracked, connected, and
           auditable. The story of why you bought it, who owns it, and when you
-          can leave — captured automatically.
+          can leave - captured automatically.
         </p>
       </div>
 

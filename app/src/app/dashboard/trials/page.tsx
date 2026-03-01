@@ -178,7 +178,7 @@ export default function TrialsPage() {
                           <CardTitle className="text-lg">{trial.toolName}</CardTitle>
                         </div>
                         <p className="text-sm text-slate-600">
-                          {trial.department?.name || "—"} · {trial.category || "—"}
+                          {trial.department?.name || " - "} · {trial.category || " - "}
                         </p>
                       </div>
                       <div className="flex items-center gap-2">

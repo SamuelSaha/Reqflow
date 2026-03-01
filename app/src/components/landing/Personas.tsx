@@ -53,7 +53,7 @@ export function Personas() {
             One tool for everyone<br />wearing multiple hats.
           </h2>
           <p className="text-body-lg text-slate-600 max-w-2xl">
-            Whether you handle finances, ship code, or keep operations running —
+            Whether you handle finances, ship code, or keep operations running  - 
             Reqflow gives you a view shaped around your decisions.
           </p>
         </div>

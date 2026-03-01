@@ -78,7 +78,7 @@ export default function BudgetsPage() {
                   <div>
                     <CardTitle className="text-base">{budget.name}</CardTitle>
                     <p className="text-xs text-slate-500 mt-0.5">
-                      {budget.department?.name ?? "—"} &middot; {budget.period}
+                      {budget.department?.name ?? " - "} &middot; {budget.period}
                     </p>
                   </div>
                   {isOver && (

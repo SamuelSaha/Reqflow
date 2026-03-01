@@ -103,7 +103,7 @@ export default function RequestApprovedEmail({
           </Section>
 
           <Text style={footer}>
-            — Reqflow Team
+            - Reqflow Team
           </Text>
         </Container>
       </Body>

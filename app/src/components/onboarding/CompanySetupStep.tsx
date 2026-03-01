@@ -130,7 +130,7 @@ export function CompanySetupStep({ defaultValues, onNext }: Props) {
             className="mt-1.5"
           />
           <p className="text-caption text-slate-400 mt-1">
-            Used for auto-joining — teammates with this domain can join automatically.
+            Used for auto-joining - teammates with this domain can join automatically.
           </p>
         </div>
       </div>

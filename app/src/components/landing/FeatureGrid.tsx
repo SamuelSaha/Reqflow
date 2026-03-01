@@ -38,7 +38,7 @@ const features = [
   {
     icon: Bell,
     title: "Renewal Tracking",
-    description: "Never miss a renewal deadline. Track notice windows, not just renewal dates—decide before auto-renew locks you in.",
+    description: "Never miss a renewal deadline. Track notice windows, not just renewal dates - decide before auto-renew locks you in.",
     link: "/features/renewals",
   },
   {

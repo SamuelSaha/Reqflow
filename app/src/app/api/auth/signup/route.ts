@@ -176,7 +176,7 @@ export async function POST(request: Request) {
         .set({ status: "accepted" })
         .where(eq(invites.id, invite.id));
 
-      // Invited users skip onboarding — the org is already set up
+      // Invited users skip onboarding - the org is already set up
       const token = await createSession(user, { onboardingCompleted: true });
 
       const cookieStore = await cookies();

@@ -117,7 +117,7 @@ export default function ApprovalReminderEmail({
           </Text>
 
           <Text style={footer}>
-            — Reqflow Team
+            - Reqflow Team
           </Text>
         </Container>
       </Body>

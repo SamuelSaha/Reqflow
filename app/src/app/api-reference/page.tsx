@@ -107,7 +107,7 @@ export default function ApiReferencePage() {
                   1. Get your API key
                 </h3>
                 <p className="text-body-sm text-slate-300 mb-4">
-                  Navigate to Settings → Integrations → API and generate a new API key. Keep it secure — it grants full access to your Reqflow data.
+                  Navigate to Settings → Integrations → API and generate a new API key. Keep it secure - it grants full access to your Reqflow data.
                 </p>
               </div>
               <div>

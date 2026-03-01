@@ -60,7 +60,7 @@ export default function DocumentationPage() {
         },
         {
           title: "Renewal Tracking",
-          desc: "Track notice windows, not just renewal dates. Get notified when you must decide — before auto-renew locks you in.",
+          desc: "Track notice windows, not just renewal dates. Get notified when you must decide - before auto-renew locks you in.",
           link: "#renewal-tracking",
           time: "7 min",
         },

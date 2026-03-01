@@ -33,7 +33,7 @@ export default function VendorTrackingPage() {
               Manage vendor relationships
             </h1>
             <p className="text-body-lg text-slate-600 leading-relaxed">
-              Built for teams of 5-50: Keep all vendor data in one place—contracts, contacts, performance, and spending. Track renewals automatically and link contracts to budgets.
+              Built for teams of 5-50: Keep all vendor data in one place - contracts, contacts, performance, and spending. Track renewals automatically and link contracts to budgets.
             </p>
           </div>
 

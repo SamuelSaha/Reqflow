@@ -16,7 +16,7 @@ const features = [
     id: "connected-records",
     icon: Workflow,
     title: "Connected Records",
-    description: "Every purchase tells its complete story—from request to renewal. Tool → Contract → Subscription → Invoice → Owner.",
+    description: "Every purchase tells its complete story - from request to renewal. Tool → Contract → Subscription → Invoice → Owner.",
     benefits: [
       "Auto-link requests to contracts and invoices",
       "Track ownership changes over time",

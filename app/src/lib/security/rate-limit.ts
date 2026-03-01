@@ -131,9 +131,17 @@ export async function checkAuthRateLimit(
   email: string,
   request: Request
 ): Promise<{ success: boolean; limit: number; remaining: number; reset: number }> {
-  // If rate limiting is not configured, allow all requests
+  // SECURITY WARNING: If rate limiting is not configured, all brute-force protection is disabled
+  // This is a critical security risk in production environments
   if (!authRateLimiter) {
-    logger.warn("Auth rate limiting is disabled - Upstash Redis not configured");
+    if (process.env.NODE_ENV === "production") {
+      // In production, log a critical security warning
+      logger.error("CRITICAL SECURITY ISSUE: Auth rate limiting is disabled in production!", new Error("Missing Upstash Redis configuration"), {
+        message: "Configure UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN to enable rate limiting",
+      });
+    } else {
+      logger.warn("Auth rate limiting is disabled - Upstash Redis not configured");
+    }
     return {
       success: true,
       limit: 999,

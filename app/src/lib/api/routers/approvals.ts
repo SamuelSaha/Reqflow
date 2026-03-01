@@ -7,7 +7,7 @@ import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { router, protectedProcedure } from "../trpc";
 import { approvals, requests } from "../../db/schema";
-import { eq, and, desc, asc, or, ilike, gte, lte } from "drizzle-orm";
+import { eq, and, desc, asc, gte, lte } from "drizzle-orm";
 import { analyzeRequest } from "../../ai/request-analyzer";
 import { createAuditLog, AuditAction } from "../../monitoring/audit";
 

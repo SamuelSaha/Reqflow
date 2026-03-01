@@ -15,6 +15,7 @@ import {
   checkMutationRateLimit,
 } from "../security/rate-limit";
 import { validateCSRFToken, getCSRFTokenFromRequest } from "../security/csrf";
+import { setRLSContext, clearRLSContext } from "../security/rls-context";
 
 /**
  * Context for all tRPC procedures
@@ -126,20 +127,44 @@ const csrfMiddleware = t.middleware(async ({ ctx, next, type }) => {
 });
 
 /**
+ * RLS (Row-Level Security) context middleware
+ * Sets PostgreSQL session variables for database-level tenant isolation
+ */
+const rlsMiddleware = t.middleware(async ({ ctx, next }) => {
+  if (ctx.user && ctx.tenantId) {
+    await setRLSContext({
+      tenantId: ctx.tenantId,
+      userId: ctx.user.id,
+      role: ctx.user.role,
+    });
+  }
+
+  try {
+    return next({ ctx });
+  } finally {
+    if (ctx.user && ctx.tenantId) {
+      await clearRLSContext();
+    }
+  }
+});
+
+/**
  * Public procedure - no authentication required
  */
 export const publicProcedure = t.procedure;
 
 /**
- * Protected procedure - requires authentication + rate limiting + CSRF protection
+ * Protected procedure - requires authentication + rate limiting + CSRF protection + RLS
  * Automatically applies appropriate rate limits based on operation type:
  * - Queries: 100 per minute
  * - Mutations: 20 per minute
  * - Mutations also require valid CSRF token
+ * - RLS context is set for database-level tenant isolation
  */
 export const protectedProcedure = t.procedure
   .use(rateLimitMiddleware)
   .use(csrfMiddleware)
+  .use(rlsMiddleware)
   .use(async ({ ctx, next }) => {
     if (!ctx.user || !ctx.tenantId) {
       throw new TRPCError({ code: "UNAUTHORIZED" });

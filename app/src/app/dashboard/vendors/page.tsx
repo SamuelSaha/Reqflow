@@ -168,7 +168,7 @@ export default function VendorsPage() {
                     {vendor.industry ? (
                       <span className="capitalize">{vendor.industry}</span>
                     ) : (
-                      <span className="text-slate-400">—</span>
+                      <span className="text-slate-400"> - </span>
                     )}
                   </TableCell>
                   <TableCell>

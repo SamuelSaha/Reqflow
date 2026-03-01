@@ -76,7 +76,7 @@ export function FirstRequestStep({ onNext }: Props) {
           <Sparkles className="w-5 h-5 text-amber-500" />
         </div>
         <p className="text-body-sm text-slate-500">
-          Try submitting a purchase request — this is how your team will request
+          Try submitting a purchase request - this is how your team will request
           new tools and services.
         </p>
       </div>

@@ -223,7 +223,7 @@ export default function RenewalsPage() {
                           Annual Value
                         </p>
                         <p className="text-sm font-medium text-slate-900 mt-1">
-                          €{contract?.totalValue ? parseFloat(contract.totalValue).toLocaleString("en") : "—"}
+                          €{contract?.totalValue ? parseFloat(contract.totalValue).toLocaleString("en") : " - "}
                         </p>
                       </div>
                       <div>

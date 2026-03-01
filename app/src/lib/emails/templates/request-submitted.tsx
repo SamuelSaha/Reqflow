@@ -69,7 +69,7 @@ export default function RequestSubmittedEmail({
           </Section>
 
           <Text style={footer}>
-            — Reqflow Team
+            - Reqflow Team
           </Text>
         </Container>
       </Body>

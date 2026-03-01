@@ -158,13 +158,13 @@ export default function VendorDetailPage({
               <div>
                 <div className="text-sm text-slate-600 mb-1">Legal Name</div>
                 <div className="text-slate-900">
-                  {vendor.legalName || "—"}
+                  {vendor.legalName || " - "}
                 </div>
               </div>
               <div>
                 <div className="text-sm text-slate-600 mb-1">Industry</div>
                 <div className="text-slate-900 capitalize">
-                  {vendor.industry || "—"}
+                  {vendor.industry || " - "}
                 </div>
               </div>
               {vendor.website && (
@@ -183,11 +183,11 @@ export default function VendorDetailPage({
               )}
               <div>
                 <div className="text-sm text-slate-600 mb-1">Country</div>
-                <div className="text-slate-900">{vendor.country || "—"}</div>
+                <div className="text-slate-900">{vendor.country || " - "}</div>
               </div>
               <div>
                 <div className="text-sm text-slate-600 mb-1">Tax ID</div>
-                <div className="text-slate-900">{vendor.taxId || "—"}</div>
+                <div className="text-slate-900">{vendor.taxId || " - "}</div>
               </div>
               <div>
                 <div className="text-sm text-slate-600 mb-1">Status</div>
@@ -246,9 +246,9 @@ export default function VendorDetailPage({
                       <TableCell className="font-medium">
                         {sub.toolName}
                       </TableCell>
-                      <TableCell>{sub.plan || "—"}</TableCell>
+                      <TableCell>{sub.plan || " - "}</TableCell>
                       <TableCell>
-                        {sub.seats ? `${sub.activeSeats || 0} / ${sub.seats}` : "—"}
+                        {sub.seats ? `${sub.activeSeats || 0} / ${sub.seats}` : " - "}
                       </TableCell>
                       <TableCell>
                         €{parseFloat(sub.totalCost).toFixed(2)}
@@ -306,12 +306,12 @@ export default function VendorDetailPage({
                       <TableCell>
                         {contract.renewalDate
                           ? new Date(contract.renewalDate).toLocaleDateString()
-                          : "—"}
+                          : " - "}
                       </TableCell>
                       <TableCell>
                         {contract.totalValue
                           ? `€${parseFloat(contract.totalValue).toLocaleString()}`
-                          : "—"}
+                          : " - "}
                       </TableCell>
                       <TableCell>
                         <Badge variant="secondary">{contract.status}</Badge>

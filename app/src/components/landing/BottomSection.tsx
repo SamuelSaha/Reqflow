@@ -119,7 +119,7 @@ const faqs = [
   {
     question: "Do we need to switch from QuickBooks/Xero to use Reqflow?",
     answer:
-      "No. Reqflow integrates with QuickBooks and Xero — we sync invoices and vendors automatically. Keep your existing accounting software and add Reqflow for procurement workflows on top.",
+      "No. Reqflow integrates with QuickBooks and Xero - we sync invoices and vendors automatically. Keep your existing accounting software and add Reqflow for procurement workflows on top.",
   },
 ];
 

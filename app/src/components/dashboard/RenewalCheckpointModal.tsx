@@ -44,19 +44,52 @@ export function RenewalCheckpointModal({
   const utils = trpc.useUtils();
 
   const updateCheckpoint = trpc.renewals.updateCheckpoint.useMutation({
+    onMutate: async (variables) => {
+      await utils.renewals.list.cancel();
+      await utils.renewals.getById.cancel({ id: renewalId });
+
+      const previousList = utils.renewals.list.getData({});
+      const previousRenewal = utils.renewals.getById.getData({ id: renewalId });
+
+      if (previousRenewal) {
+        utils.renewals.getById.setData({ id: renewalId }, {
+          ...previousRenewal,
+          readinessCheckpoints: previousRenewal.readinessCheckpoints.map((cp) =>
+            cp.id === checkpoint.id
+              ? {
+                  ...cp,
+                  completed: variables.completed,
+                  notes: variables.notes ?? cp.notes,
+                  completedAt: variables.completed ? new Date().toISOString() : undefined,
+                }
+              : cp
+          ),
+        });
+      }
+
+      return { previousList, previousRenewal };
+    },
+    onError: (error, variables, context) => {
+      if (context?.previousList) {
+        utils.renewals.list.setData({}, context.previousList);
+      }
+      if (context?.previousRenewal) {
+        utils.renewals.getById.setData({ id: renewalId }, context.previousRenewal);
+      }
+      toast.error("Failed to update checkpoint", {
+        description: error.message,
+      });
+    },
     onSuccess: () => {
       toast.success("Checkpoint updated", {
         description: `${checkpoint.label} marked as ${completed ? "complete" : "incomplete"}`,
       });
-      utils.renewals.list.invalidate();
-      utils.renewals.getById.invalidate({ id: renewalId });
       onSuccess();
       onOpenChange(false);
     },
-    onError: (error) => {
-      toast.error("Failed to update checkpoint", {
-        description: error.message,
-      });
+    onSettled: () => {
+      utils.renewals.list.invalidate();
+      utils.renewals.getById.invalidate({ id: renewalId });
     },
   });
 

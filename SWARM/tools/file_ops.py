@@ -2,14 +2,68 @@
 File Operations Tools
 LangChain tool wrappers for file system operations.
 Used by agents when they need to read, write, or list files.
-"""
 
+SECURITY: All file operations are sandboxed to allowed directories.
+"""
 from __future__ import annotations
 
+import os
 from pathlib import Path
-from typing import Optional
+from typing import Optional, List
 
 from langchain_core.tools import tool
+
+
+# SECURITY: Base directories that are allowed for file operations
+# Can be overridden via environment variable
+ALLOWED_BASE_DIRS = [
+    Path(os.environ.get("SWARM_WORK_DIR", ".")).resolve(),
+]
+
+# SECURITY: Patterns that are never allowed in file paths
+BLOCKED_PATTERNS = [
+    "../",  # Path traversal
+    "..\\",  # Windows path traversal
+    "/etc/passwd",
+    "/etc/shadow",
+    "/.ssh/",
+    "/.env",
+    "id_rsa",
+    "id_ed25519",
+]
+
+
+def _validate_path(file_path: str) -> Path:
+    """
+    Validate and resolve a file path, ensuring it's within allowed directories.
+    
+    SECURITY: Prevents path traversal attacks by:
+    1. Resolving the path to its absolute form
+    2. Checking for blocked patterns
+    3. Ensuring the path is within allowed base directories
+    
+    Raises:
+        ValueError: If path is invalid or outside allowed directories
+    """
+    # Check for blocked patterns
+    for pattern in BLOCKED_PATTERNS:
+        if pattern in file_path:
+            raise ValueError(f"Path contains blocked pattern: {pattern}")
+    
+    # Resolve to absolute path
+    path = Path(file_path).resolve()
+    
+    # Check if path is within any allowed base directory
+    for base_dir in ALLOWED_BASE_DIRS:
+        try:
+            path.relative_to(base_dir)
+            return path  # Path is within allowed directory
+        except ValueError:
+            continue
+    
+    # Path is not within any allowed directory
+    allowed_str = ", ".join(str(d) for d in ALLOWED_BASE_DIRS)
+    raise ValueError(f"Path must be within allowed directories: {allowed_str}")
 
 
 @tool
@@ -25,7 +79,11 @@ def view_file(file_path: str, start_line: int = 1, end_line: int = 0) -> str:
     Returns:
         File contents with line numbers, or error message
     """
-    path = Path(file_path)
+    try:
+        path = _validate_path(file_path)
+    except ValueError as e:
+        return f"Error: {str(e)}"
+    
     if not path.exists():
         return f"Error: File not found: {file_path}"
     if not path.is_file():
@@ -64,7 +122,10 @@ def write_file(file_path: str, content: str, create_dirs: bool = True) -> str:
     Returns:
         Success message or error
     """
-    path = Path(file_path)
+    try:
+        path = _validate_path(file_path)
+    except ValueError as e:
+        return f"Error: {str(e)}"
 
     try:
         if create_dirs:
@@ -90,7 +151,11 @@ def list_dir(directory: str, pattern: str = "*", max_depth: int = 2) -> str:
     Returns:
         Formatted directory listing
     """
-    path = Path(directory)
+    try:
+        path = _validate_path(directory)
+    except ValueError as e:
+        return f"Error: {str(e)}"
+    
     if not path.exists():
         return f"Error: Directory not found: {directory}"
     if not path.is_dir():
@@ -101,6 +166,12 @@ def list_dir(directory: str, pattern: str = "*", max_depth: int = 2) -> str:
         glob_pattern = f"{'*/' * (max_depth - 1)}{pattern}" if max_depth > 1 else pattern
 
         for item in sorted(path.glob(glob_pattern)):
+            # SECURITY: Double-check each item is within allowed directory
+            try:
+                item.resolve().relative_to(path.resolve())
+            except ValueError:
+                continue  # Skip items outside allowed directory
+            
             rel = item.relative_to(path)
             if item.is_dir():
                 entries.append(f"  📁 {rel}/")

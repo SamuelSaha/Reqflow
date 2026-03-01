@@ -154,7 +154,7 @@ export default function RequestDetailPage({
       </div>
 
       <div className="grid gap-6 md:grid-cols-3">
-        {/* Main content — 2 cols */}
+        {/* Main content - 2 cols */}
         <div className="md:col-span-2 space-y-6">
           {/* Description */}
           {req.description && (
@@ -178,15 +178,15 @@ export default function RequestDetailPage({
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 gap-4">
-                <DetailItem icon={Building2} label="Department" value={req.department?.name ?? "—"} />
-                <DetailItem icon={FileText} label="Category" value={(req as any).category?.name ?? req.category ?? "—"} />
+                <DetailItem icon={Building2} label="Department" value={req.department?.name ?? " - "} />
+                <DetailItem icon={FileText} label="Category" value={(req as any).category?.name ?? req.category ?? " - "} />
                 <DetailItem icon={DollarSign} label="Amount" value={`€${parseFloat(req.amount).toLocaleString("en", { minimumFractionDigits: 2 })}`} />
                 <DetailItem icon={Calendar} label="Frequency" value={req.frequency} />
                 {req.vendorName && (
                   <DetailItem icon={Building2} label="Vendor" value={req.vendorName} />
                 )}
                 <DetailItem icon={AlertCircle} label="Urgency" value={req.urgency} />
-                <DetailItem icon={User} label="Requester" value={req.requester?.name ?? "—"} />
+                <DetailItem icon={User} label="Requester" value={req.requester?.name ?? " - "} />
                 {req.submittedAt && (
                   <DetailItem
                     icon={Calendar}
@@ -226,7 +226,7 @@ export default function RequestDetailPage({
           )}
         </div>
 
-        {/* Sidebar — approval chain */}
+        {/* Sidebar - approval chain */}
         <div className="space-y-6">
           <Card>
             <CardHeader>

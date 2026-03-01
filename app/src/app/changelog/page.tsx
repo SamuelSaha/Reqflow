@@ -16,7 +16,7 @@ export default function ChangelogPage() {
         {
           type: "new",
           title: "Renewal Notice Window Tracking",
-          desc: "Finally know when you MUST decide — not just when renewals happen. We track cancellation deadlines so you don't miss notice windows and get stuck for another year.",
+          desc: "Finally know when you MUST decide - not just when renewals happen. We track cancellation deadlines so you don't miss notice windows and get stuck for another year.",
         },
         {
           type: "improved",
@@ -65,7 +65,7 @@ export default function ChangelogPage() {
         {
           type: "new",
           title: "AI-Powered Case Builder",
-          desc: "Purchases over €500 now trigger automatic vendor comparison. AI researches 2-3 alternatives, pulls pricing, and builds a structured business case — so approvers see options, not just a number.",
+          desc: "Purchases over €500 now trigger automatic vendor comparison. AI researches 2-3 alternatives, pulls pricing, and builds a structured business case - so approvers see options, not just a number.",
         },
         {
           type: "new",

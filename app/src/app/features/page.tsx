@@ -18,7 +18,7 @@ export default function FeaturesPage() {
         </h1>
         <p className="text-body-lg text-slate-600 max-w-[620px] mx-auto">
           From first request to renewal decision, Reqflow captures why you bought
-          it, who owns it, what it costs, and when you can leave — automatically.
+          it, who owns it, what it costs, and when you can leave - automatically.
         </p>
       </section>
       <CoreFeatures />

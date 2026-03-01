@@ -1,0 +1,27 @@
+# CodeQL Configuration for Reqflow
+# https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning
+
+name: Reqflow CodeQL Config
+
+# Paths to include in analysis
+paths:
+  - app/src
+
+# Paths to exclude from analysis
+paths-ignore:
+  - app/src/lib/db/migrations
+  - app/node_modules
+  - '**/*.test.ts'
+  - '**/*.test.tsx'
+  - '**/*.spec.ts'
+  - '**/*.spec.tsx'
+
+# Query suites to run
+queries:
+  - uses: security-and-quality
+
+# Query filters - exclude specific queries
+query-filters:
+  - exclude:
+      id: js/unused-local-variable
+      id: js/implicit-any-type

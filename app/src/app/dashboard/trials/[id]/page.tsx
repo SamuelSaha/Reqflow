@@ -148,19 +148,19 @@ export default function TrialDetailPage({
                   <div>
                     <p className="text-xs text-slate-500 uppercase tracking-wider">Department</p>
                     <p className="text-sm font-medium text-slate-900 mt-1">
-                      {t.department?.name || "—"}
+                      {t.department?.name || " - "}
                     </p>
                   </div>
                   <div>
                     <p className="text-xs text-slate-500 uppercase tracking-wider">Category</p>
                     <p className="text-sm font-medium text-slate-900 mt-1">
-                      {t.category || "—"}
+                      {t.category || " - "}
                     </p>
                   </div>
                   <div>
                     <p className="text-xs text-slate-500 uppercase tracking-wider">Estimated Annual Cost</p>
                     <p className="text-sm font-medium text-slate-900 mt-1">
-                      {t.estimatedAnnualCost || "—"}
+                      {t.estimatedAnnualCost || " - "}
                     </p>
                   </div>
                   <div>

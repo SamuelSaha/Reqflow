@@ -38,19 +38,60 @@ export function RenewalDecisionModal({
   const utils = trpc.useUtils();
 
   const makeDecision = trpc.renewals.makeDecision.useMutation({
+    onMutate: async (variables) => {
+      await utils.renewals.list.cancel();
+      await utils.renewals.getById.cancel({ id: renewalId });
+
+      const previousList = utils.renewals.list.getData({});
+      const previousRenewal = utils.renewals.getById.getData({ id: renewalId });
+
+      utils.renewals.list.setData({}, (old) =>
+        old?.map((r) =>
+          r.id === renewalId
+            ? {
+                ...r,
+                status: "decided" as const,
+                decision: variables.decision,
+                decisionDate: new Date(),
+                decisionNotes: variables.decisionNotes,
+              }
+            : r
+        ) ?? []
+      );
+
+      if (previousRenewal) {
+        utils.renewals.getById.setData({ id: renewalId }, {
+          ...previousRenewal,
+          status: "decided" as const,
+          decision: variables.decision,
+          decisionDate: new Date(),
+          decisionNotes: variables.decisionNotes,
+        });
+      }
+
+      return { previousList, previousRenewal };
+    },
+    onError: (error, variables, context) => {
+      if (context?.previousList) {
+        utils.renewals.list.setData({}, context.previousList);
+      }
+      if (context?.previousRenewal) {
+        utils.renewals.getById.setData({ id: renewalId }, context.previousRenewal);
+      }
+      toast.error("Failed to record decision", {
+        description: error.message,
+      });
+    },
     onSuccess: () => {
       toast.success("Decision recorded", {
         description: `Renewal ${decision} - ${vendorName}`,
       });
-      utils.renewals.list.invalidate();
-      utils.renewals.getById.invalidate({ id: renewalId });
       onSuccess();
       onOpenChange(false);
     },
-    onError: (error) => {
-      toast.error("Failed to record decision", {
-        description: error.message,
-      });
+    onSettled: () => {
+      utils.renewals.list.invalidate();
+      utils.renewals.getById.invalidate({ id: renewalId });
     },
   });
 

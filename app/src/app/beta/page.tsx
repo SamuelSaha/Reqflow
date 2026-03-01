@@ -349,7 +349,7 @@ export default function BetaPage() {
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-slate-50 rounded-xl border border-slate-200 p-6 text-left">
                 <p className="text-body text-slate-700 italic leading-relaxed mb-4">
-                  "We went from 2-week approval cycles to same-day approvals. The founders are incredibly responsive — they fixed a bug we reported within 3 hours."
+                  "We went from 2-week approval cycles to same-day approvals. The founders are incredibly responsive - they fixed a bug we reported within 3 hours."
                 </p>
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white text-caption font-bold">

@@ -44,29 +44,90 @@ export default function WorkflowsPage() {
   } | null>(null);
 
   const toggleActive = trpc.workflows.toggleActive.useMutation({
+    onMutate: async (variables) => {
+      await utils.workflows.list.cancel();
+
+      const previousList = utils.workflows.list.getData();
+
+      utils.workflows.list.setData(undefined, (old) =>
+        old?.map((w) =>
+          w.id === variables.workflowId
+            ? { ...w, isActive: variables.isActive }
+            : w
+        ) ?? []
+      );
+
+      return { previousList };
+    },
+    onError: (error, variables, context) => {
+      if (context?.previousList) {
+        utils.workflows.list.setData(undefined, context.previousList);
+      }
+      toast.error(error.message);
+    },
     onSuccess: (data) => {
       toast.success(
         data.workflow.isActive ? "Workflow activated" : "Workflow deactivated"
       );
+    },
+    onSettled: () => {
       utils.workflows.list.invalidate();
     },
-    onError: (error) => toast.error(error.message),
   });
 
   const setDefault = trpc.workflows.setDefault.useMutation({
+    onMutate: async (variables) => {
+      await utils.workflows.list.cancel();
+
+      const previousList = utils.workflows.list.getData();
+
+      utils.workflows.list.setData(undefined, (old) =>
+        old?.map((w) => ({
+          ...w,
+          isDefault: w.id === variables.workflowId,
+        })) ?? []
+      );
+
+      return { previousList };
+    },
+    onError: (error, variables, context) => {
+      if (context?.previousList) {
+        utils.workflows.list.setData(undefined, context.previousList);
+      }
+      toast.error(error.message);
+    },
     onSuccess: () => {
       toast.success("Default workflow updated");
+    },
+    onSettled: () => {
       utils.workflows.list.invalidate();
     },
-    onError: (error) => toast.error(error.message),
   });
 
   const deleteWorkflow = trpc.workflows.delete.useMutation({
+    onMutate: async (variables) => {
+      await utils.workflows.list.cancel();
+
+      const previousList = utils.workflows.list.getData();
+
+      utils.workflows.list.setData(undefined, (old) =>
+        old?.filter((w) => w.id !== variables.workflowId) ?? []
+      );
+
+      return { previousList };
+    },
+    onError: (error, variables, context) => {
+      if (context?.previousList) {
+        utils.workflows.list.setData(undefined, context.previousList);
+      }
+      toast.error(error.message);
+    },
     onSuccess: () => {
       toast.success("Workflow deleted");
+    },
+    onSettled: () => {
       utils.workflows.list.invalidate();
     },
-    onError: (error) => toast.error(error.message),
   });
 
   function handleTestWorkflow(workflow: { id: string; name: string }) {

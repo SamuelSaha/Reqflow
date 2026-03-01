@@ -3,13 +3,13 @@
  * Determines the approval chain for a purchase request
  *
  * Architecture:
- *   1. findMatchingWorkflow()  — picks the most specific workflow template
- *   2. buildApprovalChain()    — converts template steps to concrete approvers
- *   3. addDynamicApprovers()   — injects extra approvers based on live state
- *   4. routeApproval()         — orchestrates 1→2→3 and returns the final chain
+ *   1. findMatchingWorkflow()  - picks the most specific workflow template
+ *   2. buildApprovalChain()    - converts template steps to concrete approvers
+ *   3. addDynamicApprovers()   - injects extra approvers based on live state
+ *   4. routeApproval()         - orchestrates 1→2→3 and returns the final chain
  *
  * The engine is deterministic: same inputs → same chain. This is critical for
- * audit trails — you must be able to explain why any approver was selected.
+ * audit trails - you must be able to explain why any approver was selected.
  */
 
 import { eq, and } from "drizzle-orm";
@@ -60,12 +60,12 @@ export interface RoutingResult {
     budgetOverrun: boolean;
     autoApproved: boolean;
   };
-  /** Warnings surfaced to approvers — never block, always inform */
+  /** Warnings surfaced to approvers - never block, always inform */
   warnings: string[];
 }
 
 /* ------------------------------------------------------------------ */
-/*  Constants — Business Rules                                         */
+/*  Constants - Business Rules                                         */
 /* ------------------------------------------------------------------ */
 
 /** Requests at or below this amount get auto-approved (no human in the loop) */
@@ -162,7 +162,7 @@ function findMatchingWorkflow(
 
   if (scored.length === 0) return null;
 
-  // Sort by score descending — most specific wins
+  // Sort by score descending - most specific wins
   scored.sort((a, b) => b.score - a.score);
   return scored[0].workflow;
 }
@@ -316,7 +316,7 @@ function addDynamicApprovers(
           approverName: finance.name,
           approverRole: "finance",
           required: "required",
-          reason: `Budget ${(utilization * 100).toFixed(0)}% utilized — exceeds ${BUDGET_ESCALATION_THRESHOLD * 100}% escalation threshold`,
+          reason: `Budget ${(utilization * 100).toFixed(0)}% utilized - exceeds ${BUDGET_ESCALATION_THRESHOLD * 100}% escalation threshold`,
         });
         existingIds.add(finance.id);
         flags.budgetEscalation = true;
@@ -365,7 +365,7 @@ export async function routeApproval(
 ): Promise<RoutingResult> {
   const amount = parseFloat(context.request.amount);
 
-  // Auto-approve if below threshold (currently disabled — every request needs a human)
+  // Auto-approve if below threshold (currently disabled - every request needs a human)
   if (AUTO_APPROVE_THRESHOLD > 0 && amount <= AUTO_APPROVE_THRESHOLD) {
     return {
       steps: [],
@@ -454,7 +454,7 @@ export async function executeApprovalRouting(
         riskFlags: [
           ...(result.flags.securityReview ? ["Security review recommended"] : []),
           ...(result.flags.legalReview ? ["Legal review recommended"] : []),
-          ...(result.flags.budgetEscalation ? ["Budget near limit — escalated"] : []),
+          ...(result.flags.budgetEscalation ? ["Budget near limit - escalated"] : []),
           ...(result.flags.budgetOverrun ? ["WARNING: Would exceed budget"] : []),
           ...result.warnings,
         ],

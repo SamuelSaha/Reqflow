@@ -119,7 +119,7 @@ export default function ForFoundersPage() {
                     Never miss a cancellation window
                   </h3>
                   <p className="text-body text-slate-600 leading-relaxed mb-4">
-                    We track notice deadlines, not just renewal dates. Get alerted 60 days before you MUST decide — before auto-renew locks you in for another year.
+                    We track notice deadlines, not just renewal dates. Get alerted 60 days before you MUST decide - before auto-renew locks you in for another year.
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {[

@@ -12,7 +12,7 @@ import { db } from "@/lib/db";
 import { accountingIntegrations } from "@/lib/db/schema";
 import { eq, and } from "drizzle-orm";
 import { getSession } from "@/lib/auth/session";
-import { validateOAuthState } from "@/lib/security/oauth-state";
+import { validateOAuthStateWithContext } from "@/lib/security/oauth-state";
 
 export async function GET(request: Request) {
   try {
@@ -34,11 +34,17 @@ export async function GET(request: Request) {
       );
     }
 
-    // 🔒 SECURITY FIX: Validate OAuth state parameter to prevent CSRF attacks
-    const isValidState = await validateOAuthState("xero", state);
-    if (!isValidState) {
+    // 🔒 SECURITY FIX: Validate OAuth state parameter with user+tenant binding to prevent CSRF/state hijacking
+    const stateContext = await validateOAuthStateWithContext(
+      "xero",
+      state,
+      session.userId,
+      session.tenantId
+    );
+    if (!stateContext) {
       logger.warn("Xero OAuth state validation failed", {
         userId: session.userId,
+        tenantId: session.tenantId,
         hasState: !!state,
       });
       return NextResponse.redirect(

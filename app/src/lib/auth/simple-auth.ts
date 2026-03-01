@@ -158,7 +158,7 @@ export async function hashPassword(password: string): Promise<string> {
 }
 
 /**
- * Refresh session — re-reads user+org from DB, issues new JWT+cookie
+ * Refresh session - re-reads user+org from DB, issues new JWT+cookie
  * Called when onboarding completes to update the JWT claims
  */
 export async function refreshSession(userId: string): Promise<void> {

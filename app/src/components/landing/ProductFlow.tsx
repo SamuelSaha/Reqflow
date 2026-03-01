@@ -42,7 +42,7 @@ function IntakePreview() {
         <div>
           <label className="text-caption text-slate-500 block mb-1.5">Business justification</label>
           <div className="px-3 py-2.5 rounded-lg border border-slate-200 bg-slate-50 text-body-sm text-slate-600">
-            Team productivity improvement — 15min/day/dev saves $180k+ in annual dev...
+            Team productivity improvement - 15min/day/dev saves $180k+ in annual dev...
           </div>
         </div>
         <div className="flex items-center justify-end gap-3 pt-2">
@@ -119,7 +119,7 @@ function BudgetPreview() {
     <div className="rounded-2xl border border-slate-200 bg-white shadow-lg overflow-hidden">
       <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
         <h4 className="text-body font-semibold text-slate-900">Q1 Budget Overview</h4>
-        <span className="text-caption text-slate-500">Jan — Mar 2026</span>
+        <span className="text-caption text-slate-500">Jan - Mar 2026</span>
       </div>
       <div className="p-6">
         <div className="flex items-baseline gap-2 mb-6">
@@ -181,7 +181,7 @@ export function ProductFlow() {
             <ul className="space-y-2.5">
               {["Submit from Slack, email, or browser", "AI detects categories and flags duplicates", "Requests arrive complete on the first try"].map((item, i) => (
                 <li key={i} className="flex items-center gap-2.5 text-body-sm text-slate-600">
-                  <span className="text-slate-400">—</span>
+                  <span className="text-slate-400"> - </span>
                   {item}
                 </li>
               ))}
@@ -208,7 +208,7 @@ export function ProductFlow() {
             <ul className="space-y-2.5">
               {["Visual workflow builder for custom routing", "Full context: budget impact and purchase history", "One-click approval from Slack or email"].map((item, i) => (
                 <li key={i} className="flex items-center gap-2.5 text-body-sm text-slate-600">
-                  <span className="text-slate-400">—</span>
+                  <span className="text-slate-400"> - </span>
                   {item}
                 </li>
               ))}
@@ -231,7 +231,7 @@ export function ProductFlow() {
             <ul className="space-y-2.5">
               {["Real-time budget visibility before requesting", "Hard stops prevent overspend automatically", "AI forecasting flags budgets trending to zero"].map((item, i) => (
                 <li key={i} className="flex items-center gap-2.5 text-body-sm text-slate-600">
-                  <span className="text-slate-400">—</span>
+                  <span className="text-slate-400"> - </span>
                   {item}
                 </li>
               ))}

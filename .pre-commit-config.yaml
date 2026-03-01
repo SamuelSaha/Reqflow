@@ -1,0 +1,89 @@
+# Reqflow Pre-Commit Configuration
+# Security-first hooks to prevent secrets and enforce code quality
+# Install: pip install pre-commit && pre-commit install
+
+repos:
+  # General file checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+        args: [--unsafe]
+      - id: check-json
+      - id: check-toml
+      - id: check-added-large-files
+        args: ['--maxkb=500']
+      - id: detect-private-key
+      - id: detect-aws-credentials
+        args: ['--allow-missing-credentials']
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: forbid-submodules
+
+  # Gitleaks - comprehensive secret detection
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.22.1
+    hooks:
+      - id: gitleaks
+
+  # Secretlint - additional secret scanning
+  - repo: https://github.com/secretlint/secretlint
+    rev: v9.0.0
+    hooks:
+      - id: secretlint
+
+  # Python (SWARM) formatting and linting
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.9.6
+    hooks:
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
+        files: ^SWARM/
+      - id: ruff-format
+        files: ^SWARM/
+
+  # Local hooks for TypeScript/Next.js
+  - repo: local
+    hooks:
+      - id: typecheck
+        name: TypeScript Type Check
+        entry: bash -c 'cd app && npm run type-check'
+        language: system
+        pass_filenames: false
+        types: [typescript]
+        files: ^app/
+
+      - id: eslint
+        name: ESLint
+        entry: bash -c 'cd app && npm run lint .'
+        language: system
+        pass_filenames: false
+        types: [javascript, typescript]
+        files: ^app/
+
+      - id: no-secrets-in-env
+        name: Check for secrets in env files
+        entry: bash -c 'grep -rE "(password|secret|key|token|api_key)\s*=" app/.env* 2>/dev/null && echo "ERROR: Secrets found in .env files!" && exit 1 || exit 0'
+        language: system
+        pass_filenames: false
+
+      - id: no-console-log
+        name: Check for console.log in production code
+        entry: bash -c 'grep -rE "console\.(log|debug|info)" app/src --include="*.ts" --include="*.tsx" 2>/dev/null | grep -v "node_modules" | grep -v ".test." | head -20 && echo "WARNING: console.log statements found" || exit 0'
+        language: system
+        pass_filenames: false
+
+# CI configuration
+ci:
+  autofix_commit_msg: |
+    [pre-commit.ci] auto fixes from pre-commit.com hooks
+
+    for more information, see https://pre-commit.ci
+  autofix_prs: true
+  autoupdate_branch: ''
+  autoupdate_commit_msg: '[pre-commit.ci] pre-commit autoupdate'
+  autoupdate_schedule: weekly
+  skip: [typecheck, eslint, no-secrets-in-env, no-console-log]
+  submodules: false

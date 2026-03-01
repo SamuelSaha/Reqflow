@@ -152,7 +152,7 @@ export default function RenewalDetailPage({
                       Vendor
                     </p>
                     <p className="text-sm font-medium text-slate-900 mt-1">
-                      {vendor?.name || "—"}
+                      {vendor?.name || " - "}
                     </p>
                   </div>
                   <div>
@@ -160,7 +160,7 @@ export default function RenewalDetailPage({
                       Tool/Service
                     </p>
                     <p className="text-sm font-medium text-slate-900 mt-1">
-                      {contract?.title || "—"}
+                      {contract?.title || " - "}
                     </p>
                   </div>
                   <div>
@@ -168,7 +168,7 @@ export default function RenewalDetailPage({
                       Annual Value
                     </p>
                     <p className="text-sm font-medium text-slate-900 mt-1">
-                      €{contract?.totalValue ? parseFloat(contract.totalValue).toLocaleString("en") : "—"}
+                      €{contract?.totalValue ? parseFloat(contract.totalValue).toLocaleString("en") : " - "}
                     </p>
                   </div>
                   <div>

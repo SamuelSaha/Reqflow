@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { signIn } from "@/lib/auth/session";
+import { signIn, isMFARequired } from "@/lib/auth/session";
 import { logger } from "@/lib/monitoring/logger";
 import { captureError } from "@/lib/monitoring/sentry";
 import {
@@ -112,6 +112,15 @@ export async function POST(request: Request) {
     // Successful login - clear any failed attempts
     await clearFailedAttempts(email);
 
+    // SECURITY: Check if MFA is required for this user's role
+    // Finance and Admin roles must complete MFA before full access
+    const mfaRequired = await isMFARequired(result.user);
+    
+    // TODO: When MFA is implemented, check if user has MFA enabled
+    // If MFA required but not set up, return mfaSetupRequired: true
+    // If MFA required and set up, return mfaVerificationRequired: true
+    // For now, flag that MFA should be set up for high-privilege roles
+    
     return NextResponse.json({
       success: true,
       user: {
@@ -120,6 +129,12 @@ export async function POST(request: Request) {
         name: result.user.name,
         role: result.user.role,
       },
+      // SECURITY: Indicate if MFA is required for this user
+      // Frontend should prompt for MFA setup if mfaRequired but not yet set up
+      mfaRequired,
+      // When MFA is implemented, these will be:
+      // mfaEnabled: result.user.mfaEnabled,
+      // mfaVerified: false, // Requires separate MFA verification step
     });
   } catch (error: unknown) {
     logger.error("Login failed", error as Error, { route: "/api/auth/login" });

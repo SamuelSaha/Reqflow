@@ -1,0 +1,98 @@
+# Gitleaks Configuration for Reqflow
+# https://github.com/gitleaks/gitleaks#configuration
+
+title = "Reqflow Secret Detection"
+
+[extend]
+# Use default rules plus custom rules
+useDefault = true
+
+[[rules]]
+id = "neon-database-url"
+description = "Neon PostgreSQL Database URL"
+regex = '''postgres(?:ql)?://[^\s]+\.neon\.(?:tech|app)[^\s]*'''
+tags = ["database", "postgres", "neon"]
+
+[[rules]]
+id = "upstash-redis-url"
+description = "Upstash Redis URL"
+regex = '''https?://[a-zA-Z0-9-]+\.upstash\.io[^\s]*'''
+tags = ["redis", "upstash"]
+
+[[rules]]
+id = "cloudflare-r2-endpoint"
+description = "Cloudflare R2 Endpoint"
+regex = '''https?://[a-zA-Z0-9-]+\.r2\.cloudflarestorage\.com[^\s]*'''
+tags = ["cloudflare", "r2", "storage"]
+
+[[rules]]
+id = "xero-client-secret"
+description = "Xero OAuth Client Secret"
+regex = '''(?i)xero[_-]?client[_-]?secret['\"]?\s*[:=]\s*['\"]?[a-zA-Z0-9_-]{20,}'''
+tags = ["xero", "oauth", "secret"]
+
+[[rules]]
+id = "quickbooks-client-secret"
+description = "QuickBooks OAuth Client Secret"
+regex = '''(?i)quickbooks[_-]?client[_-]?secret['\"]?\s*[:=]\s*['\"]?[a-zA-Z0-9_-]{20,}'''
+tags = ["quickbooks", "oauth", "secret"]
+
+[[rules]]
+id = "slack-bot-token"
+description = "Slack Bot Token (xoxb-)"
+regex = '''xoxb-[0-9]{10,13}-[0-9]{10,13}-[a-zA-Z0-9]{24}'''
+tags = ["slack", "bot", "token"]
+
+[[rules]]
+id = "slack-app-token"
+description = "Slack App Token (xapp-)"
+regex = '''xapp-[0-9]{10,13}-[0-9]{10,13}-[a-zA-Z0-9]{24}'''
+tags = ["slack", "app", "token"]
+
+[[rules]]
+id = "slack-webhook-url"
+description = "Slack Webhook URL"
+regex = '''https://hooks\.slack\.com/services/T[a-zA-Z0-9]+/B[a-zA-Z0-9]+/[a-zA-Z0-9]+'''
+tags = ["slack", "webhook"]
+
+[[rules]]
+id = "resend-api-key"
+description = "Resend API Key"
+regex = '''re_[a-zA-Z0-9]{20,}'''
+tags = ["resend", "email", "api-key"]
+
+[[rules]]
+id = "sentry-dsn"
+description = "Sentry DSN"
+regex = '''https://[a-f0-9]+@[a-zA-Z0-9]+\.ingest\.sentry\.io/[0-9]+'''
+tags = ["sentry", "monitoring"]
+
+[[rules]]
+id = "axiom-api-token"
+description = "Axiom API Token"
+regex = '''xaat-[a-zA-Z0-9]{20,}'''
+tags = ["axiom", "logging", "api-token"]
+
+# Allow patterns (false positives)
+[allowlist]
+description = "Global allowlist"
+paths = [
+  '''\.gitleaks\.toml$''',
+  '''\.secretlintrc\.json$''',
+  '''SECURITY_10X_PLAN\.md$''',
+  '''SECURITY_REVIEW\.md$''',
+  '''test-rate-limit\.sh$''',
+  '''node_modules''',
+  '''\.git/''',
+  '''package-lock\.json$''',
+  '''drizzle/.*\.sql$'''
+]
+regexes = [
+  '''NEXT_PUBLIC_''',
+  '''VITE_''',
+  '''EXAMPLE_''',
+  '''placeholder''',
+  '''your-.*-here''',
+  '''xxx+''',
+  '''redacted'''
+]

@@ -1,0 +1,21 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🚀 Running pre-push security checks..."
+
+# Run npm audit for the app
+echo "Checking for vulnerable dependencies..."
+cd app && npm audit --audit-level=high --omit=dev
+if [ $? -eq 1 ]; then
+  echo "⚠️  Warning: Vulnerable dependencies found. Consider running npm audit fix."
+fi
+
+# Run type check
+echo "Running TypeScript type check..."
+npm run type-check --workspace=app
+if [ $? -eq 1 ]; then
+  echo "❌ TypeScript errors found. Fix before pushing."
+  exit 1
+fi
+
+echo "✅ Pre-push checks passed"

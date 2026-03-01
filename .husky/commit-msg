@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔐 Checking commit message for secrets..."
+
+# Check if gitleaks is available
+if command -v gitleaks &> /dev/null; then
+  gitleaks protect --verbose --staged
+  if [ $? -eq 1 ]; then
+    echo "❌ Secrets detected in commit! Please remove sensitive data."
+    exit 1
+  fi
+fi
+
+echo "✅ Commit message check passed"

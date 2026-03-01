@@ -60,6 +60,14 @@ export const env = createEnv({
     UPSTASH_REDIS_REST_URL: z.string().optional(),
     UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
 
+    // Field-level encryption (for OAuth tokens, API keys, PII)
+    FIELD_ENCRYPTION_KEY: z.string().min(32).optional(),
+
+    // Row-Level Security (RLS) feature flag
+    // SECURITY: Enabled by default. Database-level tenant isolation provides defense-in-depth
+    // even if application-level filtering is missed.
+    RLS_ENABLED: z.enum(["true", "false"]).default("true"),
+
     // Environment
     NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
   },
@@ -107,6 +115,8 @@ export const env = createEnv({
     SENTRY_PROJECT: process.env.SENTRY_PROJECT,
     UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
     UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
+    FIELD_ENCRYPTION_KEY: process.env.FIELD_ENCRYPTION_KEY,
+    RLS_ENABLED: process.env.RLS_ENABLED,
     NODE_ENV: process.env.NODE_ENV,
 
     // Client

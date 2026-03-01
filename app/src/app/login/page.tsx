@@ -112,23 +112,15 @@ function LoginForm() {
               Sign in
             </Button>
 
-            <div className="relative my-4">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-slate-200" />
+            {/* SECURITY: Dev credentials only shown in development mode */}
+            {process.env.NODE_ENV === "development" && (
+              <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm">
+                <p className="font-medium text-blue-900 mb-1">Dev credentials:</p>
+                <p className="text-blue-700 text-xs font-mono">
+                  Check your seed script or run: npm run db:seed
+                </p>
               </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-white px-2 text-slate-500">
-                  Development mode
-                </span>
-              </div>
-            </div>
-
-            <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm">
-              <p className="font-medium text-blue-900 mb-1">Dev credentials:</p>
-              <p className="text-blue-700 text-xs font-mono">
-                admin@acme.dev / password
-              </p>
-            </div>
+            )}
           </form>
 
           <div className="mt-6 text-center text-sm">

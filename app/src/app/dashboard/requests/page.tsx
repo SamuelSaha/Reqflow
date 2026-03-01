@@ -412,7 +412,7 @@ export default function RequestsPage() {
                           </Badge>
                         </div>
                         <p className="text-caption text-slate-500 mt-0.5 truncate">
-                          {req.department?.name ?? "—"} &middot;{" "}
+                          {req.department?.name ?? " - "} &middot;{" "}
                           {req.category} &middot;{" "}
                           {new Date(req.createdAt).toLocaleDateString()}
                           {req.vendorName ? ` · ${req.vendorName}` : ""}

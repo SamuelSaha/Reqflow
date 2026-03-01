@@ -44,7 +44,7 @@ export default function TeamInviteEmail({
           </Text>
 
           <Text style={text}>
-            Reqflow helps teams manage software purchases — from first request
+            Reqflow helps teams manage software purchases - from first request
             to renewal. Accept the invite to get started.
           </Text>
 
@@ -59,7 +59,7 @@ export default function TeamInviteEmail({
             email, you can safely ignore it.
           </Text>
 
-          <Text style={footer}>— Reqflow Team</Text>
+          <Text style={footer}> -  Reqflow Team</Text>
         </Container>
       </Body>
     </Html>

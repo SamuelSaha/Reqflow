@@ -2,13 +2,18 @@
 """
 Plane API Client - Ultimate Edition
 Supports: Issues, Modules, Labels, States, Members, Sub-issues, Relations, Links, Attachments
-Workspace: samsam
 
 Usage:
-    python3 plane_client.py -w samsam list_projects
-    python3 plane_client.py -w samsam create_issue -p Couplance -t "Title" --priority 2
-    python3 plane_client.py -w samsam update_issue -p Couplance -i COUPLANCE-1 --state "Done"
+    python3 plane_client.py -w WORKSPACE list_projects
+    python3 plane_client.py -w WORKSPACE create_issue -p PROJECT -t "Title" --priority 2
+    python3 plane_client.py -w WORKSPACE update_issue -p PROJECT -i ISSUE-1 --state "Done"
+
+Environment Variables (required):
+    PLANE_API_URL - Plane API base URL (e.g., https://plane.example.com/api/v1)
+    PLANE_API_KEY - Plane API key for authentication
+    PLANE_DEFAULT_WORKSPACE - Default workspace slug (optional)
 """
+import os
 import requests
 import argparse
 import sys
@@ -16,9 +21,23 @@ import json
 import re
 
 # ============ CONFIGURATION ============
-BASE_URL = "http://49.13.87.235/api/v1"
-API_KEY = "plane_api_cc1356ba88fe404ba9b953140d3b2fe5"
-DEFAULT_WORKSPACE = "samsam"
+# SECURITY: All credentials loaded from environment variables
+BASE_URL = os.environ.get("PLANE_API_URL")
+API_KEY = os.environ.get("PLANE_API_KEY")
+DEFAULT_WORKSPACE = os.environ.get("PLANE_DEFAULT_WORKSPACE", "")
+
+# Validate required configuration
+if not BASE_URL or not API_KEY:
+    print("ERROR: Missing required environment variables:", file=sys.stderr)
+    print("  PLANE_API_URL - Plane API base URL", file=sys.stderr)
+    print("  PLANE_API_KEY - Plane API key", file=sys.stderr)
+    sys.exit(1)
+
+# SECURITY: Enforce HTTPS for production
+if BASE_URL.startswith("http://") and os.environ.get("PLANE_ALLOW_HTTP", "").lower() != "true":
+    print("ERROR: HTTP is not allowed. Use HTTPS or set PLANE_ALLOW_HTTP=true for development.", file=sys.stderr)
+    sys.exit(1)
+
 HEADERS = {"x-api-key": API_KEY, "Content-Type": "application/json"}
 
 

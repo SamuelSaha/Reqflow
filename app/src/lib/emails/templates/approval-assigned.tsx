@@ -117,7 +117,7 @@ export default function ApprovalAssignedEmail({
           </Section>
 
           <Text style={footer}>
-            — Reqflow Team
+            - Reqflow Team
           </Text>
         </Container>
       </Body>

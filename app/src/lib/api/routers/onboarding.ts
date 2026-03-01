@@ -345,7 +345,7 @@ export const onboardingRouter = router({
       return { success: true };
     }),
 
-  /** Complete onboarding — flip flag and refresh JWT */
+  /** Complete onboarding - flip flag and refresh JWT */
   completeOnboarding: protectedProcedure.mutation(async ({ ctx }) => {
     await ctx.db
       .update(organizations)

@@ -316,7 +316,7 @@ export function BudgetSetupStep({ onNext }: Props) {
           Create a budget
         </h2>
         <p className="text-body-sm text-slate-500 mt-1">
-          Start with one budget — you can always add more from the dashboard.
+          Start with one budget - you can always add more from the dashboard.
         </p>
       </div>
 

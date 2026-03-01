@@ -52,7 +52,7 @@ export default function CareersPage() {
               Help us build procurement software that doesn't suck.
             </h1>
             <p className="text-body-lg text-slate-600 leading-relaxed max-w-[700px] mx-auto">
-              We're a small team in Paris building Reqflow — procurement for teams moving too fast for spreadsheets. No open roles right now, but we're growing fast.
+              We're a small team in Paris building Reqflow - procurement for teams moving too fast for spreadsheets. No open roles right now, but we're growing fast.
             </p>
           </div>
 
@@ -70,7 +70,7 @@ export default function CareersPage() {
                   Two founders (product + engineering) and one contract designer. We're bootstrapped, profitable from month one (beta revenue), and growing steadily.
                 </p>
                 <p className="text-body text-slate-600 leading-relaxed">
-                  We'll hire when we have clear, urgent needs — not because we raised a round. Expect roles in engineering (full-stack), product design, and customer success over the next 6-12 months.
+                  We'll hire when we have clear, urgent needs - not because we raised a round. Expect roles in engineering (full-stack), product design, and customer success over the next 6-12 months.
                 </p>
               </div>
             </div>

@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 
 /* ------------------------------------------------------------------ */
-/*  Case Builder Showcase (Features Page — full breakdown)             */
+/*  Case Builder Showcase (Features Page - full breakdown)             */
 /* ------------------------------------------------------------------ */
 
 const alternatives = [
@@ -57,7 +57,7 @@ export function CaseBuilderShowcase() {
         </h2>
         <p className="text-body-lg text-slate-600 max-w-[620px]">
           No more guessing which vendor is best. Reqflow's AI researches
-          alternatives, compares pricing, and builds a structured case — so
+          alternatives, compares pricing, and builds a structured case - so
           approvers get context, not just a number.
         </p>
       </div>
@@ -73,8 +73,8 @@ export function CaseBuilderShowcase() {
           </h3>
           <p className="text-body text-slate-600 leading-relaxed">
             When a request crosses the €500 threshold, Case Builder activates
-            automatically. AI pre-fills vendor data from public sources — pricing,
-            reviews, contract terms — and presents 2-3 structured alternatives
+            automatically. AI pre-fills vendor data from public sources - pricing,
+            reviews, contract terms - and presents 2-3 structured alternatives
             side-by-side.
           </p>
           <div className="flex flex-col gap-2.5">
@@ -82,7 +82,7 @@ export function CaseBuilderShowcase() {
               "AI researches vendors and fills pricing automatically",
               "Side-by-side comparison with pros, cons, and terms",
               "Budget impact shown before you submit",
-              "Becomes part of the approval — approvers see your work",
+              "Becomes part of the approval - approvers see your work",
               "Export to PDF for audit trail and compliance",
             ].map((text) => (
               <div key={text} className="flex items-center gap-2">
@@ -226,7 +226,7 @@ export function CaseBuilderShowcase() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Case Builder Spotlight (Homepage — compact callout)                */
+/*  Case Builder Spotlight (Homepage - compact callout)                */
 /* ------------------------------------------------------------------ */
 export function CaseBuilderSpotlight() {
   return (
@@ -248,7 +248,7 @@ export function CaseBuilderSpotlight() {
             </h2>
             <p className="text-body text-slate-600 leading-relaxed max-w-[400px]">
               Purchases over €500 automatically trigger an AI-powered comparison
-              of 2-3 vendor alternatives — pricing, reviews, and budget impact —
+              of 2-3 vendor alternatives - pricing, reviews, and budget impact  - 
               so approvers never fly blind.
             </p>
             <a

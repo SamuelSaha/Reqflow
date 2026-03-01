@@ -6,7 +6,7 @@ import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { router, protectedProcedure } from "../trpc";
 import { requests, approvals, insertRequestSchema } from "../../db/schema";
-import { eq, and, desc, asc, count, sql, or, ilike, gte, lte, between } from "drizzle-orm";
+import { eq, and, desc, asc, count, sql, or, ilike, gte, lte } from "drizzle-orm";
 import { createAuditLog, AuditAction } from "../../monitoring/audit";
 
 export const requestsRouter = router({

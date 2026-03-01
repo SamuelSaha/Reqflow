@@ -15,7 +15,7 @@ const testimonials = [
     companySize: "50 people",
     avatar: "/avatars/sarah-chen.jpg", // TODO: Add actual images
     quote:
-      "We caught €25K in duplicate SaaS tools in the first month. Reqflow paid for itself before we even launched—and it's free during early access.",
+      "We caught €25K in duplicate SaaS tools in the first month. Reqflow paid for itself before we even launched - and it's free during early access.",
     impact: "€25K saved",
     metric: "29% of subscriptions were duplicates",
   },

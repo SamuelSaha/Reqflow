@@ -626,8 +626,9 @@ export const teamRouter = router({
         });
       }
 
-      // Generate new token and extend expiry
-      const newToken = crypto.randomUUID();
+      // SECURITY: Generate cryptographically secure token (256-bit entropy)
+      // Using same method as createInviteWithRetry for consistency
+      const newToken = generateSecureToken();
       const newExpiresAt = new Date();
       newExpiresAt.setDate(newExpiresAt.getDate() + 7);
 

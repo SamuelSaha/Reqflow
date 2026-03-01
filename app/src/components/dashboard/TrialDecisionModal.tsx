@@ -75,6 +75,64 @@ export function TrialDecisionModal({
   });
 
   const makeDecision = trpc.trials.makeDecision.useMutation({
+    onMutate: async (variables) => {
+      await utils.trials.list.cancel();
+      await utils.trials.getById.cancel({ id: trialId });
+
+      const previousList = utils.trials.list.getData({});
+      const previousTrial = utils.trials.getById.getData({ id: trialId });
+
+      const newStatus = variables.decision === "convert" ? "converted"
+        : variables.decision === "extend" ? "extended"
+        : "cancelled";
+
+      const newDecision = variables.decision === "convert" ? "buy"
+        : variables.decision === "extend" ? "extend"
+        : "cancel";
+
+      utils.trials.list.setData({}, (old) =>
+        old?.map((t) =>
+          t.id === trialId
+            ? {
+                ...t,
+                status: newStatus,
+                decision: newDecision,
+                decisionDate: new Date(),
+                decisionNotes: variables.decisionNotes ?? null,
+                ...(variables.decision === "extend" && variables.newEndDate
+                  ? { endDate: variables.newEndDate }
+                  : {}),
+              }
+            : t
+        ) ?? []
+      );
+
+      if (previousTrial) {
+        utils.trials.getById.setData({ id: trialId }, {
+          ...previousTrial,
+          status: newStatus,
+          decision: newDecision,
+          decisionDate: new Date(),
+          decisionNotes: variables.decisionNotes ?? null,
+          ...(variables.decision === "extend" && variables.newEndDate
+            ? { endDate: variables.newEndDate }
+            : {}),
+        });
+      }
+
+      return { previousList, previousTrial };
+    },
+    onError: (error, variables, context) => {
+      if (context?.previousList) {
+        utils.trials.list.setData({}, context.previousList);
+      }
+      if (context?.previousTrial) {
+        utils.trials.getById.setData({ id: trialId }, context.previousTrial);
+      }
+      toast.error("Failed to process decision", {
+        description: error.message || "Please try again",
+      });
+    },
     onSuccess: (result) => {
       const decision = form.getValues("decision");
 
@@ -103,15 +161,10 @@ export function TrialDecisionModal({
         onSuccess();
         onOpenChange(false);
       }
-
-      // Invalidate queries
+    },
+    onSettled: () => {
       utils.trials.list.invalidate();
       utils.trials.getById.invalidate({ id: trialId });
-    },
-    onError: (error) => {
-      toast.error("Failed to process decision", {
-        description: error.message || "Please try again",
-      });
     },
   });
 

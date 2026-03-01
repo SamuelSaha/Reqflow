@@ -7,7 +7,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Renewal Tracking Software - Never Miss a Renewal Deadline",
-  description: "Track notice windows, not just renewal dates. Get alerted when you must decide—before auto-renew locks you in. Built for small teams managing SaaS subscriptions.",
+  description: "Track notice windows, not just renewal dates. Get alerted when you must decide - before auto-renew locks you in. Built for small teams managing SaaS subscriptions.",
   alternates: {
     canonical: "/features/renewals",
   },
@@ -58,7 +58,7 @@ export default function RenewalAlertsPage() {
                   </div>
                   <div className="flex items-start gap-3">
                     <span className="text-body-lg">3️⃣</span>
-                    <span>Notice window closes (Nov 1, 2026) — you didn't get reminded</span>
+                    <span>Notice window closes (Nov 1, 2026) - you didn't get reminded</span>
                   </div>
                   <div className="flex items-start gap-3">
                     <span className="text-body-lg">4️⃣</span>
@@ -95,7 +95,7 @@ export default function RenewalAlertsPage() {
                   </h3>
                 </div>
                 <p className="text-body text-slate-600 leading-relaxed mb-4">
-                  Most tools only track when subscriptions renew (Jan 1, 2027). By the time renewal hits, it's too late — the notice window closed 60 days ago.
+                  Most tools only track when subscriptions renew (Jan 1, 2027). By the time renewal hits, it's too late - the notice window closed 60 days ago.
                 </p>
                 <div className="text-body-sm text-red-600 font-medium bg-red-50 rounded-lg p-3 border border-red-200">
                   "Notion renews tomorrow at €4,800. Cancel?" → TOO LATE. Notice window closed 60 days ago.
@@ -111,7 +111,7 @@ export default function RenewalAlertsPage() {
                   </h3>
                 </div>
                 <p className="text-body text-slate-700 leading-relaxed mb-4">
-                  Reqflow tracks the notice deadline — when you MUST decide. We alert you 90/60/30 days before the window closes, so you have time to evaluate.
+                  Reqflow tracks the notice deadline - when you MUST decide. We alert you 90/60/30 days before the window closes, so you have time to evaluate.
                 </p>
                 <div className="text-body-sm text-green-700 font-medium bg-green-100 rounded-lg p-3 border border-green-200">
                   "Notion renews in 90 days (€4,800). Notice window closes in 30 days. Decide now or auto-renew."
@@ -236,7 +236,7 @@ export default function RenewalAlertsPage() {
                   Can't we just track renewals in a calendar?
                 </h3>
                 <p className="text-body text-slate-600">
-                  Calendars only track renewal dates, not notice windows. By the time the renewal date hits, it's too late—the 60-day cancellation window already closed. Reqflow tracks the deadline that actually matters: when you MUST decide.
+                  Calendars only track renewal dates, not notice windows. By the time the renewal date hits, it's too late - the 60-day cancellation window already closed. Reqflow tracks the deadline that actually matters: when you MUST decide.
                 </p>
               </div>
               <div>
