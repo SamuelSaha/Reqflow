@@ -15,8 +15,9 @@ import { setCSRFToken } from "../security/csrf";
 
 const JWT_SECRET = new TextEncoder().encode(env.AUTH_SECRET);
 
-// Use __Host- prefix for enhanced security (requires secure=true, path="/")
-const COOKIE_NAME = "__Host-reqflow_session";
+// Cookie name must match middleware.ts
+// Note: __Host- prefix requires HTTPS and breaks local dev on HTTP
+const COOKIE_NAME = "reqflow_session";
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
 
 export interface SessionPayload {
