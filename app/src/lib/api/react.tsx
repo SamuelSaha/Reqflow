@@ -5,7 +5,7 @@
 "use client";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { httpBatchLink, httpSubscriptionLink, splitLink } from "@trpc/client";
+import { httpBatchLink } from "@trpc/client";
 import { createTRPCReact } from "@trpc/react-query";
 import { useState } from "react";
 import type { AppRouter } from "./root";
@@ -45,26 +45,15 @@ export function TRPCProvider({ children }: { children: React.ReactNode }) {
   const [trpcClient] = useState(() =>
     trpc.createClient({
       links: [
-        splitLink({
-          // Use HTTP subscription link for subscriptions (long-polling)
-          condition(op) {
-            return op.type === "subscription";
+        httpBatchLink({
+          url: `${getBaseUrl()}/api/trpc`,
+          transformer: superjson,
+          // Prevent URLs from exceeding browser limits
+          maxURLLength: 2083,
+          headers() {
+            const csrfToken = getCookie("csrf_token");
+            return csrfToken ? { "x-csrf-token": csrfToken } : {};
           },
-          true: httpSubscriptionLink({
-            url: `${getBaseUrl()}/api/trpc`,
-            transformer: superjson,
-          }),
-          // Use HTTP batch link for queries and mutations
-          false: httpBatchLink({
-            url: `${getBaseUrl()}/api/trpc`,
-            transformer: superjson,
-            // Prevent URLs from exceeding browser limits
-            maxURLLength: 2083,
-            headers() {
-              const csrfToken = getCookie("csrf_token");
-              return csrfToken ? { "x-csrf-token": csrfToken } : {};
-            },
-          }),
         }),
       ],
     })

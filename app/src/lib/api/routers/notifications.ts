@@ -8,7 +8,6 @@ import { TRPCError } from "@trpc/server";
 import { router, protectedProcedure } from "../trpc";
 import { notifications, users } from "../../db/schema";
 import { eq, and, desc, sql } from "drizzle-orm";
-import { observable } from "@trpc/server/observable";
 import { EventEmitter } from "events";
 import { createAuditLog, AuditAction } from "../../monitoring/audit";
 import type { Notification } from "../../db/schema";
@@ -241,26 +240,11 @@ export const notificationsRouter = router({
       return { success: true };
     }),
 
-  /**
-   * Real-time subscription for new notifications
-   * Clients subscribe to this and receive new notifications instantly
-   */
-  onNew: protectedProcedure.subscription(({ ctx }) => {
-    return observable<Notification>((emit) => {
-      const listener = (notification: Notification) => {
-        emit.next(notification);
-      };
-
-      // Subscribe to notifications for this user
-      const eventName = `notification:${ctx.user.id}`;
-      notificationEvents.on(eventName, listener);
-
-      // Cleanup on unsubscribe
-      return () => {
-        notificationEvents.off(eventName, listener);
-      };
-    });
-  }),
+  // TODO: Real-time subscription for new notifications
+  // Re-enable once WebSocket transport (wsLink) is configured:
+  //   onNew: protectedProcedure.subscription(({ ctx }) => {
+  //     return observable<Notification>((emit) => { ... });
+  //   }),
 
   /**
    * Get notification preferences for the current user

@@ -18,21 +18,14 @@ import { NotificationList } from "./NotificationList";
 export function NotificationBell() {
   const [isOpen, setIsOpen] = useState(false);
 
-  // Get unread count
-  const { data: unreadCount = 0, refetch: refetchCount } = trpc.notifications.getUnreadCount.useQuery(
+  // Get unread count — polls every 30 seconds
+  // TODO: Add real-time subscriptions once WebSocket transport is set up
+  const { data: unreadCount = 0 } = trpc.notifications.getUnreadCount.useQuery(
     undefined,
     {
-      refetchInterval: 30000, // Poll every 30 seconds as fallback
+      refetchInterval: 30000,
     }
   );
-
-  // Subscribe to real-time notifications
-  trpc.notifications.onNew.useSubscription(undefined, {
-    onData: () => {
-      // New notification received - refetch count
-      refetchCount();
-    },
-  });
 
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
