@@ -19,6 +19,12 @@ function getBaseUrl() {
   return env.NEXT_PUBLIC_APP_URL;
 }
 
+function getCookie(name: string): string | undefined {
+  if (typeof document === "undefined") return undefined;
+  const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
+  return match ? decodeURIComponent(match[1]) : undefined;
+}
+
 export function TRPCProvider({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
@@ -27,6 +33,10 @@ export function TRPCProvider({ children }: { children: React.ReactNode }) {
         httpBatchLink({
           url: `${getBaseUrl()}/api/trpc`,
           transformer: superjson,
+          headers() {
+            const csrfToken = getCookie("csrf_token");
+            return csrfToken ? { "x-csrf-token": csrfToken } : {};
+          },
         }),
       ],
     })
