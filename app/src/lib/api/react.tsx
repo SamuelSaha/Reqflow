@@ -26,13 +26,31 @@ function getCookie(name: string): string | undefined {
 }
 
 export function TRPCProvider({ children }: { children: React.ReactNode }) {
-  const [queryClient] = useState(() => new QueryClient());
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            // Explicitly enable query deduplication (default: true, but make it explicit)
+            // Prevents duplicate requests for same query key across component tree
+            refetchOnWindowFocus: false,
+            // Cancel in-flight requests on unmount to prevent race conditions
+            // and stale data updates during rapid navigation
+            refetchOnMount: true,
+            retry: 1,
+            staleTime: 5000, // Consider data fresh for 5 seconds
+          },
+        },
+      })
+  );
   const [trpcClient] = useState(() =>
     trpc.createClient({
       links: [
         httpBatchLink({
           url: `${getBaseUrl()}/api/trpc`,
           transformer: superjson,
+          // Prevent URLs from exceeding browser limits
+          maxURLLength: 2083,
           headers() {
             const csrfToken = getCookie("csrf_token");
             return csrfToken ? { "x-csrf-token": csrfToken } : {};
