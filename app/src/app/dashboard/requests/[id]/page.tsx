@@ -30,6 +30,9 @@ import {
 import { RequestDetailSkeleton } from "@/components/dashboard/LoadingSkeletons";
 import { getErrorMessage } from "@/lib/utils/error-messages";
 import { toast } from "sonner";
+import { ConvertToSubscriptionDialog } from "@/components/dashboard/ConvertToSubscriptionDialog";
+import { useState } from "react";
+import { Repeat } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -55,6 +58,7 @@ export default function RequestDetailPage({
   const { id } = use(params);
   const request = trpc.requests.getById.useQuery({ id });
   const utils = trpc.useUtils();
+  const [convertDialogOpen, setConvertDialogOpen] = useState(false);
 
   const retrySync = trpc.integrations.retrySync.useMutation({
     onMutate: () => {
@@ -179,7 +183,7 @@ export default function RequestDetailPage({
             <CardContent>
               <div className="grid grid-cols-2 gap-4">
                 <DetailItem icon={Building2} label="Department" value={req.department?.name ?? " - "} />
-                <DetailItem icon={FileText} label="Category" value={(req as any).category?.name ?? req.category ?? " - "} />
+                <DetailItem icon={FileText} label="Category" value={(req.category && typeof req.category === 'object' && 'name' in req.category ? req.category.name : req.category) ?? " - "} />
                 <DetailItem icon={DollarSign} label="Amount" value={`€${parseFloat(req.amount).toLocaleString("en", { minimumFractionDigits: 2 })}`} />
                 <DetailItem icon={Calendar} label="Frequency" value={req.frequency} />
                 {req.vendorName && (
@@ -388,6 +392,68 @@ export default function RequestDetailPage({
             </Card>
           )}
 
+          {/* Subscription Link - Show if request was converted */}
+          {req.convertedToSubscriptionId && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-body flex items-center gap-2">
+                  <Repeat className="h-4 w-4" />
+                  Subscription
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex items-start gap-2">
+                    <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5" />
+                    <div className="flex-1">
+                      <p className="text-body-sm font-medium text-green-700">
+                        Converted to subscription
+                      </p>
+                      <p className="text-caption text-slate-600 mt-1">
+                        This request has been converted to an active subscription.
+                      </p>
+                    </div>
+                  </div>
+                  <Link href={`/dashboard/subscriptions/${req.convertedToSubscriptionId}`}>
+                    <Button variant="outline" size="sm" className="w-full">
+                      View Subscription
+                    </Button>
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Convert to Subscription - Show for approved recurring requests not yet converted */}
+          {req.status === "approved" &&
+           req.frequency !== "one-time" &&
+           !req.convertedToSubscriptionId && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-body flex items-center gap-2">
+                  <Repeat className="h-4 w-4" />
+                  Convert to Subscription
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <p className="text-body-sm text-slate-600">
+                    Track this recurring purchase as a subscription to monitor spend and renewal dates.
+                  </p>
+                  <Button
+                    variant="default"
+                    size="sm"
+                    className="w-full"
+                    onClick={() => setConvertDialogOpen(true)}
+                  >
+                    <Repeat className="mr-2 h-4 w-4" />
+                    Convert to Subscription
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           {/* Timeline */}
           <Card>
             <CardHeader>
@@ -434,6 +500,16 @@ export default function RequestDetailPage({
           </Card>
         </div>
       </div>
+
+      {/* Conversion Dialog */}
+      <ConvertToSubscriptionDialog
+        open={convertDialogOpen}
+        onOpenChange={setConvertDialogOpen}
+        requestId={id}
+        requestTitle={req.title}
+        requestAmount={req.amount}
+        frequency={req.frequency}
+      />
     </div>
   );
 }

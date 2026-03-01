@@ -16,6 +16,7 @@ import { users } from "./users";
 import { departments } from "./departments";
 import { budgets } from "./budgets";
 import { categories } from "./categories";
+import { subscriptions } from "./subscriptions";
 import { z } from "zod";
 
 /**
@@ -50,6 +51,9 @@ export const requests = pgTable(
     // Vendor info
     vendorName: text("vendor_name"),
     vendorId: uuid("vendor_id"), // References vendors.id (will create later)
+
+    // Conversion tracking
+    convertedToSubscriptionId: uuid("converted_to_subscription_id"), // References subscriptions.id when converted
 
     // Financial
     amount: numeric("amount", { precision: 12, scale: 2 }).notNull(), // Total cost
@@ -118,6 +122,10 @@ export const requestsRelations = relations(requests, ({ one }) => ({
   category: one(categories, {
     fields: [requests.categoryId],
     references: [categories.id],
+  }),
+  convertedToSubscription: one(subscriptions, {
+    fields: [requests.convertedToSubscriptionId],
+    references: [subscriptions.id],
   }),
 }));
 
