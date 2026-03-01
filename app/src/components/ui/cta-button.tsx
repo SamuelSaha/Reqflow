@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * CTA Button Components - Conversion-optimized call-to-action buttons
  * Follows 3-tier hierarchy: Primary > Secondary > Tertiary
