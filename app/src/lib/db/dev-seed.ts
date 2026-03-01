@@ -25,7 +25,7 @@ let seeded = false;
 
 export async function ensureDevSeed() {
   if (seeded) return;
-  if (env.NODE_ENV !== "development") return;
+  if (env.NODE_ENV === "production") return;
 
   // Check if already seeded
   const existing = await db.query.organizations.findFirst({
@@ -48,6 +48,7 @@ export async function ensureDevSeed() {
     industry: "Technology",
     size: "50-100",
     plan: "growth",
+    onboardingCompleted: true,
   }).onConflictDoNothing();
 
   // Departments

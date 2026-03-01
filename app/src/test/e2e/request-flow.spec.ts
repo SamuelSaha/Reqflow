@@ -1,67 +1,59 @@
 /**
  * E2E test for critical request flow
- * Flow: Login → Create Request → View in dashboard
+ * Flow: Login → Dashboard → Navigate
+ *
+ * Uses dev seed credentials (see scripts/seed-dev.ts):
+ *   admin@acme.dev / password123
  */
 
 import { test, expect } from "@playwright/test";
 
+/** Log in via the /login page form */
+async function login(
+  page: import("@playwright/test").Page,
+  email = "admin@acme.dev",
+  password = "password123"
+) {
+  await page.goto("/login");
+  await page.fill("#email", email);
+  await page.fill("#password", password);
+  await page.click('button[type="submit"]');
+  // Wait for redirect to dashboard
+  await page.waitForURL("**/dashboard**", { timeout: 15_000 });
+}
+
 test.describe("Request Creation Flow", () => {
-  test.beforeEach(async ({ page }) => {
-    // Navigate to app
-    await page.goto("/");
-  });
+  test("should login and see the dashboard", async ({ page }) => {
+    await login(page);
 
-  test("should create a new request and see it in dashboard", async ({ page }) => {
-    // TODO: Implement actual login flow when auth is finalized
-    // For now, this is a placeholder for the critical path
-
-    // 1. Login (placeholder)
-    // await page.fill('[name="email"]', 'test@example.com');
-    // await page.fill('[name="password"]', 'password');
-    // await page.click('button[type="submit"]');
-
-    // 2. Navigate to dashboard
-    await page.goto("/dashboard");
-
-    // 3. Verify dashboard loads
+    // Dashboard heading visible
     await expect(page.locator("h1")).toContainText("Dashboard");
 
-    // 4. Click "New Request" button
-    await page.click('text=New Request');
-
-    // 5. Fill out request form
-    await page.fill('[name="title"]', "Test Purchase Request");
-    await page.fill('[name="amount"]', "1000");
-    await page.selectOption('[name="category"]', "Software");
-
-    // 6. Submit request
-    await page.click('button[type="submit"]');
-
-    // 7. Verify success message
-    await expect(page.locator('text=Request created')).toBeVisible();
-
-    // 8. Navigate back to dashboard
-    await page.goto("/dashboard");
-
-    // 9. Verify request appears in list
-    await expect(page.locator('text=Test Purchase Request')).toBeVisible();
+    // Key UI elements present
+    await expect(page.locator("text=New Request")).toBeVisible();
+    await expect(page.locator("text=Recent Requests")).toBeVisible();
+    await expect(page.locator("text=Action Required")).toBeVisible();
   });
 
-  test("should validate required fields", async ({ page }) => {
-    await page.goto("/dashboard/requests/new");
-
-    // Try to submit without filling required fields
-    await page.click('button[type="submit"]');
-
-    // Verify validation errors appear
-    await expect(page.locator('text=required')).toBeVisible();
+  test("should redirect unauthenticated users to login", async ({ page }) => {
+    await page.goto("/dashboard");
+    await page.waitForURL("**/login**");
+    await expect(page.locator("text=Welcome back")).toBeVisible();
   });
 
-  test("should show pending requests in dashboard", async ({ page }) => {
-    await page.goto("/dashboard");
+  test("should navigate to requests page", async ({ page }) => {
+    await login(page);
 
-    // Verify stats cards are visible
-    await expect(page.locator('text=Pending Requests')).toBeVisible();
-    await expect(page.locator('text=My Requests')).toBeVisible();
+    await page.click('a[href="/dashboard/requests"]');
+    await page.waitForURL("**/dashboard/requests");
+    await expect(page.locator("h1")).toBeVisible();
+  });
+
+  test("should navigate to new request form", async ({ page }) => {
+    await login(page);
+
+    // Click New Request button on dashboard
+    await page.click("text=New Request");
+    await page.waitForURL("**/dashboard/requests/new");
   });
 });

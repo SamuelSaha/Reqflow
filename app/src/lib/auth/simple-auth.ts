@@ -135,7 +135,7 @@ export async function signIn(
   const cookieStore = await cookies();
   cookieStore.set(COOKIE_NAME, token, {
     httpOnly: true, // Prevent XSS access
-    secure: true, // ALWAYS require HTTPS (fixed security issue)
+    secure: process.env.NODE_ENV === "production", // HTTPS in production, HTTP allowed in dev/test
     sameSite: "lax", // Allow cookie on GET requests (like OAuth callbacks)
     maxAge: COOKIE_MAX_AGE,
     path: "/",
@@ -184,7 +184,7 @@ export async function refreshSession(userId: string): Promise<void> {
   const cookieStore = await cookies();
   cookieStore.set(COOKIE_NAME, token, {
     httpOnly: true, // Prevent XSS access
-    secure: true, // ALWAYS require HTTPS (fixed security issue)
+    secure: process.env.NODE_ENV === "production", // HTTPS in production, HTTP allowed in dev/test
     sameSite: "lax", // Allow cookie on GET requests
     maxAge: COOKIE_MAX_AGE,
     path: "/",

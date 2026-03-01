@@ -47,8 +47,21 @@ jobs:
   e2e-tests:
     name: E2E Tests
     runs-on: ubuntu-latest
-    # E2E tests are placeholder stubs — no auth/DB setup in CI yet
-    continue-on-error: true
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     env:
       DATABASE_URL: "postgresql://test:test@localhost:5432/test"
@@ -56,6 +69,7 @@ jobs:
       AUTH_SECRET: "test-secret-key-for-ci-minimum-32-chars"
       AUTH_URL: "http://localhost:3000"
       NEXT_PUBLIC_APP_URL: "http://localhost:3000"
+      NODE_ENV: "development"
 
     steps:
       - uses: actions/checkout@v4
@@ -74,13 +88,17 @@ jobs:
       - name: Install platform-specific native binaries
         run: npm install --no-save @tailwindcss/oxide-linux-x64-gnu@4.2.0 lightningcss-linux-x64-gnu@1.31.1 @unrs/resolver-binding-linux-x64-gnu@1.11.1
 
+      - name: Push database schema
+        run: npm run db:push --workspace=app
+
+      - name: Seed test data
+        run: cd app && npx tsx scripts/seed-dev.ts
+
       - name: Install Playwright Browsers
-        run: cd app && npx playwright install --with-deps
+        run: cd app && npx playwright install --with-deps chromium
 
       - name: Run E2E tests
         run: npm run test:e2e --workspace=app
-        # E2E tests are placeholder — no auth/DB setup in CI yet
-        continue-on-error: true
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
