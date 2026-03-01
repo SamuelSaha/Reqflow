@@ -44,7 +44,11 @@ type CategoryData = { monthly: number; annual: number; count: number };
 type VendorData = { monthly: number; annual: number; count: number; vendorName: string };
 type DepartmentData = { monthly: number; annual: number; count: number; departmentName: string };
 type UtilizationItem = {
-  subscription: unknown;
+  subscription: {
+    id: string;
+    toolName: string;
+    status: string;
+  };
   seats: number;
   activeSeats: number;
   utilizationPercent: number;

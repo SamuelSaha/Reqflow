@@ -39,7 +39,9 @@ if (isServerless || env.NODE_ENV === "development") {
 }
 
 // Create Drizzle instance
-export const db = drizzle(queryClient, { schema });
+// Type assertion needed due to workspace postgres duplication (TypeScript sees two postgres types)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const db = drizzle(queryClient as any, { schema });
 
 // Export types
 export type Database = typeof db;

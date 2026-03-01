@@ -50,7 +50,9 @@ const queryClient = postgres(DATABASE_URL, {
   connect_timeout: 10,
 });
 
-const db = drizzle(queryClient, { schema });
+// Type assertion needed due to workspace postgres duplication (TypeScript sees two postgres types)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const db = drizzle(queryClient as any, { schema });
 
 // Resolve authenticated user at startup
 async function resolveUser() {
