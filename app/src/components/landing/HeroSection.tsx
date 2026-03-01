@@ -61,7 +61,7 @@ export function HeroSection() {
 
             {/* Headline */}
             <h1 className="text-hero text-slate-900 leading-[1.1]">
-              Procurement software for teams of 5–50 who move too fast for spreadsheets
+              Procurement software for teams who move too fast for spreadsheets
             </h1>
 
             {/* Subheadline */}
