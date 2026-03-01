@@ -68,8 +68,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install platform-specific CSS compiler
-        run: npm install --no-save lightningcss-linux-x64-gnu@1.31.1 2>/dev/null || true
+      # npm ci doesn't resolve platform-specific optional deps from macOS-generated lock file (npm/cli#4828)
+      - name: Install platform-specific native binaries
+        run: npm install --no-save @tailwindcss/oxide-linux-x64-gnu@4.2.0 lightningcss-linux-x64-gnu@1.31.1 @unrs/resolver-binding-linux-x64-gnu@1.11.1
 
       - name: Install Playwright Browsers
         run: cd app && npx playwright install --with-deps
@@ -136,8 +137,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Install platform-specific CSS compiler
-        run: npm install --no-save lightningcss-linux-x64-gnu@1.31.1 2>/dev/null || true
+      # npm ci doesn't resolve platform-specific optional deps from macOS-generated lock file (npm/cli#4828)
+      - name: Install platform-specific native binaries
+        run: npm install --no-save @tailwindcss/oxide-linux-x64-gnu@4.2.0 lightningcss-linux-x64-gnu@1.31.1 @unrs/resolver-binding-linux-x64-gnu@1.11.1
 
       - name: Build
         run: npm run build --workspace=app
