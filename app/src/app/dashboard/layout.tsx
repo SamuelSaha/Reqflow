@@ -80,7 +80,12 @@ export default function DashboardLayout({
             {/* Mobile hamburger */}
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="sm" className="md:hidden h-10 w-10 p-0">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="md:hidden h-10 w-10 p-0"
+                  suppressHydrationWarning
+                >
                   <Menu className="h-5 w-5" />
                   <span className="sr-only">Open menu</span>
                 </Button>
