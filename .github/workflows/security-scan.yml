@@ -41,20 +41,17 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: app/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
-        working-directory: app
         run: npm ci
 
       - name: Run npm audit
-        working-directory: app
         run: |
           npm audit --audit-level=high --omit=dev
         continue-on-error: true
 
       - name: Run npm audit (production only)
-        working-directory: app
         run: |
           npm audit --audit-level=critical
         continue-on-error: false
@@ -107,15 +104,13 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: app/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
-        working-directory: app
         run: npm ci
 
       - name: Build application
-        working-directory: app
-        run: npm run build
+        run: npm run build --workspace=app
         env:
           SKIP_ENV_VALIDATION: '1'
         continue-on-error: true
@@ -184,15 +179,13 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: app/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
-        working-directory: app
         run: npm ci
 
       - name: Run TypeScript check
-        working-directory: app
-        run: npm run type-check
+        run: npm run type-check --workspace=app
 
   # ============================================================================
   # ESLint Security Check
@@ -209,15 +202,13 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: app/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
-        working-directory: app
         run: npm ci
 
       - name: Run ESLint
-        working-directory: app
-        run: npm run lint -- --max-warnings 0
+        run: npm run lint --workspace=app -- --max-warnings 0
         continue-on-error: true
 
   # ============================================================================
