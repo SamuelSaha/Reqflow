@@ -3,10 +3,10 @@
 
 echo "🚀 Running pre-push security checks..."
 
-# Run npm audit for the app
+# Run npm audit for the app (don't fail on vulnerabilities, just warn)
 echo "Checking for vulnerable dependencies..."
-npm audit --audit-level=high --omit=dev --workspace=app
-if [ $? -eq 1 ]; then
+npm audit --audit-level=high --omit=dev --workspace=app || audit_exit=$?
+if [ "${audit_exit:-0}" -ne 0 ]; then
   echo "⚠️  Warning: Vulnerable dependencies found. Consider running npm audit fix."
 fi
 
