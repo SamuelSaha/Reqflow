@@ -14,7 +14,7 @@ jobs:
     env:
       DATABASE_URL: "postgresql://test:test@localhost:5432/test"
       REDIS_URL: "redis://localhost:6379"
-      AUTH_SECRET: "test-secret-key-for-ci-only"
+      AUTH_SECRET: "test-secret-key-for-ci-minimum-32-chars"
       AUTH_URL: "http://localhost:3000"
       NEXT_PUBLIC_APP_URL: "http://localhost:3000"
 
@@ -51,7 +51,7 @@ jobs:
     env:
       DATABASE_URL: "postgresql://test:test@localhost:5432/test"
       REDIS_URL: "redis://localhost:6379"
-      AUTH_SECRET: "test-secret-key-for-ci-only"
+      AUTH_SECRET: "test-secret-key-for-ci-minimum-32-chars"
       AUTH_URL: "http://localhost:3000"
       NEXT_PUBLIC_APP_URL: "http://localhost:3000"
 
@@ -89,7 +89,7 @@ jobs:
     env:
       DATABASE_URL: "postgresql://test:test@localhost:5432/test"
       REDIS_URL: "redis://localhost:6379"
-      AUTH_SECRET: "test-secret-key-for-ci-only"
+      AUTH_SECRET: "test-secret-key-for-ci-minimum-32-chars"
       AUTH_URL: "http://localhost:3000"
       NEXT_PUBLIC_APP_URL: "http://localhost:3000"
 
@@ -116,7 +116,7 @@ jobs:
     env:
       DATABASE_URL: "postgresql://test:test@localhost:5432/test"
       REDIS_URL: "redis://localhost:6379"
-      AUTH_SECRET: "test-secret-key-for-ci-only"
+      AUTH_SECRET: "test-secret-key-for-ci-minimum-32-chars"
       AUTH_URL: "http://localhost:3000"
       NEXT_PUBLIC_APP_URL: "http://localhost:3000"
 
