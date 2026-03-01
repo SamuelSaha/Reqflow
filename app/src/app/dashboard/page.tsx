@@ -33,11 +33,26 @@ export const dynamic = "force-dynamic";
 const statusBadge = STATUS_STYLES;
 
 export default function DashboardPage() {
-  const stats = trpc.requests.stats.useQuery();
-  const recentRequests = trpc.requests.myList.useQuery({ limit: 5 });
-  const pendingApprovals = trpc.approvals.myQueue.useQuery({ status: "pending" });
-  const activeTrials = trpc.trials.list.useQuery({ status: "active" });
-  const renewalsStats = trpc.renewals.getDashboardStats.useQuery();
+  const stats = trpc.requests.stats.useQuery(undefined, {
+    refetchInterval: 30000,
+    refetchIntervalInBackground: false,
+  });
+  const recentRequests = trpc.requests.myList.useQuery({ limit: 5 }, {
+    refetchInterval: 30000,
+    refetchIntervalInBackground: false,
+  });
+  const pendingApprovals = trpc.approvals.myQueue.useQuery({ status: "pending" }, {
+    refetchInterval: 30000,
+    refetchIntervalInBackground: false,
+  });
+  const activeTrials = trpc.trials.list.useQuery({ status: "active" }, {
+    refetchInterval: 60000, // Less critical, poll every minute
+    refetchIntervalInBackground: false,
+  });
+  const renewalsStats = trpc.renewals.getDashboardStats.useQuery(undefined, {
+    refetchInterval: 60000,
+    refetchIntervalInBackground: false,
+  });
 
   // Count expiring soon trials (< 7 days)
   const expiringSoonCount = activeTrials.data?.filter(t => t.daysRemaining < 7).length || 0;

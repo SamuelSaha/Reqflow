@@ -15,7 +15,8 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { ApprovalCard } from "@/components/dashboard/ApprovalCard";
 import { trpc } from "@/lib/api/react";
-import { CheckSquare, Clock, XCircle, AlertCircle, Search, Filter, X } from "lucide-react";
+import { CheckSquare, Clock, XCircle, AlertCircle, Search, Filter, X, RefreshCw } from "lucide-react";
+import { useEffect, useState as useReactState } from "react";
 import { ApprovalCardSkeleton } from "@/components/dashboard/LoadingSkeletons";
 import { getErrorMessage } from "@/lib/utils/error-messages";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -37,6 +38,7 @@ export default function ApprovalsPage() {
   const [dateRange, setDateRange] = useState<string>("");
   const [sortBy, setSortBy] = useState<SortOption>("createdAt");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [lastUpdated, setLastUpdated] = useReactState<Date>(new Date());
 
   const utils = trpc.useUtils();
 
@@ -83,7 +85,35 @@ export default function ApprovalsPage() {
     queryParams.dateFrom = ninetyDaysAgo.toISOString();
   }
 
-  const queue = trpc.approvals.myQueue.useQuery(queryParams);
+  const queue = trpc.approvals.myQueue.useQuery(queryParams, {
+    refetchInterval: 30000, // Poll every 30s for real-time updates
+    refetchIntervalInBackground: false, // Stop polling when tab is inactive
+  });
+
+  // Track last update time
+  useEffect(() => {
+    if (queue.dataUpdatedAt) {
+      setLastUpdated(new Date(queue.dataUpdatedAt));
+    }
+  }, [queue.dataUpdatedAt]);
+
+  // Format "last updated" text
+  const getLastUpdatedText = () => {
+    const seconds = Math.floor((Date.now() - lastUpdated.getTime()) / 1000);
+    if (seconds < 10) return "Just now";
+    if (seconds < 60) return `${seconds}s ago`;
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes}m ago`;
+    const hours = Math.floor(minutes / 60);
+    return `${hours}h ago`;
+  };
+
+  // Update "last updated" text every 5 seconds
+  const [, forceUpdate] = useReactState({});
+  useEffect(() => {
+    const interval = setInterval(() => forceUpdate({}), 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   const hasActiveFilters = searchTerm || category || urgency || amountRange || dateRange;
 
@@ -168,13 +198,19 @@ export default function ApprovalsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900">
-          Approvals
-        </h1>
-        <p className="text-slate-600 mt-2">
-          Review purchase requests with AI-powered analysis
-        </p>
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+            Approvals
+          </h1>
+          <p className="text-slate-600 mt-2">
+            Review purchase requests with AI-powered analysis
+          </p>
+        </div>
+        <div className="flex items-center gap-2 text-sm text-slate-500">
+          <RefreshCw className={`h-3.5 w-3.5 ${queue.isFetching ? "animate-spin" : ""}`} />
+          <span>{getLastUpdatedText()}</span>
+        </div>
       </div>
 
       {/* Search Bar */}
