@@ -12,7 +12,6 @@ import { observable } from "@trpc/server/observable";
 import { EventEmitter } from "events";
 import { createAuditLog, AuditAction } from "../../monitoring/audit";
 import type { Notification } from "../../db/schema";
-import type { NodePgDatabase } from "drizzle-orm/node-postgres";
 
 // Event emitter for real-time notifications
 // This allows us to broadcast new notifications to subscribed clients
@@ -31,7 +30,8 @@ export function emitNotification(userId: string, notification: Notification) {
  * Used by other routers to create notifications
  */
 export async function createNotification(
-  db: NodePgDatabase<typeof import("../../db/schema")>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  db: any,
   data: {
     tenantId: string;
     userId: string;
@@ -299,13 +299,11 @@ export const notificationsRouter = router({
   updatePreferences: protectedProcedure
     .input(
       z.object({
-        preferences: z.record(
-          z.object({
-            email: z.boolean(),
-            inApp: z.boolean(),
-            slack: z.boolean(),
-          })
-        ),
+        preferences: z.record(z.string(), z.object({
+          email: z.boolean(),
+          inApp: z.boolean(),
+          slack: z.boolean(),
+        })),
       })
     )
     .mutation(async ({ ctx, input }) => {

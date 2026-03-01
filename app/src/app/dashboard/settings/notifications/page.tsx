@@ -102,7 +102,12 @@ export default function NotificationPreferencesPage() {
   };
 
   const handleSave = () => {
-    updatePrefs.mutate({ preferences: localPrefs });
+    updatePrefs.mutate({
+      preferences: localPrefs as Record<
+        string,
+        { email: boolean; inApp: boolean; slack: boolean }
+      >,
+    });
   };
 
   if (isLoading) {
