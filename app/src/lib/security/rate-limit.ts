@@ -126,28 +126,36 @@ export function getClientIp(request: Request): string {
 /**
  * Check rate limit for authentication attempts
  * Uses email + IP combination for better security
+ * 
+ * SECURITY: Fails closed in production if Redis is unavailable
  */
 export async function checkAuthRateLimit(
   email: string,
   request: Request
 ): Promise<{ success: boolean; limit: number; remaining: number; reset: number }> {
-  // SECURITY WARNING: If rate limiting is not configured, all brute-force protection is disabled
-  // This is a critical security risk in production environments
+  // SECURITY: Fail closed in production - block auth attempts if rate limiting unavailable
   if (!authRateLimiter) {
-    if (process.env.NODE_ENV === "production") {
-      // In production, log a critical security warning
-      logger.error("CRITICAL SECURITY ISSUE: Auth rate limiting is disabled in production!", new Error("Missing Upstash Redis configuration"), {
-        message: "Configure UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN to enable rate limiting",
+    if (env.NODE_ENV === "production") {
+      logger.error("CRITICAL: Auth rate limiting unavailable in production - blocking request", {
+        email: email.substring(0, 3) + "***",
+        message: "Configure UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN",
       });
+      // FAIL CLOSED: Return success=false to block the request
+      return {
+        success: false,
+        limit: 0,
+        remaining: 0,
+        reset: Date.now() + 900000, // 15 minutes
+      };
     } else {
-      logger.warn("Auth rate limiting is disabled - Upstash Redis not configured");
+      logger.warn("Auth rate limiting is disabled - Upstash Redis not configured (dev mode)");
+      return {
+        success: true,
+        limit: 999,
+        remaining: 999,
+        reset: Date.now() + 60000,
+      };
     }
-    return {
-      success: true,
-      limit: 999,
-      remaining: 999,
-      reset: Date.now() + 60000,
-    };
   }
 
   const ip = getClientIp(request);
@@ -166,13 +174,24 @@ export async function checkAuthRateLimit(
 /**
  * Check rate limit for signup attempts
  * Uses IP address only to prevent abuse
+ * 
+ * SECURITY: Fails closed in production if Redis is unavailable
  */
 export async function checkSignupRateLimit(
   request: Request
 ): Promise<{ success: boolean; limit: number; remaining: number; reset: number }> {
-  // If rate limiting is not configured, allow all requests
+  // SECURITY: Fail closed in production - block signups if rate limiting unavailable
   if (!signupRateLimiter) {
-    logger.warn("Signup rate limiting is disabled - Upstash Redis not configured");
+    if (env.NODE_ENV === "production") {
+      logger.error("CRITICAL: Signup rate limiting unavailable in production - blocking request");
+      return {
+        success: false,
+        limit: 0,
+        remaining: 0,
+        reset: Date.now() + 3600000, // 1 hour
+      };
+    }
+    logger.warn("Signup rate limiting is disabled - Upstash Redis not configured (dev mode)");
     return {
       success: true,
       limit: 999,
@@ -313,9 +332,11 @@ export async function clearFailedAttempts(email: string): Promise<void> {
 export async function checkApiRateLimit(
   identifier: string
 ): Promise<{ success: boolean; limit: number; remaining: number; reset: number }> {
-  // If rate limiting is not configured, allow all requests
+  // Allow API queries even if rate limiting unavailable (less critical)
   if (!apiRateLimiter) {
-    logger.warn("API rate limiting is disabled - Upstash Redis not configured");
+    if (env.NODE_ENV === "production") {
+      logger.warn("API rate limiting unavailable - allowing request (non-critical)");
+    }
     return {
       success: true,
       limit: 999,
@@ -337,13 +358,26 @@ export async function checkApiRateLimit(
 /**
  * Check rate limit for tRPC mutations (create, update, delete)
  * More restrictive than query rate limiting
+ * 
+ * SECURITY: Fails closed in production if Redis is unavailable
  */
 export async function checkMutationRateLimit(
   identifier: string
 ): Promise<{ success: boolean; limit: number; remaining: number; reset: number }> {
-  // If rate limiting is not configured, allow all requests
+  // SECURITY: Fail closed in production - block mutations if rate limiting unavailable
   if (!mutationRateLimiter) {
-    logger.warn("Mutation rate limiting is disabled - Upstash Redis not configured");
+    if (env.NODE_ENV === "production") {
+      logger.error("CRITICAL: Mutation rate limiting unavailable in production - blocking request", {
+        identifier,
+      });
+      return {
+        success: false,
+        limit: 0,
+        remaining: 0,
+        reset: Date.now() + 60000,
+      };
+    }
+    logger.warn("Mutation rate limiting is disabled - Upstash Redis not configured (dev mode)");
     return {
       success: true,
       limit: 999,
@@ -365,13 +399,24 @@ export async function checkMutationRateLimit(
 /**
  * 🔒 SECURITY FIX: Check rate limit for email verification requests
  * Prevents email bombing attacks - 3 emails per hour per email address
+ * 
+ * SECURITY: Fails closed in production if Redis is unavailable
  */
 export async function checkEmailVerificationRateLimit(
   email: string
 ): Promise<{ success: boolean; limit: number; remaining: number; reset: number }> {
-  // If rate limiting is not configured, allow all requests
+  // SECURITY: Fail closed in production - block email verification if rate limiting unavailable
   if (!emailVerificationRateLimiter) {
-    logger.warn("Email verification rate limiting is disabled - Upstash Redis not configured");
+    if (env.NODE_ENV === "production") {
+      logger.error("CRITICAL: Email verification rate limiting unavailable in production - blocking request");
+      return {
+        success: false,
+        limit: 0,
+        remaining: 0,
+        reset: Date.now() + 3600000, // 1 hour
+      };
+    }
+    logger.warn("Email verification rate limiting is disabled - Upstash Redis not configured (dev mode)");
     return {
       success: true,
       limit: 999,
@@ -402,13 +447,24 @@ export async function checkEmailVerificationRateLimit(
 /**
  * 🔒 SECURITY FIX: Check rate limit for invite token validation attempts
  * Prevents brute-force attacks on invite tokens - 10 attempts per hour per IP
+ * 
+ * SECURITY: Fails closed in production if Redis is unavailable
  */
 export async function checkInviteTokenRateLimit(
   request: Request
 ): Promise<{ success: boolean; limit: number; remaining: number; reset: number }> {
-  // If rate limiting is not configured, allow all requests
+  // SECURITY: Fail closed in production - block invite token validation if rate limiting unavailable
   if (!inviteTokenRateLimiter) {
-    logger.warn("Invite token rate limiting is disabled - Upstash Redis not configured");
+    if (env.NODE_ENV === "production") {
+      logger.error("CRITICAL: Invite token rate limiting unavailable in production - blocking request");
+      return {
+        success: false,
+        limit: 0,
+        remaining: 0,
+        reset: Date.now() + 3600000, // 1 hour
+      };
+    }
+    logger.warn("Invite token rate limiting is disabled - Upstash Redis not configured (dev mode)");
     return {
       success: true,
       limit: 999,

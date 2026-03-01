@@ -116,14 +116,11 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
-  // 🔒 SECURITY: Email verification gate for sensitive routes
-  // Users without verified email cannot access sensitive operations
-  if (!session.emailVerified && verificationRequiredRoutes.some((route) => pathname.startsWith(route))) {
-    // Redirect to email verification reminder page
-    const verifyUrl = new URL("/verify-email", request.url);
-    verifyUrl.searchParams.set("redirect", pathname);
-    return NextResponse.redirect(verifyUrl);
-  }
+  // 🔒 SECURITY: Email verification gate for sensitive routes (DISABLED — /verify-email page not built yet)
+  // TODO: Re-enable once the /verify-email page and email verification flow are implemented
+  // Users without verified email will be blocked from:
+  //   verificationRequiredRoutes: /dashboard/requests/new, /dashboard/approvals, /dashboard/budgets,
+  //   /dashboard/settings, /dashboard/users, /dashboard/vendors, /dashboard/contracts, /dashboard/integrations
 
   // 🔒 SECURITY: MFA gate for high-privilege routes (DISABLED — /verify-mfa page not built yet)
   // TODO: Re-enable once MFA verification page and TOTP enrollment are implemented

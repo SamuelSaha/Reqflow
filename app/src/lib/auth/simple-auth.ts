@@ -24,7 +24,9 @@ export interface SessionPayload {
   userId: string;
   email: string;
   tenantId: string;
+  role: string;
   onboardingCompleted: boolean;
+  emailVerified: boolean;
   exp: number;
 }
 
@@ -39,7 +41,9 @@ export async function createSession(
     userId: user.id,
     email: user.email,
     tenantId: user.tenantId,
+    role: user.role,
     onboardingCompleted: opts?.onboardingCompleted ?? false,
+    emailVerified: user.emailVerified ?? false,
   })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
