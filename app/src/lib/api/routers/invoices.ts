@@ -82,10 +82,12 @@ export const invoicesRouter = router({
       }
 
       // Full-text search using PostgreSQL tsvector
+      // 🔒 SECURITY FIX: Use plainto_tsquery instead of to_tsquery to prevent SQL injection
+      // plainto_tsquery automatically escapes special characters and is safe with user input
       if (input?.search) {
-        const searchQuery = input.search.trim().split(/\s+/).join(' & ');
+        const searchQuery = input.search.trim();
         conditions.push(
-          sql`${invoices.searchVector} @@ to_tsquery('english', ${searchQuery})`
+          sql`${invoices.searchVector} @@ plainto_tsquery('english', ${searchQuery})`
         );
       }
 

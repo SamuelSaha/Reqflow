@@ -6,8 +6,19 @@
 import { z } from "zod";
 import { router, adminProcedure } from "../trpc";
 import { requests, users, auditLogs, authEvents } from "@/lib/db/schema";
-import { eq, and, gte, lte, desc, sql, count, inArray } from "drizzle-orm";
+import { eq, and, gte, lte, desc, sql, count, inArray, ilike, or } from "drizzle-orm";
 import { subDays } from "date-fns";
+
+/**
+ * 🔒 SECURITY FIX: Escape ILIKE wildcards to prevent pattern injection
+ * Users can inject % and _ wildcards to broaden search results
+ */
+function escapeLikePattern(pattern: string): string {
+  return pattern
+    .replace(/\\/g, "\\\\")  // Escape backslashes first
+    .replace(/%/g, "\\%")     // Escape percentage wildcards
+    .replace(/_/g, "\\_");    // Escape underscore wildcards
+}
 
 export const analyticsRouter = router({
   /**
@@ -230,10 +241,17 @@ export const analyticsRouter = router({
       }
 
       // Search in entity ID and description
+      // 🔒 SECURITY FIX: Escape wildcards and use parameterized ILIKE
       if (input.search) {
-        conditions.push(
-          sql`(${auditLogs.entityId}::text ILIKE ${`%${input.search}%`} OR ${auditLogs.description} ILIKE ${`%${input.search}%`})`
+        const escapedSearch = escapeLikePattern(input.search);
+        const searchPattern = `%${escapedSearch}%`;
+        const searchCondition = or(
+          sql`${auditLogs.entityId}::text ILIKE ${searchPattern}`,
+          ilike(auditLogs.description, searchPattern)
         );
+        if (searchCondition) {
+          conditions.push(searchCondition);
+        }
       }
 
       // Get total count for pagination
@@ -310,10 +328,17 @@ export const analyticsRouter = router({
       if (input.entityId) {
         conditions.push(eq(auditLogs.entityId, input.entityId));
       }
+      // 🔒 SECURITY FIX: Escape wildcards and use parameterized ILIKE
       if (input.search) {
-        conditions.push(
-          sql`(${auditLogs.entityId}::text ILIKE ${`%${input.search}%`} OR ${auditLogs.description} ILIKE ${`%${input.search}%`})`
+        const escapedSearch = escapeLikePattern(input.search);
+        const searchPattern = `%${escapedSearch}%`;
+        const searchCondition = or(
+          sql`${auditLogs.entityId}::text ILIKE ${searchPattern}`,
+          ilike(auditLogs.description, searchPattern)
         );
+        if (searchCondition) {
+          conditions.push(searchCondition);
+        }
       }
 
       // Get all matching logs (up to 10,000 for export safety)

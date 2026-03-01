@@ -125,11 +125,12 @@ export const requestsRouter = router({
       }
 
       // Full-text search using PostgreSQL tsvector
+      // 🔒 SECURITY FIX: Use plainto_tsquery instead of to_tsquery to prevent SQL injection
+      // plainto_tsquery automatically escapes special characters and is safe with user input
       if (input?.search) {
-        // Clean search query for to_tsquery (replace spaces with & for AND logic)
-        const searchQuery = input.search.trim().split(/\s+/).join(' & ');
+        const searchQuery = input.search.trim();
         conditions.push(
-          sql`${requests.searchVector} @@ to_tsquery('english', ${searchQuery})`
+          sql`${requests.searchVector} @@ plainto_tsquery('english', ${searchQuery})`
         );
       }
 

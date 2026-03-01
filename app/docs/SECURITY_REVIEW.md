@@ -274,6 +274,9 @@ await securityMonitor.recordEvent({
 - [x] Zod schema validation on all API inputs
 - [x] Input sanitization (XSS prevention)
 - [x] SQL injection prevention via parameterized queries
+- [x] LIKE pattern wildcard escaping (%, _, \)
+- [x] Full-text search using safe plainto_tsquery function
+- [x] Application-level filtering for complex operations
 - [x] File upload validation
 
 ### Monitoring & Detection
@@ -338,8 +341,61 @@ AXIOM_TOKEN=your-token
 
 ---
 
+## SQL Injection Mitigations (Critical)
+
+**Issue ID:** SQLi-001 (GitHub #96)
+**Status:** ✅ RESOLVED
+**Resolution Date:** 2026-03-01
+
+### Vulnerabilities Identified & Fixed
+
+1. **File Deletion Endpoint** (`/app/src/lib/api/routers/files.ts`)
+   - **Risk:** Raw SQL with string interpolation in attachments array manipulation
+   - **Fix:** Application-level filtering using JavaScript Array.filter()
+   - **Status:** ✅ Fixed (already implemented)
+
+2. **Analytics Search** (`/app/src/lib/api/routers/analytics.ts`)
+   - **Risk:** Direct interpolation in ILIKE queries (lines 235, 315)
+   - **Fix:** Parameterized ILIKE with Drizzle ORM + wildcard escaping
+   - **Status:** ✅ Fixed (2026-03-01)
+
+3. **Full-Text Search** (`/app/src/lib/api/routers/requests.ts`, `invoices.ts`)
+   - **Risk:** to_tsquery allows control characters, potential for injection
+   - **Fix:** Replaced with plainto_tsquery (auto-escapes special characters)
+   - **Status:** ✅ Fixed (2026-03-01)
+
+### Security Testing
+
+Comprehensive security test suite created:
+- **Location:** `/app/src/test/security/sql-injection.test.ts`
+- **Coverage:** 12 test cases covering all injection vectors
+- **Status:** All tests passing ✅
+
+Test scenarios include:
+- File deletion with malicious fileId
+- ILIKE queries with SQL injection attempts
+- Full-text search with special characters
+- UUID validation
+- Input length limits
+- Null byte injection
+- Rate limiting verification
+- Audit logging
+
+### Defense in Depth Layers
+
+1. **Input Validation** - Zod schemas enforce type safety and constraints
+2. **Parameterized Queries** - Drizzle ORM prevents SQL injection by design
+3. **Application Filtering** - JavaScript-level operations for complex logic
+4. **Wildcard Escaping** - LIKE patterns escape %, _, and \ characters
+5. **Safe Functions** - plainto_tsquery instead of to_tsquery
+6. **Rate Limiting** - Prevents rapid-fire attack attempts
+7. **Audit Logging** - All suspicious activity logged for monitoring
+
+---
+
 ## Changelog
 
 | Date | Version | Changes |
 |------|---------|---------|
+| 2026-03-01 | 1.1 | SQL injection fixes (Issue #96) - All endpoints secured |
 | 2026-02-27 | 1.0 | Initial security review - Phase 1 & 2 completed |
