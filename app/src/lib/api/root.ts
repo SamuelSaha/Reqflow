@@ -21,6 +21,7 @@ import { contractsRouter } from "./routers/contracts";
 import { categoriesRouter } from "./routers/categories";
 import { subscriptionsRouter } from "./routers/subscriptions";
 import { invoicesRouter } from "./routers/invoices";
+import { notificationsRouter } from "./routers/notifications";
 
 export const appRouter = router({
   requests: requestsRouter,
@@ -40,6 +41,7 @@ export const appRouter = router({
   categories: categoriesRouter,
   subscriptions: subscriptionsRouter,
   invoices: invoicesRouter,
+  notifications: notificationsRouter,
 });
 
 export type AppRouter = typeof appRouter;

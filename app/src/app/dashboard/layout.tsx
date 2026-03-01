@@ -15,6 +15,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { NotificationBell } from "@/components/notifications/NotificationBell";
 
 export const dynamic = "force-dynamic";
 
@@ -54,7 +55,7 @@ export default function DashboardLayout({
             </Link>
 
             {/* Desktop nav */}
-            <nav className="hidden md:flex items-center gap-1">
+            <nav className="hidden md:flex items-center gap-1 flex-1">
               {navItems.map(({ href, label, icon: Icon, exact }) => {
                 const isActive = exact
                   ? pathname === href
@@ -77,8 +78,12 @@ export default function DashboardLayout({
               })}
             </nav>
 
-            {/* Mobile hamburger */}
-            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+            {/* Right side actions */}
+            <div className="flex items-center gap-2">
+              <NotificationBell />
+
+              {/* Mobile hamburger */}
+              <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
                 <Button
                   variant="ghost"
@@ -118,6 +123,7 @@ export default function DashboardLayout({
                 </nav>
               </SheetContent>
             </Sheet>
+            </div>
           </div>
         </div>
       </header>

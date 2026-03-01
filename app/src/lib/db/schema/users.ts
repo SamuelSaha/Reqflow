@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, uuid, boolean, index } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, uuid, boolean, index, jsonb } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { organizations } from "./organizations";
@@ -43,6 +43,16 @@ export const users = pgTable(
     // MFA (Better Auth handles this, but we track the requirement)
     mfaEnabled: boolean("mfa_enabled").notNull().default(false),
     mfaRequired: boolean("mfa_required").notNull().default(false), // Finance + Admin roles
+
+    // Notification preferences (per notification type: email + in-app, Slack + in-app)
+    notificationPreferences: jsonb("notification_preferences").$type<{
+      approval_assigned?: { email: boolean; inApp: boolean; slack: boolean };
+      request_approved?: { email: boolean; inApp: boolean; slack: boolean };
+      request_rejected?: { email: boolean; inApp: boolean; slack: boolean };
+      budget_warning?: { email: boolean; inApp: boolean; slack: boolean };
+      trial_expiring?: { email: boolean; inApp: boolean; slack: boolean };
+      renewal_due?: { email: boolean; inApp: boolean; slack: boolean };
+    }>(),
 
     // Timestamps
     createdAt: timestamp("created_at").notNull().defaultNow(),

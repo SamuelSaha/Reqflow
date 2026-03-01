@@ -142,6 +142,9 @@ export const AuditAction = {
   TEMPLATE_DELETED: "template.deleted",
   TEMPLATE_USED: "template.used",
 
+  // Notification actions
+  NOTIFICATION_READ: "notification.read",
+
   // Contract actions
   CONTRACT_CREATED: "contract.created",
   CONTRACT_UPDATED: "contract.updated",

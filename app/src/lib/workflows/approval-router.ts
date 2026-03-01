@@ -441,6 +441,11 @@ export async function executeApprovalRouting(
     return;
   }
 
+  // Get request details for notification
+  const request = await db.query.requests.findFirst({
+    where: and(eq(requests.id, requestId), eq(requests.tenantId, tenantId)),
+  });
+
   // Insert approval records for each step
   for (const step of result.steps) {
     await db.insert(approvals).values({
@@ -461,6 +466,19 @@ export async function executeApprovalRouting(
         aiSuggestion: step.reason,
       },
     });
+
+    // Create in-app notification for the approver
+    if (request) {
+      const { createNotification } = await import("../api/routers/notifications");
+      await createNotification(db, {
+        tenantId,
+        userId: step.approverId,
+        type: "approval_assigned",
+        title: "New Approval Required",
+        message: `You have been assigned to approve "${request.title}" (${request.requestNumber}) - ${request.currency} ${parseFloat(request.amount).toLocaleString()}.`,
+        actionUrl: `/dashboard/approvals`,
+      });
+    }
   }
 }
 

@@ -10,6 +10,7 @@ import { approvals, requests } from "../../db/schema";
 import { eq, and, desc, asc, gte, lte } from "drizzle-orm";
 import { analyzeRequest } from "../../ai/request-analyzer";
 import { createAuditLog, AuditAction } from "../../monitoring/audit";
+import { createNotification } from "./notifications";
 
 export const approvalsRouter = router({
   /**
@@ -272,6 +273,16 @@ export const approvalsRouter = router({
                 requestUrl: `${env.NEXT_PUBLIC_APP_URL}/dashboard/requests/${fullRequest.id}`,
               },
             });
+
+            // Create in-app notification for requester
+            await createNotification(ctx.db, {
+              tenantId: ctx.tenantId,
+              userId: fullRequest.requesterId,
+              type: "request_rejected",
+              title: "Request Not Approved",
+              message: `Your request "${fullRequest.title}" (${fullRequest.requestNumber}) was not approved by ${ctx.user.name}.`,
+              actionUrl: `/dashboard/requests/${fullRequest.id}`,
+            });
           } else {
             // Send approval email
             // Check if there are more approval steps
@@ -301,6 +312,20 @@ export const approvalsRouter = router({
                 nextApproverName,
                 requestUrl: `${env.NEXT_PUBLIC_APP_URL}/dashboard/requests/${fullRequest.id}`,
               },
+            });
+
+            // Create in-app notification for requester
+            const approvalMessage = hasMoreApprovers
+              ? `Your request "${fullRequest.title}" (${fullRequest.requestNumber}) was approved by ${ctx.user.name}. Awaiting approval from ${nextApproverName}.`
+              : `Your request "${fullRequest.title}" (${fullRequest.requestNumber}) has been fully approved!`;
+
+            await createNotification(ctx.db, {
+              tenantId: ctx.tenantId,
+              userId: fullRequest.requesterId,
+              type: "request_approved",
+              title: hasMoreApprovers ? "Request Partially Approved" : "Request Approved",
+              message: approvalMessage,
+              actionUrl: `/dashboard/requests/${fullRequest.id}`,
             });
           }
         }
