@@ -65,6 +65,9 @@ export const invoices = pgTable("invoices", {
   approvedAt: timestamp("approved_at"),
   paidAt: timestamp("paid_at"),
 
+  // Full-text search
+  searchVector: text("search_vector"), // tsvector managed by PostgreSQL trigger
+
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 }, (table) => [

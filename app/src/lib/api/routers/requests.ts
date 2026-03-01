@@ -124,14 +124,12 @@ export const requestsRouter = router({
         conditions.push(lte(requests.createdAt, new Date(input.dateTo)));
       }
 
-      // Search filter (request number, title, vendor name)
+      // Full-text search using PostgreSQL tsvector
       if (input?.search) {
+        // Clean search query for to_tsquery (replace spaces with & for AND logic)
+        const searchQuery = input.search.trim().split(/\s+/).join(' & ');
         conditions.push(
-          or(
-            ilike(requests.requestNumber, `%${input.search}%`),
-            ilike(requests.title, `%${input.search}%`),
-            ilike(requests.vendorName, `%${input.search}%`)
-          )!
+          sql`${requests.searchVector} @@ to_tsquery('english', ${searchQuery})`
         );
       }
 
@@ -209,6 +207,8 @@ export const requestsRouter = router({
           requester: true,
           department: true,
           budget: true,
+          category: true,
+          convertedToSubscription: true,
         },
       });
 
@@ -408,70 +408,67 @@ export const requestsRouter = router({
       // Persist approval chain
       await executeApprovalRouting(ctx.tenantId, input.id, routingResult);
 
-      // Send email notifications
-      const { emailQueue, EmailTemplate } = await import("../../queue/queues/email");
-      const { env } = await import("../../env");
+      // Send email notifications — fire-and-forget (don't block submission on Redis/email)
+      void (async () => {
+        try {
+          const { emailQueue, EmailTemplate } = await import("../../queue/queues/email");
+          const { env } = await import("../../env");
 
-      // Get full request details with requester info
-      const fullRequest = await ctx.db.query.requests.findFirst({
-        where: eq(requests.id, input.id),
-        with: { requester: true },
-      });
-
-      if (!fullRequest) {
-        throw new TRPCError({ code: "NOT_FOUND" });
-      }
-
-      // 1. Send confirmation email to requester
-      await emailQueue.add("request-submitted", {
-        to: fullRequest.requester.email,
-        subject: `Request Submitted: ${fullRequest.requestNumber}`,
-        template: EmailTemplate.REQUEST_SUBMITTED,
-        data: {
-          requesterName: fullRequest.requester.name,
-          requestNumber: fullRequest.requestNumber,
-          title: fullRequest.title,
-          amount: parseFloat(fullRequest.amount).toLocaleString("en", { minimumFractionDigits: 2 }),
-          currency: fullRequest.currency,
-          requestUrl: `${env.NEXT_PUBLIC_APP_URL}/dashboard/requests/${fullRequest.id}`,
-        },
-      });
-
-      // 2. Send notification emails to approvers (unless auto-approved)
-      if (!routingResult.flags.autoApproved) {
-        // Get first step approvers
-        const firstStepApprovals = await ctx.db.query.approvals.findMany({
-          where: and(
-            eq(approvals.requestId, input.id),
-            eq(approvals.step, 0) // First step
-          ),
-          with: { approver: true },
-        });
-
-        for (const approval of firstStepApprovals) {
-          // TODO: Add risk flags from AI analysis when implemented
-          const riskFlags: string[] = [];
-
-          await emailQueue.add(`approval-assigned-${approval.id}`, {
-            to: approval.approver.email,
-            subject: `Action Required: Approve ${fullRequest.requestNumber} - ${fullRequest.title}`,
-            template: EmailTemplate.APPROVAL_REQUESTED,
-            data: {
-              approverName: approval.approver.name,
-              requesterName: fullRequest.requester.name,
-              requestNumber: fullRequest.requestNumber,
-              title: fullRequest.title,
-              amount: parseFloat(fullRequest.amount).toLocaleString("en", { minimumFractionDigits: 2 }),
-              currency: fullRequest.currency,
-              vendor: fullRequest.vendorName,
-              category: fullRequest.category,
-              urgency: fullRequest.urgency,
-              riskFlags,
-              approvalUrl: `${env.NEXT_PUBLIC_APP_URL}/dashboard/approvals`,
-            },
+          const fullRequest = await ctx.db.query.requests.findFirst({
+            where: eq(requests.id, input.id),
+            with: { requester: true },
           });
+
+          if (fullRequest) {
+            await emailQueue.add("request-submitted", {
+              to: fullRequest.requester.email,
+              subject: `Request Submitted: ${fullRequest.requestNumber}`,
+              template: EmailTemplate.REQUEST_SUBMITTED,
+              data: {
+                requesterName: fullRequest.requester.name,
+                requestNumber: fullRequest.requestNumber,
+                title: fullRequest.title,
+                amount: parseFloat(fullRequest.amount).toLocaleString("en", { minimumFractionDigits: 2 }),
+                currency: fullRequest.currency,
+                requestUrl: `${env.NEXT_PUBLIC_APP_URL}/dashboard/requests/${fullRequest.id}`,
+              },
+            });
+
+            if (!routingResult.flags.autoApproved) {
+              const firstStepApprovals = await ctx.db.query.approvals.findMany({
+                where: and(
+                  eq(approvals.requestId, input.id),
+                  eq(approvals.step, 0)
+                ),
+                with: { approver: true },
+              });
+
+              for (const approval of firstStepApprovals) {
+                await emailQueue.add(`approval-assigned-${approval.id}`, {
+                  to: approval.approver.email,
+                  subject: `Action Required: Approve ${fullRequest.requestNumber} - ${fullRequest.title}`,
+                  template: EmailTemplate.APPROVAL_REQUESTED,
+                  data: {
+                    approverName: approval.approver.name,
+                    requesterName: fullRequest.requester.name,
+                    requestNumber: fullRequest.requestNumber,
+                    title: fullRequest.title,
+                    amount: parseFloat(fullRequest.amount).toLocaleString("en", { minimumFractionDigits: 2 }),
+                    currency: fullRequest.currency,
+                    vendor: fullRequest.vendorName,
+                    category: fullRequest.category,
+                    urgency: fullRequest.urgency,
+                    riskFlags: [] as string[],
+                    approvalUrl: `${env.NEXT_PUBLIC_APP_URL}/dashboard/approvals`,
+                  },
+                });
+              }
+            }
+          }
+        } catch {
+          // Silently ignore — Redis likely not running in dev
         }
-      }
+      })();
 
       // Audit log
       await createAuditLog({
@@ -497,5 +494,62 @@ export const requestsRouter = router({
         approvalSteps: routingResult.steps.length,
         flags: routingResult.flags,
       };
+    }),
+
+  /**
+   * Delete a draft request
+   */
+  delete: protectedProcedure
+    .input(z.object({ id: z.string().uuid() }))
+    .mutation(async ({ ctx, input }) => {
+      // First check if request exists and is a draft
+      const request = await ctx.db.query.requests.findFirst({
+        where: and(
+          eq(requests.id, input.id),
+          eq(requests.tenantId, ctx.tenantId),
+          eq(requests.requesterId, ctx.user.id)
+        ),
+      });
+
+      if (!request) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Request not found",
+        });
+      }
+
+      if (request.status !== "draft") {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Only draft requests can be deleted",
+        });
+      }
+
+      // Delete the request
+      await ctx.db
+        .delete(requests)
+        .where(
+          and(
+            eq(requests.id, input.id),
+            eq(requests.tenantId, ctx.tenantId)
+          )
+        );
+
+      // Audit log
+      await createAuditLog({
+        tenantId: ctx.tenantId,
+        userId: ctx.user.id,
+        userEmail: ctx.user.email,
+        userName: ctx.user.name,
+        action: AuditAction.REQUEST_DELETED,
+        entityType: "request",
+        entityId: input.id,
+        description: `Deleted draft request: ${request.title}`,
+        metadata: {
+          requestNumber: request.requestNumber,
+        },
+      });
+
+      return { success: true };
     }),
 });

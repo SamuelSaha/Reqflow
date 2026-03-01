@@ -49,6 +49,9 @@ export const contracts = pgTable("contracts", {
   documentUrl: text("document_url"),
   amendments: jsonb("amendments").$type<Array<{ date: string; description: string; url?: string }>>(),
 
+  // Full-text search
+  searchVector: text("search_vector"), // tsvector managed by PostgreSQL trigger
+
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 }, (table) => [

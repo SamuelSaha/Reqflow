@@ -23,5 +23,8 @@
   },
   "workspaces": [
     "app"
-  ]
+  ],
+  "overrides": {
+    "postgres": "3.4.8"
+  }
 }

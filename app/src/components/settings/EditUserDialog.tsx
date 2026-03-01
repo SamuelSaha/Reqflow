@@ -59,12 +59,41 @@ export function EditUserDialog({ open, onOpenChange, user }: Props) {
   });
 
   const mutation = trpc.team.updateUser.useMutation({
-    onSuccess: () => {
-      toast.success("User updated successfully");
+    onMutate: async (variables) => {
+      await utils.team.listUsers.cancel();
+
+      const previousUsers = utils.team.listUsers.getData({});
+
+      return { previousUsers, variables };
+    },
+    onSuccess: (data, variables, context) => {
+      const wasDeactivated = context?.variables && !context.variables.isActive && user?.isActive;
+
+      if (wasDeactivated) {
+        toast.success("Team member removed", {
+          description: "User account has been deactivated",
+          action: {
+            label: "Undo",
+            onClick: () => {
+              // Restore snapshot
+              if (context?.previousUsers) {
+                utils.team.listUsers.setData({}, context.previousUsers);
+              }
+            },
+          },
+          duration: 5000,
+        });
+      } else {
+        toast.success("User updated successfully");
+      }
+
       utils.team.listUsers.invalidate();
       onOpenChange(false);
     },
-    onError: (error) => {
+    onError: (error, variables, context) => {
+      if (context?.previousUsers) {
+        utils.team.listUsers.setData({}, context.previousUsers);
+      }
       toast.error(error.message || "Failed to update user");
     },
   });

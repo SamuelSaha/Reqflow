@@ -345,4 +345,173 @@ export const approvalsRouter = router({
         syncProvider,
       };
     }),
+
+  /**
+   * Bulk approve multiple approvals at once
+   * Returns partial success (some may succeed, some may fail)
+   */
+  bulkApprove: protectedProcedure
+    .input(
+      z.object({
+        approvalIds: z.array(z.string().uuid()).min(1).max(50),
+        comments: z.string().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const succeeded: string[] = [];
+      const failed: Array<{ id: string; error: string }> = [];
+
+      // Process each approval individually
+      for (const approvalId of input.approvalIds) {
+        try {
+          // Verify approval exists and belongs to this user
+          const approval = await ctx.db.query.approvals.findFirst({
+            where: and(
+              eq(approvals.id, approvalId),
+              eq(approvals.approverId, ctx.user.id),
+              eq(approvals.tenantId, ctx.tenantId)
+            ),
+          });
+
+          if (!approval) {
+            failed.push({ id: approvalId, error: "Not found or unauthorized" });
+            continue;
+          }
+
+          if (approval.decision !== "pending") {
+            failed.push({ id: approvalId, error: "Already decided" });
+            continue;
+          }
+
+          // Update the approval
+          await ctx.db
+            .update(approvals)
+            .set({
+              decision: "approved",
+              comments: input.comments ?? null,
+              decidedAt: new Date(),
+            })
+            .where(eq(approvals.id, approvalId));
+
+          succeeded.push(approvalId);
+
+          // Check if request is fully approved (simplified - full logic in single approve)
+          const allApprovals = await ctx.db.query.approvals.findMany({
+            where: and(
+              eq(approvals.requestId, approval.requestId),
+              eq(approvals.tenantId, ctx.tenantId)
+            ),
+          });
+
+          const requiredApprovals = allApprovals.filter((a) => a.required === "required");
+          const allRequiredDecided = requiredApprovals.every((a) =>
+            a.id === approvalId ? true : a.decision !== "pending"
+          );
+
+          if (allRequiredDecided) {
+            const anyRejected = requiredApprovals.some(
+              (a) => a.id !== approvalId && a.decision === "rejected"
+            );
+
+            if (!anyRejected) {
+              await ctx.db
+                .update(requests)
+                .set({
+                  status: "approved",
+                  approvedAt: new Date(),
+                  updatedAt: new Date(),
+                })
+                .where(eq(requests.id, approval.requestId));
+            }
+          }
+        } catch (err) {
+          failed.push({
+            id: approvalId,
+            error: err instanceof Error ? err.message : "Unknown error",
+          });
+        }
+      }
+
+      return { succeeded, failed };
+    }),
+
+  /**
+   * Bulk reject multiple approvals with a single reason
+   */
+  bulkReject: protectedProcedure
+    .input(
+      z.object({
+        approvalIds: z.array(z.string().uuid()).min(1).max(50),
+        reason: z.string().min(10, "Reason must be at least 10 characters"),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const succeeded: string[] = [];
+      const failed: Array<{ id: string; error: string }> = [];
+
+      for (const approvalId of input.approvalIds) {
+        try {
+          const approval = await ctx.db.query.approvals.findFirst({
+            where: and(
+              eq(approvals.id, approvalId),
+              eq(approvals.approverId, ctx.user.id),
+              eq(approvals.tenantId, ctx.tenantId)
+            ),
+          });
+
+          if (!approval) {
+            failed.push({ id: approvalId, error: "Not found or unauthorized" });
+            continue;
+          }
+
+          if (approval.decision !== "pending") {
+            failed.push({ id: approvalId, error: "Already decided" });
+            continue;
+          }
+
+          // Update the approval
+          await ctx.db
+            .update(approvals)
+            .set({
+              decision: "rejected",
+              comments: input.reason,
+              decidedAt: new Date(),
+            })
+            .where(eq(approvals.id, approvalId));
+
+          succeeded.push(approvalId);
+
+          // Update request status to rejected
+          const allApprovals = await ctx.db.query.approvals.findMany({
+            where: and(
+              eq(approvals.requestId, approval.requestId),
+              eq(approvals.tenantId, ctx.tenantId)
+            ),
+          });
+
+          const requiredApprovals = allApprovals.filter((a) => a.required === "required");
+          const allRequiredDecided = requiredApprovals.every((a) =>
+            a.id === approvalId ? true : a.decision !== "pending"
+          );
+
+          if (allRequiredDecided) {
+            await ctx.db
+              .update(requests)
+              .set({
+                status: "rejected",
+                rejectedAt: new Date(),
+                updatedAt: new Date(),
+              })
+              .where(eq(requests.id, approval.requestId));
+          }
+        } catch (err) {
+          failed.push({
+            id: approvalId,
+            error: err instanceof Error ? err.message : "Unknown error",
+          });
+        }
+      }
+
+      return { succeeded, failed };
+    }),
 });

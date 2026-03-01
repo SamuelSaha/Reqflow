@@ -8,6 +8,20 @@
       "when": 1772019502918,
       "tag": "0000_yummy_psylocke",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1772128800000,
+      "tag": "0001_accounting_integrations",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1772128900000,
+      "tag": "0002_request_subscription_conversion",
+      "breakpoints": true
     }
   ]
 }
