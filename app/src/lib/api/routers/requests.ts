@@ -209,6 +209,8 @@ export const requestsRouter = router({
           requester: true,
           department: true,
           budget: true,
+          category: true,
+          convertedToSubscription: true,
         },
       });
 
