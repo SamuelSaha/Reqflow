@@ -125,24 +125,11 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(verifyUrl);
   }
 
-  // 🔒 SECURITY: MFA gate for high-privilege routes
-  // Finance and Admin roles require MFA for sensitive operations
-  const requiresMfa = 
-    (session.role === "finance" || session.role === "admin") &&
-    mfaRequiredRoutes.some((route) => pathname.startsWith(route)) &&
-    !mfaExemptRoutes.includes(pathname);
-
-  if (requiresMfa) {
-    // Check if user has completed MFA this session (via cookie or header)
-    const mfaVerified = request.cookies.get("mfa_verified")?.value === "true";
-    
-    if (!mfaVerified) {
-      // Redirect to MFA verification page
-      const mfaUrl = new URL("/verify-mfa", request.url);
-      mfaUrl.searchParams.set("redirect", pathname);
-      return NextResponse.redirect(mfaUrl);
-    }
-  }
+  // 🔒 SECURITY: MFA gate for high-privilege routes (DISABLED — /verify-mfa page not built yet)
+  // TODO: Re-enable once MFA verification page and TOTP enrollment are implemented
+  // Finance and Admin roles will require MFA for sensitive operations:
+  //   mfaRequiredRoutes: /dashboard/settings, /dashboard/users, /dashboard/vendors, /dashboard/integrations
+  //   mfaExemptRoutes: /dashboard/settings/security
 
   return NextResponse.next();
 }
