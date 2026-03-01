@@ -32,11 +32,14 @@ import {
   Search,
   Filter,
   X,
+  Download,
 } from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
 import { EmptyRequestsIllustration, NoResultsIllustration } from "@/components/ui/illustrations";
 import { RequestListSkeleton } from "@/components/dashboard/LoadingSkeletons";
 import { getErrorMessage } from "@/lib/utils/error-messages";
+import Papa from "papaparse";
+import { toast } from "sonner";
 
 export const dynamic = "force-dynamic";
 
@@ -132,6 +135,46 @@ export default function RequestsPage() {
     setSortOrder("desc");
   };
 
+  const exportToCSV = () => {
+    if (!requestList.data || requestList.data.length === 0) {
+      toast.error("No data to export");
+      return;
+    }
+
+    // Format data for CSV
+    const csvData = requestList.data.map((req) => ({
+      "Request Number": req.requestNumber,
+      "Title": req.title,
+      "Vendor": req.vendorName || "N/A",
+      "Department": req.department?.name || "N/A",
+      "Category": req.category || "N/A",
+      "Amount": `€${parseFloat(req.amount).toFixed(2)}`,
+      "Status": req.status,
+      "Urgency": req.urgency,
+      "Frequency": req.frequency,
+      "Created Date": new Date(req.createdAt).toLocaleDateString("en-GB"),
+      "Approved Date": req.approvedAt
+        ? new Date(req.approvedAt).toLocaleDateString("en-GB")
+        : "N/A",
+    }));
+
+    // Generate CSV
+    const csv = Papa.unparse(csvData);
+
+    // Create download
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `requests-export-${new Date().toISOString().split("T")[0]}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    toast.success(`Exported ${requestList.data.length} requests to CSV`);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -143,12 +186,23 @@ export default function RequestsPage() {
             View and manage your purchase requests
           </p>
         </div>
-        <Link href="/dashboard/requests/new">
-          <Button className="w-full sm:w-auto">
-            <Plus className="mr-2 h-4 w-4" />
-            New Request
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            onClick={exportToCSV}
+            disabled={!requestList.data || requestList.data.length === 0}
+            className="w-full sm:w-auto"
+          >
+            <Download className="mr-2 h-4 w-4" />
+            Export CSV
           </Button>
-        </Link>
+          <Link href="/dashboard/requests/new">
+            <Button className="w-full sm:w-auto">
+              <Plus className="mr-2 h-4 w-4" />
+              New Request
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* Search Bar */}
