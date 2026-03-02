@@ -32,6 +32,36 @@ export const filesRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
+      // 🔒 SECURITY FIX: Verify entity belongs to user's tenant (IDOR prevention)
+      // If entityId is provided, user must own that entity to attach files
+      if (input.entityId) {
+        const { requests } = await import("@/lib/db/schema");
+        const { eq, and } = await import("drizzle-orm");
+
+        let entity;
+        if (input.entityType === "request") {
+          entity = await ctx.db.query.requests.findFirst({
+            where: and(
+              eq(requests.id, input.entityId),
+              eq(requests.tenantId, ctx.tenantId)
+            ),
+          });
+        } else {
+          // TODO: Add support for contracts and invoices
+          throw new TRPCError({
+            code: "NOT_IMPLEMENTED",
+            message: "File uploads for contracts and invoices coming soon",
+          });
+        }
+
+        if (!entity) {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "Access denied. You don't have permission to attach files to this entity.",
+          });
+        }
+      }
+
       // Validate file type
       if (!validateFileType(input.filename, input.contentType)) {
         throw new TRPCError({
@@ -90,7 +120,7 @@ export const filesRouter = router({
     .query(async ({ ctx, input }) => {
       // Verify entity belongs to user's tenant
       const { requests } = await import("@/lib/db/schema");
-      const { eq, and, sql } = await import("drizzle-orm");
+      const { eq, and } = await import("drizzle-orm");
 
       let entity;
       if (input.entityType === "request") {
@@ -117,9 +147,9 @@ export const filesRouter = router({
 
       // 🔒 CRITICAL FIX: Verify file key exists in entity's attachments
       // Prevents IDOR where user could download any file by guessing keys
-      const attachments = (entity as any).attachments || [];
+      const attachments = (entity as unknown as { attachments?: Array<{ key: string }> }).attachments || [];
       const fileExists = attachments.some(
-        (att: any) => att.key === input.key
+        (att) => att.key === input.key
       );
 
       if (!fileExists) {
@@ -164,7 +194,7 @@ export const filesRouter = router({
     .mutation(async ({ ctx, input }) => {
       // Verify entity belongs to user's tenant
       const { requests } = await import("@/lib/db/schema");
-      const { eq, and, sql } = await import("drizzle-orm");
+      const { eq, and } = await import("drizzle-orm");
 
       let entity;
       if (input.entityType === "request") {
@@ -196,10 +226,10 @@ export const filesRouter = router({
       // Remove from attachments array in DB (only for requests currently)
       if (input.entityType === "request") {
         // Safer approach: Filter in application layer to avoid SQL injection
-        const currentEntity = entity as any;
+        const currentEntity = entity as unknown as { attachments?: Array<{ id: string }> };
         const updatedAttachments = (currentEntity.attachments || []).filter(
-          (att: any) => att.id !== input.fileId
-        );
+          (att) => att.id !== input.fileId
+        ) as unknown as Array<{ name: string; url: string }>;
 
         await ctx.db
           .update(requests)
