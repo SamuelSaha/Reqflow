@@ -106,7 +106,7 @@ const nextConfig: NextConfig = {
           },
           {
             key: "X-Frame-Options",
-            value: "SAMEORIGIN",
+            value: "DENY", // 🔒 SECURITY: Prevent clickjacking (issue #117)
           },
           {
             key: "X-Content-Type-Options",
@@ -118,7 +118,7 @@ const nextConfig: NextConfig = {
           },
           {
             key: "Referrer-Policy",
-            value: "origin-when-cross-origin",
+            value: "strict-origin-when-cross-origin", // 🔒 SECURITY: Never send referrer on HTTPS→HTTP (issue #128)
           },
           {
             key: "Content-Security-Policy",

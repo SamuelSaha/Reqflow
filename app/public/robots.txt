@@ -1,0 +1,27 @@
+# Reqflow - Procurement Software
+# Security: Prevent indexing of private routes (issue #122)
+
+User-agent: *
+Disallow: /dashboard
+Disallow: /api
+Disallow: /onboarding
+Disallow: /verify-email
+Disallow: /login
+Disallow: /signup
+Allow: /
+
+# Public pages
+Allow: /about
+Allow: /pricing
+Allow: /features
+Allow: /beta
+Allow: /privacy
+Allow: /terms
+Allow: /security
+Allow: /contact
+Allow: /blog
+Allow: /changelog
+Allow: /careers
+Allow: /status
+
+Sitemap: https://reqflow.com/sitemap.xml

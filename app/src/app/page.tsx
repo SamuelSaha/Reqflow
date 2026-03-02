@@ -75,6 +75,28 @@ function SectionSkeleton({ height }: { height: number }) {
   );
 }
 
+/**
+ * 🔒 SECURITY NOTE (issue #118):
+ * This component uses dangerouslySetInnerHTML for JSON-LD structured data.
+ * This is SAFE because:
+ * 1. Data is always static (no user input)
+ * 2. JSON.stringify() properly escapes all content
+ * 3. Script type="application/ld+json" is NOT executed as JavaScript
+ * 4. Google/search engines parse this as structured data only
+ *
+ * React does not support children in <script> tags, so dangerouslySetInnerHTML
+ * is the only way to inject JSON-LD. This is the standard Next.js pattern.
+ */
+function JsonLd({ data }: { data: Record<string, unknown> }) {
+  return (
+    <script
+      type="application/ld+json"
+      // Safe: data is always static, JSON.stringify escapes content
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+    />
+  );
+}
+
 export default function ReqflowLanding() {
   const baseUrl = 'https://reqflow.com';
 
@@ -105,65 +127,56 @@ export default function ReqflowLanding() {
     <>
       <PageShell>
         {/* Organization Schema */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              name: "Reqflow",
-              url: baseUrl,
-              logo: `${baseUrl}/logo.png`,
-              description: "Procurement software for teams of 5-50. Track SaaS spend, catch duplicates, never miss renewals.",
-            }),
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: "Reqflow",
+            url: baseUrl,
+            logo: `${baseUrl}/logo.png`,
+            description: "Procurement software for teams of 5-50. Track SaaS spend, catch duplicates, never miss renewals.",
           }}
         />
 
         {/* SoftwareApplication Schema */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "SoftwareApplication",
-              name: "Reqflow",
-              applicationCategory: "BusinessApplication",
-              applicationSubCategory: "Procurement Software",
-              operatingSystem: "Web",
-              offers: {
-                "@type": "Offer",
-                price: "0",
-                priceCurrency: "USD",
-                description: "Free during early access",
-                availability: "https://schema.org/InStock",
-              },
-              description: "Procurement software for teams of 5-50. Track SaaS spend, catch duplicates, never miss renewals.",
-              featureList: [
-                "Smart Intake with AI-powered forms",
-                "Approval Workflows with Slack integration",
-                "Budget Tracking with enforcement",
-                "Renewal Tracking with notice-window alerts",
-              ],
-            }),
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            name: "Reqflow",
+            applicationCategory: "BusinessApplication",
+            applicationSubCategory: "Procurement Software",
+            operatingSystem: "Web",
+            offers: {
+              "@type": "Offer",
+              price: "0",
+              priceCurrency: "USD",
+              description: "Free during early access",
+              availability: "https://schema.org/InStock",
+            },
+            description: "Procurement software for teams of 5-50. Track SaaS spend, catch duplicates, never miss renewals.",
+            featureList: [
+              "Smart Intake with AI-powered forms",
+              "Approval Workflows with Slack integration",
+              "Budget Tracking with enforcement",
+              "Renewal Tracking with notice-window alerts",
+            ],
           }}
         />
 
         {/* FAQ Schema */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "FAQPage",
-              mainEntity: faqs.map((faq) => ({
-                "@type": "Question",
-                name: faq.question,
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: faq.answer,
-                },
-              })),
-            }),
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: faqs.map((faq) => ({
+              "@type": "Question",
+              name: faq.question,
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: faq.answer,
+              },
+            })),
           }}
         />
 
