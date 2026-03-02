@@ -23,7 +23,7 @@ const roles = [
   {
     icon: Users,
     color: "bg-purple-50 text-purple-600",
-    title: "Team Member",
+    title: "Individual Contributor",
     benefit: "Request any tool via Slack in under 2 minutes",
   },
 ];

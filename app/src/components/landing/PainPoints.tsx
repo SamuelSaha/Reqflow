@@ -32,10 +32,10 @@ export function PainPoints() {
         {/* Header */}
         <div className="text-center mb-16 max-w-3xl mx-auto">
           <h2 className="text-h2 text-slate-900 mb-4">
-            Your team buys tools on a shared card and hopes someone is tracking it.
+            People buy tools on a shared card and you hope someone is tracking it.
           </h2>
           <p className="text-body-lg text-slate-600">
-            No procurement team. No formal process. Just Slack messages, a shared
+            No procurement department. No formal process. Just Slack messages, a shared
             credit card, and a founder who finds surprise charges every month.
             Sound familiar?
           </p>
@@ -49,7 +49,7 @@ export function PainPoints() {
               Without Reqflow
             </span>
             <h3 className="text-h4 text-red-700 font-bold mt-3 mb-6">
-              A week to approve a $200 tool for a 20-person team
+              A week to approve a $200 tool for a 20-person business
             </h3>
             <div className="space-y-3.5">
               {withoutItems.map((item, i) => (

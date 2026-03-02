@@ -94,7 +94,7 @@ const faqs = [
   {
     question: "How fast can we get Reqflow running?",
     answer:
-      "Most teams go live in under 10 minutes. Connect Slack, set your first approval rule, and start receiving purchase requests. No onboarding call required.",
+      "Most businesses go live in under 10 minutes. Connect Slack, set your first approval rule, and start receiving purchase requests. No onboarding call required.",
   },
   {
     question: "Is Reqflow actually free right now?",
@@ -114,7 +114,7 @@ const faqs = [
   {
     question: "We're only 15 people. Is this overkill for us?",
     answer:
-      "Not at all. Reqflow was built specifically for teams of 5 to 50. The smaller you are, the less you can afford to waste time on manual procurement. Most of our early users are under 30 people.",
+      "Not at all. Reqflow was built specifically for businesses of 5 to 50 people. The smaller you are, the less you can afford to waste time on manual procurement. Most of our early users are under 30 people.",
   },
   {
     question: "Do we need to switch from QuickBooks/Xero to use Reqflow?",
@@ -133,7 +133,7 @@ export function FAQ() {
           Common questions
         </h2>
         <p className="text-body-lg text-slate-600">
-          What small teams ask before signing up.
+          What small businesses ask before signing up.
         </p>
       </div>
 
@@ -187,7 +187,7 @@ export function FinalCTA() {
       </h2>
 
       <p className="text-body-lg text-slate-400 text-center max-w-[600px]">
-        Reqflow gives your small team a real procurement workflow. Free during
+        Reqflow gives you a real procurement workflow. Free during
         early access. No credit card, no limits.
       </p>
 

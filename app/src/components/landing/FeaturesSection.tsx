@@ -349,7 +349,7 @@ export function PersonaSection() {
         <div className="bg-blue-50 rounded-full px-3.5 py-1.5 flex items-center gap-1.5">
           <Users className="w-3.5 h-3.5 text-blue-600" />
           <span className="text-caption font-semibold text-blue-600 tracking-wide">
-            BUILT FOR SMALL TEAMS
+            BUILT FOR SMALL BUSINESSES
           </span>
         </div>
         <h2 className="text-h2 font-bold leading-[1.15] tracking-tight text-slate-900">
@@ -424,7 +424,7 @@ export function PersonaSection() {
               </div>
             </div>
             <p className="text-body-sm leading-relaxed text-slate-600 italic">
-              &ldquo;I just want to buy what my team needs without a 3-page form
+              &ldquo;I just want to buy what I need without a 3-page form
               and a two-week wait.&rdquo;
             </p>
           </div>

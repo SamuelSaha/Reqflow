@@ -16,9 +16,9 @@ const personas = [
   {
     name: "Marc Chen",
     role: "Senior Developer",
-    company: "Team of 18",
+    company: "18-person startup",
     avatarColor: "bg-purple-500",
-    quote: "I just want to buy what my team needs without a 3-page form and a two-week wait.",
+    quote: "I just want to buy what I need without a 3-page form and a two-week wait.",
     features: [
       { icon: Zap, label: "2-minute smart request form" },
       { icon: Clock, label: "Live approval status tracking" },

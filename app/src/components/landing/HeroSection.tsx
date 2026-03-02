@@ -61,12 +61,12 @@ export function HeroSection() {
 
             {/* Headline */}
             <h1 className="text-hero text-slate-900 leading-[1.1]">
-              Procurement software for teams who move too fast for spreadsheets
+              Procurement software for businesses that move too fast for spreadsheets
             </h1>
 
             {/* Subheadline */}
             <p className="text-body-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
-              Reqflow gives small teams a real purchasing workflow - free to use,
+              Reqflow gives you a real purchasing workflow - free to use,
               ready in minutes, and built to replace the Slack threads your ops lead
               is drowning in.
             </p>
@@ -309,18 +309,18 @@ const beforeSteps = [
   'Someone drops a Slack message: "Can I buy this tool?"',
   'Founder replies three hours later: "Ask ops"',
   "Ops lead is buried in other work, sees it next day",
-  "Nobody checks if the team already pays for something similar",
+  "Nobody checks if you already pay for something similar",
   "Purchase happens on a shared card with no record",
   "Invoice shows up. Nobody remembers approving it.",
 ];
 
 const afterSteps = [
-  "Team member submits a request in Slack or a quick web form",
+  "Someone submits a request in Slack or a quick web form",
   "Reqflow flags duplicates and fills in the details automatically",
-  "Request routes to the right person on your team instantly",
+  "Request routes to the right person instantly",
   "Approver sees full context, approves with one click",
   "PO created. Spend logged. Audit trail saved.",
-  "Done. Your team's spend is tracked in real time.",
+  "Done. Your spend is tracked in real time.",
 ];
 
 const painStats = [
@@ -342,11 +342,11 @@ export function ProblemSection() {
         </div>
 
         <h2 className="text-h2 text-slate-900">
-          Your team buys SaaS tools on a shared card and you find out when the invoice arrives.
+          People buy SaaS tools on a shared card and you find out when the invoice arrives.
         </h2>
 
         <p className="text-body-lg text-slate-600 max-w-[620px]">
-          You're not big enough for a procurement team, but you're too big to track everything in your head.
+          You're not big enough for a procurement department, but you're too big to track everything in your head.
           Slack threads, shared cards, surprise renewals. Every founder's been there.
         </p>
       </div>
@@ -444,27 +444,27 @@ export function ProblemSection() {
 const faqs = [
   {
     question: "How is Reqflow different from using spreadsheets for procurement?",
-    answer: "Spreadsheets break down when your team hits 10-15 people. They live outside your workflow - nobody updates them, nobody checks them before buying, and they're always out of date. Reqflow lives where your team already works (Slack, email, web) and automatically captures every purchase request, duplicate check, and approval. The data stays current without anyone doing extra work.",
+    answer: "Spreadsheets break down when you hit 10-15 people. They live outside your workflow - nobody updates them, nobody checks them before buying, and they're always out of date. Reqflow lives where you already work (Slack, email, web) and automatically captures every purchase request, duplicate check, and approval. The data stays current without anyone doing extra work.",
   },
   {
-    question: "Do I need a procurement team to use procurement software?",
-    answer: "No. That's exactly who we built Reqflow for - teams without procurement departments. If you're the founder, ops lead, or finance person handling purchases while also doing your actual job, this replaces the manual work. Set it up once (takes 2 minutes), and it runs itself. No training, no procurement expertise needed.",
+    question: "Do I need a procurement department to use procurement software?",
+    answer: "No. That's exactly who we built Reqflow for - businesses without procurement departments. If you're the founder, ops lead, or finance person handling purchases while also doing your actual job, this replaces the manual work. Set it up once (takes 2 minutes), and it runs itself. No training, no procurement expertise needed.",
   },
   {
-    question: "How does SaaS spend management work for small teams without finance software?",
+    question: "How does SaaS spend management work for small businesses without finance software?",
     answer: "We track every SaaS subscription from the moment someone requests it. You'll see what you're paying, when it renews, who uses it, and if you already have something similar. We flag duplicates automatically, so you don't end up paying for three project management tools. Export everything for your accountant in one click.",
   },
   {
-    question: "What's the ROI of procurement software for a 30-person team?",
-    answer: "Most teams save 10-15% on SaaS spend in the first 6 months by catching duplicates (29% of subscriptions overlap) and cancelling unused tools. For a team spending €150K/year on SaaS, that's €15-22K saved. Plus you recover 8.3 hours/week in manual work - worth ~€16K/year if your ops person's time is valued at €40/hour. Total ROI: €30-40K annually.",
+    question: "What's the ROI of procurement software for a 30-person business?",
+    answer: "Most businesses save 10-15% on SaaS spend in the first 6 months by catching duplicates (29% of subscriptions overlap) and cancelling unused tools. For a business spending €150K/year on SaaS, that's €15-22K saved. Plus you recover 8.3 hours/week in manual work - worth ~€16K/year if your ops person's time is valued at €40/hour. Total ROI: €30-40K annually.",
   },
   {
     question: "Can Reqflow catch duplicate SaaS subscriptions before we buy them?",
-    answer: "Yes. When someone submits a request, we check your existing tools and flag potential overlaps before the purchase happens. For example, if your design team already uses Figma and someone requests Sketch, we'll surface that immediately. Saves you from discovering duplicates months later when renewals hit.",
+    answer: "Yes. When someone submits a request, we check your existing tools and flag potential overlaps before the purchase happens. For example, if your design department already uses Figma and someone requests Sketch, we'll surface that immediately. Saves you from discovering duplicates months later when renewals hit.",
   },
   {
     question: "What's the fastest way to set up procurement for a startup?",
-    answer: "Connect your Slack workspace or create a web form (2 minutes). Set approval rules - like \"under €500 auto-approve, over €500 needs founder approval.\" That's it. Your team can start submitting requests immediately. No software to install, no training meetings, no complicated setup. Most teams are fully running within their first hour.",
+    answer: "Connect your Slack workspace or create a web form (2 minutes). Set approval rules - like \"under €500 auto-approve, over €500 needs founder approval.\" That's it. People can start submitting requests immediately. No software to install, no training meetings, no complicated setup. Most businesses are fully running within their first hour.",
   },
 ];
 
@@ -475,7 +475,7 @@ export function FaqSection() {
         {/* Header */}
         <div className="flex flex-col items-center gap-4 text-center">
           <h2 className="text-h2 text-slate-900">
-            Common questions about procurement software for small teams
+            Common questions about procurement software for small businesses
           </h2>
           <p className="text-body-lg text-slate-600 max-w-[600px]">
             Everything you need to know about managing SaaS spend without a procurement department.

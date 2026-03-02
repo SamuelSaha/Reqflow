@@ -1,6 +1,6 @@
 /**
  * Pricing Section
- * Simple, transparent pricing for small teams
+ * Simple, transparent pricing for small businesses
  */
 
 import { Check } from "lucide-react";
@@ -9,7 +9,7 @@ import { Container } from "@/components/layout/Container";
 import { PrimaryCta } from "@/components/ui/cta-button";
 
 const features = [
-  "Unlimited users across your team",
+  "Unlimited users",
   "Unlimited purchase requests",
   "Slack + email integrations",
   "QuickBooks & Xero sync",
@@ -32,7 +32,7 @@ export function Pricing() {
               Unlimited users. Always.
             </h2>
             <p className="text-body-lg text-slate-600 max-w-2xl mx-auto">
-              No per-seat pricing. No hidden fees. Built for teams of 5-50 who need procurement without the enterprise price tag.
+              No per-seat pricing. No hidden fees. Built for businesses of 5-50 people who need procurement without the enterprise price tag.
             </p>
           </div>
 

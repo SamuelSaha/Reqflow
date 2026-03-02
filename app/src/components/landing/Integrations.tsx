@@ -20,7 +20,7 @@ export function Integrations() {
             <span className="text-caption font-semibold text-blue-600 uppercase tracking-wider">Integrations</span>
           </div>
           <h2 className="text-h2 text-slate-900 mb-4">
-            Plugs into the tools<br />your team already uses.
+            Plugs into the tools<br />you already use.
           </h2>
           <p className="text-body-lg text-slate-600 max-w-2xl">
             One-click integrations with your accounting, chat, and identity tools.

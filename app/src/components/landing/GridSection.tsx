@@ -70,7 +70,7 @@ export function FeaturesGrid() {
         <span className="inline-flex items-center gap-1.5 border border-slate-700 rounded-full px-3.5 py-1.5">
           <Layers className="text-blue-500" size={14} />
           <span className="text-caption font-semibold text-blue-500">
-            Built for Small Teams
+            Built for Small Businesses
           </span>
         </span>
 
@@ -206,7 +206,7 @@ export function Integrations() {
         </span>
 
         <h2 className="text-h2 text-slate-900 whitespace-pre-line">
-          {"Plugs into the tools\nyour team already uses."}
+          {"Plugs into the tools\nyou already use."}
         </h2>
 
         <p className="text-body-lg text-slate-600 max-w-[620px]">

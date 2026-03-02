@@ -60,7 +60,7 @@ export function Features() {
           </h2>
           <p className="text-body-lg text-slate-400 max-w-2xl">
             Requests, approvals, purchase orders, and spend tracking in one place.
-            Built for teams that move fast and hate busywork.
+            Built for businesses that move fast and hate busywork.
           </p>
         </div>
 

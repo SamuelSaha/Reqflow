@@ -43,7 +43,7 @@ export function DarkFeatures() {
                 Everything you need. Nothing you don't.
               </h2>
               <p className="text-body-lg text-slate-400 max-w-2xl mx-auto">
-                Built for teams of 5-50. Not enterprise bloat. Not spreadsheet chaos.
+                Built for businesses of 5-50 people. Not enterprise bloat. Not spreadsheet chaos.
               </p>
             </div>
 

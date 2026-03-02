@@ -26,7 +26,7 @@ const testimonials = [
     companySize: "35 people",
     avatar: "/avatars/marcus-rodriguez.jpg",
     quote:
-      "Approval time went from 3 days to under 2 hours. Our team can actually move fast now without bypassing the process.",
+      "Approval time went from 3 days to under 2 hours. We can actually move fast now without bypassing the process.",
     impact: "<2 hrs approval time",
     metric: "87% faster than before",
   },
@@ -56,10 +56,10 @@ export function Testimonials() {
             </span>
           </div>
           <h2 className="text-h2 text-slate-900 mb-6">
-            Built for teams like yours
+            Built for businesses like yours
           </h2>
           <p className="text-body-lg text-slate-600">
-            Small teams using Reqflow to take control of SaaS spend without hiring a procurement department.
+            Small businesses using Reqflow to take control of SaaS spend without hiring a procurement department.
           </p>
         </div>
 
@@ -124,7 +124,7 @@ export function Testimonials() {
                 ))}
               </div>
               <span className="text-body-sm font-medium text-slate-900">
-                150+ teams
+                150+ businesses
               </span>
             </div>
             <div className="h-4 w-px bg-slate-200" />

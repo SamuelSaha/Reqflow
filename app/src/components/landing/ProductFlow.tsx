@@ -42,7 +42,7 @@ function IntakePreview() {
         <div>
           <label className="text-caption text-slate-500 block mb-1.5">Business justification</label>
           <div className="px-3 py-2.5 rounded-lg border border-slate-200 bg-slate-50 text-body-sm text-slate-600">
-            Team productivity improvement - 15min/day/dev saves $180k+ in annual dev...
+            Productivity improvement - 15min/day/dev saves $180k+ in annual dev...
           </div>
         </div>
         <div className="flex items-center justify-end gap-3 pt-2">
@@ -224,7 +224,7 @@ export function ProductFlow() {
               Live Budget Tracking & Enforcement
             </h3>
             <p className="text-body text-slate-600 mb-6 leading-relaxed">
-              Your team sees remaining budget before they request. Hard stops prevent
+              Everyone sees remaining budget before they request. Hard stops prevent
               overspend automatically. AI-powered forecasting flags budgets trending toward
               zero before they get there.
             </p>

@@ -121,7 +121,7 @@ export function CaseBuilderShowcase() {
             <span className="text-[11px] text-slate-500">
               Request:{" "}
               <span className="font-semibold text-slate-700">
-                Knowledge base tool for 50-person team
+                Knowledge base tool for 50-person company
               </span>
               {" · "}
               <span className="font-semibold text-amber-600">

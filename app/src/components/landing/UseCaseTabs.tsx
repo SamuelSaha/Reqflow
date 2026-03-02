@@ -2,7 +2,7 @@
 
 /**
  * Use Case Tabs - Mistral-inspired
- * Department-specific examples showing how different teams use Reqflow
+ * Department-specific examples showing how different departments use Reqflow
  */
 
 import { useState } from "react";
@@ -16,7 +16,7 @@ const useCases = [
     icon: DollarSign,
     title: "Finance",
     scenario: "Month-end close with zero invoice surprises",
-    challenge: "Finance team spent 6 hours reconciling invoices that didn't match purchase orders.",
+    challenge: "Finance department spent 6 hours reconciling invoices that didn't match purchase orders.",
     solution: "Every invoice is pre-approved. POs are auto-generated. Reconciliation takes 20 minutes.",
     outcome: "94% of invoices match POs perfectly",
     savings: "€16K/year saved",
@@ -54,10 +54,10 @@ export function UseCaseTabs() {
           {/* Header */}
           <div className="text-center max-w-3xl mx-auto mb-12">
             <h2 className="text-h2 text-slate-900 mb-4">
-              Built for your team
+              Built for every department
             </h2>
             <p className="text-body-lg text-slate-600">
-              Real results from Finance, Engineering, and Operations teams.
+              Real results from Finance, Engineering, and Operations departments.
             </p>
           </div>
 
@@ -115,7 +115,7 @@ export function UseCaseTabs() {
                   <div>
                     <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200 mb-4">
                       <activeCase.icon className="w-4 h-4 text-blue-600" />
-                      <span className="text-caption text-blue-900">{activeCase.title} Team</span>
+                      <span className="text-caption text-blue-900">{activeCase.title}</span>
                     </div>
                     <h3 className="text-h4 text-slate-900 mb-3">
                       {activeCase.scenario}

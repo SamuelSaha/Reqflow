@@ -153,7 +153,7 @@ export function ProductScreenshots() {
             </h2>
             <p className="text-body-lg text-slate-600">
               Every feature designed to save time and reduce chaos. See how Reqflow
-              helps teams manage procurement without the overhead.
+              helps you manage procurement without the overhead.
             </p>
           </div>
 
