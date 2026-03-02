@@ -149,7 +149,11 @@ export function AiAnalysisPanel({ requestId }: AiAnalysisPanelProps) {
           </div>
         )}
 
-        <p className="text-[10px] text-slate-400">Powered by Claude AI · Not a substitute for human judgment</p>
+        <p className="text-[10px] text-slate-400">
+          Powered by{" "}
+          {data.provider === "openai" ? "GPT-4o mini" : data.provider === "gemini" ? "Gemini 1.5 Flash" : "Claude AI"}
+          {" "}· Not a substitute for human judgment
+        </p>
       </CardContent>
     </Card>
   );

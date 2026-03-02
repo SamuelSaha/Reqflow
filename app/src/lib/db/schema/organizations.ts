@@ -28,9 +28,11 @@ export const organizations = pgTable("organizations", {
   onboardingCompleted: boolean("onboarding_completed").notNull().default(false),
   onboardingStep: integer("onboarding_step").notNull().default(0), // 0-4
 
-  // AI - Bring Your Own API Key
+  // AI - Bring Your Own API Key (multi-provider, Issue #35)
   // Encrypted with FIELD_ENCRYPTION_KEY (AES-256-GCM) — never returned to client
-  anthropicApiKey: text("anthropic_api_key"),
+  anthropicApiKey: text("anthropic_api_key"), // legacy; kept for backward compat
+  aiProvider: text("ai_provider").default("anthropic"), // 'anthropic' | 'openai' | 'gemini'
+  aiApiKey: text("ai_api_key"), // encrypted key for the active provider
 
   // Timestamps
   createdAt: timestamp("created_at").notNull().defaultNow(),

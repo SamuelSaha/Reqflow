@@ -1,11 +1,11 @@
 /**
- * AI Router — Bring Your Own API Key (BYOAK)
- * Issue #35: Claude AI integration for purchase request analysis
+ * AI Router — Bring Your Own API Key (BYOAK), multi-provider
+ * Issue #35: Claude / GPT / Gemini support for purchase request analysis
  *
  * Security model:
  * - API key encrypted at rest with AES-256-GCM (FIELD_ENCRYPTION_KEY)
- * - Key stored per-org in organizations.anthropic_api_key
- * - Key NEVER returned to the client — only { configured: boolean }
+ * - Key stored per-org in organizations.ai_api_key + organizations.ai_provider
+ * - Key NEVER returned to the client — only { configured: boolean, provider: string }
  * - Only admins can save/remove the key
  */
 
@@ -17,8 +17,16 @@ import { eq } from "drizzle-orm";
 import { encryptField, decryptField, isFieldEncrypted } from "@/lib/security/field-encryption";
 import Anthropic from "@anthropic-ai/sdk";
 
-// Anthropic key prefix validation
-const ANTHROPIC_KEY_PREFIX = "sk-ant-";
+export type AiProvider = "anthropic" | "openai" | "gemini";
+
+const providerSchema = z.enum(["anthropic", "openai", "gemini"]);
+
+// Key format hints for each provider
+const KEY_PREFIXES: Record<AiProvider, string | null> = {
+  anthropic: "sk-ant-",
+  openai: "sk-",
+  gemini: null, // Google AI keys have no standard prefix
+};
 
 const AiAnalysisSchema = z.object({
   riskLevel: z.enum(["low", "medium", "high"]),
@@ -31,63 +39,178 @@ const AiAnalysisSchema = z.object({
 
 export type AiAnalysis = z.infer<typeof AiAnalysisSchema>;
 
-async function getDecryptedKey(tenantId: string, db: typeof import("@/lib/db").db): Promise<string | null> {
+async function getOrgAiConfig(
+  tenantId: string,
+  db: typeof import("@/lib/db").db
+): Promise<{ provider: AiProvider; apiKey: string } | null> {
   const org = await db.query.organizations.findFirst({
     where: eq(organizations.id, tenantId),
-    columns: { anthropicApiKey: true },
+    columns: { aiProvider: true, aiApiKey: true, anthropicApiKey: true },
   });
 
-  if (!org?.anthropicApiKey) return null;
+  if (!org) return null;
 
-  try {
-    return decryptField(org.anthropicApiKey);
-  } catch {
-    return null;
+  // New unified key takes priority
+  if (org.aiApiKey && isFieldEncrypted(org.aiApiKey)) {
+    try {
+      return {
+        provider: (org.aiProvider ?? "anthropic") as AiProvider,
+        apiKey: decryptField(org.aiApiKey),
+      };
+    } catch {
+      return null;
+    }
+  }
+
+  // Fall back to legacy anthropic_api_key (pre-migration rows)
+  if (org.anthropicApiKey && isFieldEncrypted(org.anthropicApiKey)) {
+    try {
+      return { provider: "anthropic", apiKey: decryptField(org.anthropicApiKey) };
+    } catch {
+      return null;
+    }
+  }
+
+  return null;
+}
+
+/** Call the appropriate provider API and return raw text response */
+async function callProvider(
+  provider: AiProvider,
+  apiKey: string,
+  prompt: string
+): Promise<string> {
+  if (provider === "anthropic") {
+    const client = new Anthropic({ apiKey });
+    const message = await client.messages.create({
+      model: "claude-haiku-4-5-20251001",
+      max_tokens: 512,
+      messages: [{ role: "user", content: prompt }],
+    });
+    const content = message.content[0];
+    if (content.type !== "text") throw new Error("Unexpected response type");
+    return content.text;
+  }
+
+  if (provider === "openai") {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        max_tokens: 512,
+        messages: [{ role: "user", content: prompt }],
+      }),
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err?.error?.message ?? `OpenAI API error ${response.status}`);
+    }
+    const data = await response.json();
+    return data.choices?.[0]?.message?.content ?? "";
+  }
+
+  if (provider === "gemini") {
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { maxOutputTokens: 512 },
+        }),
+      }
+    );
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err?.error?.message ?? `Gemini API error ${response.status}`);
+    }
+    const data = await response.json();
+    return data.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+  }
+
+  throw new Error(`Unknown provider: ${provider}`);
+}
+
+/** Validate a key by making a minimal test call */
+async function validateKey(provider: AiProvider, key: string): Promise<void> {
+  if (provider === "anthropic") {
+    const client = new Anthropic({ apiKey: key });
+    await client.messages.create({
+      model: "claude-haiku-4-5-20251001",
+      max_tokens: 1,
+      messages: [{ role: "user", content: "hi" }],
+    });
+    return;
+  }
+
+  if (provider === "openai") {
+    const res = await fetch("https://api.openai.com/v1/models", {
+      headers: { Authorization: `Bearer ${key}` },
+    });
+    if (!res.ok) throw new Error("Invalid OpenAI key");
+    return;
+  }
+
+  if (provider === "gemini") {
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models?key=${key}`
+    );
+    if (!res.ok) throw new Error("Invalid Gemini key");
+    return;
   }
 }
 
 export const aiRouter = router({
   /**
-   * Check if this org has a Claude API key configured.
-   * Returns { configured: boolean } — never the key itself.
+   * Check if this org has an AI key configured.
+   * Returns { configured: boolean, provider: AiProvider } — never the key itself.
    */
   status: protectedProcedure.query(async ({ ctx }) => {
     const org = await ctx.db.query.organizations.findFirst({
       where: eq(organizations.id, ctx.tenantId),
-      columns: { anthropicApiKey: true },
+      columns: { aiProvider: true, aiApiKey: true, anthropicApiKey: true },
     });
 
+    const hasNewKey = !!org?.aiApiKey && isFieldEncrypted(org.aiApiKey);
+    const hasLegacyKey = !!org?.anthropicApiKey && isFieldEncrypted(org.anthropicApiKey);
+
     return {
-      configured: !!org?.anthropicApiKey && isFieldEncrypted(org.anthropicApiKey),
+      configured: hasNewKey || hasLegacyKey,
+      provider: (org?.aiProvider ?? "anthropic") as AiProvider,
     };
   }),
 
   /**
-   * Save (or replace) the org's Claude API key.
-   * Admin only. Validates the key format, then encrypts and stores it.
+   * Save (or replace) the org's AI key for the selected provider.
+   * Admin only. Validates key format + live-tests it, then encrypts and stores.
    */
   saveKey: adminProcedure
-    .input(z.object({ key: z.string().min(1) }))
+    .input(z.object({ provider: providerSchema, key: z.string().min(1) }))
     .mutation(async ({ ctx, input }) => {
-      if (!input.key.startsWith(ANTHROPIC_KEY_PREFIX)) {
+      const prefix = KEY_PREFIXES[input.provider];
+      if (prefix && !input.key.startsWith(prefix)) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "Invalid API key format. Anthropic keys start with sk-ant-",
+          message: `Invalid key format. ${
+            input.provider === "anthropic" ? "Anthropic" : "OpenAI"
+          } keys start with ${prefix}`,
         });
       }
 
-      // Quick validation: test the key with a minimal API call
       try {
-        const client = new Anthropic({ apiKey: input.key });
-        await client.messages.create({
-          model: "claude-haiku-4-5-20251001",
-          max_tokens: 1,
-          messages: [{ role: "user", content: "hi" }],
-        });
-      } catch {
+        await validateKey(input.provider, input.key);
+      } catch (err) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "API key validation failed. Please check your key and try again.",
+          message:
+            err instanceof Error
+              ? err.message
+              : "API key validation failed. Please check your key and try again.",
         });
       }
 
@@ -95,50 +218,52 @@ export const aiRouter = router({
 
       await ctx.db
         .update(organizations)
-        .set({ anthropicApiKey: encrypted, updatedAt: new Date() })
+        .set({
+          aiProvider: input.provider,
+          aiApiKey: encrypted,
+          updatedAt: new Date(),
+        })
         .where(eq(organizations.id, ctx.tenantId));
 
       return { success: true };
     }),
 
   /**
-   * Remove the org's Claude API key.
+   * Remove the org's AI key.
    * Admin only.
    */
   removeKey: adminProcedure.mutation(async ({ ctx }) => {
     await ctx.db
       .update(organizations)
-      .set({ anthropicApiKey: null, updatedAt: new Date() })
+      .set({ aiApiKey: null, anthropicApiKey: null, updatedAt: new Date() })
       .where(eq(organizations.id, ctx.tenantId));
 
     return { success: true };
   }),
 
   /**
-   * Analyze a purchase request with Claude.
-   * Uses the org's stored API key (falls back to server-level key if no org key).
+   * Analyze a purchase request with the configured AI provider.
+   * Falls back to ANTHROPIC_API_KEY env var if no org key is set.
    * Returns structured AI analysis — never exposes the API key.
    */
   analyzeRequest: protectedProcedure
     .input(z.object({ requestId: z.string().uuid() }))
     .query(async ({ ctx, input }) => {
-      // Get API key: org key takes priority, then server-level env key
-      let apiKey = await getDecryptedKey(ctx.tenantId, ctx.db);
+      let config = await getOrgAiConfig(ctx.tenantId, ctx.db);
 
-      if (!apiKey) {
-        // Check server-level key as fallback
+      if (!config) {
         const { env } = await import("@/lib/env");
-        apiKey = env.ANTHROPIC_API_KEY ?? null;
+        const fallback = env.ANTHROPIC_API_KEY ?? null;
+        if (fallback) config = { provider: "anthropic", apiKey: fallback };
       }
 
-      if (!apiKey) {
+      if (!config) {
         throw new TRPCError({
           code: "PRECONDITION_FAILED",
-          message: "No AI API key configured. Add your Anthropic API key in Settings → AI.",
+          message: "No AI API key configured. Add your API key in Settings → AI.",
         });
       }
 
-      // Fetch the request with context
       const request = await ctx.db.query.requests.findFirst({
         where: eq(requests.id, input.requestId),
         with: {
@@ -155,7 +280,6 @@ export const aiRouter = router({
         throw new TRPCError({ code: "FORBIDDEN" });
       }
 
-      // Build the analysis prompt
       const prompt = `You are a procurement analyst reviewing a purchase request. Analyze this request and respond with ONLY valid JSON matching the schema below.
 
 PURCHASE REQUEST:
@@ -188,24 +312,11 @@ Guidelines:
 - insights should add real value (pricing benchmarks, vendor reputation, alternatives)`;
 
       try {
-        const client = new Anthropic({ apiKey });
-        const message = await client.messages.create({
-          model: "claude-haiku-4-5-20251001",
-          max_tokens: 512,
-          messages: [{ role: "user", content: prompt }],
-        });
-
-        const content = message.content[0];
-        if (content.type !== "text") {
-          throw new Error("Unexpected response type");
-        }
-
-        // Extract JSON from response (handle markdown code blocks)
-        const jsonMatch = content.text.match(/\{[\s\S]*\}/);
+        const text = await callProvider(config.provider, config.apiKey, prompt);
+        const jsonMatch = text.match(/\{[\s\S]*\}/);
         if (!jsonMatch) throw new Error("No JSON found in response");
-
         const parsed = AiAnalysisSchema.parse(JSON.parse(jsonMatch[0]));
-        return parsed;
+        return { ...parsed, provider: config.provider };
       } catch (error) {
         if (error instanceof TRPCError) throw error;
         throw new TRPCError({
