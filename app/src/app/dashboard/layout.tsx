@@ -8,6 +8,7 @@ import { FileText, CheckSquare, LayoutDashboard, Wallet, FlaskConical, Calendar,
 import { Toaster } from "sonner";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { useNavigationPrefetch } from "@/hooks/useNavigationPrefetch";
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -16,6 +17,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { CommandPalette } from "@/components/ui/command-palette";
+import { KeyboardShortcutsHelp } from "@/components/ui/keyboard-shortcuts-help";
 
 // Skip SSR for NotificationBell — Radix DropdownMenu generates mismatched
 // IDs between server and client. No SEO value in a notification bell anyway.
@@ -47,9 +50,17 @@ export default function DashboardLayout({
   const pathname = usePathname();
   const { prefetch } = useNavigationPrefetch();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
+  const [shortcutsHelpOpen, setShortcutsHelpOpen] = useState(false);
 
   // Prefetch likely next pages on mount
   useNavigationPrefetchOnMount(prefetch, pathname);
+
+  // Global keyboard shortcuts
+  useKeyboardShortcuts({
+    onCommandPalette: () => setCommandPaletteOpen(true),
+    onHelp: () => setShortcutsHelpOpen(true),
+  });
 
   return (
     <div className="min-h-screen bg-[var(--warm-50)]">
@@ -142,6 +153,12 @@ export default function DashboardLayout({
 
       {/* Toast notifications */}
       <Toaster position="top-right" />
+
+      {/* Command palette (Cmd+K) */}
+      <CommandPalette open={commandPaletteOpen} onOpenChange={setCommandPaletteOpen} />
+
+      {/* Keyboard shortcuts help (?) */}
+      <KeyboardShortcutsHelp open={shortcutsHelpOpen} onOpenChange={setShortcutsHelpOpen} />
     </div>
   );
 }
