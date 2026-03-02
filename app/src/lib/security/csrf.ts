@@ -85,3 +85,33 @@ export async function getCSRFTokenFromRequest(): Promise<string | null> {
   const headersList = await headers();
   return headersList.get("x-csrf-token") || null;
 }
+
+/**
+ * CSRF protection middleware for Next.js API routes
+ * Validates x-csrf-token header against csrf_token cookie on every request.
+ * Skips validation in development (matches tRPC middleware behavior).
+ *
+ * Usage: export const POST = withCSRF(async (request) => { ... })
+ */
+export function withCSRF(
+  handler: (request: Request) => Promise<Response>
+): (request: Request) => Promise<Response> {
+  return async (request: Request) => {
+    // Skip CSRF in development — matches tRPC middleware behavior
+    if (process.env.NODE_ENV === "development") {
+      return handler(request);
+    }
+
+    const csrfToken = request.headers.get("x-csrf-token");
+    const isValid = await validateCSRFToken(csrfToken);
+
+    if (!isValid) {
+      return Response.json(
+        { error: "Invalid or missing CSRF token. Please refresh the page and try again." },
+        { status: 403 }
+      );
+    }
+
+    return handler(request);
+  };
+}

@@ -8,6 +8,7 @@ export {
   generateCSRFToken,
   validateCSRFToken,
   getCSRFTokenFromRequest,
+  withCSRF,
 } from "./csrf";
 
 // Rate Limiting
