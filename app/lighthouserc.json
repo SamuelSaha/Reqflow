@@ -1,0 +1,48 @@
+{
+  "ci": {
+    "collect": {
+      "numberOfRuns": 3,
+      "settings": {
+        "preset": "desktop",
+        "throttling": {
+          "rttMs": 40,
+          "throughputKbps": 10240,
+          "cpuSlowdownMultiplier": 1
+        }
+      }
+    },
+    "assert": {
+      "assertions": {
+        "categories:performance": ["error", {"minScore": 0.95}],
+        "categories:accessibility": ["error", {"minScore": 0.95}],
+        "categories:best-practices": ["warn", {"minScore": 0.90}],
+        "categories:seo": ["warn", {"minScore": 0.90}],
+
+        "first-contentful-paint": ["error", {"maxNumericValue": 500}],
+        "largest-contentful-paint": ["error", {"maxNumericValue": 2500}],
+        "interactive": ["error", {"maxNumericValue": 1000}],
+        "speed-index": ["error", {"maxNumericValue": 1500}],
+        "cumulative-layout-shift": ["error", {"maxNumericValue": 0.1}],
+        "total-blocking-time": ["warn", {"maxNumericValue": 300}],
+
+        "max-potential-fid": ["warn", {"maxNumericValue": 100}],
+        "server-response-time": ["warn", {"maxNumericValue": 600}],
+
+        "uses-responsive-images": ["warn", {"minScore": 0.9}],
+        "offscreen-images": ["warn", {"minScore": 0.9}],
+        "uses-optimized-images": ["warn", {"minScore": 0.9}],
+        "modern-image-formats": ["warn", {"minScore": 0.9}],
+
+        "uses-text-compression": ["error", {"minScore": 1}],
+        "unminified-javascript": ["warn", {"minScore": 0.9}],
+        "unused-javascript": ["warn", {"minScore": 0.8}],
+
+        "dom-size": ["warn", {"maxNumericValue": 1500}],
+        "bootup-time": ["warn", {"maxNumericValue": 3000}]
+      }
+    },
+    "upload": {
+      "target": "temporary-public-storage"
+    }
+  }
+}
