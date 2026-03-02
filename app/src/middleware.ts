@@ -3,11 +3,13 @@
  * Enforces authentication on protected routes
  * Gates unonboarded users to the onboarding wizard
  * Gates unverified users from sensitive operations
+ * 🔒 SECURITY (issue #115): CSP with nonces for XSS protection
  */
 
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { verifySession } from "@/lib/auth/simple-auth";
+import { generateNonce, buildCSP, NONCE_HEADER } from "@/lib/security/csp";
 
 // Routes that require authentication
 const protectedRoutes = ["/dashboard", "/onboarding"];
@@ -28,16 +30,19 @@ const verificationRequiredRoutes = [
   "/dashboard/integrations",
 ];
 
-// Routes that require MFA for finance/admin roles (high-privilege operations)
-const mfaRequiredRoutes = [
+// Routes that require MFA verification (for users with MFA enabled)
+const mfaVerifyRoutes = [
   "/dashboard/settings",
   "/dashboard/users",
   "/dashboard/vendors",
   "/dashboard/integrations",
 ];
 
-// Routes exempt from MFA requirement (allow access but show reminder)
-const mfaExemptRoutes = ["/dashboard/settings/security"];
+// Routes exempt from MFA verification requirement (but still accessible for MFA setup)
+const mfaExemptRoutes = ["/dashboard/settings/security", "/setup-mfa"];
+
+// Roles that require MFA to be enabled
+const mfaRequiredRoles = ["finance", "admin"];
 
 // Public routes (accessible to everyone)
 const publicRoutes = [
@@ -63,6 +68,19 @@ const publicRoutes = [
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // 🔒 SECURITY (issue #115): Generate CSP nonce for each request
+  const nonce = generateNonce();
+  const isDev = process.env.NODE_ENV === "development";
+
+  // Helper to add CSP headers to any response
+  const withCSP = (response: NextResponse) => {
+    // Set nonce as request header so server components can access it
+    response.headers.set(NONCE_HEADER, nonce);
+    // Set CSP header
+    response.headers.set("Content-Security-Policy", buildCSP(nonce, isDev));
+    return response;
+  };
+
   // Allow public routes (exact match or starts with for paths like /api/auth)
   const isPublicRoute = publicRoutes.some((route) => {
     if (route === "/") {
@@ -72,7 +90,7 @@ export async function middleware(request: NextRequest) {
   });
 
   if (isPublicRoute) {
-    return NextResponse.next();
+    return withCSP(NextResponse.next());
   }
 
   // Allow static files
@@ -81,7 +99,7 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith("/favicon") ||
     pathname.includes(".")
   ) {
-    return NextResponse.next();
+    return withCSP(NextResponse.next());
   }
 
   // Check session
@@ -93,42 +111,65 @@ export async function middleware(request: NextRequest) {
   if (!isAuthenticated) {
     // Allow auth routes for unauthenticated users
     if (pathname.startsWith("/login") || pathname.startsWith("/signup")) {
-      return NextResponse.next();
+      return withCSP(NextResponse.next());
     }
     const loginUrl = new URL("/login", request.url);
     loginUrl.searchParams.set("redirect", pathname);
-    return NextResponse.redirect(loginUrl);
+    return withCSP(NextResponse.redirect(loginUrl));
   }
 
   // Redirect authenticated users away from auth pages
   if (pathname.startsWith("/login") || pathname.startsWith("/signup")) {
     const dest = session.onboardingCompleted ? "/dashboard" : "/onboarding";
-    return NextResponse.redirect(new URL(dest, request.url));
+    return withCSP(NextResponse.redirect(new URL(dest, request.url)));
   }
 
   // Onboarding gate: redirect unonboarded users to /onboarding
   if (!session.onboardingCompleted && !pathname.startsWith("/onboarding")) {
-    return NextResponse.redirect(new URL("/onboarding", request.url));
+    return withCSP(NextResponse.redirect(new URL("/onboarding", request.url)));
   }
 
   // Redirect completed users away from /onboarding
   if (session.onboardingCompleted && pathname.startsWith("/onboarding")) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    return withCSP(NextResponse.redirect(new URL("/dashboard", request.url)));
   }
 
-  // 🔒 SECURITY: Email verification gate for sensitive routes (DISABLED — /verify-email page not built yet)
-  // TODO: Re-enable once the /verify-email page and email verification flow are implemented
-  // Users without verified email will be blocked from:
-  //   verificationRequiredRoutes: /dashboard/requests/new, /dashboard/approvals, /dashboard/budgets,
-  //   /dashboard/settings, /dashboard/users, /dashboard/vendors, /dashboard/contracts, /dashboard/integrations
+  // 🔒 SECURITY (issue #120): Email verification gate for sensitive routes
+  // Users without verified email are blocked from creating requests, approvals, budgets, etc.
+  const requiresVerification = verificationRequiredRoutes.some(route =>
+    pathname.startsWith(route)
+  );
 
-  // 🔒 SECURITY: MFA gate for high-privilege routes (DISABLED — /verify-mfa page not built yet)
-  // TODO: Re-enable once MFA verification page and TOTP enrollment are implemented
-  // Finance and Admin roles will require MFA for sensitive operations:
-  //   mfaRequiredRoutes: /dashboard/settings, /dashboard/users, /dashboard/vendors, /dashboard/integrations
-  //   mfaExemptRoutes: /dashboard/settings/security
+  // session.emailVerified can be undefined on old tokens (before the field was added to the payload).
+  // Treat undefined as "verified" for backward compatibility; only block when explicitly false.
+  if (requiresVerification && session.emailVerified === false) {
+    const verifyUrl = new URL("/verify-email", request.url);
+    verifyUrl.searchParams.set("email", session.email || "");
+    return withCSP(NextResponse.redirect(verifyUrl));
+  }
 
-  return NextResponse.next();
+  // 🔒 SECURITY (issue #121): MFA enforcement for Finance/Admin roles
+  // 1. Finance/Admin users MUST have MFA enabled - redirect to /setup-mfa if not
+  // 2. Users with MFA enabled must verify on sensitive routes
+
+  const requiresMfaRole = mfaRequiredRoles.includes(session.role);
+  const isMfaExemptRoute = mfaExemptRoutes.some(route => pathname.startsWith(route));
+  const isMfaVerifyRoute = mfaVerifyRoutes.some(route => pathname.startsWith(route));
+
+  // Finance/Admin without MFA enabled must set it up first
+  if (requiresMfaRole && !session.mfaEnabled && !isMfaExemptRoute) {
+    const setupUrl = new URL("/setup-mfa", request.url);
+    return withCSP(NextResponse.redirect(setupUrl));
+  }
+
+  // Users with MFA enabled need to verify on sensitive routes (unless already verified this session)
+  if (session.mfaEnabled && isMfaVerifyRoute && !isMfaExemptRoute && !session.mfaVerified) {
+    const verifyUrl = new URL("/verify-mfa", request.url);
+    verifyUrl.searchParams.set("redirect", pathname);
+    return withCSP(NextResponse.redirect(verifyUrl));
+  }
+
+  return withCSP(NextResponse.next());
 }
 
 export const config = {
