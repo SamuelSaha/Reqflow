@@ -31,6 +31,7 @@ import { RequestDetailSkeleton } from "@/components/dashboard/LoadingSkeletons";
 import { getErrorMessage } from "@/lib/utils/error-messages";
 import { toast } from "sonner";
 import { ConvertToSubscriptionDialog } from "@/components/dashboard/ConvertToSubscriptionDialog";
+import { AiAnalysisPanel } from "@/components/dashboard/AiAnalysisPanel";
 import { useState } from "react";
 import { Repeat } from "lucide-react";
 
@@ -232,6 +233,8 @@ export default function RequestDetailPage({
 
         {/* Sidebar - approval chain */}
         <div className="space-y-6">
+          <AiAnalysisPanel requestId={id} />
+
           <Card>
             <CardHeader>
               <CardTitle className="text-body flex items-center gap-2">

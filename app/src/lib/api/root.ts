@@ -22,6 +22,7 @@ import { categoriesRouter } from "./routers/categories";
 import { subscriptionsRouter } from "./routers/subscriptions";
 import { invoicesRouter } from "./routers/invoices";
 import { notificationsRouter } from "./routers/notifications";
+import { aiRouter } from "./routers/ai";
 
 export const appRouter = router({
   requests: requestsRouter,
@@ -42,6 +43,7 @@ export const appRouter = router({
   subscriptions: subscriptionsRouter,
   invoices: invoicesRouter,
   notifications: notificationsRouter,
+  ai: aiRouter,
 });
 
 export type AppRouter = typeof appRouter;

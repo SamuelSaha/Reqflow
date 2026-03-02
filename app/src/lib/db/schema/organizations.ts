@@ -28,6 +28,10 @@ export const organizations = pgTable("organizations", {
   onboardingCompleted: boolean("onboarding_completed").notNull().default(false),
   onboardingStep: integer("onboarding_step").notNull().default(0), // 0-4
 
+  // AI - Bring Your Own API Key
+  // Encrypted with FIELD_ENCRYPTION_KEY (AES-256-GCM) — never returned to client
+  anthropicApiKey: text("anthropic_api_key"),
+
   // Timestamps
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
