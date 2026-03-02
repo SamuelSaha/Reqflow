@@ -34,6 +34,8 @@ import {
   X,
   Download,
   Trash2,
+  ArrowUp,
+  ArrowDown,
 } from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
 import { EmptyRequestsIllustration, NoResultsIllustration } from "@/components/ui/illustrations";
@@ -402,9 +404,14 @@ export default function RequestsPage() {
               variant="outline"
               size="sm"
               onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
-              className="h-8 px-2"
+              className="h-8 w-8 p-0"
+              title={sortOrder === "asc" ? "Ascending — click to sort descending" : "Descending — click to sort ascending"}
             >
-              {sortOrder === "asc" ? "↑" : "↓"}
+              {sortOrder === "asc" ? (
+                <ArrowUp className="h-4 w-4 text-blue-600" />
+              ) : (
+                <ArrowDown className="h-4 w-4 text-blue-600" />
+              )}
             </Button>
           </div>
         </div>

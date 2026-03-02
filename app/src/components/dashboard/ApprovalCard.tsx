@@ -333,7 +333,11 @@ export function ApprovalCard({
             disabled={deciding}
             className="flex-1 border-red-200 text-red-600 hover:bg-red-50"
           >
-            <XCircle className="h-4 w-4 mr-2" />
+            {deciding ? (
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+            ) : (
+              <XCircle className="h-4 w-4 mr-2" />
+            )}
             {showComments ? "Confirm Reject" : "Reject"}
           </Button>
           {!showComments && (

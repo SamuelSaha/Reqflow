@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { useDirtyFormGuard } from "@/hooks/useDirtyFormGuard";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
@@ -29,7 +30,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Checkbox } from "@/components/ui/checkbox";
 import { trpc } from "@/lib/api/react";
 import { Loader2, ChevronLeft } from "lucide-react";
-import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -59,7 +59,7 @@ export default function NewContractPage() {
   const vendors = trpc.vendors.list.useQuery({});
 
   const form = useForm<ContractFormValues>({
-    resolver: zodResolver(contractFormSchema) as any,
+    resolver: zodResolver(contractFormSchema),
     defaultValues: {
       title: "",
       contractNumber: "",
@@ -73,6 +73,8 @@ export default function NewContractPage() {
       paymentTerms: "",
     },
   });
+
+  const { confirmNavigation } = useDirtyFormGuard(form.formState.isDirty);
 
   const createContract = trpc.contracts.create.useMutation();
 
@@ -102,13 +104,13 @@ export default function NewContractPage() {
 
   return (
     <div className="max-w-3xl">
-      <Link
-        href="/dashboard/contracts"
+      <button
+        onClick={() => confirmNavigation(() => router.push("/dashboard/contracts"))}
         className="inline-flex items-center text-sm text-slate-600 hover:text-slate-900 mb-6"
       >
         <ChevronLeft className="mr-1 h-4 w-4" />
         Back to Contracts
-      </Link>
+      </button>
 
       <div className="mb-8">
         <h1 className="text-3xl font-bold tracking-tight text-slate-900">
@@ -143,7 +145,7 @@ export default function NewContractPage() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {vendors.data?.vendors.map((vendor: any) => (
+                        {vendors.data?.vendors.map((vendor) => (
                           <SelectItem key={vendor.id} value={vendor.id}>
                             {vendor.name}
                           </SelectItem>

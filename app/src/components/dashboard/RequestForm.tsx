@@ -33,7 +33,8 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { trpc } from "@/lib/api/react";
-import { Loader2, FlaskConical, Plus, X, FileText, Save, ChevronDown, ChevronRight, CheckCircle2 } from "lucide-react";
+import { Loader2, FlaskConical, Plus, X, FileText, Save, ChevronDown, ChevronRight, CheckCircle2, RotateCcw } from "lucide-react";
+import { useDirtyFormGuard } from "@/hooks/useDirtyFormGuard";
 import { addDays, format } from "date-fns";
 import { TemplatePickerDialog } from "./TemplatePickerDialog";
 import { SaveTemplateDialog } from "./SaveTemplateDialog";
@@ -60,6 +61,8 @@ const requestFormSchema = z.object({
 
 type RequestFormValues = z.infer<typeof requestFormSchema>;
 
+const DRAFT_KEY = "reqflow:request-draft";
+
 export function RequestForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [templatePickerOpen, setTemplatePickerOpen] = useState(false);
@@ -68,6 +71,7 @@ export function RequestForm() {
   const [basicsOpen, setBasicsOpen] = useState(true);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [trialOpen, setTrialOpen] = useState(false);
+  const [showDraftBanner, setShowDraftBanner] = useState(false);
   const router = useRouter();
 
   const form = useForm<RequestFormValues>({
@@ -87,6 +91,38 @@ export function RequestForm() {
       trialEstimatedAnnualCost: "",
     },
   });
+
+  // Dirty-state guard: warn on browser refresh/close when form has changes
+  useDirtyFormGuard(form.formState.isDirty);
+
+  // Auto-save: load draft on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(DRAFT_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved) as RequestFormValues;
+        if (parsed.title || parsed.amount) setShowDraftBanner(true);
+      }
+    } catch {
+      // Ignore corrupt localStorage entries
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Auto-save: write to localStorage on changes (debounced 800ms)
+  const watchedValues = form.watch();
+  useEffect(() => {
+    if (!form.formState.isDirty) return;
+    const timeout = setTimeout(() => {
+      try {
+        localStorage.setItem(DRAFT_KEY, JSON.stringify(watchedValues));
+      } catch {
+        // Ignore quota errors
+      }
+    }, 800);
+    return () => clearTimeout(timeout);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(watchedValues), form.formState.isDirty]);
 
   const createRequest = trpc.requests.create.useMutation();
   const submitRequest = trpc.requests.submit.useMutation();
@@ -167,6 +203,7 @@ export function RequestForm() {
         });
 
         // Navigate to trials dashboard
+        localStorage.removeItem(DRAFT_KEY);
         router.push("/dashboard/trials");
       } else {
         // Regular request mode
@@ -193,6 +230,7 @@ export function RequestForm() {
           }
         }
 
+        localStorage.removeItem(DRAFT_KEY);
         router.push(`/dashboard/requests/${request.id}`);
       }
     } catch (error: unknown) {
@@ -220,6 +258,42 @@ export function RequestForm() {
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          {/* Draft recovery banner */}
+          {showDraftBanner && (
+            <div className="flex items-center justify-between p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-800">
+              <span className="flex items-center gap-2">
+                <RotateCcw className="h-4 w-4" />
+                You have an unsaved draft. Restore it?
+              </span>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    try {
+                      const saved = localStorage.getItem(DRAFT_KEY);
+                      if (saved) form.reset(JSON.parse(saved));
+                    } catch { /* ignore */ }
+                    setShowDraftBanner(false);
+                  }}
+                  className="text-amber-900 font-medium underline underline-offset-2 hover:text-amber-700"
+                >
+                  Restore
+                </button>
+                <span className="text-amber-400">·</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    localStorage.removeItem(DRAFT_KEY);
+                    setShowDraftBanner(false);
+                  }}
+                  className="text-amber-700 hover:text-amber-900"
+                >
+                  Discard
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Template actions */}
           <div className="flex gap-2 justify-end">
             <Button

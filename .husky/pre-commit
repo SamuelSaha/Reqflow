@@ -3,8 +3,8 @@
 
 echo "🔍 Running pre-commit security checks..."
 
-# Run lint-staged for code quality
-npx lint-staged
+# Run lint-staged for code quality (--no-stash needed for lint-staged v15+ inside git hooks)
+npx lint-staged --no-stash
 
 # Optional: Run pre-commit framework if installed
 # Uncomment the following line if you want to use the Python pre-commit framework

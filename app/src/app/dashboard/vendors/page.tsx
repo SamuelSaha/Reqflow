@@ -24,19 +24,39 @@ import {
 } from "@/components/ui/select";
 import { Building2, Search, Plus } from "lucide-react";
 import { VendorTableSkeleton } from "@/components/dashboard/LoadingSkeletons";
+import { SortableColumnHeader } from "@/components/ui/sortable-column-header";
+import { DataPagination } from "@/components/ui/data-pagination";
+
+type VendorSortOption = "name" | "annualSpend" | "activeSubscriptions" | "status";
+
+const PAGE_SIZE = 20;
 
 export default function VendorsPage() {
   const router = useRouter();
   const [search, setSearch] = useState("");
   const [industry, setIndustry] = useState<string | undefined>();
   const [complianceTier, setComplianceTier] = useState<string | undefined>();
+  const [sortBy, setSortBy] = useState<VendorSortOption>("name");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [page, setPage] = useState(0);
+
+  const handleSort = (key: string) => {
+    const k = key as VendorSortOption;
+    if (sortBy === k) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    } else {
+      setSortBy(k);
+      setSortOrder("asc");
+    }
+    setPage(0);
+  };
 
   const { data, isLoading, error } = trpc.vendors.list.useQuery({
     search: search || undefined,
     industry,
     complianceTier,
-    limit: 50,
-    offset: 0,
+    limit: PAGE_SIZE,
+    offset: page * PAGE_SIZE,
   });
 
   const complianceTierColors = {
@@ -90,12 +110,12 @@ export default function VendorsPage() {
             <Input
               placeholder="Search vendors..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => { setSearch(e.target.value); setPage(0); }}
               className="pl-10"
             />
           </div>
           <div className="grid grid-cols-2 gap-3 md:flex md:gap-4">
-            <Select value={industry} onValueChange={setIndustry}>
+            <Select value={industry} onValueChange={(v) => { setIndustry(v); setPage(0); }}>
               <SelectTrigger className="md:w-[180px]">
                 <SelectValue placeholder="Industry" />
               </SelectTrigger>
@@ -107,7 +127,7 @@ export default function VendorsPage() {
                 <SelectItem value="hardware">Hardware</SelectItem>
               </SelectContent>
             </Select>
-            <Select value={complianceTier} onValueChange={setComplianceTier}>
+            <Select value={complianceTier} onValueChange={(v) => { setComplianceTier(v); setPage(0); }}>
               <SelectTrigger className="md:w-[180px]">
                 <SelectValue placeholder="Compliance" />
               </SelectTrigger>
@@ -132,16 +152,30 @@ export default function VendorsPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Vendor</TableHead>
+                <TableHead>
+                  <SortableColumnHeader label="Vendor" sortKey="name" currentSortBy={sortBy} currentSortOrder={sortOrder} onSort={handleSort} />
+                </TableHead>
                 <TableHead>Industry</TableHead>
                 <TableHead>Compliance</TableHead>
-                <TableHead>Subscriptions</TableHead>
-                <TableHead>Annual Spend</TableHead>
-                <TableHead>Status</TableHead>
+                <TableHead>
+                  <SortableColumnHeader label="Subscriptions" sortKey="activeSubscriptions" currentSortBy={sortBy} currentSortOrder={sortOrder} onSort={handleSort} />
+                </TableHead>
+                <TableHead>
+                  <SortableColumnHeader label="Annual Spend" sortKey="annualSpend" currentSortBy={sortBy} currentSortOrder={sortOrder} onSort={handleSort} />
+                </TableHead>
+                <TableHead>
+                  <SortableColumnHeader label="Status" sortKey="status" currentSortBy={sortBy} currentSortOrder={sortOrder} onSort={handleSort} />
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data.vendors.map((vendor) => (
+              {[...data.vendors].sort((a, b) => {
+                const dir = sortOrder === "asc" ? 1 : -1;
+                if (sortBy === "annualSpend") return (parseFloat(a.annualSpend) - parseFloat(b.annualSpend)) * dir;
+                if (sortBy === "activeSubscriptions") return (a.activeSubscriptions - b.activeSubscriptions) * dir;
+                if (sortBy === "status") return a.status.localeCompare(b.status) * dir;
+                return a.name.localeCompare(b.name) * dir;
+              }).map((vendor) => (
                 <TableRow
                   key={vendor.id}
                   className="cursor-pointer hover:bg-slate-50"
@@ -218,6 +252,12 @@ export default function VendorsPage() {
               ))}
             </TableBody>
           </Table>
+          <DataPagination
+            page={page}
+            total={data.total}
+            pageSize={PAGE_SIZE}
+            onPageChange={setPage}
+          />
           </div>
         ) : (
           <div className="p-12 text-center">
@@ -239,12 +279,6 @@ export default function VendorsPage() {
         )}
       </Card>
 
-      {/* Pagination */}
-      {data && data.total > 50 && (
-        <div className="text-center text-sm text-slate-600">
-          Showing {data.vendors.length} of {data.total} vendors
-        </div>
-      )}
     </div>
   );
 }
