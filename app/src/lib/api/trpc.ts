@@ -6,7 +6,7 @@ import { initTRPC, TRPCError } from "@trpc/server";
 import { ZodError } from "zod";
 import superjson from "superjson";
 import { db } from "../db";
-import { getCurrentUser, getCurrentTenantId } from "../auth/session";
+import { getCurrentUser } from "../auth/session";
 import type { User } from "../db/schema";
 import { logger } from "../monitoring/logger";
 import { captureError } from "../monitoring/sentry";
@@ -23,13 +23,14 @@ import { cookies } from "next/headers";
  * Contains user, tenant, and database access
  */
 export async function createTRPCContext() {
+  // Single DB query — tenantId is derived from the user record,
+  // not fetched separately (eliminates the prior duplicate DB hit).
   const user = await getCurrentUser();
-  const tenantId = await getCurrentTenantId();
 
   return {
     db,
     user,
-    tenantId,
+    tenantId: user?.tenantId ?? null,
   };
 }
 

@@ -11,17 +11,24 @@ export {
   createUser,
   hashPassword,
   refreshSession,
+  createRefreshToken,
+  verifyRefreshToken,
+  revokeRefreshToken,
+  revokeAllUserRefreshTokens,
+  cleanupExpiredRefreshTokens,
+  completeMFAVerification,
 } from "./simple-auth";
 
 import type { User } from "../db/schema";
 
 /**
- * Get current tenant ID
+ * Get current tenant ID — reads JWT claims directly, no DB round-trip.
+ * tenantId is embedded in the session token at login and never changes.
  */
 export async function getCurrentTenantId(): Promise<string | null> {
-  const { getCurrentUser } = await import("./simple-auth");
-  const user = await getCurrentUser();
-  return user?.tenantId || null;
+  const { getSession } = await import("./simple-auth");
+  const session = await getSession();
+  return session?.tenantId ?? null;
 }
 
 /**
