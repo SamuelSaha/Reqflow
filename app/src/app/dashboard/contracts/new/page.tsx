@@ -27,9 +27,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Checkbox } from "@/components/ui/checkbox";
 import { trpc } from "@/lib/api/react";
-import { Loader2, ChevronLeft } from "lucide-react";
+import { Loader2, ChevronLeft, ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -54,12 +56,15 @@ type ContractFormValues = z.infer<typeof contractFormSchema>;
 
 export default function NewContractPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [datesOpen, setDatesOpen] = useState(true);
+  const [financialOpen, setFinancialOpen] = useState(false);
   const router = useRouter();
 
   const vendors = trpc.vendors.list.useQuery({});
 
   const form = useForm<ContractFormValues>({
-    resolver: zodResolver(contractFormSchema),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: zodResolver(contractFormSchema) as any,
     defaultValues: {
       title: "",
       contractNumber: "",
@@ -239,13 +244,20 @@ export default function NewContractPage() {
           </Card>
 
           {/* Dates & Renewal */}
+          <Collapsible open={datesOpen} onOpenChange={setDatesOpen}>
           <Card>
-            <CardHeader>
-              <CardTitle>Dates & Renewal Terms</CardTitle>
-              <CardDescription>
-                When does this contract start, end, and renew?
-              </CardDescription>
-            </CardHeader>
+            <CollapsibleTrigger className="w-full text-left">
+              <CardHeader className="flex flex-row items-start justify-between space-y-0">
+                <div>
+                  <CardTitle>Dates & Renewal Terms</CardTitle>
+                  <CardDescription>
+                    When does this contract start, end, and renew?
+                  </CardDescription>
+                </div>
+                <ChevronDown className={cn("h-4 w-4 mt-1 text-slate-400 transition-transform duration-200", datesOpen && "rotate-180")} />
+              </CardHeader>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
             <CardContent className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2">
                 <FormField
@@ -364,16 +376,26 @@ export default function NewContractPage() {
                 )}
               />
             </CardContent>
+            </CollapsibleContent>
           </Card>
+          </Collapsible>
 
           {/* Financial */}
+          <Collapsible open={financialOpen} onOpenChange={setFinancialOpen}>
           <Card>
-            <CardHeader>
-              <CardTitle>Financial Terms</CardTitle>
-              <CardDescription>
-                Contract value and payment details
-              </CardDescription>
-            </CardHeader>
+            <CollapsibleTrigger className="w-full text-left">
+              <CardHeader className="flex flex-row items-start justify-between space-y-0">
+                <div>
+                  <CardTitle>Financial Terms</CardTitle>
+                  <CardDescription>
+                    Contract value and payment details
+                    {!financialOpen && <span className="ml-2 text-slate-400">(optional)</span>}
+                  </CardDescription>
+                </div>
+                <ChevronDown className={cn("h-4 w-4 mt-1 text-slate-400 transition-transform duration-200", financialOpen && "rotate-180")} />
+              </CardHeader>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
             <CardContent className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2">
                 <FormField
@@ -435,7 +457,9 @@ export default function NewContractPage() {
                 )}
               />
             </CardContent>
+            </CollapsibleContent>
           </Card>
+          </Collapsible>
 
           {/* Submit */}
           <div className="flex gap-3">

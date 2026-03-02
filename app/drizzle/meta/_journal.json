@@ -22,6 +22,27 @@
       "when": 1772128900000,
       "tag": "0002_request_subscription_conversion",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1772685000000,
+      "tag": "0003_refresh_tokens_security_issue_126",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1740895200000,
+      "tag": "0004_mfa_fields_issue_121",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1740898800000,
+      "tag": "0005_organizations_indexes",
+      "breakpoints": true
     }
   ]
 }

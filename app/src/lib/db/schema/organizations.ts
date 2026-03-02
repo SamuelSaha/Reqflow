@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, uuid, boolean, integer } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, uuid, boolean, integer, index } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 
@@ -31,7 +31,12 @@ export const organizations = pgTable("organizations", {
   // Timestamps
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
-});
+},
+(table) => [
+  // Index for email-domain auto-join lookup on signup
+  index("organizations_domain_idx").on(table.domain),
+  index("organizations_plan_idx").on(table.plan),
+]);
 
 // Zod schemas for validation
 export const insertOrganizationSchema = createInsertSchema(organizations);
