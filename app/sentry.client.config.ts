@@ -1,25 +1,30 @@
 import * as Sentry from "@sentry/nextjs";
-import { env } from "@/lib/env";
 
-if (env.SENTRY_DSN) {
+// Use process.env directly — @/lib/env throws when server-side vars are
+// accessed from the client bundle. SENTRY_DSN is undefined on the client
+// (not a NEXT_PUBLIC_ var), so Sentry init is safely skipped.
+if (process.env.SENTRY_DSN) {
   Sentry.init({
-    dsn: env.SENTRY_DSN,
-    environment: env.NODE_ENV,
+    dsn: process.env.SENTRY_DSN,
+    environment: process.env.NODE_ENV,
 
     // Tracing
-    tracesSampleRate: env.NODE_ENV === "production" ? 0.1 : 1.0,
+    tracesSampleRate: process.env.NODE_ENV === "production" ? 0.1 : 1.0,
 
     integrations: [
       Sentry.browserTracingIntegration(),
-      Sentry.replayIntegration({
-        maskAllText: true,
-        blockAllMedia: true,
-      }),
+      // 🔒 SECURITY (issue #115): Session replay disabled for CSP compliance
+      // The replay integration uses eval/new Function which requires unsafe-eval
+      // Re-enable if needed by accepting the eval risk or using Sentry Loader Script
+      // Sentry.replayIntegration({
+      //   maskAllText: true,
+      //   blockAllMedia: true,
+      // }),
     ],
 
-    // Session Replay
-    replaysSessionSampleRate: 0.1, // 10% of sessions
-    replaysOnErrorSampleRate: 1.0, // 100% of sessions with errors
+    // 🔒 SECURITY (issue #115): Session replay disabled for CSP compliance
+    // replaysSessionSampleRate: 0.1,
+    // replaysOnErrorSampleRate: 1.0,
 
     // Don't report errors from browser extensions
     ignoreErrors: [
