@@ -2,7 +2,7 @@
 
 **Last Updated:** 2026-03-02
 **Status:** Strategic Framework (Currently Free, Future Monetization)
-**Market:** Procurement workflow SaaS for small-mid size teams (5-50 people)
+**Market:** Procurement workflow SaaS for small-mid size businesses (5-50 people)
 
 ---
 
@@ -24,6 +24,8 @@ Req flow's pricing strategy is built on **value-based pricing** anchored to **pr
 **Target:** 1-5 users, <$50K annual spend managed
 **Price:** $0/month forever
 
+**Tagline:** "Perfect for getting started"
+
 **Core Features:**
 - ✅ Unlimited requests & approvals
 - ✅ Basic budget tracking
@@ -42,13 +44,14 @@ Req flow's pricing strategy is built on **value-based pricing** anchored to **pr
 - Needs Slack integration → Upgrade to Starter
 - Wants vendor management → Upgrade to Business
 
-**Rationale:** Captures SMBs, enables viral adoption, creates product stickiness before monetization. Free tier drives top-of-funnel volume and product-market fit validation.
+**Rationale:** Captures small businesses, enables adoption, creates product stickiness before monetization. Free tier drives top-of-funnel volume and product-market fit validation.
 
 ---
 
 ### 🚀 **Starter** (SMB / Self-Service)
 **Target:** 5-15 users, $50K-$500K annual spend managed
 **Price:** **$29/user/month** (billed annually) or **$35/user/month** (monthly)
+**Tagline:** "For growing operations"
 
 **Everything in Free, plus:**
 - ✅ Slack + Microsoft Teams integration
@@ -86,6 +89,7 @@ Req flow's pricing strategy is built on **value-based pricing** anchored to **pr
 ### 💼 **Business** (Mid-Market / Sales-Assisted)
 **Target:** 15-50 users, $500K-$5M annual spend managed
 **Price:** **$49/user/month** (billed annually) or **$59/user/month** (monthly)
+**Tagline:** "For scaling operations"
 
 **Everything in Starter, plus:**
 - ✅ QuickBooks + Xero integration

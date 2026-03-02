@@ -58,7 +58,7 @@ const tiers: PricingTier[] = [
     name: "Free",
     price: "$0",
     billing: "forever",
-    tagline: "Perfect for small teams getting started",
+    tagline: "Perfect for getting started",
     features: [
       "Unlimited requests & approvals",
       "Basic budget tracking",
@@ -74,7 +74,7 @@ const tiers: PricingTier[] = [
     price: "$29",
     priceMonthly: "$35",
     billing: "/user/month",
-    tagline: "For growing teams",
+    tagline: "For growing operations",
     badge: "14-Day Free Trial",
     features: [
       "Everything in Free, plus:",
@@ -94,7 +94,7 @@ const tiers: PricingTier[] = [
     price: "$49",
     priceMonthly: "$59",
     billing: "/user/month",
-    tagline: "For teams ready to scale",
+    tagline: "For scaling operations",
     badge: "Most Popular",
     popular: true,
     features: [
@@ -169,13 +169,13 @@ export function PricingTable() {
           {/* Header */}
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-semibold text-slate-900 mb-4">
-              Transparent pricing that scales with your team
+              Transparent pricing that scales with you
             </h2>
             <p className="text-lg text-slate-600 max-w-3xl mx-auto mb-2">
               Start free, upgrade as you grow. No hidden fees.
             </p>
             <p className="text-sm text-slate-500">
-              Trusted by 500+ teams to manage $100M+ in procurement spend
+              Trusted by 500+ businesses to manage $100M+ in procurement spend
             </p>
           </div>
 
