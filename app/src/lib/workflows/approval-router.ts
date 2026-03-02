@@ -478,6 +478,31 @@ export async function executeApprovalRouting(
         message: `You have been assigned to approve "${request.title}" (${request.requestNumber}) - ${request.currency} ${parseFloat(request.amount).toLocaleString()}.`,
         actionUrl: `/dashboard/approvals`,
       });
+
+      // Send Slack notification (if configured)
+      const approver = await db.query.users.findFirst({
+        where: eq(users.id, step.approverId),
+      });
+
+      if (approver?.email) {
+        const { sendApprovalNotification } = await import("../slack/client");
+        const { env } = await import("../env");
+
+        const riskFlags = [
+          ...(result.flags.securityReview ? ["Security review recommended"] : []),
+          ...(result.flags.legalReview ? ["Legal review recommended"] : []),
+          ...(result.flags.budgetEscalation ? ["Budget near limit - escalated"] : []),
+          ...(result.flags.budgetOverrun ? ["WARNING: Would exceed budget"] : []),
+          ...result.warnings,
+        ];
+
+        await sendApprovalNotification({
+          request,
+          approverName: approver.email, // Used for email lookup
+          riskFlags,
+          actionUrl: `${env.NEXT_PUBLIC_APP_URL}/dashboard/requests/${request.id}`,
+        });
+      }
     }
   }
 }
