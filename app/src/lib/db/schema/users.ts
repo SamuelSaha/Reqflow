@@ -43,6 +43,8 @@ export const users = pgTable(
     // MFA (Better Auth handles this, but we track the requirement)
     mfaEnabled: boolean("mfa_enabled").notNull().default(false),
     mfaRequired: boolean("mfa_required").notNull().default(false), // Finance + Admin roles
+    mfaSecret: text("mfa_secret"), // TOTP secret (base32 encoded)
+    mfaBackupCodes: jsonb("mfa_backup_codes").$type<string[]>().default([]), // One-time backup codes
 
     // Notification preferences (per notification type: email + in-app, Slack + in-app)
     notificationPreferences: jsonb("notification_preferences").$type<{

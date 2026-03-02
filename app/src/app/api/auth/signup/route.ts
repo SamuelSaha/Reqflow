@@ -19,7 +19,7 @@ import { setCSRFToken } from "@/lib/security/csrf";
 
 // Use __Host- prefix for enhanced security (requires secure=true, path="/")
 const COOKIE_NAME = "__Host-reqflow_session";
-const COOKIE_MAX_AGE = 60 * 60 * 24 * 7; // 7 days
+const COOKIE_MAX_AGE = 60 * 60 * 24; // 24 hours (matches JWT expiration)
 
 /**
  * Password policy enforcement (NIST, OWASP compliant)

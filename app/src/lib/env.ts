@@ -16,6 +16,12 @@ export const env = createEnv({
     AUTH_SECRET: z.string().min(32),
     AUTH_URL: z.string().url(),
 
+    // 🔒 SECURITY (issue #116): JWT RS256 asymmetric keys
+    // Private key for signing (base64-encoded PEM)
+    JWT_PRIVATE_KEY: z.string().optional(),
+    // Public key for verification (base64-encoded PEM)
+    JWT_PUBLIC_KEY: z.string().optional(),
+
     // Cloudflare R2
     R2_ACCOUNT_ID: z.string().optional(),
     R2_ACCESS_KEY_ID: z.string().optional(),
@@ -30,12 +36,18 @@ export const env = createEnv({
     ONESIGNAL_APP_ID: z.string().optional(),
     ONESIGNAL_API_KEY: z.string().optional(),
 
-    // Slack
+    // Slack (full OAuth integration - optional)
     SLACK_CLIENT_ID: z.string().optional(),
     SLACK_CLIENT_SECRET: z.string().optional(),
     SLACK_SIGNING_SECRET: z.string().optional(),
     SLACK_BOT_TOKEN: z.string().optional(),
     SLACK_WORKSPACE_ID: z.string().optional(),
+
+    // Notifications (simplified webhooks)
+    SLACK_WEBHOOK_URL: z.string().url().optional(),
+    DISCORD_WEBHOOK_URL: z.string().url().optional(),
+    TELEGRAM_BOT_TOKEN: z.string().optional(),
+    TELEGRAM_CHAT_ID: z.string().optional(),
 
     // QuickBooks
     QUICKBOOKS_CLIENT_ID: z.string().optional(),
@@ -91,6 +103,8 @@ export const env = createEnv({
     REDIS_URL: process.env.REDIS_URL,
     AUTH_SECRET: process.env.AUTH_SECRET,
     AUTH_URL: process.env.AUTH_URL,
+    JWT_PRIVATE_KEY: process.env.JWT_PRIVATE_KEY,
+    JWT_PUBLIC_KEY: process.env.JWT_PUBLIC_KEY,
     R2_ACCOUNT_ID: process.env.R2_ACCOUNT_ID,
     R2_ACCESS_KEY_ID: process.env.R2_ACCESS_KEY_ID,
     R2_SECRET_ACCESS_KEY: process.env.R2_SECRET_ACCESS_KEY,
@@ -104,6 +118,10 @@ export const env = createEnv({
     SLACK_SIGNING_SECRET: process.env.SLACK_SIGNING_SECRET,
     SLACK_BOT_TOKEN: process.env.SLACK_BOT_TOKEN,
     SLACK_WORKSPACE_ID: process.env.SLACK_WORKSPACE_ID,
+    SLACK_WEBHOOK_URL: process.env.SLACK_WEBHOOK_URL,
+    DISCORD_WEBHOOK_URL: process.env.DISCORD_WEBHOOK_URL,
+    TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,
+    TELEGRAM_CHAT_ID: process.env.TELEGRAM_CHAT_ID,
     QUICKBOOKS_CLIENT_ID: process.env.QUICKBOOKS_CLIENT_ID,
     QUICKBOOKS_CLIENT_SECRET: process.env.QUICKBOOKS_CLIENT_SECRET,
     QUICKBOOKS_REDIRECT_URI: process.env.QUICKBOOKS_REDIRECT_URI,

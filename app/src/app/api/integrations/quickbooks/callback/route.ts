@@ -11,45 +11,33 @@ import { captureError } from "@/lib/monitoring/sentry";
 import { db } from "@/lib/db";
 import { accountingIntegrations } from "@/lib/db/schema";
 import { eq, and } from "drizzle-orm";
-import { getSession } from "@/lib/auth/session";
-import { validateOAuthStateWithContext } from "@/lib/security/oauth-state";
+import { validateOAuthStateAndExtractContext } from "@/lib/security/oauth-state";
 
 export async function GET(request: Request) {
   try {
-    const session = await getSession();
-    if (!session) {
-      return NextResponse.redirect(`${env.NEXT_PUBLIC_APP_URL}/login`);
-    }
-
     const { searchParams } = new URL(request.url);
     const code = searchParams.get("code");
     const state = searchParams.get("state");
     const realmId = searchParams.get("realmId"); // QuickBooks company ID
     const error = searchParams.get("error");
 
-    // Handle user denial
-    if (error === "access_denied") {
-      logger.warn("QuickBooks OAuth denied by user", { userId: session.userId });
+    // 🔒 SECURITY (issue #125): Validate OAuth state to extract user context
+    // This allows SameSite=strict cookies by authenticating via state token
+    // instead of relying on session cookie which won't be sent cross-site
+    const stateContext = await validateOAuthStateAndExtractContext("quickbooks", state);
+    if (!stateContext) {
       return NextResponse.redirect(
-        `${env.NEXT_PUBLIC_APP_URL}/dashboard/settings/integrations?error=access_denied`
+        `${env.NEXT_PUBLIC_APP_URL}/dashboard/settings/integrations?error=invalid_state`
       );
     }
 
-    // 🔒 SECURITY FIX: Validate OAuth state parameter with user+tenant binding to prevent CSRF/state hijacking
-    const stateContext = await validateOAuthStateWithContext(
-      "quickbooks",
-      state,
-      session.userId,
-      session.tenantId
-    );
-    if (!stateContext) {
-      logger.warn("QuickBooks OAuth state validation failed", {
-        userId: session.userId,
-        tenantId: session.tenantId,
-        hasState: !!state,
-      });
+    const { userId, tenantId } = stateContext;
+
+    // Handle user denial
+    if (error === "access_denied") {
+      logger.warn("QuickBooks OAuth denied by user", { userId });
       return NextResponse.redirect(
-        `${env.NEXT_PUBLIC_APP_URL}/dashboard/settings/integrations?error=invalid_state`
+        `${env.NEXT_PUBLIC_APP_URL}/dashboard/settings/integrations?error=access_denied`
       );
     }
 
@@ -98,7 +86,7 @@ export async function GET(request: Request) {
     // Check for existing integration
     const existing = await db.query.accountingIntegrations.findFirst({
       where: and(
-        eq(accountingIntegrations.tenantId, session.tenantId),
+        eq(accountingIntegrations.tenantId, tenantId),
         eq(accountingIntegrations.provider, "quickbooks")
       ),
     });
@@ -122,14 +110,14 @@ export async function GET(request: Request) {
         .where(eq(accountingIntegrations.id, existing.id));
 
       logger.info("QuickBooks integration updated", {
-        tenantId: session.tenantId,
+        tenantId,
         realmId,
         companyName,
       });
     } else {
       // Create new integration
       await db.insert(accountingIntegrations).values({
-        tenantId: session.tenantId,
+        tenantId,
         provider: "quickbooks",
         accessToken: token.access_token,
         refreshToken: token.refresh_token,
@@ -138,12 +126,12 @@ export async function GET(request: Request) {
         providerAccountName: companyName,
         isActive: true,
         autoSync: true,
-        connectedBy: session.userId,
+        connectedBy: userId,
         connectedAt: new Date(),
       });
 
       logger.info("QuickBooks integration created", {
-        tenantId: session.tenantId,
+        tenantId,
         realmId,
         companyName,
       });

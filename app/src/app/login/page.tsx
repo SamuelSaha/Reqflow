@@ -39,6 +39,12 @@ function LoginForm() {
         return;
       }
 
+      // Check if MFA is required
+      if (data.mfaRequired) {
+        router.push("/verify-mfa");
+        return;
+      }
+
       // Success - redirect
       router.push(redirectTo);
       router.refresh();

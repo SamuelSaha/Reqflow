@@ -69,9 +69,9 @@ export async function setCSRFToken(): Promise<string> {
 
   cookieStore.set("csrf_token", token, {
     httpOnly: false, // Accessible to JavaScript for including in requests
-    secure: env.NODE_ENV === "production",
+    secure: true, // 🔒 SECURITY: Always HTTPS (issue #123) - use mkcert for local dev
     sameSite: "strict",
-    maxAge: 60 * 60 * 24 * 7, // 7 days
+    maxAge: 60 * 60 * 24, // 24 hours (tied to session lifetime)
     path: "/",
   });
 

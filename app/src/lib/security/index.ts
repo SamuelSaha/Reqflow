@@ -36,6 +36,7 @@ export {
 export {
   generateOAuthState,
   validateOAuthState,
+  validateOAuthStateAndExtractContext,
 } from "./oauth-state";
 
 // Row-Level Security

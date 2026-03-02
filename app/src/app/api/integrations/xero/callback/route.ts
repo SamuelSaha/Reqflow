@@ -11,44 +11,32 @@ import { captureError } from "@/lib/monitoring/sentry";
 import { db } from "@/lib/db";
 import { accountingIntegrations } from "@/lib/db/schema";
 import { eq, and } from "drizzle-orm";
-import { getSession } from "@/lib/auth/session";
-import { validateOAuthStateWithContext } from "@/lib/security/oauth-state";
+import { validateOAuthStateAndExtractContext } from "@/lib/security/oauth-state";
 
 export async function GET(request: Request) {
   try {
-    const session = await getSession();
-    if (!session) {
-      return NextResponse.redirect(`${env.NEXT_PUBLIC_APP_URL}/login`);
-    }
-
     const { searchParams } = new URL(request.url);
     const code = searchParams.get("code");
     const state = searchParams.get("state");
     const error = searchParams.get("error");
 
-    // Handle user denial
-    if (error === "access_denied") {
-      logger.warn("Xero OAuth denied by user", { userId: session.userId });
+    // 🔒 SECURITY (issue #125): Validate OAuth state to extract user context
+    // This allows SameSite=strict cookies by authenticating via state token
+    // instead of relying on session cookie which won't be sent cross-site
+    const stateContext = await validateOAuthStateAndExtractContext("xero", state);
+    if (!stateContext) {
       return NextResponse.redirect(
-        `${env.NEXT_PUBLIC_APP_URL}/dashboard/settings/integrations?error=access_denied`
+        `${env.NEXT_PUBLIC_APP_URL}/dashboard/settings/integrations?error=invalid_state`
       );
     }
 
-    // 🔒 SECURITY FIX: Validate OAuth state parameter with user+tenant binding to prevent CSRF/state hijacking
-    const stateContext = await validateOAuthStateWithContext(
-      "xero",
-      state,
-      session.userId,
-      session.tenantId
-    );
-    if (!stateContext) {
-      logger.warn("Xero OAuth state validation failed", {
-        userId: session.userId,
-        tenantId: session.tenantId,
-        hasState: !!state,
-      });
+    const { userId, tenantId } = stateContext;
+
+    // Handle user denial
+    if (error === "access_denied") {
+      logger.warn("Xero OAuth denied by user", { userId });
       return NextResponse.redirect(
-        `${env.NEXT_PUBLIC_APP_URL}/dashboard/settings/integrations?error=invalid_state`
+        `${env.NEXT_PUBLIC_APP_URL}/dashboard/settings/integrations?error=access_denied`
       );
     }
 
@@ -89,7 +77,7 @@ export async function GET(request: Request) {
     // Check for existing integration
     const existing = await db.query.accountingIntegrations.findFirst({
       where: and(
-        eq(accountingIntegrations.tenantId, session.tenantId),
+        eq(accountingIntegrations.tenantId, tenantId),
         eq(accountingIntegrations.provider, "xero")
       ),
     });
@@ -111,14 +99,14 @@ export async function GET(request: Request) {
         .where(eq(accountingIntegrations.id, existing.id));
 
       logger.info("Xero integration updated", {
-        tenantId: session.tenantId,
+        tenantId,
         xeroTenantId: xeroTenant.tenantId,
         xeroTenantName: xeroTenant.tenantName,
       });
     } else {
       // Create new integration
       await db.insert(accountingIntegrations).values({
-        tenantId: session.tenantId,
+        tenantId,
         provider: "xero",
         accessToken: tokenSet.access_token,
         refreshToken: tokenSet.refresh_token,
@@ -127,12 +115,12 @@ export async function GET(request: Request) {
         providerAccountName: xeroTenant.tenantName || "Xero Organization",
         isActive: true,
         autoSync: true,
-        connectedBy: session.userId,
+        connectedBy: userId,
         connectedAt: new Date(),
       });
 
       logger.info("Xero integration created", {
-        tenantId: session.tenantId,
+        tenantId,
         xeroTenantId: xeroTenant.tenantId,
         xeroTenantName: xeroTenant.tenantName,
       });

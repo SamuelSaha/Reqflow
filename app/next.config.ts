@@ -120,23 +120,20 @@ const nextConfig: NextConfig = {
             key: "Referrer-Policy",
             value: "strict-origin-when-cross-origin", // 🔒 SECURITY: Never send referrer on HTTPS→HTTP (issue #128)
           },
-          {
-            key: "Content-Security-Policy",
-            value: [
-              "default-src 'self'",
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.sentry.io https://cdn.jsdelivr.net",
-              "style-src 'self' 'unsafe-inline'",
-              "img-src 'self' data: https: blob:",
-              "font-src 'self' data:",
-              "connect-src 'self' https://*.sentry.io https://*.axiom.co https://*.cloudflare.com",
-              "frame-ancestors 'self'",
-              "base-uri 'self'",
-              "form-action 'self'",
-            ].join("; "),
-          },
+          // 🔒 SECURITY (issue #115): CSP moved to middleware for dynamic nonces
+          // See src/middleware.ts and src/lib/security/csp.ts
           {
             key: "Permissions-Policy",
-            value: "camera=(), microphone=(), geolocation=(), interest-cohort=()",
+            value: [
+              "camera=()",
+              "microphone=()",
+              "geolocation=()",
+              "interest-cohort=()",
+              "payment=()", // 🔒 SECURITY: Block payment APIs
+              "usb=()", // 🔒 SECURITY: Block USB access
+              "serial=()", // 🔒 SECURITY: Block serial port
+              "bluetooth=()", // 🔒 SECURITY: Block Bluetooth
+            ].join(", "),
           },
         ],
       },

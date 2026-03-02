@@ -21,6 +21,7 @@ export * from "./approval-workflows";
 // Audit & Security
 export * from "./audit-logs";
 export * from "./verification-tokens";
+export * from "./refresh-tokens";
 export * from "./oauth-states";
 
 // Integrations
