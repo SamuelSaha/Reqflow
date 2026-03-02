@@ -37,6 +37,8 @@ export const invites = pgTable(
     index("invites_tenant_idx").on(table.tenantId),
     index("invites_token_idx").on(table.token),
     index("invites_email_idx").on(table.email),
+    // Composite: duplicate invite check (tenant + email + status)
+    index("invites_tenant_email_status_idx").on(table.tenantId, table.email, table.status),
   ]
 );
 

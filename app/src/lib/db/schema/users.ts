@@ -64,6 +64,8 @@ export const users = pgTable(
     index("users_tenant_idx").on(table.tenantId),
     index("users_email_idx").on(table.email),
     index("users_better_auth_idx").on(table.betterAuthId),
+    // Composite: team listing filtered by role and active status
+    index("users_tenant_role_active_idx").on(table.tenantId, table.role, table.isActive),
   ]
 );
 

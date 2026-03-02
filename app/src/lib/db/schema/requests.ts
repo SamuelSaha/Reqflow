@@ -101,6 +101,10 @@ export const requests = pgTable(
     index("requests_status_idx").on(table.status),
     index("requests_department_idx").on(table.departmentId),
     index("requests_created_idx").on(table.createdAt),
+    // Composite: list/filter requests by status + sort by date
+    index("requests_tenant_status_created_idx").on(table.tenantId, table.status, table.createdAt),
+    // Composite: "my requests" filtered by status
+    index("requests_tenant_requester_status_idx").on(table.tenantId, table.requesterId, table.status),
   ]
 );
 

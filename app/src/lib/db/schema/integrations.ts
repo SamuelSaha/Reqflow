@@ -3,7 +3,7 @@
  * Stores OAuth tokens and configuration for QuickBooks and Xero
  */
 
-import { pgTable, uuid, text, timestamp, boolean, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, uuid, text, timestamp, boolean, jsonb, index } from "drizzle-orm/pg-core";
 import { organizations } from "./organizations";
 
 /**
@@ -52,7 +52,10 @@ export const accountingIntegrations = pgTable("accounting_integrations", {
 
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
-});
+}, (table) => [
+  // Composite: lookup integration by tenant + provider (most common query)
+  index("acct_integrations_tenant_provider_idx").on(table.tenantId, table.provider),
+]);
 
 /**
  * Accounting sync logs

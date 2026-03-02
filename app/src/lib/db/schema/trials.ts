@@ -60,6 +60,8 @@ export const trials = pgTable("trials", {
   index("trials_status_idx").on(table.status),
   index("trials_end_date_idx").on(table.endDate),
   index("trials_initiated_by_idx").on(table.initiatedById),
+  // Composite: list trials by status + sort by end date
+  index("trials_tenant_status_end_idx").on(table.tenantId, table.status, table.endDate),
 ]);
 
 export const trialRelations = relations(trials, ({ one }) => ({

@@ -3,7 +3,7 @@
  * Customizable spend categories with GL mapping for accounting integration
  */
 
-import { pgTable, text, timestamp, uuid, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, uuid, boolean, index } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { requests } from "./requests";
 
@@ -28,7 +28,12 @@ export const categories = pgTable("categories", {
   isSystem: boolean("is_system").notNull().default(false), // System categories can't be deleted
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
-});
+}, (table) => [
+  // Composite: active categories for a tenant (most common query)
+  index("categories_tenant_active_idx").on(table.tenantId, table.isActive),
+  // Composite: lookup category by slug within tenant
+  index("categories_tenant_slug_idx").on(table.tenantId, table.slug),
+]);
 
 // Relations
 export const categoriesRelations = relations(categories, ({ many }) => ({

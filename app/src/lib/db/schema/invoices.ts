@@ -78,6 +78,10 @@ export const invoices = pgTable("invoices", {
   index("invoices_status_idx").on(table.status),
   index("invoices_match_idx").on(table.matchStatus),
   index("invoices_due_idx").on(table.dueDate),
+  // Composite: list invoices by status + sort by date
+  index("invoices_tenant_status_created_idx").on(table.tenantId, table.status, table.createdAt),
+  // Composite: vendor invoices filtered by status
+  index("invoices_tenant_vendor_status_idx").on(table.tenantId, table.vendorId, table.status),
 ]);
 
 export const invoiceRelations = relations(invoices, ({ one }) => ({

@@ -60,6 +60,10 @@ export const contracts = pgTable("contracts", {
   index("contracts_status_idx").on(table.status),
   index("contracts_renewal_idx").on(table.renewalDate),
   index("contracts_notice_idx").on(table.noticeDeadline),
+  // Composite: upcoming renewals by status + notice deadline
+  index("contracts_tenant_status_notice_idx").on(table.tenantId, table.status, table.noticeDeadline),
+  // Composite: vendor's contracts within a tenant
+  index("contracts_tenant_vendor_idx").on(table.tenantId, table.vendorId),
 ]);
 
 export const contractRelations = relations(contracts, ({ one }) => ({

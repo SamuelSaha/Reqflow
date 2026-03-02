@@ -50,6 +50,8 @@ export const notifications = pgTable(
     index("notifications_created_idx").on(table.createdAt),
     // Composite index for unread notifications by user
     index("notifications_user_unread_idx").on(table.userId, table.read),
+    // Composite: notification inbox — tenant-scoped, per-user, filter by read, sort by date
+    index("notifications_tenant_user_read_created_idx").on(table.tenantId, table.userId, table.read, table.createdAt),
   ]
 );
 

@@ -53,6 +53,8 @@ export const subscriptions = pgTable("subscriptions", {
   index("subscriptions_department_idx").on(table.departmentId),
   index("subscriptions_status_idx").on(table.status),
   index("subscriptions_category_idx").on(table.category),
+  // Composite: list subscriptions by status + sort by date
+  index("subscriptions_tenant_status_created_idx").on(table.tenantId, table.status, table.createdAt),
 ]);
 
 export const subscriptionRelations = relations(subscriptions, ({ one }) => ({

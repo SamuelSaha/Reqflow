@@ -60,6 +60,8 @@ export const renewalEvents = pgTable("renewal_events", {
   index("renewal_events_status_idx").on(table.status),
   index("renewal_events_renewal_date_idx").on(table.renewalDate),
   index("renewal_events_notice_deadline_idx").on(table.noticeDeadline),
+  // Composite: upcoming renewals by status + notice deadline
+  index("renewal_events_tenant_status_notice_idx").on(table.tenantId, table.status, table.noticeDeadline),
 ]);
 
 export const renewalEventRelations = relations(renewalEvents, ({ one }) => ({

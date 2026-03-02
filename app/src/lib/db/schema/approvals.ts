@@ -63,6 +63,10 @@ export const approvals = pgTable(
     index("approvals_request_idx").on(table.requestId),
     index("approvals_approver_idx").on(table.approverId),
     index("approvals_decision_idx").on(table.decision),
+    // Composite: approval inbox (pending approvals for a user)
+    index("approvals_tenant_approver_decision_idx").on(table.tenantId, table.approverId, table.decision),
+    // Composite: all approvals for a request within a tenant
+    index("approvals_request_tenant_idx").on(table.requestId, table.tenantId),
   ]
 );
 

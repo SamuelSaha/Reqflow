@@ -53,6 +53,8 @@ export const auditLogs = pgTable(
     index("audit_logs_entity_idx").on(table.entityType, table.entityId),
     index("audit_logs_action_idx").on(table.action),
     index("audit_logs_created_idx").on(table.createdAt),
+    // Composite: activity timeline — sort by date within tenant
+    index("audit_logs_tenant_created_idx").on(table.tenantId, table.createdAt),
   ]
 );
 
