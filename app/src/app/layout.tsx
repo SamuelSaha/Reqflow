@@ -45,20 +45,11 @@ export const metadata: Metadata = {
     siteName: "Reqflow",
     title: "Reqflow - Procurement Software for Small Teams",
     description: "Track SaaS spend, catch duplicates, never miss renewals. Built for teams of 5-50 people.",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Reqflow - Procurement Software",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Reqflow - Procurement Software for Small Teams",
     description: "Track SaaS spend, catch duplicates, never miss renewals. Built for teams of 5-50 people.",
-    images: ["/og-image.jpg"],
   },
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
