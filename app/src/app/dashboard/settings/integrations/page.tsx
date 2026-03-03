@@ -467,15 +467,9 @@ export default function IntegrationsPage() {
 
             {/* Documentation Link */}
             <div className="pt-4 border-t">
-              <a
-                href="https://github.com/yourusername/reqflow#mcp-server"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-violet-600 hover:text-violet-700 font-medium inline-flex items-center gap-1"
-              >
-                View full documentation
-                <ExternalLink className="h-3.5 w-3.5" />
-              </a>
+              <span className="text-sm text-slate-400 inline-flex items-center gap-1">
+                Full documentation coming soon
+              </span>
             </div>
           </CardContent>
         </Card>

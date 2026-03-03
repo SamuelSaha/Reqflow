@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { WorkflowBuilder } from "@/components/settings/WorkflowBuilder";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -9,14 +8,6 @@ import Link from "next/link";
 export const dynamic = "force-dynamic";
 
 export default function NewWorkflowPage() {
-  const router = useRouter();
-
-  function handleComplete(workflow: any) {
-    // This will be implemented in Sprint 4
-    console.log("Workflow created:", workflow);
-    router.push("/dashboard/settings/workflows");
-  }
-
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
@@ -35,7 +26,7 @@ export default function NewWorkflowPage() {
         </div>
       </div>
 
-      <WorkflowBuilder onComplete={handleComplete} />
+      <WorkflowBuilder />
     </div>
   );
 }

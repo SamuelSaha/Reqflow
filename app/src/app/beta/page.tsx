@@ -17,7 +17,6 @@ export default function BetaPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Beta application:", formData);
     setSubmitted(true);
   };
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -204,10 +205,12 @@ export default function SubscriptionsPage() {
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Button variant="outline" size="sm">
-                    <Edit3 className="h-3 w-3 mr-1" />
-                    Optimize
-                  </Button>
+                  <Link href={`/dashboard/subscriptions/${item.subscription.id}`}>
+                    <Button variant="outline" size="sm">
+                      <Edit3 className="h-3 w-3 mr-1" />
+                      Optimize
+                    </Button>
+                  </Link>
                 </div>
               </div>
             ))}
