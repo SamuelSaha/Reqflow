@@ -98,8 +98,8 @@ export function sanitizeJSON<T>(input: string): T {
  * Sanitize object by applying sanitizeString to all string values recursively
  * Useful for sanitizing form data or API payloads
  */
-export function sanitizeObject<T extends Record<string, any>>(obj: T): T {
-  const sanitized: any = {};
+export function sanitizeObject<T extends Record<string, unknown>>(obj: T): T {
+  const sanitized: Record<string, unknown> = {};
 
   for (const [key, value] of Object.entries(obj)) {
     if (typeof value === "string") {
@@ -113,7 +113,7 @@ export function sanitizeObject<T extends Record<string, any>>(obj: T): T {
           : item
       );
     } else if (typeof value === "object" && value !== null) {
-      sanitized[key] = sanitizeObject(value);
+      sanitized[key] = sanitizeObject(value as Record<string, unknown>);
     } else {
       sanitized[key] = value;
     }

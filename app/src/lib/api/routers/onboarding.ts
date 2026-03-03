@@ -16,6 +16,15 @@ import {
 import { eq, count as drizzleCount } from "drizzle-orm";
 import { refreshSession } from "@/lib/auth/session";
 import { env } from "@/lib/env";
+import type { Database } from "@/lib/db";
+
+/**
+ * PostgreSQL error with constraint violation details
+ */
+interface PostgresError extends Error {
+  code?: string;
+  constraint?: string;
+}
 
 /**
  * Generate cryptographically secure invite token
@@ -39,8 +48,7 @@ function generateSecureToken(): string {
  * Defense-in-depth: retries up to 3 times on collision
  */
 async function createInviteWithRetry(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  db: any,
+  db: Database,
   data: {
     tenantId: string;
     email: string;
@@ -51,8 +59,7 @@ async function createInviteWithRetry(
   },
   maxAttempts = 3
 ): Promise<string> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let lastError: any;
+  let lastError: PostgresError = new Error("Failed to create invite") as PostgresError;
 
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     const token = generateSecureToken();
@@ -63,12 +70,12 @@ async function createInviteWithRetry(
         token,
       });
       return token; // Success!
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      lastError = err;
+    } catch (err) {
+      const pgError = err as PostgresError;
+      lastError = pgError;
 
       // Check for unique constraint violation (PostgreSQL error code 23505)
-      if (err.code === "23505" && err.constraint?.includes("token")) {
+      if (pgError.code === "23505" && pgError.constraint?.includes("token")) {
         // Token collision - retry with new token
         continue;
       }

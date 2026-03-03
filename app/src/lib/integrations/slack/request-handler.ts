@@ -50,7 +50,7 @@ export async function createSlackRequest(
   input: RequestInput
 ): Promise<RequestResult> {
   // 🔒 SECURITY FIX: Sanitize all inputs from Slack to prevent XSS/injection
-  const sanitizedInput = sanitizeObject(input);
+  const sanitizedInput = sanitizeObject(input as unknown as Record<string, unknown>) as unknown as RequestInput;
 
   // Parse amount as currency to ensure it's a valid number
   try {
@@ -145,12 +145,25 @@ export async function createSlackRequest(
 }
 
 /**
+ * Slack Block Kit modal state structure
+ * Represents the values object from Slack modal submissions
+ */
+interface SlackModalValues {
+  title_block?: { title?: { value?: string } };
+  description_block?: { description?: { value?: string } };
+  category_block?: { category?: { selected_option?: { value?: string } } };
+  vendor_block?: { vendor_name?: { value?: string } };
+  amount_block?: { amount?: { value?: string } };
+  frequency_block?: { frequency?: { selected_option?: { value?: string } } };
+  urgency_block?: { urgency?: { selected_option?: { value?: string } } };
+}
+
+/**
  * Extract form values from Slack modal submission payload
  * @param values - Modal state values from Slack
  * @returns Request input data
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function extractModalValues(values: any): RequestInput {
+export function extractModalValues(values: SlackModalValues): RequestInput {
   return {
     title: values.title_block?.title?.value || "",
     description: values.description_block?.description?.value || undefined,

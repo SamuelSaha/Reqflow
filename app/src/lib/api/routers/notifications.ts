@@ -11,6 +11,7 @@ import { eq, and, desc, sql } from "drizzle-orm";
 import { EventEmitter } from "events";
 import { createAuditLog, AuditAction } from "../../monitoring/audit";
 import type { Notification } from "../../db/schema";
+import type { Database } from "../../db";
 
 // Event emitter for real-time notifications
 // This allows us to broadcast new notifications to subscribed clients
@@ -29,8 +30,7 @@ export function emitNotification(userId: string, notification: Notification) {
  * Used by other routers to create notifications
  */
 export async function createNotification(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  db: any,
+  db: Database,
   data: {
     tenantId: string;
     userId: string;
