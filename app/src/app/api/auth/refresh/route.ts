@@ -5,6 +5,7 @@ import { captureError } from "@/lib/monitoring/sentry";
 import { db } from "@/lib/db";
 import { organizations } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
+import { checkAuthRateLimit, getClientIp } from "@/lib/security/rate-limit";
 
 /**
  * Refresh access token using refresh token
@@ -13,9 +14,38 @@ import { eq } from "drizzle-orm";
  * - Revokes old refresh token
  * - Issues new access token (24h) + refresh token (30d)
  * - Updates cookies
+ * 🔒 SECURITY (issue #130): Rate limiting to prevent token abuse
  */
 export async function POST(req: NextRequest) {
   try {
+    // 🔒 SECURITY (issue #130): Rate limiting - prevent refresh token abuse
+    // 10 refresh attempts per 5 minutes per IP (reusing authRateLimiter with "refresh:" prefix)
+    const ip = getClientIp(req);
+    const rateLimitResult = await checkAuthRateLimit(`refresh:${ip}`, req);
+
+    if (!rateLimitResult.success) {
+      logger.warn("Token refresh rate limit exceeded", {
+        ip,
+        remaining: rateLimitResult.remaining,
+        reset: new Date(rateLimitResult.reset).toISOString(),
+      });
+      return NextResponse.json(
+        {
+          error: "Too many refresh attempts. Please try again later.",
+          retryAfter: Math.ceil((rateLimitResult.reset - Date.now()) / 1000),
+        },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": Math.ceil((rateLimitResult.reset - Date.now()) / 1000).toString(),
+            "X-RateLimit-Limit": rateLimitResult.limit.toString(),
+            "X-RateLimit-Remaining": rateLimitResult.remaining.toString(),
+            "X-RateLimit-Reset": rateLimitResult.reset.toString(),
+          },
+        }
+      );
+    }
+
     // Get refresh token from cookie
     const refreshToken = req.cookies.get("reqflow_refresh")?.value;
 
