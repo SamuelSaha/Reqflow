@@ -15,7 +15,6 @@ import {
 } from "@/lib/db/schema";
 import { eq, count as drizzleCount } from "drizzle-orm";
 import { refreshSession } from "@/lib/auth/session";
-import { sendEmail, EmailTemplate } from "@/lib/queue/queues/email";
 import { env } from "@/lib/env";
 
 /**
@@ -40,6 +39,7 @@ function generateSecureToken(): string {
  * Defense-in-depth: retries up to 3 times on collision
  */
 async function createInviteWithRetry(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   db: any,
   data: {
     tenantId: string;
@@ -51,6 +51,7 @@ async function createInviteWithRetry(
   },
   maxAttempts = 3
 ): Promise<string> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let lastError: any;
 
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
@@ -62,6 +63,7 @@ async function createInviteWithRetry(
         token,
       });
       return token; // Success!
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       lastError = err;
 
@@ -252,6 +254,7 @@ export const onboardingRouter = router({
         });
 
         // Queue invite email
+        const { sendEmail, EmailTemplate } = await import("@/lib/queue/queues/email");
         const baseUrl = env.NEXT_PUBLIC_APP_URL;
         await sendEmail({
           to: inv.email,

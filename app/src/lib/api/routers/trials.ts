@@ -10,7 +10,6 @@ import { differenceInDays, parseISO } from "date-fns";
 import { router, protectedProcedure } from "../trpc";
 import { db } from "@/lib/db";
 import { trials, requests } from "@/lib/db/schema";
-import { scheduleTrialReminders, cancelTrialReminders, rescheduleTrialReminders } from "@/lib/queue/queues/trial-reminders";
 
 export const trialsRouter = router({
   /**
@@ -106,6 +105,7 @@ export const trialsRouter = router({
         .returning();
 
       // Schedule reminder jobs (7d, 3d, 1d before expiry)
+      const { scheduleTrialReminders } = await import("@/lib/queue/queues/trial-reminders");
       await scheduleTrialReminders({
         trialId: trial.id,
         toolName: trial.toolName,
@@ -258,6 +258,7 @@ export const trialsRouter = router({
       }
 
       // Handle decision logic
+      const { cancelTrialReminders, rescheduleTrialReminders } = await import("@/lib/queue/queues/trial-reminders");
       let updatedTrial;
       let newRequestId: string | null = null;
 

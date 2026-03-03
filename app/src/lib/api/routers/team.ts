@@ -4,11 +4,10 @@
  */
 
 import { z } from "zod";
-import { router, adminProcedure, protectedProcedure } from "../trpc";
+import { router, adminProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { users, departments, invites, organizations } from "@/lib/db/schema";
-import { eq, and, or, desc, count as drizzleCount, sql } from "drizzle-orm";
-import { sendEmail, EmailTemplate } from "@/lib/queue/queues/email";
+import { eq, and, desc, count as drizzleCount, sql } from "drizzle-orm";
 import { createAuditLog, AuditAction } from "@/lib/monitoring/audit";
 import { env } from "@/lib/env";
 
@@ -34,6 +33,7 @@ function generateSecureToken(): string {
  * Defense-in-depth: retries up to 3 times on collision
  */
 async function createInviteWithRetry(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   db: any,
   data: {
     tenantId: string;
@@ -45,6 +45,7 @@ async function createInviteWithRetry(
   },
   maxAttempts = 3
 ): Promise<string> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let lastError: any;
 
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
@@ -56,6 +57,7 @@ async function createInviteWithRetry(
         token,
       });
       return token; // Success!
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       lastError = err;
 
@@ -208,6 +210,7 @@ export const teamRouter = router({
         });
 
         // Queue invite email
+        const { sendEmail, EmailTemplate } = await import("@/lib/queue/queues/email");
         const baseUrl = env.NEXT_PUBLIC_APP_URL;
         await sendEmail({
           to: inv.email,
@@ -646,6 +649,7 @@ export const teamRouter = router({
       });
 
       // Resend email
+      const { sendEmail, EmailTemplate } = await import("@/lib/queue/queues/email");
       const baseUrl = env.NEXT_PUBLIC_APP_URL;
       await sendEmail({
         to: invite.email,
