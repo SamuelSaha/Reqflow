@@ -22,7 +22,17 @@ import { eq, lt } from "drizzle-orm";
 import type { User } from "../db/schema";
 import { env } from "../env";
 import { setCSRFToken } from "../security/csrf";
-import { randomBytes } from "crypto";
+
+/**
+ * 🔒 SECURITY: Web Crypto API compatible randomBytes (works in Edge Runtime)
+ * Generates cryptographically secure random bytes
+ * Edge Runtime doesn't support Node.js crypto module, so we use Web Crypto API
+ */
+function randomBytes(size: number): Buffer {
+  const bytes = new Uint8Array(size);
+  crypto.getRandomValues(bytes); // Web Crypto API (available in Edge Runtime)
+  return Buffer.from(bytes);
+}
 
 // Legacy HS256 secret (for verifying old tokens)
 const JWT_SECRET_HS256 = new TextEncoder().encode(env.AUTH_SECRET);
