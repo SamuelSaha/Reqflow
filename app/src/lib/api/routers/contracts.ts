@@ -9,7 +9,6 @@ import { contracts, renewalEvents, vendors } from "@/lib/db/schema";
 import { eq, and, desc, gte, lte, or, sql } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
 import { createAuditLog, AuditAction } from "@/lib/monitoring/audit";
-import { scheduleRenewalReminders, rescheduleRenewalReminders } from "@/lib/queue/queues/renewal-reminders";
 
 export const contractsRouter = router({
   /**
@@ -237,6 +236,7 @@ export const contractsRouter = router({
           })
           .returning();
 
+        const { scheduleRenewalReminders } = await import("@/lib/queue/queues/renewal-reminders");
         await scheduleRenewalReminders({
           renewalId: renewalEvent.id,
           contractId: contract.id,
@@ -386,6 +386,8 @@ export const contractsRouter = router({
           where: eq(vendors.id, existing.vendorId),
           columns: { name: true },
         });
+
+        const { scheduleRenewalReminders, rescheduleRenewalReminders } = await import("@/lib/queue/queues/renewal-reminders");
 
         if (existingRenewalEvent) {
           await ctx.db
