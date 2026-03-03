@@ -1,7 +1,9 @@
 /**
  * Development seed data
- * Creates a test organization, departments, users, and budgets
- * Only runs in development mode
+ * Creates a test organization, departments, users, and budgets.
+ * Runs once per process startup. Uses upserts so seed changes
+ * (e.g. department assignments) take effect without a DB reset.
+ * Only runs in development mode.
  */
 
 import { db } from "./index";
@@ -14,6 +16,7 @@ import { env } from "../env";
 export const DEV_ORG_ID = "00000000-0000-0000-0000-000000000001";
 export const DEV_DEPT_ENG_ID = "00000000-0000-0000-0000-000000000010";
 export const DEV_DEPT_MKT_ID = "00000000-0000-0000-0000-000000000011";
+export const DEV_DEPT_FIN_ID = "00000000-0000-0000-0000-000000000012";
 export const DEV_USER_ADMIN_ID = "00000000-0000-0000-0000-000000000100";
 export const DEV_USER_MANAGER_ID = "00000000-0000-0000-0000-000000000101";
 export const DEV_USER_REQUESTER_ID = "00000000-0000-0000-0000-000000000102";
@@ -27,19 +30,9 @@ export async function ensureDevSeed() {
   if (seeded) return;
   if (env.NODE_ENV === "production") return;
 
-  // Check if already seeded
-  const existing = await db.query.organizations.findFirst({
-    where: eq(organizations.id, DEV_ORG_ID),
-  });
+  logger.info("Applying development seed data", { source: "dev-seed" });
 
-  if (existing) {
-    seeded = true;
-    return;
-  }
-
-  logger.info("Seeding development data", { source: "dev-seed" });
-
-  // Organization
+  // Organization — create once, never overwrite
   await db.insert(organizations).values({
     id: DEV_ORG_ID,
     name: "Acme Corp",
@@ -51,23 +44,17 @@ export async function ensureDevSeed() {
     onboardingCompleted: true,
   }).onConflictDoNothing();
 
-  // Departments
+  // Departments — upsert so new depts are added without wiping existing ones
   await db.insert(departments).values([
-    {
-      id: DEV_DEPT_ENG_ID,
-      tenantId: DEV_ORG_ID,
-      name: "Engineering",
-      code: "ENG",
-    },
-    {
-      id: DEV_DEPT_MKT_ID,
-      tenantId: DEV_ORG_ID,
-      name: "Marketing",
-      code: "MKT",
-    },
-  ]).onConflictDoNothing();
+    { id: DEV_DEPT_ENG_ID, tenantId: DEV_ORG_ID, name: "Engineering", code: "ENG" },
+    { id: DEV_DEPT_MKT_ID, tenantId: DEV_ORG_ID, name: "Marketing",   code: "MKT" },
+    { id: DEV_DEPT_FIN_ID, tenantId: DEV_ORG_ID, name: "Finance",     code: "FIN" },
+  ]).onConflictDoUpdate({
+    target: departments.id,
+    set: { name: departments.name, code: departments.code },
+  });
 
-  // Users
+  // Users — upsert: always keep departmentId current so seed changes propagate
   await db.insert(users).values([
     {
       id: DEV_USER_ADMIN_ID,
@@ -75,7 +62,7 @@ export async function ensureDevSeed() {
       email: "admin@acme.dev",
       name: "Alex Admin",
       role: "admin",
-      departmentId: DEV_DEPT_ENG_ID,
+      departmentId: DEV_DEPT_ENG_ID,   // Engineering
       isActive: true,
       emailVerified: true,
     },
@@ -85,7 +72,7 @@ export async function ensureDevSeed() {
       email: "manager@acme.dev",
       name: "Morgan Manager",
       role: "manager",
-      departmentId: DEV_DEPT_ENG_ID,
+      departmentId: DEV_DEPT_MKT_ID,   // Marketing
       isActive: true,
       emailVerified: true,
     },
@@ -95,7 +82,7 @@ export async function ensureDevSeed() {
       email: "dev@acme.dev",
       name: "Sam Developer",
       role: "requester",
-      departmentId: DEV_DEPT_ENG_ID,
+      departmentId: DEV_DEPT_ENG_ID,   // Engineering
       isActive: true,
       emailVerified: true,
     },
@@ -105,19 +92,21 @@ export async function ensureDevSeed() {
       email: "finance@acme.dev",
       name: "Fiona Finance",
       role: "finance",
-      departmentId: DEV_DEPT_ENG_ID,
+      departmentId: DEV_DEPT_FIN_ID,   // Finance
       isActive: true,
       emailVerified: true,
     },
-  ]).onConflictDoNothing();
+  ]).onConflictDoUpdate({
+    target: users.id,
+    set: { departmentId: users.departmentId },
+  });
 
-  // Set department head
-  await db
-    .update(departments)
-    .set({ headId: DEV_USER_MANAGER_ID })
-    .where(eq(departments.id, DEV_DEPT_ENG_ID));
+  // Department heads — always re-apply so head assignments stay correct
+  await db.update(departments).set({ headId: DEV_USER_ADMIN_ID   }).where(eq(departments.id, DEV_DEPT_ENG_ID));
+  await db.update(departments).set({ headId: DEV_USER_MANAGER_ID }).where(eq(departments.id, DEV_DEPT_MKT_ID));
+  await db.update(departments).set({ headId: DEV_USER_FINANCE_ID }).where(eq(departments.id, DEV_DEPT_FIN_ID));
 
-  // Budgets
+  // Budgets — create once, never overwrite (users may modify them in dev)
   await db.insert(budgets).values([
     {
       id: DEV_BUDGET_ENG_ID,
@@ -154,5 +143,5 @@ export async function ensureDevSeed() {
   ]).onConflictDoNothing();
 
   seeded = true;
-  logger.info("Development data seeded successfully", { source: "dev-seed" });
+  logger.info("Development seed data applied", { source: "dev-seed" });
 }
