@@ -18,6 +18,14 @@ import {
 import { trpc } from "@/lib/api/react";
 import { toast } from "sonner";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import {
   ChevronLeft,
   Loader2,
   XCircle,
@@ -26,6 +34,7 @@ import {
   Calendar,
   Building2,
   AlertTriangle,
+  Ban,
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -52,6 +61,7 @@ export default function SubscriptionDetailPage({
   const [editActiveSeats, setEditActiveSeats] = useState<string>("");
   const [editStatus, setEditStatus] = useState<string>("");
   const [isEditing, setIsEditing] = useState(false);
+  const [cancelOpen, setCancelOpen] = useState(false);
 
   const utils = trpc.useUtils();
   const updateMutation = trpc.subscriptions.update.useMutation({
@@ -61,6 +71,17 @@ export default function SubscriptionDetailPage({
       utils.subscriptions.seatUtilization.invalidate();
       toast.success("Subscription updated");
       setIsEditing(false);
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
+  const cancelMutation = trpc.subscriptions.cancel.useMutation({
+    onSuccess: () => {
+      utils.subscriptions.getById.invalidate({ id });
+      utils.subscriptions.list.invalidate();
+      utils.subscriptions.seatUtilization.invalidate();
+      toast.success("Subscription cancelled");
+      setCancelOpen(false);
     },
     onError: (err) => toast.error(err.message),
   });
@@ -307,9 +328,22 @@ export default function SubscriptionDetailPage({
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0">
             <CardTitle>Details</CardTitle>
-            <Button variant="outline" size="sm" onClick={startEditing}>
-              Edit
-            </Button>
+            <div className="flex items-center gap-2">
+              {sub.status !== "cancelled" && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-red-600 border-red-200 hover:bg-red-50"
+                  onClick={() => setCancelOpen(true)}
+                >
+                  <Ban className="h-3.5 w-3.5 mr-1.5" />
+                  Cancel
+                </Button>
+              )}
+              <Button variant="outline" size="sm" onClick={startEditing}>
+                Edit
+              </Button>
+            </div>
           </CardHeader>
           <CardContent>
             <dl className="space-y-3">
@@ -354,6 +388,38 @@ export default function SubscriptionDetailPage({
           ← Back
         </button>
       </div>
+
+      {/* Cancel confirmation dialog */}
+      <Dialog open={cancelOpen} onOpenChange={setCancelOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Cancel subscription?</DialogTitle>
+            <DialogDescription>
+              This will cancel <strong>{sub.toolName}</strong> and set the end date to today.
+              Historical data will be preserved.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setCancelOpen(false)}
+              disabled={cancelMutation.isPending}
+            >
+              Keep subscription
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={() => cancelMutation.mutate({ id })}
+              disabled={cancelMutation.isPending}
+            >
+              {cancelMutation.isPending && (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              )}
+              Yes, cancel it
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
