@@ -11,6 +11,7 @@ interface NotificationListProps {
   onClose?: () => void;
   compact?: boolean;
   limit?: number;
+  unreadOnly?: boolean;
 }
 
 /**
@@ -21,6 +22,7 @@ export function NotificationList({
   onClose,
   compact = false,
   limit,
+  unreadOnly = false,
 }: NotificationListProps) {
   const utils = trpc.useUtils();
 
@@ -28,7 +30,7 @@ export function NotificationList({
   const { data, isLoading } = trpc.notifications.list.useQuery({
     limit: limit || 50,
     offset: 0,
-    unreadOnly: false,
+    unreadOnly,
   });
 
   // Mark as read mutation

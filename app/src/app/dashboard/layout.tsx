@@ -25,7 +25,7 @@ import { KeyboardShortcutsHelp } from "@/components/ui/keyboard-shortcuts-help";
 // IDs between server and client. No SEO value in a notification bell anyway.
 const NotificationBell = dynamic(
   () => import("@/components/notifications/NotificationBell").then((m) => m.NotificationBell),
-  { ssr: false }
+  { ssr: false, loading: () => <div className="h-10 w-10 rounded-full bg-slate-100 animate-pulse" /> }
 );
 
 // Note: route segment config (dynamic = "force-dynamic") only works in Server Components
@@ -65,6 +65,14 @@ export default function DashboardLayout({
 
   return (
     <div className="min-h-screen bg-[var(--warm-50)]">
+      {/* Skip navigation for keyboard/screen reader users */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-white focus:px-4 focus:py-2 focus:rounded-lg focus:shadow-lg focus:text-blue-600 focus:font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        Skip to main content
+      </a>
+
       {/* Top nav */}
       <header className="border-b border-slate-200 bg-white/95 backdrop-blur-md sticky top-0 z-50 shadow-sm">
         <div className="mx-auto max-w-7xl px-4 py-3 md:px-6 md:py-4">
@@ -148,7 +156,7 @@ export default function DashboardLayout({
       </header>
 
       {/* Main content */}
-      <main className="mx-auto max-w-7xl px-4 py-6 md:px-6 md:py-8">
+      <main id="main-content" className="mx-auto max-w-7xl px-4 py-6 md:px-6 md:py-8">
         <ErrorBoundary>
           <AnimatePresence mode="wait" initial={false}>
             <motion.div

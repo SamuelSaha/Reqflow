@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Bell, Filter } from "lucide-react";
 import { NotificationList } from "@/components/notifications/NotificationList";
 import {
@@ -11,8 +12,7 @@ import {
 } from "@/components/ui/select";
 
 export default function NotificationsPage() {
-  // TODO: Implement filter state when NotificationList supports unreadOnly prop
-  // const [filter, setFilter] = useState<"all" | "unread">("all");
+  const [filter, setFilter] = useState<"all" | "unread">("all");
 
   return (
     <div className="space-y-6">
@@ -30,10 +30,9 @@ export default function NotificationsPage() {
           </div>
         </div>
 
-        {/* Filters - TODO: Wire up to NotificationList */}
         <div className="flex items-center gap-2">
-          <Select defaultValue="all">
-            <SelectTrigger className="w-[140px]">
+          <Select value={filter} onValueChange={(v) => setFilter(v as "all" | "unread")}>
+            <SelectTrigger className="w-[140px]" aria-label="Filter notifications">
               <Filter className="h-4 w-4 mr-2" />
               <SelectValue />
             </SelectTrigger>
@@ -46,7 +45,7 @@ export default function NotificationsPage() {
       </div>
 
       {/* Notification list */}
-      <NotificationList compact={false} />
+      <NotificationList compact={false} unreadOnly={filter === "unread"} />
     </div>
   );
 }

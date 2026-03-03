@@ -24,6 +24,8 @@ import {
   Edit3,
 } from "lucide-react";
 import { trpc } from "@/lib/api/react";
+import { EmptyState } from "@/components/ui/empty-state";
+import { EmptyBoxIllustration } from "@/components/ui/illustrations";
 
 const statusColors = {
   trial: "bg-blue-100 text-blue-700 border-blue-200",
@@ -261,10 +263,35 @@ export default function SubscriptionsPage() {
           )}
 
           {!isLoading && subscriptions && subscriptions.length === 0 && (
-            <div className="text-center py-12 text-slate-500">
-              <Package className="h-12 w-12 mx-auto mb-3 text-slate-300" />
-              <p className="text-body-md">No subscriptions found</p>
-            </div>
+            <EmptyState
+              illustration={<EmptyBoxIllustration className="w-32 h-32" />}
+              title={
+                statusFilter !== "active" || categoryFilter
+                  ? "No subscriptions match these filters"
+                  : "No subscriptions yet"
+              }
+              description={
+                statusFilter !== "active" || categoryFilter
+                  ? "Try adjusting your filters to see more results."
+                  : "Subscriptions are created automatically when a purchase request is approved. Start by submitting a request for a new tool or service."
+              }
+              action={
+                statusFilter === "active" && !categoryFilter
+                  ? { label: "Create a Request", href: "/dashboard/requests/new" }
+                  : undefined
+              }
+              secondaryAction={
+                statusFilter !== "active" || categoryFilter
+                  ? {
+                      label: "Clear filters",
+                      onClick: () => {
+                        setStatusFilter("active");
+                        setCategoryFilter(undefined);
+                      },
+                    }
+                  : undefined
+              }
+            />
           )}
 
           {!isLoading && subscriptions && subscriptions.length > 0 && (

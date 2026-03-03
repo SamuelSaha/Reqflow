@@ -132,7 +132,8 @@ export default function ContractsPage() {
         </div>
       )}
 
-      {/* Filters */}
+      {/* Filters — only show when there's data or a non-default filter is active */}
+      {(contractsList.isLoading || (contractsList.data?.length ?? 0) > 0 || statusFilter !== "all" || showUpcomingDeadlines) && (
       <Card>
         <CardHeader>
           <CardTitle className="text-base font-medium">Filters</CardTitle>
@@ -187,6 +188,7 @@ export default function ContractsPage() {
           </div>
         </CardContent>
       </Card>
+      )}
 
       {/* Loading State */}
       {contractsList.isLoading && (
@@ -223,12 +225,32 @@ export default function ContractsPage() {
           <CardContent>
             <EmptyState
               illustration={<EmptyBoxIllustration className="w-32 h-32" />}
-              title="No contracts yet"
-              description="Create your first contract to track terms, renewal dates, and notice deadlines."
-              action={{
-                label: "Create Contract",
-                href: "/dashboard/contracts/new",
-              }}
+              title={
+                statusFilter !== "all" || showUpcomingDeadlines
+                  ? "No contracts match these filters"
+                  : "No contracts yet"
+              }
+              description={
+                statusFilter !== "all" || showUpcomingDeadlines
+                  ? "Try adjusting your filters to see more results."
+                  : "Create your first contract to track terms, renewal dates, and notice deadlines."
+              }
+              action={
+                statusFilter === "all" && !showUpcomingDeadlines
+                  ? { label: "Create Contract", href: "/dashboard/contracts/new" }
+                  : undefined
+              }
+              secondaryAction={
+                statusFilter !== "all" || showUpcomingDeadlines
+                  ? {
+                      label: "Clear filters",
+                      onClick: () => {
+                        setStatusFilter("all");
+                        setShowUpcomingDeadlines(false);
+                      },
+                    }
+                  : undefined
+              }
             />
           </CardContent>
         </Card>

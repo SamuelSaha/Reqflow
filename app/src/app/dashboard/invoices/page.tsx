@@ -22,7 +22,9 @@ import {
   XCircle,
 } from "lucide-react";
 import { trpc } from "@/lib/api/react";
-import Link from "next/link";
+import { toast } from "sonner";
+import { EmptyState } from "@/components/ui/empty-state";
+import { EmptyBoxIllustration } from "@/components/ui/illustrations";
 
 export const dynamic = "force-dynamic";
 
@@ -45,6 +47,30 @@ const statusColors = {
 export default function InvoicesPage() {
   const [matchStatusFilter, setMatchStatusFilter] = useState<string | undefined>(undefined);
   const [statusFilter, setStatusFilter] = useState<string | undefined>(undefined);
+  const [disputingId, setDisputingId] = useState<string | null>(null);
+  const [disputeReason, setDisputeReason] = useState("");
+
+  const utils = trpc.useUtils();
+
+  const approveMutation = trpc.invoices.approve.useMutation({
+    onSuccess: () => {
+      utils.invoices.list.invalidate();
+      utils.invoices.getMatchingStats.invalidate();
+      toast.success("Invoice approved");
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
+  const disputeMutation = trpc.invoices.dispute.useMutation({
+    onSuccess: () => {
+      utils.invoices.list.invalidate();
+      utils.invoices.getMatchingStats.invalidate();
+      setDisputingId(null);
+      setDisputeReason("");
+      toast.success("Invoice marked as disputed");
+    },
+    onError: (err) => toast.error(err.message),
+  });
 
   // Fetch invoices
   const { data: invoices, isLoading: invoicesLoading } = trpc.invoices.list.useQuery({
@@ -179,13 +205,30 @@ export default function InvoicesPage() {
           )}
 
           {!invoicesLoading && invoices && invoices.length === 0 && (
-            <div className="text-center py-12">
-              <FileText className="h-12 w-12 text-slate-300 mx-auto mb-3" />
-              <p className="text-slate-600 font-medium">No invoices found</p>
-              <p className="text-slate-400 text-sm mt-1">
-                Invoices will appear here once created or synced
-              </p>
-            </div>
+            <EmptyState
+              illustration={<EmptyBoxIllustration className="w-32 h-32" />}
+              title={
+                matchStatusFilter || statusFilter
+                  ? "No invoices match these filters"
+                  : "No invoices yet"
+              }
+              description={
+                matchStatusFilter || statusFilter
+                  ? "Try clearing your filters to see all invoices."
+                  : "Invoices will appear here once they are uploaded or synced from your accounting system. Reqflow automatically matches them against purchase orders and receipts."
+              }
+              secondaryAction={
+                matchStatusFilter || statusFilter
+                  ? {
+                      label: "Clear filters",
+                      onClick: () => {
+                        setMatchStatusFilter(undefined);
+                        setStatusFilter(undefined);
+                      },
+                    }
+                  : undefined
+              }
+            />
           )}
 
           {!invoicesLoading && invoices && invoices.length > 0 && (
@@ -264,15 +307,61 @@ export default function InvoicesPage() {
                         </div>
 
                         {invoice.status === "pending" && (
-                          <div className="flex gap-2">
-                            <Button size="sm" variant="outline">
-                              <ThumbsUp className="h-3 w-3 mr-1" />
-                              Approve
-                            </Button>
-                            <Button size="sm" variant="outline">
-                              <XCircle className="h-3 w-3 mr-1" />
-                              Dispute
-                            </Button>
+                          <div className="flex flex-col gap-2 items-end">
+                            <div className="flex gap-2">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                disabled={approveMutation.isPending}
+                                onClick={() => approveMutation.mutate({ invoiceId: invoice.id })}
+                                aria-label={`Approve invoice ${invoice.invoiceNumber || invoice.id.slice(0, 8)}`}
+                              >
+                                <ThumbsUp className="h-3 w-3 mr-1" />
+                                Approve
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                disabled={disputeMutation.isPending}
+                                onClick={() => {
+                                  setDisputingId(invoice.id);
+                                  setDisputeReason("");
+                                }}
+                                aria-label={`Dispute invoice ${invoice.invoiceNumber || invoice.id.slice(0, 8)}`}
+                              >
+                                <XCircle className="h-3 w-3 mr-1" />
+                                Dispute
+                              </Button>
+                            </div>
+                            {disputingId === invoice.id && (
+                              <div className="w-full mt-1 space-y-2">
+                                <textarea
+                                  className="w-full text-sm border border-slate-200 rounded-md p-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                  rows={2}
+                                  placeholder="Reason for dispute (min 10 chars)"
+                                  value={disputeReason}
+                                  onChange={(e) => setDisputeReason(e.target.value)}
+                                  aria-label="Dispute reason"
+                                />
+                                <div className="flex gap-2 justify-end">
+                                  <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={() => { setDisputingId(null); setDisputeReason(""); }}
+                                  >
+                                    Cancel
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    variant="destructive"
+                                    disabled={disputeReason.length < 10 || disputeMutation.isPending}
+                                    onClick={() => disputeMutation.mutate({ invoiceId: invoice.id, reason: disputeReason })}
+                                  >
+                                    Confirm Dispute
+                                  </Button>
+                                </div>
+                              </div>
+                            )}
                           </div>
                         )}
                       </div>

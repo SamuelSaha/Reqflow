@@ -14,6 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { trpc } from "@/lib/api/react";
+import type { AuditLog } from "@/lib/db/schema/audit-logs";
 import {
   FileText,
   Download,
@@ -167,15 +168,6 @@ export default function AuditLogsPage() {
         toast.error("No data to export");
         return;
       }
-
-      // TODO: Implement CSV conversion logic here
-      // Decision point: How should nested JSON (before/after) be represented in CSV?
-      // Options:
-      // 1. Stringify JSON objects as single cells
-      // 2. Create separate columns for common fields
-      // 3. Create multiple rows per log entry (normalized)
-      //
-      // Implement your preferred approach in the convertToCSV function below.
 
       const csv = convertToCSV(data.data);
       downloadCSV(csv, `audit-logs-${format(new Date(), "yyyy-MM-dd")}.csv`);
@@ -555,26 +547,7 @@ function AuditLogDiff({
   );
 }
 
-/**
- * TODO: Implement CSV conversion logic
- *
- * DECISION POINT: How should nested JSON be represented in CSV?
- *
- * Consider these trade-offs:
- * - Stringify JSON: Simple but hard to parse, becomes unreadable for large objects
- * - Flatten common fields: More readable but loses nested structure
- * - Multiple rows per log: Preserves structure but inflates file size
- *
- * Recommended approach: Stringify JSON with a max length truncation for
- * readability, and include a "Changes" column that summarizes what changed.
- *
- * @param logs - Array of audit log entries to convert
- * @returns CSV string ready for download
- */
-function convertToCSV(logs: any[]): string {
-  // TODO: Implement your CSV conversion logic here
-  // Headers: Timestamp, User Name, User Email, Action, Entity Type, Entity ID, Description, IP Address, Before (JSON), After (JSON)
-
+function convertToCSV(logs: AuditLog[]): string {
   const headers = [
     "Timestamp",
     "User Name",

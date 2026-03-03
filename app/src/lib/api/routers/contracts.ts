@@ -5,10 +5,11 @@
 
 import { z } from "zod";
 import { router, protectedProcedure, adminProcedure } from "../trpc";
-import { contracts } from "@/lib/db/schema";
+import { contracts, renewalEvents, vendors } from "@/lib/db/schema";
 import { eq, and, desc, gte, lte, or, sql } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
 import { createAuditLog, AuditAction } from "@/lib/monitoring/audit";
+import { scheduleRenewalReminders, rescheduleRenewalReminders } from "@/lib/queue/queues/renewal-reminders";
 
 export const contractsRouter = router({
   /**
@@ -219,6 +220,37 @@ export const contractsRouter = router({
         },
       });
 
+      // Create renewal event and schedule reminders when renewal dates are present
+      if (contract.renewalDate && noticeDeadline) {
+        const vendor = await ctx.db.query.vendors.findFirst({
+          where: eq(vendors.id, input.vendorId),
+          columns: { name: true },
+        });
+
+        const [renewalEvent] = await ctx.db
+          .insert(renewalEvents)
+          .values({
+            tenantId: ctx.tenantId,
+            contractId: contract.id,
+            renewalDate: contract.renewalDate,
+            noticeDeadline,
+          })
+          .returning();
+
+        await scheduleRenewalReminders({
+          renewalId: renewalEvent.id,
+          contractId: contract.id,
+          subscriptionId: null,
+          vendorName: vendor?.name ?? "Unknown Vendor",
+          toolName: contract.title,
+          noticeDeadline,
+          renewalDate: contract.renewalDate,
+          ownerId: contract.ownerId ?? undefined,
+          stakeholderIds: [],
+          tenantId: ctx.tenantId,
+        });
+      }
+
       return contract;
     }),
 
@@ -337,6 +369,67 @@ export const contractsRouter = router({
           noticeDeadline: updated.noticeDeadline,
         },
       });
+
+      // Reschedule renewal reminders if renewal dates changed
+      const renewalDateChanged = input.renewalDate !== undefined && input.renewalDate !== existing.renewalDate;
+      const noticeDeadlineChanged = noticeDeadline !== existing.noticeDeadline;
+
+      if ((renewalDateChanged || noticeDeadlineChanged) && updated.renewalDate && noticeDeadline) {
+        const existingRenewalEvent = await ctx.db.query.renewalEvents.findFirst({
+          where: and(
+            eq(renewalEvents.contractId, input.id),
+            eq(renewalEvents.tenantId, ctx.tenantId)
+          ),
+        });
+
+        const vendor = await ctx.db.query.vendors.findFirst({
+          where: eq(vendors.id, existing.vendorId),
+          columns: { name: true },
+        });
+
+        if (existingRenewalEvent) {
+          await ctx.db
+            .update(renewalEvents)
+            .set({ renewalDate: updated.renewalDate, noticeDeadline, updatedAt: new Date() })
+            .where(eq(renewalEvents.id, existingRenewalEvent.id));
+
+          await rescheduleRenewalReminders({
+            renewalId: existingRenewalEvent.id,
+            contractId: input.id,
+            subscriptionId: null,
+            vendorName: vendor?.name ?? "Unknown Vendor",
+            toolName: updated.title,
+            noticeDeadline,
+            renewalDate: updated.renewalDate,
+            ownerId: updated.ownerId ?? undefined,
+            stakeholderIds: [],
+            tenantId: ctx.tenantId,
+          });
+        } else {
+          const [newRenewalEvent] = await ctx.db
+            .insert(renewalEvents)
+            .values({
+              tenantId: ctx.tenantId,
+              contractId: input.id,
+              renewalDate: updated.renewalDate,
+              noticeDeadline,
+            })
+            .returning();
+
+          await scheduleRenewalReminders({
+            renewalId: newRenewalEvent.id,
+            contractId: input.id,
+            subscriptionId: null,
+            vendorName: vendor?.name ?? "Unknown Vendor",
+            toolName: updated.title,
+            noticeDeadline,
+            renewalDate: updated.renewalDate,
+            ownerId: updated.ownerId ?? undefined,
+            stakeholderIds: [],
+            tenantId: ctx.tenantId,
+          });
+        }
+      }
 
       return updated;
     }),
