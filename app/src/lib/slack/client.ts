@@ -7,6 +7,7 @@ import { WebClient } from "@slack/web-api";
 import { env } from "@/lib/env";
 import { buildApprovalMessage, type ApprovalMessageParams } from "./messages";
 import { logger } from "@/lib/monitoring/logger";
+import { withCircuitBreaker, CircuitBreakerError } from "@/lib/resilience/circuit-breaker";
 
 const slack = new WebClient(env.SLACK_BOT_TOKEN);
 
@@ -24,11 +25,13 @@ export async function sendApprovalNotification(
       return { success: false, error: "Slack not configured" };
     }
 
-    // Find Slack user by email
+    // Find Slack user by email (with circuit breaker)
     const approverEmail = params.approverName; // This will actually be the email from the caller
-    const userLookup = await slack.users.lookupByEmail({
-      email: approverEmail,
-    });
+    const userLookup = await withCircuitBreaker(
+      "slack-api",
+      () => slack.users.lookupByEmail({ email: approverEmail }),
+      { threshold: 5, timeout: 60000, requestTimeout: 10000 }
+    );
 
     if (!userLookup.ok || !userLookup.user?.id) {
       logger.warn("Slack user not found for email", { email: approverEmail });
@@ -40,12 +43,17 @@ export async function sendApprovalNotification(
     // Build message
     const message = buildApprovalMessage(params);
 
-    // Send DM to user
-    const result = await slack.chat.postMessage({
-      channel: slackUserId, // DM to user
-      text: message.text,
-      blocks: message.blocks,
-    });
+    // Send DM to user (with circuit breaker)
+    const result = await withCircuitBreaker(
+      "slack-api",
+      () =>
+        slack.chat.postMessage({
+          channel: slackUserId,
+          text: message.text,
+          blocks: message.blocks,
+        }),
+      { threshold: 5, timeout: 60000, requestTimeout: 10000 }
+    );
 
     if (!result.ok) {
       logger.error("Failed to send Slack message", { slackError: result.error });
@@ -57,6 +65,17 @@ export async function sendApprovalNotification(
       timestamp: result.ts,
     };
   } catch (error) {
+    if (error instanceof CircuitBreakerError) {
+      logger.warn("Slack API circuit breaker open", {
+        service: error.serviceName,
+        state: error.state,
+      });
+      return {
+        success: false,
+        error: "Slack service temporarily unavailable",
+      };
+    }
+
     logger.error("Error sending Slack notification", error as Error);
     return {
       success: false,

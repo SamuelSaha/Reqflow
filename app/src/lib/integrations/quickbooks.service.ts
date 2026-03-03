@@ -9,6 +9,7 @@ import { db } from "../db";
 import { accountingIntegrations } from "../db/schema";
 import { eq, and } from "drizzle-orm";
 import { logger } from "../monitoring/logger";
+import { withCircuitBreaker } from "../resilience/circuit-breaker";
 
 export interface PurchaseOrderData {
   vendorName: string;
@@ -128,16 +129,21 @@ async function getOrCreateVendor(
       ? "https://quickbooks.api.intuit.com"
       : "https://sandbox-quickbooks.api.intuit.com";
 
-  // Search for existing vendor
+  // Search for existing vendor (with circuit breaker)
   const query = `SELECT * FROM Vendor WHERE DisplayName = '${vendorName.replace(/'/g, "\\'")}'`;
   const searchUrl = `${baseUrl}/v3/company/${realmId}/query?query=${encodeURIComponent(query)}`;
 
-  const searchResponse = await fetch(searchUrl, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      Accept: "application/json",
-    },
-  });
+  const searchResponse = await withCircuitBreaker(
+    "quickbooks-api",
+    () =>
+      fetch(searchUrl, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          Accept: "application/json",
+        },
+      }),
+    { threshold: 5, timeout: 120000, requestTimeout: 15000 }
+  );
 
   if (!searchResponse.ok) {
     throw new Error(`Failed to search vendors: ${searchResponse.statusText}`);
@@ -150,19 +156,24 @@ async function getOrCreateVendor(
     return searchData.QueryResponse.Vendor[0].Id;
   }
 
-  // Create new vendor
+  // Create new vendor (with circuit breaker)
   const createUrl = `${baseUrl}/v3/company/${realmId}/vendor`;
-  const createResponse = await fetch(createUrl, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      DisplayName: vendorName,
-    }),
-  });
+  const createResponse = await withCircuitBreaker(
+    "quickbooks-api",
+    () =>
+      fetch(createUrl, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          DisplayName: vendorName,
+        }),
+      }),
+    { threshold: 5, timeout: 120000, requestTimeout: 15000 }
+  );
 
   if (!createResponse.ok) {
     throw new Error(`Failed to create vendor: ${createResponse.statusText}`);

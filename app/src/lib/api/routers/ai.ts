@@ -15,6 +15,7 @@ import { TRPCError } from "@trpc/server";
 import { organizations, requests } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { encryptField, decryptField, isFieldEncrypted } from "@/lib/security/field-encryption";
+import { withCircuitBreaker } from "@/lib/resilience/circuit-breaker";
 import Anthropic from "@anthropic-ai/sdk";
 
 export type AiProvider = "anthropic" | "openai" | "gemini";
@@ -82,29 +83,39 @@ async function callProvider(
 ): Promise<string> {
   if (provider === "anthropic") {
     const client = new Anthropic({ apiKey });
-    const message = await client.messages.create({
-      model: "claude-haiku-4-5-20251001",
-      max_tokens: 512,
-      messages: [{ role: "user", content: prompt }],
-    });
+    const message = await withCircuitBreaker(
+      "anthropic-api",
+      () =>
+        client.messages.create({
+          model: "claude-haiku-4-5-20251001",
+          max_tokens: 512,
+          messages: [{ role: "user", content: prompt }],
+        }),
+      { threshold: 5, timeout: 120000, requestTimeout: 30000 }
+    );
     const content = message.content[0];
     if (content.type !== "text") throw new Error("Unexpected response type");
     return content.text;
   }
 
   if (provider === "openai") {
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        max_tokens: 512,
-        messages: [{ role: "user", content: prompt }],
-      }),
-    });
+    const response = await withCircuitBreaker(
+      "openai-api",
+      () =>
+        fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "gpt-4o-mini",
+            max_tokens: 512,
+            messages: [{ role: "user", content: prompt }],
+          }),
+        }),
+      { threshold: 5, timeout: 120000, requestTimeout: 30000 }
+    );
     if (!response.ok) {
       const err = await response.json().catch(() => ({}));
       throw new Error(err?.error?.message ?? `OpenAI API error ${response.status}`);
@@ -114,16 +125,21 @@ async function callProvider(
   }
 
   if (provider === "gemini") {
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { maxOutputTokens: 512 },
-        }),
-      }
+    const response = await withCircuitBreaker(
+      "gemini-api",
+      () =>
+        fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: prompt }] }],
+              generationConfig: { maxOutputTokens: 512 },
+            }),
+          }
+        ),
+      { threshold: 5, timeout: 120000, requestTimeout: 30000 }
     );
     if (!response.ok) {
       const err = await response.json().catch(() => ({}));

@@ -6,6 +6,7 @@
 import { Resend } from "resend";
 import { env } from "@/lib/env";
 import { logger } from "@/lib/monitoring/logger";
+import { withCircuitBreaker, CircuitBreakerError } from "@/lib/resilience/circuit-breaker";
 import type {
   Notifier,
   NotificationPayload,
@@ -69,13 +70,19 @@ export class EmailNotifier implements Notifier {
       const message = this.buildMessage(payload, recipientEmail);
       const resend = this.resend!;
 
-      const { data, error } = await resend.emails.send({
-        from: message.from || this.fromAddress,
-        to: message.to,
-        subject: message.subject,
-        html: message.html,
-        text: message.text,
-      });
+      // Send email with circuit breaker protection
+      const { data, error } = await withCircuitBreaker(
+        "resend-api",
+        () =>
+          resend.emails.send({
+            from: message.from || this.fromAddress,
+            to: message.to,
+            subject: message.subject,
+            html: message.html,
+            text: message.text,
+          }),
+        { threshold: 5, timeout: 60000, requestTimeout: 10000 }
+      );
 
       if (error) {
         logger.error("Resend API error", new Error(error.message), {
@@ -99,6 +106,15 @@ export class EmailNotifier implements Notifier {
         timestamp: new Date(),
       };
     } catch (err) {
+      if (err instanceof CircuitBreakerError) {
+        logger.warn("Resend API circuit breaker open", {
+          service: err.serviceName,
+          state: err.state,
+          type: payload.type,
+        });
+        return this.createResult("failed", "Email service temporarily unavailable");
+      }
+
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
       logger.error("Email notification error", err as Error, {
         type: payload.type,
