@@ -1,11 +1,13 @@
 "use client";
 
-import { use } from "react";
+import { use, useState } from "react";
 import { useRouter } from "next/navigation";
 import { trpc } from "@/lib/api/react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Table,
@@ -15,6 +17,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Building2,
   Globe,
@@ -26,6 +42,7 @@ import {
   Calendar,
   DollarSign,
 } from "lucide-react";
+import { toast } from "sonner";
 
 export default function VendorDetailPage({
   params,
@@ -35,7 +52,53 @@ export default function VendorDetailPage({
   const { id } = use(params);
   const router = useRouter();
 
+  const [editOpen, setEditOpen] = useState(false);
+  const [editName, setEditName] = useState("");
+  const [editWebsite, setEditWebsite] = useState("");
+  const [editIndustry, setEditIndustry] = useState("");
+  const [editCountry, setEditCountry] = useState("");
+  const [editStatus, setEditStatus] = useState("");
+  const [editTier, setEditTier] = useState("");
+  const [editNotes, setEditNotes] = useState("");
+
+  const utils = trpc.useUtils();
   const { data, isLoading, error } = trpc.vendors.get.useQuery({ id });
+
+  const updateMutation = trpc.vendors.update.useMutation({
+    onSuccess: () => {
+      utils.vendors.get.invalidate({ id });
+      utils.vendors.list.invalidate();
+      toast.success("Vendor updated");
+      setEditOpen(false);
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
+  function openEdit() {
+    if (!data) return;
+    const v = data.vendor;
+    setEditName(v.name);
+    setEditWebsite(v.website || "");
+    setEditIndustry(v.industry || "");
+    setEditCountry(v.country || "");
+    setEditStatus(v.status);
+    setEditTier(v.complianceTier);
+    setEditNotes(v.internalNotes || "");
+    setEditOpen(true);
+  }
+
+  function handleSave() {
+    updateMutation.mutate({
+      id,
+      name: editName || undefined,
+      website: editWebsite || undefined,
+      industry: editIndustry || undefined,
+      country: editCountry || undefined,
+      status: editStatus as "active" | "inactive" | "blocked" | "pending_review",
+      complianceTier: editTier as "none" | "basic" | "customer_data" | "regulated",
+      internalNotes: editNotes || undefined,
+    });
+  }
 
   if (error) {
     return (
@@ -87,7 +150,7 @@ export default function VendorDetailPage({
             )}
           </div>
         </div>
-        <Button variant="outline">Edit Vendor</Button>
+        <Button variant="outline" onClick={openEdit}>Edit Vendor</Button>
       </div>
 
       {/* Metrics Cards */}
@@ -385,6 +448,110 @@ export default function VendorDetailPage({
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Edit dialog */}
+      <Dialog open={editOpen} onOpenChange={setEditOpen}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Edit Vendor</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div className="space-y-2">
+              <Label htmlFor="editName">Name *</Label>
+              <Input
+                id="editName"
+                value={editName}
+                onChange={(e) => setEditName(e.target.value)}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-2">
+                <Label htmlFor="editWebsite">Website</Label>
+                <Input
+                  id="editWebsite"
+                  value={editWebsite}
+                  onChange={(e) => setEditWebsite(e.target.value)}
+                  placeholder="https://..."
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="editCountry">Country</Label>
+                <Input
+                  id="editCountry"
+                  value={editCountry}
+                  onChange={(e) => setEditCountry(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="editIndustry">Industry</Label>
+              <Input
+                id="editIndustry"
+                value={editIndustry}
+                onChange={(e) => setEditIndustry(e.target.value)}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-2">
+                <Label htmlFor="editStatus">Status</Label>
+                <Select value={editStatus} onValueChange={setEditStatus}>
+                  <SelectTrigger id="editStatus">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="active">Active</SelectItem>
+                    <SelectItem value="inactive">Inactive</SelectItem>
+                    <SelectItem value="blocked">Blocked</SelectItem>
+                    <SelectItem value="pending_review">Pending Review</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="editTier">Compliance Tier</Label>
+                <Select value={editTier} onValueChange={setEditTier}>
+                  <SelectTrigger id="editTier">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">None</SelectItem>
+                    <SelectItem value="basic">Basic</SelectItem>
+                    <SelectItem value="customer_data">Customer Data</SelectItem>
+                    <SelectItem value="regulated">Regulated</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="editNotes">Internal Notes</Label>
+              <textarea
+                id="editNotes"
+                className="w-full text-sm border border-slate-200 rounded-md p-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[80px]"
+                value={editNotes}
+                onChange={(e) => setEditNotes(e.target.value)}
+                placeholder="Internal notes about this vendor..."
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setEditOpen(false)}
+              disabled={updateMutation.isPending}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleSave}
+              disabled={!editName.trim() || updateMutation.isPending}
+            >
+              {updateMutation.isPending && (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              )}
+              Save Changes
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
