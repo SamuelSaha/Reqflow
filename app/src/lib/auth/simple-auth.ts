@@ -22,6 +22,7 @@ import { eq, lt } from "drizzle-orm";
 import type { User } from "../db/schema";
 import { env } from "../env";
 import { setCSRFToken } from "../security/csrf";
+import { logger } from "../monitoring/logger";
 
 /**
  * 🔒 SECURITY: Web Crypto API compatible randomBytes (works in Edge Runtime)
@@ -64,7 +65,7 @@ async function loadRS256Keys() {
 
     return { privateKey, publicKey };
   } catch (error) {
-    console.error("Failed to load RS256 keys:", error);
+    logger.error("Failed to load RS256 keys", error as Error);
     return null;
   }
 }
@@ -130,7 +131,7 @@ export async function createSession(
   }
 
   // Fallback to HS256 (development only)
-  console.warn("JWT RS256 keys not configured - using HS256 fallback (development only)");
+  logger.warn("JWT RS256 keys not configured - using HS256 fallback (development only)");
   const token = await new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
@@ -243,7 +244,7 @@ export async function verifySession(
         algorithms: ["RS256"],
       });
       return payload as unknown as SessionPayload;
-    } catch (error) {
+    } catch (_error) {
       // Not an RS256 token or invalid - try HS256 fallback
     }
   }

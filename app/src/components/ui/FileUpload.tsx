@@ -7,6 +7,7 @@ import { Card } from "./card";
 import { trpc } from "@/lib/api/react";
 import { toast } from "sonner";
 import type { FileMetadata } from "@/lib/storage/r2";
+import { logger } from "@/lib/monitoring/logger";
 
 interface FileUploadProps {
   entityType: "request" | "contract" | "invoice";
@@ -123,7 +124,7 @@ export function FileUpload({
           toast.success(`Uploaded ${file.name}`);
         } catch (error) {
           toast.error(`Failed to upload ${file.name}`);
-          console.error(error);
+          logger.error("File upload failed", error as Error, { fileName: file.name });
         }
       }
 
@@ -145,6 +146,7 @@ export function FileUpload({
         handleFiles(e.dataTransfer.files);
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [files]
   );
 
@@ -176,6 +178,7 @@ export function FileUpload({
       onFilesChange?.(newFiles);
       toast.success(`Deleted ${file.name}`);
     } catch (error) {
+      logger.error("File deletion failed", error as Error, { fileName: file.name, fileId: file.id });
       toast.error(`Failed to delete ${file.name}`);
     }
   };

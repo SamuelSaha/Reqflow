@@ -6,6 +6,7 @@
 "use client";
 
 import { useCallback } from "react";
+import { logger } from "@/lib/monitoring/logger";
 
 interface AnalyticsEvent {
   category: string;
@@ -50,9 +51,9 @@ export function useAnalytics() {
       });
     }
 
-    // Console log in development
+    // Log in development
     if (process.env.NODE_ENV === "development") {
-      console.log("[Analytics]", event);
+      logger.debug("Analytics event", { event });
     }
   }, []);
 

@@ -13,6 +13,7 @@ import { eq, and } from "drizzle-orm";
 import { buildApprovalConfirmationMessage } from "@/lib/slack/messages";
 import { createAuditLog, AuditAction } from "@/lib/monitoring/audit";
 import { env } from "@/lib/env";
+import { logger } from "@/lib/monitoring/logger";
 
 const slack = new WebClient(env.SLACK_BOT_TOKEN);
 
@@ -29,7 +30,7 @@ function verifySlackSignature(
 
   // Skip verification if signing secret not configured
   if (!signingSecret) {
-    console.warn("SLACK_SIGNING_SECRET not configured, skipping verification");
+    logger.warn("SLACK_SIGNING_SECRET not configured, skipping verification");
     return true;
   }
 
@@ -215,7 +216,7 @@ export async function POST(request: NextRequest) {
     // Return success (Slack expects 200 response)
     return NextResponse.json({ ok: true });
   } catch (error) {
-    console.error("Slack interaction error:", error);
+    logger.error("Slack interaction error", error as Error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

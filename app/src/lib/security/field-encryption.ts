@@ -13,6 +13,7 @@
 
 import { createCipheriv, createDecipheriv, randomBytes, scryptSync, timingSafeEqual } from "crypto";
 import { env } from "@/lib/env";
+import { logger } from "@/lib/monitoring/logger";
 
 // Encryption configuration
 const ALGORITHM = "aes-256-gcm";
@@ -34,9 +35,8 @@ export class FieldEncryption {
     if (!secretKey) {
       // In development, generate a temporary key (NOT for production!)
       if (env.NODE_ENV === "development") {
-        console.warn(
-          "WARNING: FIELD_ENCRYPTION_KEY not set. Using temporary key. " +
-          "Set FIELD_ENCRYPTION_KEY for production!"
+        logger.warn(
+          "FIELD_ENCRYPTION_KEY not set. Using temporary key. Set FIELD_ENCRYPTION_KEY for production!"
         );
         this.encryptionKey = randomBytes(KEY_LENGTH);
         return;
@@ -137,7 +137,7 @@ export class FieldEncryption {
         decipher.final(),
       ]);
       return decrypted.toString("utf8");
-    } catch (error) {
+    } catch (_error) {
       throw new Error("Decryption failed: data may be tampered or key is wrong");
     }
   }

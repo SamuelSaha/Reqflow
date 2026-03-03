@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { AlertTriangle, RefreshCcw, Home } from 'lucide-react';
 import Link from 'next/link';
+import { logger } from '@/lib/monitoring/logger';
 
 export default function Error({
   error,
@@ -15,7 +16,7 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error('Application error:', error);
+    logger.error('Application error', error, { digest: error.digest });
     Sentry.captureException(error, { extra: { digest: error.digest } });
   }, [error]);
 

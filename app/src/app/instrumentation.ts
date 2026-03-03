@@ -14,7 +14,14 @@ export async function register() {
      * Send Web Vitals to analytics endpoint
      * Batches metrics to reduce network requests
      */
-    function sendToAnalytics(metric: any) {
+    function sendToAnalytics(metric: {
+      name: string;
+      value: number;
+      rating: string;
+      delta: number;
+      id: string;
+      navigationType: string;
+    }) {
       const body = JSON.stringify({
         name: metric.name,
         value: metric.value,
@@ -38,9 +45,9 @@ export async function register() {
           body,
           headers: { 'Content-Type': 'application/json' },
           keepalive: true, // Keep request alive if page unloads
-        }).catch((err) => {
+        }).catch(() => {
           // Silent fail - don't break user experience
-          console.debug('Failed to send web vital:', err);
+          // Metrics are best-effort, no logging needed
         });
       }
     }

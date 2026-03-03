@@ -6,6 +6,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { axiom } from '@/lib/monitoring/axiom';
+import { logger } from '@/lib/monitoring/logger';
 
 interface WebVitalMetric {
   name: 'CLS' | 'FCP' | 'LCP' | 'TTFB' | 'INP';
@@ -50,10 +51,10 @@ export async function POST(request: NextRequest) {
       },
     ]);
 
-    // Also log to console in development
+    // Also log in development
     if (process.env.NODE_ENV === 'development') {
-      console.log(
-        `📊 Web Vital: ${metric.name} = ${metric.value}ms (${metric.rating})`
+      logger.debug(
+        `Web Vital: ${metric.name} = ${metric.value}ms (${metric.rating})`
       );
     }
 
@@ -90,7 +91,7 @@ export async function POST(request: NextRequest) {
 
     // Log alerts (in production, this could trigger Slack/PagerDuty)
     if (alerts.length > 0) {
-      console.warn('⚠️ Performance threshold exceeded:', alerts.join(', '));
+      logger.warn('Performance threshold exceeded', { alerts, metric: metric.name, value: metric.value });
 
       // Send alert to Axiom
       await axiom.ingest('performance-alerts', [
@@ -107,7 +108,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true }, { status: 202 }); // 202 Accepted
   } catch (error) {
-    console.error('Failed to process web vital:', error);
+    logger.error('Failed to process web vital', error as Error);
 
     // Don't fail loudly - metrics are best-effort
     return NextResponse.json(

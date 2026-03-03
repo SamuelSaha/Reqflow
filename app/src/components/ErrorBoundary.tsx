@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { AlertCircle } from "lucide-react";
 import { captureError } from "@/lib/monitoring/sentry";
 import { env } from "@/lib/env";
+import { logger } from "@/lib/monitoring/logger";
 
 interface ErrorBoundaryProps {
   children: React.ReactNode;
@@ -45,9 +46,9 @@ export class ErrorBoundary extends React.Component<
       errorBoundary: true,
     });
 
-    // Log error to console in development
+    // Log error in development
     if (env.NODE_ENV === "development") {
-      console.error("Error Boundary caught error:", error, errorInfo);
+      logger.error("Error Boundary caught error", error, { errorInfo });
     }
   }
 

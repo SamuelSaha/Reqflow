@@ -6,6 +6,7 @@
 import { WebClient } from "@slack/web-api";
 import { env } from "@/lib/env";
 import { buildApprovalMessage, type ApprovalMessageParams } from "./messages";
+import { logger } from "@/lib/monitoring/logger";
 
 const slack = new WebClient(env.SLACK_BOT_TOKEN);
 
@@ -19,7 +20,7 @@ export async function sendApprovalNotification(
   try {
     // Skip if Slack is not configured
     if (!env.SLACK_BOT_TOKEN || !env.SLACK_WORKSPACE_ID) {
-      console.log("Slack not configured, skipping notification");
+      logger.info("Slack not configured, skipping notification");
       return { success: false, error: "Slack not configured" };
     }
 
@@ -30,7 +31,7 @@ export async function sendApprovalNotification(
     });
 
     if (!userLookup.ok || !userLookup.user?.id) {
-      console.log(`Slack user not found for email: ${approverEmail}`);
+      logger.warn("Slack user not found for email", { email: approverEmail });
       return { success: false, error: "User not found in Slack workspace" };
     }
 
@@ -47,7 +48,7 @@ export async function sendApprovalNotification(
     });
 
     if (!result.ok) {
-      console.error("Failed to send Slack message:", result.error);
+      logger.error("Failed to send Slack message", { slackError: result.error });
       return { success: false, error: result.error };
     }
 
@@ -56,7 +57,7 @@ export async function sendApprovalNotification(
       timestamp: result.ts,
     };
   } catch (error) {
-    console.error("Error sending Slack notification:", error);
+    logger.error("Error sending Slack notification", error as Error);
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error",

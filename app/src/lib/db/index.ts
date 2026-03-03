@@ -7,6 +7,7 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import { env } from "../env";
 import * as schema from "./schema";
+import { logger } from "../monitoring/logger";
 
 // Serverless-optimized connection pooling
 // Detect serverless environment (Vercel sets VERCEL=1)
@@ -32,10 +33,11 @@ const queryClient = postgres(env.DATABASE_URL, poolConfig);
 
 // Log connection pool configuration (helps track serverless cold start behavior)
 if (isServerless || env.NODE_ENV === "development") {
-  console.log(
-    `[DB] Pool initialized - mode: ${isServerless ? "serverless" : "dev"}, ` +
-    `max: ${poolConfig.max}, idle_timeout: ${poolConfig.idle_timeout}`
-  );
+  logger.info("Database pool initialized", {
+    mode: isServerless ? "serverless" : "dev",
+    maxConnections: poolConfig.max,
+    idleTimeout: poolConfig.idle_timeout,
+  });
 }
 
 // Create Drizzle instance
