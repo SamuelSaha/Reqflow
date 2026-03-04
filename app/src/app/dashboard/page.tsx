@@ -25,8 +25,7 @@ import {
 import { StatsCardSkeleton, RequestListSkeleton } from "@/components/dashboard/LoadingSkeletons";
 import { getErrorMessage } from "@/lib/utils/error-messages";
 import { STATUS_STYLES } from "@/lib/design/tokens";
-import { EmptyState } from "@/components/ui/empty-state";
-import { EmptyRequestsIllustration } from "@/components/ui/illustrations";
+import { EmptyRecentRequests, EmptyPendingApprovals } from "@/components/dashboard/empty-dashboard-states";
 
 export const dynamic = "force-dynamic";
 
@@ -174,16 +173,7 @@ export default function DashboardPage() {
             )}
 
             {recentRequests.data && recentRequests.data.length === 0 && (
-              <EmptyState
-                illustration={<EmptyRequestsIllustration className="w-24 h-24" />}
-                title="No requests yet"
-                description="Create your first purchase request to start tracking company spend."
-                action={{
-                  label: "Create Request",
-                  href: "/dashboard/requests/new",
-                }}
-                compact
-              />
+              <EmptyRecentRequests />
             )}
 
             {recentRequests.data && recentRequests.data.length > 0 && (
@@ -243,11 +233,7 @@ export default function DashboardPage() {
             )}
 
             {pendingApprovals.data && pendingApprovals.data.length === 0 && (
-              <div className="text-center py-6">
-                <CheckSquare className="h-8 w-8 text-slate-300 mx-auto mb-2" />
-                <p className="text-sm text-slate-600">No pending approvals</p>
-                <p className="text-xs text-slate-400 mt-1">You're all caught up</p>
-              </div>
+              <EmptyPendingApprovals />
             )}
 
             {pendingApprovals.data && pendingApprovals.data.length > 0 && (
