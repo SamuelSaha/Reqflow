@@ -27,8 +27,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { TeamListSkeleton } from "@/components/dashboard/LoadingSkeletons";
-import { EmptyState } from "@/components/ui/empty-state";
-import { EmptyTeamIllustration } from "@/components/ui/illustrations";
+import {
+  EmptyUsersState,
+  EmptyInvitesState,
+  EmptyDepartmentsState,
+} from "@/components/settings/empty-team-states";
 
 export const dynamic = "force-dynamic";
 
@@ -41,11 +44,29 @@ const roleConfig: Record<string, { label: string; className: string }> = {
 
 type Tab = "users" | "invites" | "departments";
 
+type UserData = {
+  id: string;
+  name: string;
+  email: string;
+  avatar: string | null;
+  role: string;
+  isActive: boolean;
+  emailVerified: boolean;
+  mfaEnabled: boolean;
+  lastLoginAt: Date | null;
+  createdAt: Date;
+  department: {
+    id: string;
+    name: string;
+    code: string | null;
+  } | null;
+};
+
 export default function TeamPage() {
   const [activeTab, setActiveTab] = useState<Tab>("users");
   const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
   const [editUserDialogOpen, setEditUserDialogOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<any>(null);
+  const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
 
   const userList = trpc.team.listUsers.useQuery({});
   const inviteList = trpc.team.listInvites.useQuery({});
@@ -76,7 +97,7 @@ export default function TeamPage() {
     onError: (error) => toast.error(error.message),
   });
 
-  function handleEditUser(user: any) {
+  function handleEditUser(user: UserData) {
     setSelectedUser(user);
     setEditUserDialogOpen(true);
   }
@@ -137,19 +158,7 @@ export default function TeamPage() {
           )}
 
           {userList.data && userList.data.length === 0 && (
-            <Card>
-              <CardContent>
-                <EmptyState
-                  illustration={<EmptyTeamIllustration className="w-32 h-32" />}
-                  title="No team members yet"
-                  description="Build your team to collaborate on purchase requests. Invite colleagues to join, set roles, and streamline approvals."
-                  action={{
-                    label: "Invite Team Members",
-                    onClick: () => setInviteDialogOpen(true),
-                  }}
-                />
-              </CardContent>
-            </Card>
+            <EmptyUsersState onInvite={() => setInviteDialogOpen(true)} />
           )}
 
           {userList.data && userList.data.length > 0 && (
@@ -222,21 +231,7 @@ export default function TeamPage() {
           )}
 
           {inviteList.data && inviteList.data.length === 0 && (
-            <Card>
-              <CardContent className="flex flex-col items-center justify-center py-12">
-                <Mail className="h-12 w-12 text-slate-300 mb-4" />
-                <p className="text-lg font-medium text-slate-900 mb-2">
-                  No pending invites
-                </p>
-                <p className="text-slate-600 mb-6">
-                  Invite new team members to get started
-                </p>
-                <Button onClick={() => setInviteDialogOpen(true)}>
-                  <Plus className="mr-2 h-4 w-4" />
-                  Invite Users
-                </Button>
-              </CardContent>
-            </Card>
+            <EmptyInvitesState onInvite={() => setInviteDialogOpen(true)} />
           )}
 
           {inviteList.data && inviteList.data.length > 0 && (
@@ -315,17 +310,7 @@ export default function TeamPage() {
           {departmentList.isLoading && <TeamListSkeleton count={3} />}
 
           {departmentList.data && departmentList.data.length === 0 && (
-            <Card>
-              <CardContent className="flex flex-col items-center justify-center py-12">
-                <Building className="h-12 w-12 text-slate-300 mb-4" />
-                <p className="text-lg font-medium text-slate-900 mb-2">
-                  No departments yet
-                </p>
-                <p className="text-slate-600 mb-6">
-                  Create your first department to organize your team
-                </p>
-              </CardContent>
-            </Card>
+            <EmptyDepartmentsState />
           )}
 
           {departmentList.data && departmentList.data.length > 0 && (
