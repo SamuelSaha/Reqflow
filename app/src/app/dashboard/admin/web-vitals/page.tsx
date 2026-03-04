@@ -224,18 +224,22 @@ function MetricCard({ stat }: { stat: MetricStats }) {
 export default function WebVitalsDashboard() {
   const [data, setData] = useState<WebVitalsData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [hours, setHours] = useState(24);
 
   const fetchData = async () => {
     setLoading(true);
+    setError(null);
     try {
       const response = await fetch(`/api/analytics/web-vitals?hours=${hours}`);
       if (response.ok) {
         const json = await response.json();
         setData(json);
+      } else {
+        setError(`Failed to fetch data: ${response.status} ${response.statusText}`);
       }
-    } catch (error) {
-      console.error('Failed to fetch web vitals:', error);
+    } catch (err) {
+      setError('Unable to connect to analytics API. Please try again later.');
     } finally {
       setLoading(false);
     }
@@ -344,6 +348,22 @@ export default function WebVitalsDashboard() {
               </Card>
             ))}
           </div>
+        ) : error ? (
+          <Card className="border-red-200 bg-red-50">
+            <CardContent className="pt-6">
+              <div className="text-center py-12">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-red-100 mb-4">
+                  <TrendingDown className="h-6 w-6 text-red-600" />
+                </div>
+                <p className="text-red-900 font-semibold mb-2">Failed to Load Data</p>
+                <p className="text-red-700 text-sm mb-4">{error}</p>
+                <Button onClick={fetchData} variant="outline" size="sm" className="border-red-300 text-red-700 hover:bg-red-100">
+                  <RefreshCw className="h-4 w-4 mr-2" />
+                  Try Again
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         ) : data && data.stats.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {data.stats.map((stat) => (
