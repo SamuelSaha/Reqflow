@@ -42,3 +42,6 @@ export * from "./renewal-events";
 
 // Notifications
 export * from "./notifications";
+
+// Analytics & Monitoring
+export * from "./web-vitals";

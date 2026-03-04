@@ -1,12 +1,14 @@
 /**
  * Web Vitals Analytics Endpoint
  * Receives Core Web Vitals metrics from client instrumentation
- * Sends to Axiom for analysis and alerting
+ * Stores in PostgreSQL database and sends to Axiom for analysis and alerting
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import { axiom } from '@/lib/monitoring/axiom';
 import { logger } from '@/lib/monitoring/logger';
+import { db } from '@/lib/db';
+import { webVitals } from '@/lib/db/schema';
 
 interface WebVitalMetric {
   name: 'CLS' | 'FCP' | 'LCP' | 'TTFB' | 'INP';
@@ -32,7 +34,32 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Send to Axiom for storage and analysis
+    // Extract page pathname
+    const page = new URL(metric.url).pathname;
+    const ip = request.headers.get('x-forwarded-for') || 'unknown';
+
+    // Store in PostgreSQL database for historical analysis and dashboards
+    try {
+      await db.insert(webVitals).values({
+        metricName: metric.name,
+        value: metric.value,
+        rating: metric.rating,
+        delta: metric.delta,
+        metricId: metric.id,
+        navigationType: metric.navigationType,
+        url: metric.url,
+        page,
+        userAgent: metric.userAgent,
+        ip,
+        capturedAt: new Date(metric.timestamp),
+      });
+    } catch (dbError) {
+      // Log database errors but don't fail the request
+      // Metrics collection is best-effort
+      logger.error('Failed to store web vital in database', dbError as Error);
+    }
+
+    // Send to Axiom for real-time analysis and alerting
     await axiom.ingest('web-vitals', [
       {
         _time: new Date(metric.timestamp).toISOString(),
@@ -42,10 +69,9 @@ export async function POST(request: NextRequest) {
         delta: metric.delta,
         navigation: metric.navigationType,
         url: metric.url,
-        page: new URL(metric.url).pathname,
+        page,
         userAgent: metric.userAgent,
-        // Add request context
-        ip: request.headers.get('x-forwarded-for') || 'unknown',
+        ip,
         // Note: Next.js 16 removed request.geo from edge runtime
         // Geolocation can be derived from IP in Axiom queries if needed
       },
