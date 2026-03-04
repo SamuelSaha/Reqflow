@@ -1,0 +1,79 @@
+name: Emergency Rollback
+
+on:
+  workflow_dispatch:
+    inputs:
+      deployment_id:
+        description: 'Vercel deployment ID (or "previous")'
+        required: true
+        default: 'previous'
+      reason:
+        description: 'Reason for rollback'
+        required: true
+
+jobs:
+  rollback:
+    name: Rollback Production
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
+      - name: Get previous deployment
+        id: previous
+        if: github.event.inputs.deployment_id == 'previous'
+        run: |
+          DEPLOYMENTS=$(vercel ls --token="$VERCEL_TOKEN" --yes --prod | grep -v "Preview" | head -5)
+          PREVIOUS_ID=$(echo "$DEPLOYMENTS" | sed -n '2p' | awk '{print $1}')
+          echo "deployment_id=$PREVIOUS_ID" >> "$GITHUB_OUTPUT"
+        working-directory: app
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
+      - name: Set deployment ID
+        id: deployment
+        env:
+          INPUT_ID: ${{ github.event.inputs.deployment_id }}
+          PREV_ID: ${{ steps.previous.outputs.deployment_id }}
+        run: |
+          if [ "$INPUT_ID" == "previous" ]; then
+            echo "id=$PREV_ID" >> "$GITHUB_OUTPUT"
+          else
+            echo "id=$INPUT_ID" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Confirm rollback
+        env:
+          DEP_ID: ${{ steps.deployment.outputs.id }}
+          REASON: ${{ github.event.inputs.reason }}
+          ACTOR: ${{ github.actor }}
+        run: |
+          echo "## ⚠️ Rollback Confirmation" >> $GITHUB_STEP_SUMMARY
+          echo "**Deployment:** $DEP_ID" >> $GITHUB_STEP_SUMMARY
+          echo "**Reason:** $REASON" >> $GITHUB_STEP_SUMMARY
+          echo "**By:** @$ACTOR" >> $GITHUB_STEP_SUMMARY
+
+      - name: Promote deployment
+        env:
+          DEP_ID: ${{ steps.deployment.outputs.id }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: vercel promote "$DEP_ID" --token="$VERCEL_TOKEN" --yes
+        working-directory: app
+
+      - name: Verify
+        env:
+          PROD_URL: ${{ secrets.PRODUCTION_URL }}
+        run: |
+          sleep 10
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$PROD_URL/api/health")
+          if [ "$STATUS" -eq 200 ]; then
+            echo "✅ Health check passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Health check failed" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi

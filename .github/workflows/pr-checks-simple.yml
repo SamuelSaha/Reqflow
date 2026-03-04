@@ -1,0 +1,44 @@
+name: PR Checks (Fast)
+
+on:
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: pr-fast-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  quick-checks:
+    name: Quick Checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: ./package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint --workspace=app -- --max-warnings 0
+
+      - name: Type check
+        run: npm run type-check --workspace=app
+
+      - name: Unit tests
+        run: npm test --workspace=app
+
+      - name: Build check
+        run: npm run build --workspace=app
+        env:
+          DATABASE_URL: "postgresql://test:test@localhost:5432/test"
+          REDIS_URL: "redis://localhost:6379"
+          AUTH_SECRET: "test-secret-key-for-ci-minimum-32-chars"
+          AUTH_URL: "http://localhost:3000"
+          NEXT_PUBLIC_APP_URL: "http://localhost:3000"
