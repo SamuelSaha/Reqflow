@@ -5,6 +5,13 @@
  */
 
 export async function register() {
+  // Server-side initialization
+  if (typeof window === 'undefined') {
+    // Register graceful shutdown handlers
+    const { registerShutdownHandlers } = await import('@/lib/lifecycle/shutdown');
+    registerShutdownHandlers();
+  }
+
   // Client-side Web Vitals tracking
   if (typeof window !== 'undefined') {
     // Dynamic import to avoid bundling on server

@@ -17,7 +17,7 @@ async function processApprovalTimer(job: Job<ApprovalTimerJobData>) {
   const { approvalId, type } = job.data;
 
   // Check if approval is still pending
-  const { db } = await import("../../db");
+  const { workerDb: db } = await import("../../db"); // Use worker pool for background jobs
   const { approvals } = await import("../../db/schema");
   const { eq } = await import("drizzle-orm");
 

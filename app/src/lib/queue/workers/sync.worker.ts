@@ -8,7 +8,7 @@ import { defaultQueueOptions, QueueName } from "../config";
 import type { SyncJobData } from "../queues/sync";
 import { logger } from "../../monitoring/logger";
 import { monitorWorker } from "../../monitoring/worker";
-import { db } from "../../db";
+import { workerDb as db } from "../../db"; // Use worker pool for background jobs
 import { requests, accountingSyncLogs } from "../../db/schema";
 import { eq } from "drizzle-orm";
 import * as quickbooksService from "../../integrations/quickbooks.service";

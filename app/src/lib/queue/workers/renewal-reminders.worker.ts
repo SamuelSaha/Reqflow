@@ -6,7 +6,7 @@
 import { Worker, Job } from "bullmq";
 import { eq, and } from "drizzle-orm";
 import { QueueName, defaultQueueOptions } from "../config";
-import { db } from "@/lib/db";
+import { workerDb as db } from "@/lib/db"; // Use worker pool for background jobs
 import { renewalEvents, users } from "@/lib/db/schema";
 import { emailQueue, EmailTemplate } from "../queues/email";
 import type { RenewalReminderJobData } from "../queues/renewal-reminders";

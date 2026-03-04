@@ -26,7 +26,7 @@ async function processTrialReminder(job: Job<TrialReminderJobData>) {
   } = job.data;
 
   // Check if trial is still active
-  const { db } = await import("../../db");
+  const { workerDb: db } = await import("../../db"); // Use worker pool for background jobs
   const { trials, users } = await import("../../db/schema");
 
   const trial = await db.query.trials.findFirst({

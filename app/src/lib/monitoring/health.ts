@@ -89,18 +89,35 @@ export function getVersion(): string {
 
 /**
  * Check database connectivity and latency
+ * Includes connection pool statistics
  */
 export async function checkDatabase(): Promise<HealthCheckResult> {
   const start = Date.now();
   try {
+    // Test connection
     await db.execute(sql`SELECT 1`);
     const latency = Date.now() - start;
+
+    // Get pool stats (imported dynamically to avoid circular deps)
+    const { getApiPoolStats, getWorkerPoolStats } = await import("../db");
+    const apiPool = getApiPoolStats();
+    const workerPool = getWorkerPoolStats();
 
     if (latency > 1000) {
       return {
         status: "degraded",
         latency,
         message: `Database slow: ${latency}ms`,
+        details: {
+          pools: {
+            api: {
+              maxConnections: apiPool.totalConnections,
+            },
+            worker: {
+              maxConnections: workerPool.totalConnections,
+            },
+          },
+        },
       };
     }
 
@@ -108,6 +125,16 @@ export async function checkDatabase(): Promise<HealthCheckResult> {
       status: "healthy",
       latency,
       message: "Connected",
+      details: {
+        pools: {
+          api: {
+            maxConnections: apiPool.totalConnections,
+          },
+          worker: {
+            maxConnections: workerPool.totalConnections,
+          },
+        },
+      },
     };
   } catch (error) {
     return {
