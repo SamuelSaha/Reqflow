@@ -39,7 +39,7 @@ import {
 } from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
 import { EmptyRequestsIllustration, NoResultsIllustration } from "@/components/ui/illustrations";
-import { RequestListSkeleton } from "@/components/dashboard/LoadingSkeletons";
+
 import { getErrorMessage } from "@/lib/utils/error-messages";
 import Papa from "papaparse";
 import { toast } from "sonner";
@@ -417,11 +417,8 @@ export default function RequestsPage() {
         </div>
       </div>
 
-      {/* Loading */}
-      {requestList.isLoading && <RequestListSkeleton rows={5} />}
-
       {/* Error state */}
-      {requestList.error && (
+      {requestList.error && !requestList.isLoading && (
         <Card className="border-red-200 bg-red-50">
           <CardContent className="flex flex-col items-center justify-center py-12">
             <AlertCircle className="h-12 w-12 text-red-400 mb-4" />
@@ -436,7 +433,7 @@ export default function RequestsPage() {
       )}
 
       {/* Empty state */}
-      {requestList.data && requestList.data.length === 0 && (
+      {!requestList.error && (!requestList.data || requestList.data.length === 0) && (
         <Card>
           <CardContent>
             <EmptyState

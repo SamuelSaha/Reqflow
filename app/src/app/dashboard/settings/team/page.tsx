@@ -16,6 +16,7 @@ import {
   XCircle,
   Trash2,
   Edit,
+  Loader2,
 } from "lucide-react";
 import { getErrorMessage } from "@/lib/utils/error-messages";
 import { InviteUsersDialog, EditUserDialog } from "@/components/settings/lazy-components";
@@ -26,7 +27,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
-import { TeamListSkeleton } from "@/components/dashboard/LoadingSkeletons";
 import {
   EmptyUsersState,
   EmptyInvitesState,
@@ -121,10 +121,10 @@ export default function TeamPage() {
       <div className="border-b border-slate-200">
         <nav className="flex gap-6">
           {[
-            { id: "users" as Tab, label: "Users", icon: Users },
-            { id: "invites" as Tab, label: "Invites", icon: Mail },
-            { id: "departments" as Tab, label: "Departments", icon: Building },
-          ].map(({ id, label, icon: Icon }) => (
+            { id: "users" as Tab, label: "Users", icon: Users, loading: userList.isLoading },
+            { id: "invites" as Tab, label: "Invites", icon: Mail, loading: inviteList.isLoading },
+            { id: "departments" as Tab, label: "Departments", icon: Building, loading: departmentList.isLoading },
+          ].map(({ id, label, icon: Icon, loading }) => (
             <button
               key={id}
               onClick={() => setActiveTab(id)}
@@ -134,7 +134,11 @@ export default function TeamPage() {
                   : "border-transparent text-slate-600 hover:text-slate-900"
               }`}
             >
-              <Icon className="h-4 w-4" />
+              {loading && activeTab === id ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Icon className="h-4 w-4" />
+              )}
               {label}
             </button>
           ))}
@@ -144,9 +148,7 @@ export default function TeamPage() {
       {/* Users Tab */}
       {activeTab === "users" && (
         <>
-          {userList.isLoading && <TeamListSkeleton count={5} />}
-
-          {userList.error && (
+          {userList.error && !userList.isLoading && (
             <Card className="border-red-200 bg-red-50">
               <CardContent className="flex flex-col items-center justify-center py-12">
                 <AlertCircle className="h-12 w-12 text-red-400 mb-4" />
@@ -157,7 +159,7 @@ export default function TeamPage() {
             </Card>
           )}
 
-          {userList.data && userList.data.length === 0 && (
+          {!userList.error && (!userList.data || userList.data.length === 0) && (
             <EmptyUsersState onInvite={() => setInviteDialogOpen(true)} />
           )}
 
@@ -214,9 +216,7 @@ export default function TeamPage() {
       {/* Invites Tab */}
       {activeTab === "invites" && (
         <>
-          {inviteList.isLoading && <TeamListSkeleton count={3} />}
-
-          {inviteList.error && (
+          {inviteList.error && !inviteList.isLoading && (
             <Card className="border-red-200 bg-red-50">
               <CardContent className="flex flex-col items-center justify-center py-12">
                 <AlertCircle className="h-12 w-12 text-red-400 mb-4" />
@@ -230,7 +230,7 @@ export default function TeamPage() {
             </Card>
           )}
 
-          {inviteList.data && inviteList.data.length === 0 && (
+          {!inviteList.error && (!inviteList.data || inviteList.data.length === 0) && (
             <EmptyInvitesState onInvite={() => setInviteDialogOpen(true)} />
           )}
 
@@ -307,9 +307,7 @@ export default function TeamPage() {
       {/* Departments Tab */}
       {activeTab === "departments" && (
         <>
-          {departmentList.isLoading && <TeamListSkeleton count={3} />}
-
-          {departmentList.data && departmentList.data.length === 0 && (
+          {!departmentList.error && (!departmentList.data || departmentList.data.length === 0) && (
             <EmptyDepartmentsState />
           )}
 

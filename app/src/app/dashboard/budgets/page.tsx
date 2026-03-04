@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { trpc } from "@/lib/api/react";
 import { Wallet, AlertTriangle, AlertCircle } from "lucide-react";
-import { BudgetCardSkeleton } from "@/components/dashboard/LoadingSkeletons";
+
 import { getErrorMessage } from "@/lib/utils/error-messages";
 
 export const dynamic = "force-dynamic";
@@ -29,9 +29,7 @@ export default function BudgetsPage() {
         </p>
       </div>
 
-      {budgets.isLoading && <BudgetCardSkeleton count={3} />}
-
-      {budgets.error && (
+      {budgets.error && !budgets.isLoading && (
         <Card className="border-red-200 bg-red-50">
           <CardContent className="flex flex-col items-center justify-center py-12">
             <AlertCircle className="h-12 w-12 text-red-400 mb-4" />
@@ -45,7 +43,7 @@ export default function BudgetsPage() {
         </Card>
       )}
 
-      {budgets.data && budgets.data.length === 0 && (
+      {!budgets.error && (!budgets.data || budgets.data.length === 0) && (
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
             <Wallet className="h-12 w-12 text-slate-300 mb-4" />

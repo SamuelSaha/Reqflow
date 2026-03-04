@@ -21,8 +21,8 @@ import {
   AlertCircle,
   FlaskConical,
   Calendar as CalendarIcon,
+  Loader2,
 } from "lucide-react";
-import { StatsCardSkeleton, RequestListSkeleton } from "@/components/dashboard/LoadingSkeletons";
 import { getErrorMessage } from "@/lib/utils/error-messages";
 import { STATUS_STYLES } from "@/lib/design/tokens";
 import { EmptyRecentRequests, EmptyPendingApprovals } from "@/components/dashboard/empty-dashboard-states";
@@ -32,7 +32,6 @@ export const dynamic = "force-dynamic";
 const statusBadge = STATUS_STYLES;
 
 export default function DashboardPage() {
-  // Parallel queries to eliminate waterfall (5x faster page load: 1000ms → 200ms)
   const [stats, recentRequests, pendingApprovals, activeTrials, renewalsStats] = trpc.useQueries((t) => [
     t.requests.stats(undefined, {
       refetchInterval: 30000,
@@ -47,7 +46,7 @@ export default function DashboardPage() {
       refetchIntervalInBackground: false,
     }),
     t.trials.list({ status: "active" }, {
-      refetchInterval: 60000, // Less critical, poll every minute
+      refetchInterval: 60000,
       refetchIntervalInBackground: false,
     }),
     t.renewals.getDashboardStats(undefined, {
@@ -56,11 +55,10 @@ export default function DashboardPage() {
     }),
   ]);
 
-  // Count expiring soon trials (< 7 days)
-  const expiringSoonCount = activeTrials.data?.filter(t => t.daysRemaining < 7).length || 0;
-
-  // Count urgent renewals (red)
-  const urgentRenewalsCount = renewalsStats.data?.red || 0;
+  // Derive values — fall back to zero when data hasn't loaded yet
+  const expiringSoonCount = activeTrials.data?.filter(t => t.daysRemaining < 7).length ?? 0;
+  const urgentRenewalsCount = renewalsStats.data?.red ?? 0;
+  const anyStatsLoading = stats.isLoading || activeTrials.isLoading || renewalsStats.isLoading;
 
   return (
     <div className="space-y-6 md:space-y-8">
@@ -81,65 +79,68 @@ export default function DashboardPage() {
         </Link>
       </div>
 
-      {/* Stat cards */}
-      {(stats.isLoading || activeTrials.isLoading || renewalsStats.isLoading) && <StatsCardSkeleton count={5} />}
+      {/* Stat cards — always rendered, show 0 while loading */}
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-6 lg:grid-cols-6">
+        <StatCard
+          title="Pending Requests"
+          value={stats.data?.myPending ?? 0}
+          icon={Clock}
+          subtitle="Awaiting approval"
+          loading={stats.isLoading}
+        />
+        <StatCard
+          title="My Requests"
+          value={stats.data?.myRequests ?? 0}
+          icon={FileText}
+          subtitle="Total submitted"
+          loading={stats.isLoading}
+        />
+        <StatCard
+          title="Pending Approvals"
+          value={stats.data?.pendingApprovals ?? 0}
+          icon={CheckSquare}
+          subtitle="Require your review"
+          highlight={(stats.data?.pendingApprovals ?? 0) > 0}
+          loading={stats.isLoading}
+        />
+        <StatCard
+          title="Active Trials"
+          value={activeTrials.data?.length ?? 0}
+          icon={FlaskConical}
+          subtitle={expiringSoonCount > 0 ? `${expiringSoonCount} expiring soon` : "Being evaluated"}
+          highlight={expiringSoonCount > 0}
+          loading={activeTrials.isLoading}
+        />
+        <StatCard
+          title="Upcoming Renewals"
+          value={renewalsStats.data?.total ?? 0}
+          icon={CalendarIcon}
+          subtitle={urgentRenewalsCount > 0 ? `${urgentRenewalsCount} urgent` : "Next 90 days"}
+          highlight={urgentRenewalsCount > 0}
+          loading={renewalsStats.isLoading}
+        />
+        <StatCard
+          title="Approved This Month"
+          value={stats.data ? `€${stats.data.approvedThisMonth.toLocaleString("en", { minimumFractionDigits: 0 })}` : "€0"}
+          icon={TrendingUp}
+          subtitle="Total value approved"
+          loading={stats.isLoading}
+        />
+      </div>
 
-      {stats.error && (
+      {/* Error banner — only if stats query actually errored */}
+      {stats.error && !stats.isLoading && (
         <Card className="border-red-200 bg-red-50">
-          <CardContent className="flex flex-col items-center justify-center py-12">
-            <AlertCircle className="h-12 w-12 text-red-400 mb-4" />
-            <p className="text-lg font-medium text-slate-900 mb-2">
+          <CardContent className="flex items-center gap-4 py-4">
+            <AlertCircle className="h-5 w-5 text-red-500 flex-shrink-0" />
+            <p className="text-sm font-medium text-slate-900 flex-1">
               {getErrorMessage(stats.error)}
             </p>
-            <Button onClick={() => stats.refetch()} variant="outline" className="mt-2">
-              Try again
+            <Button onClick={() => stats.refetch()} variant="outline" size="sm">
+              Retry
             </Button>
           </CardContent>
         </Card>
-      )}
-
-      {stats.data && activeTrials.data && renewalsStats.data && (
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-6 lg:grid-cols-6">
-          <StatCard
-            title="Pending Requests"
-            value={stats.data.myPending}
-            icon={Clock}
-            subtitle="Awaiting approval"
-          />
-          <StatCard
-            title="My Requests"
-            value={stats.data.myRequests}
-            icon={FileText}
-            subtitle="Total submitted"
-          />
-          <StatCard
-            title="Pending Approvals"
-            value={stats.data.pendingApprovals}
-            icon={CheckSquare}
-            subtitle="Require your review"
-            highlight={stats.data.pendingApprovals > 0}
-          />
-          <StatCard
-            title="Active Trials"
-            value={activeTrials.data.length}
-            icon={FlaskConical}
-            subtitle={expiringSoonCount > 0 ? `${expiringSoonCount} expiring soon` : "Being evaluated"}
-            highlight={expiringSoonCount > 0}
-          />
-          <StatCard
-            title="Upcoming Renewals"
-            value={renewalsStats.data.total}
-            icon={CalendarIcon}
-            subtitle={urgentRenewalsCount > 0 ? `${urgentRenewalsCount} urgent` : "Next 90 days"}
-            highlight={urgentRenewalsCount > 0}
-          />
-          <StatCard
-            title="Approved This Month"
-            value={`€${stats.data.approvedThisMonth.toLocaleString("en", { minimumFractionDigits: 0 })}`}
-            icon={TrendingUp}
-            subtitle="Total value approved"
-          />
-        </div>
       )}
 
       {/* Two-column: recent requests + action required */}
@@ -148,7 +149,12 @@ export default function DashboardPage() {
         <Card className="shadow-sm hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
-              <CardTitle>Recent Requests</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                Recent Requests
+                {recentRequests.isLoading && (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin text-slate-400" />
+                )}
+              </CardTitle>
               <CardDescription>Your latest purchase requests</CardDescription>
             </div>
             <Link href="/dashboard/requests">
@@ -158,9 +164,7 @@ export default function DashboardPage() {
             </Link>
           </CardHeader>
           <CardContent>
-            {recentRequests.isLoading && <RequestListSkeleton rows={3} />}
-
-            {recentRequests.error && (
+            {recentRequests.error && !recentRequests.isLoading && (
               <div className="text-center py-6">
                 <AlertCircle className="h-8 w-8 text-red-400 mx-auto mb-2" />
                 <p className="text-sm text-slate-900 font-medium mb-1">
@@ -172,7 +176,7 @@ export default function DashboardPage() {
               </div>
             )}
 
-            {recentRequests.data && recentRequests.data.length === 0 && (
+            {!recentRequests.error && (!recentRequests.data || recentRequests.data.length === 0) && (
               <EmptyRecentRequests />
             )}
 
@@ -208,7 +212,12 @@ export default function DashboardPage() {
         <Card className="shadow-sm hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
-              <CardTitle>Action Required</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                Action Required
+                {pendingApprovals.isLoading && (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin text-slate-400" />
+                )}
+              </CardTitle>
               <CardDescription>Approvals waiting for your review</CardDescription>
             </div>
             <Link href="/dashboard/approvals">
@@ -218,9 +227,7 @@ export default function DashboardPage() {
             </Link>
           </CardHeader>
           <CardContent>
-            {pendingApprovals.isLoading && <RequestListSkeleton rows={3} />}
-
-            {pendingApprovals.error && (
+            {pendingApprovals.error && !pendingApprovals.isLoading && (
               <div className="text-center py-6">
                 <AlertCircle className="h-8 w-8 text-red-400 mx-auto mb-2" />
                 <p className="text-sm text-slate-900 font-medium mb-1">
@@ -232,7 +239,7 @@ export default function DashboardPage() {
               </div>
             )}
 
-            {pendingApprovals.data && pendingApprovals.data.length === 0 && (
+            {!pendingApprovals.error && (!pendingApprovals.data || pendingApprovals.data.length === 0) && (
               <EmptyPendingApprovals />
             )}
 
@@ -273,21 +280,27 @@ function StatCard({
   icon: Icon,
   subtitle,
   highlight,
+  loading,
 }: {
   title: string;
   value: number | string;
   icon: typeof Clock;
   subtitle: string;
   highlight?: boolean;
+  loading?: boolean;
 }) {
   return (
     <Card className={highlight ? "ring-2 ring-blue-200 bg-blue-50/30 shadow-md" : "shadow-sm hover:shadow-md transition-shadow"}>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 md:pb-2 p-4 md:p-6">
         <CardTitle className="text-xs md:text-sm font-medium">{title}</CardTitle>
-        <Icon className={`h-4 w-4 ${highlight ? "text-blue-600" : "text-slate-600"}`} />
+        {loading ? (
+          <Loader2 className="h-4 w-4 animate-spin text-slate-400" />
+        ) : (
+          <Icon className={`h-4 w-4 ${highlight ? "text-blue-600" : "text-slate-600"}`} />
+        )}
       </CardHeader>
       <CardContent className="p-4 pt-0 md:p-6 md:pt-0">
-        <div className={`text-xl md:text-2xl font-bold ${highlight ? "text-blue-700" : ""}`}>
+        <div className={`text-xl md:text-2xl font-bold ${highlight ? "text-blue-700" : ""} ${loading ? "text-slate-300" : ""}`}>
           {value}
         </div>
         <p className="text-[10px] md:text-xs text-slate-600 mt-1">{subtitle}</p>

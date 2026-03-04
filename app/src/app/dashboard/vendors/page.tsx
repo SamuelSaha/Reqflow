@@ -23,7 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Building2, Search, Plus } from "lucide-react";
-import { VendorTableSkeleton } from "@/components/dashboard/LoadingSkeletons";
+
 import { SortableColumnHeader } from "@/components/ui/sortable-column-header";
 import { DataPagination } from "@/components/ui/data-pagination";
 
@@ -145,9 +145,7 @@ export default function VendorsPage() {
 
       {/* Table */}
       <Card>
-        {isLoading ? (
-          <VendorTableSkeleton rows={5} />
-        ) : data && data.vendors.length > 0 ? (
+        {data && data.vendors.length > 0 ? (
           <div className="overflow-x-auto">
           <Table>
             <TableHeader>

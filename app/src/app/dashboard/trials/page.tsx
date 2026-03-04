@@ -18,7 +18,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { format, differenceInDays } from "date-fns";
-import { ApprovalCardSkeleton } from "@/components/dashboard/LoadingSkeletons";
+
 import { getErrorMessage } from "@/lib/utils/error-messages";
 import { EmptyState } from "@/components/ui/empty-state";
 import { EmptyTrialsIllustration, NoResultsIllustration } from "@/components/ui/illustrations";
@@ -91,11 +91,8 @@ export default function TrialsPage() {
         ))}
       </div>
 
-      {/* Loading */}
-      {trials.isLoading && <ApprovalCardSkeleton count={4} />}
-
       {/* Error state */}
-      {trials.error && (
+      {trials.error && !trials.isLoading && (
         <Card className="border-red-200 bg-red-50">
           <CardContent className="flex flex-col items-center justify-center py-12">
             <AlertCircle className="h-12 w-12 text-red-400 mb-4" />
@@ -110,7 +107,7 @@ export default function TrialsPage() {
       )}
 
       {/* Empty state */}
-      {trials.data && trials.data.length === 0 && (
+      {!trials.error && (!trials.data || trials.data.length === 0) && (
         <Card>
           <CardContent>
             <EmptyState

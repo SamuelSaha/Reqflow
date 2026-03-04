@@ -30,7 +30,7 @@ import {
   addMonths,
   subMonths,
 } from "date-fns";
-import { RequestListSkeleton } from "@/components/dashboard/LoadingSkeletons";
+
 import { getErrorMessage } from "@/lib/utils/error-messages";
 import {
   getUrgencyBadgeClass,
@@ -141,11 +141,8 @@ export default function RenewalsPage() {
         </Button>
       </div>
 
-      {/* Loading state */}
-      {renewals.isLoading && <RequestListSkeleton rows={5} />}
-
       {/* Error state */}
-      {renewals.error && (
+      {renewals.error && !renewals.isLoading && (
         <Card className="border-red-200 bg-red-50">
           <CardContent className="flex flex-col items-center justify-center py-12">
             <AlertCircle className="h-12 w-12 text-red-400 mb-4" />
@@ -160,7 +157,7 @@ export default function RenewalsPage() {
       )}
 
       {/* Empty state */}
-      {renewals.data && renewals.data.length === 0 && (
+      {!renewals.error && (!renewals.data || renewals.data.length === 0) && (
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
             <TrendingDown className="h-12 w-12 text-slate-300 mb-4" />

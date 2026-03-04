@@ -27,7 +27,7 @@ import { ApprovalCard } from "@/components/dashboard/ApprovalCard";
 import { trpc } from "@/lib/api/react";
 import { CheckSquare, Clock, XCircle, AlertCircle, Search, Filter, X, RefreshCw, Loader2 } from "lucide-react";
 import { useEffect, useState as useReactState } from "react";
-import { ApprovalCardSkeleton } from "@/components/dashboard/LoadingSkeletons";
+
 import { getErrorMessage } from "@/lib/utils/error-messages";
 import { EmptyState } from "@/components/ui/empty-state";
 import { NoApprovalsIllustration } from "@/components/ui/illustrations";
@@ -481,11 +481,8 @@ export default function ApprovalsPage() {
         </div>
       </div>
 
-      {/* Loading state */}
-      {queue.isLoading && <ApprovalCardSkeleton count={4} />}
-
       {/* Error state */}
-      {queue.error && (
+      {queue.error && !queue.isLoading && (
         <Card className="border-red-200 bg-red-50">
           <CardContent className="flex flex-col items-center justify-center py-12">
             <AlertCircle className="h-12 w-12 text-red-400 mb-4" />
@@ -500,7 +497,7 @@ export default function ApprovalsPage() {
       )}
 
       {/* Empty state */}
-      {queue.data && queue.data.length === 0 && (
+      {!queue.error && (!queue.data || queue.data.length === 0) && (
         <Card>
           <CardContent>
             <EmptyState
