@@ -4,35 +4,21 @@ import { PageShell } from "@/components/layout";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 
-// Hero section loads immediately (above the fold)
-const HeroSection = dynamic(
-  () => import("@/components/landing/HeroSection").then((mod) => mod.HeroSection),
-  { ssr: true }
-);
+// NEW refined marketing components
+import { HeroRefined } from "@/components/marketing/hero/HeroRefined";
+import { ProblemSection } from "@/components/marketing/sections/ProblemSection";
+import { ProductFlow as ProductFlowRefined } from "@/components/marketing/sections/ProductFlow";
+import { FeatureGrid } from "@/components/marketing/sections/FeatureGrid";
+import { PricingRefined } from "@/components/marketing/sections/PricingRefined";
 
-// Below-fold sections lazy-loaded with Suspense
+// Original components that still work well
 const TrustLogos = dynamic(
   () => import("@/components/landing/HeroSection").then((mod) => mod.TrustLogos),
   { loading: () => <SectionSkeleton height={100} />, ssr: false }
 );
 
-const PainPoints = dynamic(
-  () => import("@/components/landing/PainPoints").then((mod) => mod.PainPoints),
-  { loading: () => <SectionSkeleton height={700} />, ssr: false }
-);
-
-const ProductFlow = dynamic(
-  () => import("@/components/landing/ProductFlow").then((mod) => mod.ProductFlow),
-  { loading: () => <SectionSkeleton height={800} />, ssr: false }
-);
-
 const Personas = dynamic(
   () => import("@/components/landing/Personas").then((mod) => mod.Personas),
-  { loading: () => <SectionSkeleton height={500} />, ssr: false }
-);
-
-const Features = dynamic(
-  () => import("@/components/landing/Features").then((mod) => mod.Features),
   { loading: () => <SectionSkeleton height={500} />, ssr: false }
 );
 
@@ -44,11 +30,6 @@ const MeasuredOutcomes = dynamic(
 const Integrations = dynamic(
   () => import("@/components/landing/Integrations").then((mod) => mod.Integrations),
   { loading: () => <SectionSkeleton height={400} />, ssr: false }
-);
-
-const Pricing = dynamic(
-  () => import("@/components/landing/BottomSection").then((mod) => mod.Pricing),
-  { loading: () => <SectionSkeleton height={600} />, ssr: false }
 );
 
 const FAQ = dynamic(
@@ -180,57 +161,47 @@ export default function ReqflowLanding() {
           }}
         />
 
-        {/* Section 1: Hero */}
-        <Suspense fallback={<SectionSkeleton height={600} />}>
-          <HeroSection />
-        </Suspense>
+        {/* Section 1: Hero - NEW REFINED VERSION */}
+        <HeroRefined />
 
-        {/* Section 2: Trust Logos */}
+        {/* Section 2: Trust Logos - Original */}
         <Suspense fallback={<SectionSkeleton height={100} />}>
           <TrustLogos />
         </Suspense>
 
-        {/* Section 3: Problem (Before/After + Metrics) */}
-        <Suspense fallback={<SectionSkeleton height={700} />}>
-          <PainPoints />
-        </Suspense>
+        {/* Section 3: Problem/Solution - NEW REFINED VERSION */}
+        <ProblemSection />
 
-        {/* Section 4: Product Flow (3 Steps) */}
-        <Suspense fallback={<SectionSkeleton height={800} />}>
-          <ProductFlow />
-        </Suspense>
+        {/* Section 4: Product Flow - NEW REFINED VERSION */}
+        <ProductFlowRefined />
 
-        {/* Section 5: Personas */}
+        {/* Section 5: Personas - Original */}
         <Suspense fallback={<SectionSkeleton height={500} />}>
           <Personas />
         </Suspense>
 
-        {/* Section 6: Features (Dark Grid) */}
-        <Suspense fallback={<SectionSkeleton height={500} />}>
-          <Features />
-        </Suspense>
+        {/* Section 6: Feature Grid - NEW REFINED VERSION */}
+        <FeatureGrid />
 
-        {/* Section 7: Measured Outcomes */}
+        {/* Section 7: Measured Outcomes - Original */}
         <Suspense fallback={<SectionSkeleton height={400} />}>
           <MeasuredOutcomes />
         </Suspense>
 
-        {/* Section 8: Integrations */}
+        {/* Section 8: Integrations - Original */}
         <Suspense fallback={<SectionSkeleton height={400} />}>
           <Integrations />
         </Suspense>
 
-        {/* Section 9: Pricing */}
-        <Suspense fallback={<SectionSkeleton height={600} />}>
-          <Pricing />
-        </Suspense>
+        {/* Section 9: Pricing - NEW REFINED VERSION */}
+        <PricingRefined />
 
-        {/* Section 10: FAQ */}
+        {/* Section 10: FAQ - Original */}
         <Suspense fallback={<SectionSkeleton height={500} />}>
           <FAQ />
         </Suspense>
 
-        {/* Section 11: Final CTA (Dark) */}
+        {/* Section 11: Final CTA - Original */}
         <Suspense fallback={<SectionSkeleton height={300} />}>
           <FinalCTA />
         </Suspense>
