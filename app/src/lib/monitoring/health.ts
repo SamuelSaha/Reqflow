@@ -99,9 +99,9 @@ export async function checkDatabase(): Promise<HealthCheckResult> {
     const latency = Date.now() - start;
 
     // Get pool stats (imported dynamically to avoid circular deps)
-    const { getApiPoolStats, getWorkerPoolStats } = await import("../db");
-    const apiPool = getApiPoolStats();
-    const workerPool = getWorkerPoolStats();
+    const { getApiPoolMetrics, getWorkerPoolMetrics } = await import("../db");
+    const apiPool = await getApiPoolMetrics();
+    const workerPool = await getWorkerPoolMetrics();
 
     if (latency > 1000) {
       return {

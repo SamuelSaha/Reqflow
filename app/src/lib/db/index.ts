@@ -8,6 +8,7 @@ import postgres from "postgres";
 import { env } from "../env";
 import * as schema from "./schema";
 import { logger } from "../monitoring/logger";
+import type { PoolMetrics } from "./pool-monitor";
 
 /**
  * Connection pool configuration strategy:
@@ -36,16 +37,32 @@ const isServerless = !!process.env.VERCEL;
 const isProduction = env.NODE_ENV === "production" && !isServerless;
 
 /**
+ * Connection URL strategy:
+ * - Prefer DATABASE_POOLER_URL if set (optimized for serverless with connection pooling)
+ * - Fall back to DATABASE_URL (direct connection)
+ *
+ * Popular poolers:
+ * - Neon: Automatic pooling with neon.tech
+ * - Supabase: Connection pooler in project settings
+ * - PgBouncer: Self-hosted or managed (transaction/session mode)
+ */
+const databaseUrl = env.DATABASE_POOLER_URL || env.DATABASE_URL;
+const usingPooler = !!env.DATABASE_POOLER_URL;
+
+/**
  * API connection pool (for tRPC, route handlers)
  * Optimized for high-volume, short-lived queries
  */
 const apiPoolConfig = isServerless
   ? {
       // Serverless: Single connection per function
-      max: 1,
-      idle_timeout: 0,
+      // If using pooler, can increase to 2-3 for concurrent requests
+      max: usingPooler ? 2 : 1,
+      idle_timeout: 0, // Close immediately after use
       connect_timeout: 10,
       max_lifetime: 60 * 30, // 30 minutes
+      // Poolers handle prepared statements
+      prepare: !usingPooler,
     }
   : isProduction
     ? {
@@ -58,6 +75,11 @@ const apiPoolConfig = isServerless
         prepare: true,
         // Connection validation
         onnotice: () => {}, // Suppress notices in production
+        // Add transform for better error messages
+        transform: {
+          ...postgres.toCamel,
+          undefined: null, // Convert undefined to null for JSON
+        },
       }
     : {
         // Development: Small pool
@@ -89,9 +111,9 @@ const workerPoolConfig = isServerless
       };
 
 // Create connection clients
-const apiQueryClient = postgres(env.DATABASE_URL, apiPoolConfig);
+const apiQueryClient = postgres(databaseUrl, apiPoolConfig);
 const workerQueryClient = isProduction
-  ? postgres(env.DATABASE_URL, workerPoolConfig)
+  ? postgres(databaseUrl, workerPoolConfig)
   : apiQueryClient; // Reuse in dev/serverless
 
 // Create Drizzle instances
@@ -105,6 +127,8 @@ export const workerDb = drizzle(workerQueryClient as any, { schema });
 // Log pool initialization
 logger.info("Database pools initialized", {
   environment: isServerless ? "serverless" : isProduction ? "production" : "development",
+  usingPooler,
+  poolerType: usingPooler ? (databaseUrl.includes("neon") ? "Neon" : databaseUrl.includes("supabase") ? "Supabase" : "PgBouncer") : "none",
   apiPool: {
     max: apiPoolConfig.max,
     idleTimeout: apiPoolConfig.idle_timeout,
@@ -123,41 +147,40 @@ logger.info("Database pools initialized", {
 export type Database = typeof db;
 
 /**
- * Connection pool statistics
+ * Get real-time API pool metrics from PostgreSQL
+ * Uses pg_stat_activity for accurate statistics
  */
-export interface PoolStats {
-  totalConnections: number;
-  idleConnections: number;
-  waitingClients: number;
+export async function getApiPoolMetrics(): Promise<PoolMetrics> {
+  const { getPoolMetrics } = await import("./pool-monitor");
+  return getPoolMetrics(apiQueryClient, "reqflow-api");
 }
 
 /**
- * Get API pool statistics
- * Note: postgres.js doesn't expose pool internals, so we track at connection level
+ * Get real-time worker pool metrics
  */
-export function getApiPoolStats(): PoolStats {
-  // postgres.js doesn't expose pool stats directly
-  // In production, use pg_stat_activity query or external monitoring
-  return {
-    totalConnections: apiPoolConfig.max,
-    idleConnections: 0, // Not available
-    waitingClients: 0, // Not available
-  };
-}
-
-/**
- * Get worker pool statistics
- */
-export function getWorkerPoolStats(): PoolStats {
+export async function getWorkerPoolMetrics(): Promise<PoolMetrics> {
   if (!isProduction) {
-    return getApiPoolStats(); // Shared pool in dev
+    return getApiPoolMetrics(); // Shared pool in dev
   }
 
-  return {
-    totalConnections: workerPoolConfig.max,
-    idleConnections: 0,
-    waitingClients: 0,
-  };
+  const { getPoolMetrics } = await import("./pool-monitor");
+  return getPoolMetrics(workerQueryClient, "reqflow-worker");
+}
+
+/**
+ * Get slow queries currently running
+ */
+export async function getSlowQueries(thresholdMs: number = 1000) {
+  const { getSlowQueries } = await import("./pool-monitor");
+  return getSlowQueries(apiQueryClient, thresholdMs);
+}
+
+/**
+ * Get database connection limits and current usage
+ */
+export async function getConnectionLimits() {
+  const { getConnectionLimits } = await import("./pool-monitor");
+  return getConnectionLimits(apiQueryClient);
 }
 
 /**

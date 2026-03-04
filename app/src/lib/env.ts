@@ -8,6 +8,9 @@ export const env = createEnv({
   server: {
     // Database
     DATABASE_URL: z.string().url(),
+    // Optional: Connection pooler URL (Neon, Supabase, PgBouncer)
+    // Use this in serverless for better connection management
+    DATABASE_POOLER_URL: z.string().url().optional(),
 
     // Redis (Upstash for BullMQ)
     REDIS_URL: z.string().url(),
@@ -96,52 +99,10 @@ export const env = createEnv({
 
   /**
    * Runtime environment variables
+   * Only client-side variables (NEXT_PUBLIC_*) need to be listed here
+   * Server variables are automatically read from process.env
    */
-  runtimeEnv: {
-    // Server
-    DATABASE_URL: process.env.DATABASE_URL,
-    REDIS_URL: process.env.REDIS_URL,
-    AUTH_SECRET: process.env.AUTH_SECRET,
-    AUTH_URL: process.env.AUTH_URL,
-    JWT_PRIVATE_KEY: process.env.JWT_PRIVATE_KEY,
-    JWT_PUBLIC_KEY: process.env.JWT_PUBLIC_KEY,
-    R2_ACCOUNT_ID: process.env.R2_ACCOUNT_ID,
-    R2_ACCESS_KEY_ID: process.env.R2_ACCESS_KEY_ID,
-    R2_SECRET_ACCESS_KEY: process.env.R2_SECRET_ACCESS_KEY,
-    R2_BUCKET_NAME: process.env.R2_BUCKET_NAME,
-    RESEND_API_KEY: process.env.RESEND_API_KEY,
-    EMAIL_FROM: process.env.EMAIL_FROM,
-    ONESIGNAL_APP_ID: process.env.ONESIGNAL_APP_ID,
-    ONESIGNAL_API_KEY: process.env.ONESIGNAL_API_KEY,
-    SLACK_CLIENT_ID: process.env.SLACK_CLIENT_ID,
-    SLACK_CLIENT_SECRET: process.env.SLACK_CLIENT_SECRET,
-    SLACK_SIGNING_SECRET: process.env.SLACK_SIGNING_SECRET,
-    SLACK_BOT_TOKEN: process.env.SLACK_BOT_TOKEN,
-    SLACK_WORKSPACE_ID: process.env.SLACK_WORKSPACE_ID,
-    SLACK_WEBHOOK_URL: process.env.SLACK_WEBHOOK_URL,
-    DISCORD_WEBHOOK_URL: process.env.DISCORD_WEBHOOK_URL,
-    TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,
-    TELEGRAM_CHAT_ID: process.env.TELEGRAM_CHAT_ID,
-    QUICKBOOKS_CLIENT_ID: process.env.QUICKBOOKS_CLIENT_ID,
-    QUICKBOOKS_CLIENT_SECRET: process.env.QUICKBOOKS_CLIENT_SECRET,
-    QUICKBOOKS_REDIRECT_URI: process.env.QUICKBOOKS_REDIRECT_URI,
-    XERO_CLIENT_ID: process.env.XERO_CLIENT_ID,
-    XERO_CLIENT_SECRET: process.env.XERO_CLIENT_SECRET,
-    XERO_REDIRECT_URI: process.env.XERO_REDIRECT_URI,
-    ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
-    AXIOM_API_TOKEN: process.env.AXIOM_API_TOKEN,
-    AXIOM_DATASET: process.env.AXIOM_DATASET,
-    SENTRY_DSN: process.env.SENTRY_DSN,
-    SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN,
-    SENTRY_ORG: process.env.SENTRY_ORG,
-    SENTRY_PROJECT: process.env.SENTRY_PROJECT,
-    UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
-    UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
-    FIELD_ENCRYPTION_KEY: process.env.FIELD_ENCRYPTION_KEY,
-    RLS_ENABLED: process.env.RLS_ENABLED,
-    NODE_ENV: process.env.NODE_ENV,
-
-    // Client
+  experimental__runtimeEnv: {
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
   },
 
