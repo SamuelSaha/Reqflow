@@ -30,15 +30,15 @@ const legalLinks = [
 
 export function Footer() {
   return (
-    <footer className="bg-slate-900 border-t border-slate-800">
+    <footer role="contentinfo" className="bg-slate-900 border-t border-slate-800">
       <div className="max-w-6xl mx-auto px-6 md:px-12 lg:px-20">
         {/* Main footer content */}
         <div className="py-12 lg:py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-16">
           {/* Brand column */}
           <div className="flex flex-col gap-4">
-            <Link href="/" className="group flex items-center gap-2.5 no-underline w-fit">
-              <div className="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center">
-                <ArrowRight className="w-4 h-4 text-white" />
+            <Link href="/" aria-label="Reqflow home" className="group flex items-center gap-2.5 no-underline w-fit">
+              <div className="w-7 h-7 bg-blue-600 rounded-lg flex items-center justify-center" aria-hidden="true">
+                <ArrowRight className="w-4 h-4 text-white" aria-hidden="true" />
               </div>
               <span className="text-h5 text-white">Reqflow</span>
             </Link>

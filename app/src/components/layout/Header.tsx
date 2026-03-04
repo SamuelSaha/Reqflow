@@ -21,6 +21,7 @@ export function Header() {
 
   return (
     <header
+      role="banner"
       className={cn(
         "sticky top-0 z-50 h-[72px] transition-all duration-300 px-6 md:px-12 lg:px-20 flex items-center justify-between",
         isScrolled
@@ -29,9 +30,9 @@ export function Header() {
       )}
     >
       {/* Logo */}
-      <Link href="/" className="flex items-center gap-3 no-underline">
-        <div className="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center">
-          <ArrowRight className="w-5 h-5 text-white" />
+      <Link href="/" aria-label="Reqflow home" className="flex items-center gap-3 no-underline">
+        <div className="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center" aria-hidden="true">
+          <ArrowRight className="w-5 h-5 text-white" aria-hidden="true" />
         </div>
         <span className="text-h5 font-bold text-slate-900">Reqflow</span>
       </Link>

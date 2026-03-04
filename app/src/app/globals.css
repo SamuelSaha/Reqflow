@@ -417,3 +417,99 @@ a[role="button"],
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+/* ========================================
+   ACCESSIBILITY UTILITIES (WCAG 2.2 AA)
+   ======================================== */
+
+/* Screen Reader Only - Visually hidden but accessible to assistive tech */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Make screen reader only content visible on focus (e.g., skip links) */
+.sr-only.focus\:not-sr-only:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* Focus Visible - Enhanced keyboard focus indicators */
+*:focus-visible {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
+}
+
+/* High Contrast Mode Support - Ensures visible outlines */
+@media (prefers-contrast: high) {
+  *:focus {
+    outline: 3px solid currentColor;
+    outline-offset: 3px;
+  }
+
+  /* Ensure sufficient contrast for text */
+  body {
+    background: Canvas;
+    color: CanvasText;
+  }
+
+  a {
+    color: LinkText;
+  }
+}
+
+/* Print Styles - Accessibility for printed documents */
+@media print {
+  /* Expand all hidden content */
+  details {
+    display: block !important;
+  }
+
+  details summary {
+    display: none;
+  }
+
+  /* Show link URLs */
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+    font-weight: normal;
+  }
+
+  /* Hide navigation and non-essential elements */
+  nav,
+  header[role="banner"],
+  footer[role="contentinfo"],
+  .no-print {
+    display: none !important;
+  }
+
+  /* Optimize for printing */
+  body {
+    background: white;
+    color: black;
+  }
+
+  /* Prevent page breaks inside elements */
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+    page-break-inside: avoid;
+  }
+
+  p, blockquote {
+    page-break-inside: avoid;
+  }
+}

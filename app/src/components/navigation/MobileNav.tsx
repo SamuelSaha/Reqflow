@@ -39,11 +39,15 @@ interface AccordionSectionProps {
 
 function AccordionSection({ title, links, onLinkClick }: AccordionSectionProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const contentId = `${title.toLowerCase().replace(/\s+/g, '-')}-content`;
 
   return (
     <div className="border-b border-slate-200">
       <button
+        type="button"
         onClick={() => setIsOpen(!isOpen)}
+        aria-expanded={isOpen}
+        aria-controls={contentId}
         className="w-full flex items-center justify-between py-4 text-left"
       >
         <span className="text-base font-semibold text-slate-900">{title}</span>
@@ -52,11 +56,12 @@ function AccordionSection({ title, links, onLinkClick }: AccordionSectionProps) 
             "w-5 h-5 text-slate-600 transition-transform duration-200",
             isOpen && "rotate-180"
           )}
+          aria-hidden="true"
         />
       </button>
 
       {isOpen && (
-        <div className="pb-4 space-y-2">
+        <div id={contentId} className="pb-4 space-y-2">
           {links.map((link) => (
             <Link
               key={link.href}
@@ -86,11 +91,12 @@ export function MobileNav() {
     <>
       {/* Hamburger Button */}
       <button
+        type="button"
         onClick={() => setIsOpen(true)}
         className="lg:hidden p-2 text-slate-900 hover:bg-slate-100 rounded-lg transition-colors"
         aria-label="Open menu"
       >
-        <Menu className="w-6 h-6" />
+        <Menu className="w-6 h-6" aria-hidden="true" />
       </button>
 
       {/* Mobile Menu Dialog */}
@@ -100,11 +106,12 @@ export function MobileNav() {
           <div className="flex items-center justify-between p-6 border-b border-slate-200">
             <span className="text-lg font-bold text-slate-900">Menu</span>
             <button
+              type="button"
               onClick={closeMenu}
               className="p-2 text-slate-900 hover:bg-slate-100 rounded-lg transition-colors"
               aria-label="Close menu"
             >
-              <X className="w-6 h-6" />
+              <X className="w-6 h-6" aria-hidden="true" />
             </button>
           </div>
 
