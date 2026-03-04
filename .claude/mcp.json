@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "gtm": {
+      "command": "python",
+      "args": ["-m", "src.server"],
+      "cwd": "/Users/samuelsaha/gtm-reqflow"
+    }
+  }
+}

@@ -3,6 +3,8 @@ import { Manrope, DM_Mono } from "next/font/google";
 import { TRPCProvider } from "@/lib/api/react";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import "./globals.css";
+import "@/styles/marketing-tokens.css";
+import "@/styles/marketing-animations.css";
 
 const manrope = Manrope({
   variable: "--font-manrope",
@@ -63,7 +65,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${manrope.variable} ${dmMono.variable} antialiased`}>
+      <body className={`${manrope.variable} ${dmMono.variable} font-sans antialiased`}>
         {/* Skip to main content link for keyboard navigation */}
         <a
           href="#main-content"
