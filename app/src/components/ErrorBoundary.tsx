@@ -10,8 +10,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { AlertCircle } from "lucide-react";
 import { captureError } from "@/lib/monitoring/sentry";
-import { env } from "@/lib/env";
-import { logger } from "@/lib/monitoring/logger";
 
 interface ErrorBoundaryProps {
   children: React.ReactNode;
@@ -47,8 +45,8 @@ export class ErrorBoundary extends React.Component<
     });
 
     // Log error in development
-    if (env.NODE_ENV === "development") {
-      logger.error("Error Boundary caught error", error, { errorInfo });
+    if (process.env.NODE_ENV === "development") {
+      console.error("Error Boundary caught error", error, errorInfo);
     }
   }
 
@@ -85,7 +83,7 @@ function ErrorFallback({ error }: { error: Error | null }) {
             An unexpected error occurred. Please try refreshing the page.
           </p>
 
-          {env.NODE_ENV === "development" && error && (
+          {process.env.NODE_ENV === "development" && error && (
             <div className="rounded-md bg-slate-50 p-3 border border-slate-200">
               <p className="text-xs font-mono text-slate-700 break-all">
                 {error.message}

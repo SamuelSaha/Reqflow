@@ -2,7 +2,6 @@
 
 import { useEffect } from 'react';
 import * as Sentry from '@sentry/nextjs';
-import { logger } from '@/lib/monitoring/logger';
 
 /**
  * Global error boundary - catches errors in root layout
@@ -16,7 +15,7 @@ export default function GlobalError({
   reset: () => void;
 }) {
   useEffect(() => {
-    logger.error('Global error caught', error, { digest: error.digest });
+    console.error('Global error caught', error);
     Sentry.captureException(error, { extra: { digest: error.digest } });
   }, [error]);
 
