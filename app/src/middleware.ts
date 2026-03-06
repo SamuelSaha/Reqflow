@@ -39,7 +39,8 @@ const mfaVerifyRoutes = [
 ];
 
 // Routes exempt from MFA verification requirement (but still accessible for MFA setup)
-const mfaExemptRoutes = ["/dashboard/settings/security", "/setup-mfa"];
+// /onboarding must be exempt so finance/admin users can complete onboarding before setting up MFA
+const mfaExemptRoutes = ["/dashboard/settings/security", "/setup-mfa", "/verify-mfa", "/onboarding"];
 
 // Roles that require MFA to be enabled
 const mfaRequiredRoles = ["finance", "admin"];
@@ -59,6 +60,12 @@ const publicRoutes = [
   "/changelog",
   "/careers",
   "/status",
+  "/integrations",
+  "/documentation",
+  "/case-studies",
+  "/api-reference",
+  "/cookies",
+  "/support",
   "/verify-email",
   "/api/auth", // Auth API routes
   "/api/webhooks", // Webhook integrations (Slack, QuickBooks, etc.)
@@ -125,7 +132,9 @@ export async function middleware(request: NextRequest) {
   }
 
   // Onboarding gate: redirect unonboarded users to /onboarding
-  if (!session.onboardingCompleted && !pathname.startsWith("/onboarding")) {
+  // Exempt MFA routes so finance/admin can set up MFA even if onboarding isn't complete
+  const isMfaFlowRoute = pathname.startsWith("/setup-mfa") || pathname.startsWith("/verify-mfa");
+  if (!session.onboardingCompleted && !pathname.startsWith("/onboarding") && !isMfaFlowRoute) {
     return withCSP(NextResponse.redirect(new URL("/onboarding", request.url)));
   }
 
