@@ -44,11 +44,10 @@ export const subscriptionsRouter = router({
       return await db.query.subscriptions.findMany({
         where: and(...conditions),
         orderBy: [desc(subscriptions.createdAt)],
+        limit: 100,
         with: {
           vendor: true,
           department: true,
-          contract: true,
-          sourceRequest: true,
         },
       });
     }),

@@ -95,8 +95,6 @@ export const invoicesRouter = router({
         where: and(...conditions),
         with: {
           vendor: true,
-          contract: true,
-          subscription: true,
         },
         orderBy: [desc(invoices.createdAt)],
         limit: input?.limit || 50,
