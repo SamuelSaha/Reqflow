@@ -78,10 +78,11 @@ export default function InvoicesPage() {
     status: statusFilter as "pending" | "approved" | "paid" | "disputed" | "overdue" | "cancelled" | undefined,
   });
 
-  // Fetch matching stats
-  const { data: stats, isLoading: statsLoading } = trpc.invoices.getMatchingStats.useQuery();
-
-  const isLoading = invoicesLoading || statsLoading;
+  // Fetch matching stats — secondary, loads independently of the list
+  const { data: stats, isLoading: statsLoading } = trpc.invoices.getMatchingStats.useQuery(
+    undefined,
+    { retry: 1 }
+  );
 
   // Format currency
   function formatCurrency(amount: string | number): string {
@@ -111,7 +112,7 @@ export default function InvoicesPage() {
       </div>
 
       {/* Stats Cards */}
-      {isLoading && (
+      {statsLoading && !stats && (
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-6">
           {[...Array(4)].map((_, i) => (
             <Card key={i} className="animate-pulse">

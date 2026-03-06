@@ -78,23 +78,23 @@ export default function SubscriptionsPage() {
   const [statusFilter, setStatusFilter] = useState<string>("active");
   const [categoryFilter, setCategoryFilter] = useState<string | undefined>(undefined);
 
-  // Fetch subscriptions
+  // Fetch subscriptions — primary data, drives the list
   const { data: subscriptions, isLoading: subsLoading } = trpc.subscriptions.list.useQuery({
     status: statusFilter as "trial" | "active" | "paused" | "cancelled" | "expired",
     category: categoryFilter,
   });
 
-  // Fetch spend metrics
-  const { data: metrics, isLoading: metricsLoading } = trpc.subscriptions.spendMetrics.useQuery({
-    status: ["active", "trial"],
-  });
+  // Fetch spend metrics — secondary, loads independently
+  const { data: metrics, isLoading: metricsLoading } = trpc.subscriptions.spendMetrics.useQuery(
+    { status: ["active", "trial"] },
+    { retry: 1 }
+  );
 
-  // Fetch seat utilization
-  const { data: utilization, isLoading: utilizationLoading } = trpc.subscriptions.seatUtilization.useQuery({
-    threshold: 50, // Flag subscriptions with <50% utilization
-  });
-
-  const isLoading = subsLoading || metricsLoading || utilizationLoading;
+  // Fetch seat utilization — secondary, loads independently
+  const { data: utilization } = trpc.subscriptions.seatUtilization.useQuery(
+    { threshold: 50 },
+    { retry: 1 }
+  );
 
   return (
     <div className="space-y-6">
@@ -107,6 +107,18 @@ export default function SubscriptionsPage() {
       </div>
 
       {/* Metrics Overview */}
+      {metricsLoading && !metrics && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {[...Array(3)].map((_, i) => (
+            <Card key={i} className="animate-pulse">
+              <CardContent className="p-6">
+                <div className="h-4 bg-slate-200 rounded w-2/3 mb-3"></div>
+                <div className="h-7 bg-slate-100 rounded w-1/2"></div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
       {metrics && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card>
@@ -256,13 +268,13 @@ export default function SubscriptionsPage() {
           </div>
         </CardHeader>
         <CardContent>
-          {isLoading && (
+          {subsLoading && (
             <div className="flex items-center justify-center py-12">
               <Loader2 className="h-6 w-6 animate-spin text-slate-400" />
             </div>
           )}
 
-          {!isLoading && subscriptions && subscriptions.length === 0 && (
+          {!subsLoading && subscriptions && subscriptions.length === 0 && (
             <EmptyState
               illustration={<EmptyBoxIllustration className="w-32 h-32" />}
               title={
@@ -294,7 +306,7 @@ export default function SubscriptionsPage() {
             />
           )}
 
-          {!isLoading && subscriptions && subscriptions.length > 0 && (
+          {!subsLoading && subscriptions && subscriptions.length > 0 && (
             <div className="space-y-3">
               {subscriptions.map((sub: SubscriptionItem) => {
                 const monthlyCost = sub.billingCycle === "monthly"
