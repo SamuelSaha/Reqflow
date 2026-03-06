@@ -375,6 +375,7 @@ export default function TeamPage() {
         onOpenChange={setInviteDialogOpen}
       />
       <EditUserDialog
+        key={selectedUser?.id}
         open={editUserDialogOpen}
         onOpenChange={setEditUserDialogOpen}
         user={selectedUser}

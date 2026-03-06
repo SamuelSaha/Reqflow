@@ -140,11 +140,21 @@ async function handleModalSubmission(
 
 /**
  * Send message to Slack response_url
+ * 🔒 SECURITY: Whitelisted to hooks.slack.com only (SSRF prevention)
  */
 async function sendToResponseUrl(responseUrl: string | null, payload: Record<string, unknown>) {
   if (!responseUrl) {
     logger.warn("No response_url provided for Slack interactivity", {
       source: "slack_interactivity",
+    });
+    return;
+  }
+
+  // 🔒 SECURITY: Only allow official Slack response URLs to prevent SSRF
+  if (!responseUrl.startsWith("https://hooks.slack.com/")) {
+    logger.warn("Rejected non-Slack response_url", {
+      source: "slack_interactivity",
+      prefix: responseUrl.substring(0, 40),
     });
     return;
   }

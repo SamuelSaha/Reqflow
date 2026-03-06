@@ -12,7 +12,10 @@ import { Loader2, AlertCircle } from "lucide-react";
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirect") || "/dashboard";
+  const raw = searchParams.get("redirect") || "/dashboard";
+  // 🔒 SECURITY: Only allow same-origin relative paths (prevent open redirect)
+  // Rejects absolute URLs (http://evil.com), protocol-relative (//evil.com), and non-path values
+  const redirectTo = raw.startsWith("/") && !raw.startsWith("//") ? raw : "/dashboard";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

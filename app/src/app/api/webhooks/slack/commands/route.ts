@@ -148,11 +148,21 @@ async function processQuickRequest(
 
 /**
  * Send message to Slack response_url
+ * 🔒 SECURITY: Whitelisted to hooks.slack.com only (SSRF prevention)
  */
 async function sendToResponseUrl(responseUrl: string | null, payload: Record<string, unknown>) {
   if (!responseUrl) {
     logger.warn("No response_url provided for Slack command", {
       source: "slack_commands",
+    });
+    return;
+  }
+
+  // 🔒 SECURITY: Only allow official Slack response URLs to prevent SSRF
+  if (!responseUrl.startsWith("https://hooks.slack.com/")) {
+    logger.warn("Rejected non-Slack response_url", {
+      source: "slack_commands",
+      prefix: responseUrl.substring(0, 40),
     });
     return;
   }

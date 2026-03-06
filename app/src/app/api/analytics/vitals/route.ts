@@ -145,14 +145,17 @@ export async function POST(request: NextRequest) {
 }
 
 // Handle OPTIONS for CORS preflight
+// 🔒 SECURITY: Restrict to app origin only — prevents cross-site metric injection
 export async function OPTIONS() {
+  const origin = process.env.NEXT_PUBLIC_APP_URL || '';
   return NextResponse.json(
     {},
     {
       headers: {
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': origin,
         'Access-Control-Allow-Methods': 'POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type',
+        'Vary': 'Origin',
       },
     }
   );

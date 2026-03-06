@@ -48,16 +48,22 @@ export function verifySlackSignature(
   const expected = `v0=${hmac}`;
 
   // Timing-safe comparison to prevent timing attacks
+  // 🔒 SECURITY: Pad both buffers to the same length before comparing so that
+  // a length mismatch doesn't create an early-return timing oracle.
   try {
     const signatureBuffer = Buffer.from(signature);
     const expectedBuffer = Buffer.from(expected);
 
-    // Buffers must be same length for timingSafeEqual
-    if (signatureBuffer.length !== expectedBuffer.length) {
-      return false;
-    }
+    const maxLen = Math.max(signatureBuffer.length, expectedBuffer.length);
+    const a = Buffer.alloc(maxLen, 0);
+    const b = Buffer.alloc(maxLen, 0);
+    signatureBuffer.copy(a);
+    expectedBuffer.copy(b);
 
-    return crypto.timingSafeEqual(signatureBuffer, expectedBuffer);
+    // Length must match AND content must match (both evaluated in constant time)
+    const lengthMatch = signatureBuffer.length === expectedBuffer.length;
+    const contentMatch = crypto.timingSafeEqual(a, b);
+    return lengthMatch && contentMatch;
   } catch (error) {
     logger.error("Slack signature verification failed", error as Error, {
       source: "slack_signature",

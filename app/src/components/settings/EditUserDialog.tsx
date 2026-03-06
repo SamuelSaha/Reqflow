@@ -110,15 +110,6 @@ export function EditUserDialog({ open, onOpenChange, user }: Props) {
     });
   }
 
-  // Reset form when user changes
-  if (user && open) {
-    if (role !== user.role) setRole(user.role);
-    if (departmentId !== user.department?.id) {
-      setDepartmentId(user.department?.id || null);
-    }
-    if (isActive !== user.isActive) setIsActive(user.isActive);
-  }
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[500px]">

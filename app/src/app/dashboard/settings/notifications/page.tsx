@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Bell, Mail, MessageSquare, Save } from "lucide-react";
 import { trpc } from "@/lib/api/react";
 import { Button } from "@/components/ui/button";
@@ -83,9 +83,12 @@ export default function NotificationPreferencesPage() {
   });
 
   // Initialize local state when data loads
-  if (preferences && Object.keys(localPrefs).length === 0) {
-    setLocalPrefs(preferences);
-  }
+  useEffect(() => {
+    if (preferences && Object.keys(localPrefs).length === 0) {
+      setLocalPrefs(preferences);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [preferences]);
 
   const handleToggle = (
     type: keyof NotificationPreferences,
