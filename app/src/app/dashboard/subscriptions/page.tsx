@@ -79,7 +79,7 @@ export default function SubscriptionsPage() {
   const [categoryFilter, setCategoryFilter] = useState<string | undefined>(undefined);
 
   // Fetch subscriptions — primary data, drives the list
-  const { data: subscriptions, isLoading: subsLoading } = trpc.subscriptions.list.useQuery({
+  const { data: subscriptions, isLoading: subsLoading, isError: subsError } = trpc.subscriptions.list.useQuery({
     status: statusFilter as "trial" | "active" | "paused" | "cancelled" | "expired",
     category: categoryFilter,
   });
@@ -274,7 +274,17 @@ export default function SubscriptionsPage() {
             </div>
           )}
 
-          {!subsLoading && subscriptions && subscriptions.length === 0 && (
+          {!subsLoading && subsError && (
+            <div className="flex flex-col items-center justify-center py-12 text-center gap-3">
+              <AlertTriangle className="h-8 w-8 text-slate-300" />
+              <p className="text-sm text-slate-500">Failed to load subscriptions.</p>
+              <Button variant="outline" size="sm" onClick={() => window.location.reload()}>
+                Retry
+              </Button>
+            </div>
+          )}
+
+          {!subsLoading && !subsError && subscriptions && subscriptions.length === 0 && (
             <EmptyState
               illustration={<EmptyBoxIllustration className="w-32 h-32" />}
               title={
@@ -306,7 +316,7 @@ export default function SubscriptionsPage() {
             />
           )}
 
-          {!subsLoading && subscriptions && subscriptions.length > 0 && (
+          {!subsLoading && !subsError && subscriptions && subscriptions.length > 0 && (
             <div className="space-y-3">
               {subscriptions.map((sub: SubscriptionItem) => {
                 const monthlyCost = sub.billingCycle === "monthly"

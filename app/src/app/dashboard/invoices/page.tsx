@@ -73,7 +73,7 @@ export default function InvoicesPage() {
   });
 
   // Fetch invoices
-  const { data: invoices, isLoading: invoicesLoading } = trpc.invoices.list.useQuery({
+  const { data: invoices, isLoading: invoicesLoading, isError: invoicesError } = trpc.invoices.list.useQuery({
     matchStatus: matchStatusFilter as "unmatched" | "auto_matched" | "manual_matched" | "disputed" | undefined,
     status: statusFilter as "pending" | "approved" | "paid" | "disputed" | "overdue" | "cancelled" | undefined,
   });
@@ -205,7 +205,20 @@ export default function InvoicesPage() {
             </div>
           )}
 
-          {!invoicesLoading && invoices && invoices.length === 0 && (
+          {!invoicesLoading && invoicesError && (
+            <div className="flex flex-col items-center justify-center py-12 text-center gap-3">
+              <AlertTriangle className="h-8 w-8 text-slate-300" />
+              <p className="text-sm text-slate-500">Failed to load invoices.</p>
+              <button
+                onClick={() => window.location.reload()}
+                className="text-sm text-blue-600 underline underline-offset-2"
+              >
+                Retry
+              </button>
+            </div>
+          )}
+
+          {!invoicesLoading && !invoicesError && invoices && invoices.length === 0 && (
             <EmptyState
               illustration={<EmptyBoxIllustration className="w-32 h-32" />}
               title={
@@ -232,7 +245,7 @@ export default function InvoicesPage() {
             />
           )}
 
-          {!invoicesLoading && invoices && invoices.length > 0 && (
+          {!invoicesLoading && !invoicesError && invoices && invoices.length > 0 && (
             <div className="space-y-3">
               {invoices.map((invoice) => {
                 const variance = invoice.varianceAmount ? parseFloat(invoice.varianceAmount) : 0;
