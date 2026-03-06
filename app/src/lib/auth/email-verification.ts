@@ -56,8 +56,19 @@ export async function createVerificationToken(
     expiresAt,
   });
 
-  // Send verification email
+  // Build verification URL
   const verificationUrl = `${env.NEXT_PUBLIC_APP_URL}/api/auth/verify-email?token=${token}`;
+
+  // In development, log the link to the console so it works without an email provider
+  if (process.env.NODE_ENV === "development") {
+    console.log("\n╔══════════════════════════════════════════════════════════╗");
+    console.log("║          📧 EMAIL VERIFICATION LINK (dev only)           ║");
+    console.log("╠══════════════════════════════════════════════════════════╣");
+    console.log(`║  User: ${email.padEnd(50)} ║`);
+    console.log("║  Click below to verify:                                  ║");
+    console.log(`║  ${verificationUrl}`);
+    console.log("╚══════════════════════════════════════════════════════════╝\n");
+  }
 
   await sendEmail({
     to: email,

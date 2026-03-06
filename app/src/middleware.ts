@@ -17,19 +17,6 @@ const protectedRoutes = ["/dashboard", "/onboarding"];
 // Routes that should redirect to dashboard if already authenticated
 const authRoutes = ["/login", "/signup"];
 
-// Routes that require email verification (sensitive operations)
-const verificationRequiredRoutes = [
-  "/dashboard/requests/new",
-  "/dashboard/requests/create",
-  "/dashboard/approvals",
-  "/dashboard/budgets",
-  "/dashboard/settings",
-  "/dashboard/users",
-  "/dashboard/vendors",
-  "/dashboard/contracts",
-  "/dashboard/integrations",
-];
-
 // Public routes (accessible to everyone)
 const publicRoutes = [
   "/",
@@ -124,20 +111,6 @@ export async function middleware(request: NextRequest) {
   // Redirect completed users away from /onboarding
   if (session.onboardingCompleted && pathname.startsWith("/onboarding")) {
     return withCSP(NextResponse.redirect(new URL("/dashboard", request.url)));
-  }
-
-  // 🔒 SECURITY (issue #120): Email verification gate for sensitive routes
-  // Users without verified email are blocked from creating requests, approvals, budgets, etc.
-  const requiresVerification = verificationRequiredRoutes.some(route =>
-    pathname.startsWith(route)
-  );
-
-  // session.emailVerified can be undefined on old tokens (before the field was added to the payload).
-  // Treat undefined as "verified" for backward compatibility; only block when explicitly false.
-  if (requiresVerification && session.emailVerified === false) {
-    const verifyUrl = new URL("/verify-email", request.url);
-    verifyUrl.searchParams.set("email", session.email || "");
-    return withCSP(NextResponse.redirect(verifyUrl));
   }
 
   return withCSP(NextResponse.next());
