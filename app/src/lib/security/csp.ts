@@ -23,14 +23,18 @@ export function generateNonce(): string {
 export function buildCSP(nonce: string, isDev: boolean): string {
   const directives = [
     "default-src 'self'",
-    // 🔒 SECURITY: Scripts use nonces, no unsafe-inline
-    // Note: unsafe-eval removed by disabling Sentry session replay
-    `script-src 'self' 'nonce-${nonce}' https://*.sentry.io${isDev ? " 'unsafe-eval'" : ""}`,
-    // 🔒 SECURITY: Styles still need unsafe-inline for Tailwind CSS and Radix UI
-    // This is a known limitation - Tailwind generates classes at build time but
-    // Radix UI injects inline styles at runtime for animations/positioning
-    // Future: Migrate to CSS-in-JS with nonce support or use strict-dynamic
-    `style-src 'self' 'unsafe-inline' 'nonce-${nonce}'`,
+    // 🔒 SECURITY: Scripts use nonces, no unsafe-inline in production.
+    // In dev: unsafe-eval + unsafe-inline needed for Next.js HMR and RSC hydration bootstrapping.
+    // Next.js App Router generates inline <script> tags for RSC payload that have no nonce —
+    // those would be blocked without unsafe-inline, preventing React hydration entirely.
+    // In production: use strict-dynamic so nonce-authorized scripts can load dynamic chunks.
+    // TODO: Track https://github.com/vercel/next.js/issues for native nonce injection into RSC scripts.
+    `script-src 'self' 'nonce-${nonce}' https://*.sentry.io${isDev ? " 'unsafe-eval' 'unsafe-inline'" : " 'strict-dynamic'"}`,
+    // 🔒 SECURITY: Styles use unsafe-inline for Tailwind CSS and Radix UI runtime styles.
+    // NOTE: Do NOT add 'nonce-...' here alongside 'unsafe-inline' — in CSP Level 2+,
+    // the presence of a nonce/hash source causes 'unsafe-inline' to be IGNORED by the browser,
+    // which breaks Radix UI inline styles and the Next.js devtools rendering.
+    `style-src 'self' 'unsafe-inline'`,
     "img-src 'self' data: https: blob:",
     "font-src 'self' data:",
     `connect-src 'self' https://*.sentry.io https://*.axiom.co https://*.cloudflare.com wss://localhost:* ws://localhost:*${isDev ? " ws://*" : ""}`,
