@@ -30,21 +30,6 @@ const verificationRequiredRoutes = [
   "/dashboard/integrations",
 ];
 
-// Routes that require MFA verification (for users with MFA enabled)
-const mfaVerifyRoutes = [
-  "/dashboard/settings",
-  "/dashboard/users",
-  "/dashboard/vendors",
-  "/dashboard/integrations",
-];
-
-// Routes exempt from MFA verification requirement (but still accessible for MFA setup)
-// /onboarding must be exempt so finance/admin users can complete onboarding before setting up MFA
-const mfaExemptRoutes = ["/dashboard/settings/security", "/setup-mfa", "/verify-mfa", "/onboarding"];
-
-// Roles that require MFA to be enabled
-const mfaRequiredRoles = ["finance", "admin"];
-
 // Public routes (accessible to everyone)
 const publicRoutes = [
   "/",
@@ -132,9 +117,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // Onboarding gate: redirect unonboarded users to /onboarding
-  // Exempt MFA routes so finance/admin can set up MFA even if onboarding isn't complete
-  const isMfaFlowRoute = pathname.startsWith("/setup-mfa") || pathname.startsWith("/verify-mfa");
-  if (!session.onboardingCompleted && !pathname.startsWith("/onboarding") && !isMfaFlowRoute) {
+  if (!session.onboardingCompleted && !pathname.startsWith("/onboarding")) {
     return withCSP(NextResponse.redirect(new URL("/onboarding", request.url)));
   }
 
@@ -154,27 +137,6 @@ export async function middleware(request: NextRequest) {
   if (requiresVerification && session.emailVerified === false) {
     const verifyUrl = new URL("/verify-email", request.url);
     verifyUrl.searchParams.set("email", session.email || "");
-    return withCSP(NextResponse.redirect(verifyUrl));
-  }
-
-  // 🔒 SECURITY (issue #121): MFA enforcement for Finance/Admin roles
-  // 1. Finance/Admin users MUST have MFA enabled - redirect to /setup-mfa if not
-  // 2. Users with MFA enabled must verify on sensitive routes
-
-  const requiresMfaRole = mfaRequiredRoles.includes(session.role);
-  const isMfaExemptRoute = mfaExemptRoutes.some(route => pathname.startsWith(route));
-  const isMfaVerifyRoute = mfaVerifyRoutes.some(route => pathname.startsWith(route));
-
-  // Finance/Admin without MFA enabled must set it up first
-  if (requiresMfaRole && !session.mfaEnabled && !isMfaExemptRoute) {
-    const setupUrl = new URL("/setup-mfa", request.url);
-    return withCSP(NextResponse.redirect(setupUrl));
-  }
-
-  // Users with MFA enabled need to verify on sensitive routes (unless already verified this session)
-  if (session.mfaEnabled && isMfaVerifyRoute && !isMfaExemptRoute && !session.mfaVerified) {
-    const verifyUrl = new URL("/verify-mfa", request.url);
-    verifyUrl.searchParams.set("redirect", pathname);
     return withCSP(NextResponse.redirect(verifyUrl));
   }
 
