@@ -1,17 +1,22 @@
-"use client";
+import { MarketingNav } from '@/components/marketing/nav/MarketingNav';
+import { PricingSection } from '@/components/marketing/sections/PricingSection';
+import { FAQSection } from '@/components/marketing/sections/FAQSection';
+import { FinalCTA } from '@/components/marketing/sections/FinalCTA';
+import { MarketingFooter } from '@/components/marketing/footer/MarketingFooter';
 
-import { PageShell } from "@/components/layout";
-import { Pricing, FAQ, FinalCTA } from "@/components/landing/BottomSection";
-
-// Note: metadata export doesn't work in client components
-// Metadata is set via layout.tsx template: "Pricing | Reqflow"
+export const metadata = {
+  title: 'Pricing | Reqflow',
+  description: 'Free during early access. No credit card required.',
+};
 
 export default function PricingPage() {
   return (
-    <PageShell>
-      <Pricing />
-      <FAQ />
+    <>
+      <MarketingNav />
+      <PricingSection />
+      <FAQSection />
       <FinalCTA />
-    </PageShell>
+      <MarketingFooter />
+    </>
   );
 }
