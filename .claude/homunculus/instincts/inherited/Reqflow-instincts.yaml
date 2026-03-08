@@ -1,0 +1,774 @@
+# Instincts generated from https://github.com/SamuelSaha/Reqflow
+# Generated: 2026-03-08T00:06:52.558Z
+# Version: 2.0
+
+---
+id: Reqflow-commit-length
+trigger: "when writing a commit message"
+confidence: 0.6
+domain: git
+source: repo-analysis
+source_repo: https://github.com/SamuelSaha/Reqflow
+---
+
+# Reqflow Commit Length
+
+## Action
+
+Write moderate-length commit messages (~50 characters)
+
+## Evidence
+
+- Average commit message length: 60 chars
+- Based on 200 commits
+
+---
+id: Reqflow-naming-files
+trigger: "when creating a new file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/SamuelSaha/Reqflow
+---
+
+# Reqflow Naming Files
+
+## Action
+
+Use camelCase naming convention
+
+## Evidence
+
+- Analyzed file naming patterns in repository
+- Dominant pattern: camelCase
+
+---
+id: Reqflow-export-style
+trigger: "when exporting from a module"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/SamuelSaha/Reqflow
+---
+
+# Reqflow Export Style
+
+## Action
+
+Prefer default exports
+
+## Evidence
+
+- Export pattern analysis
+- Dominant style: default
+
+---
+id: Reqflow-arch-type-based
+trigger: "when adding new code"
+confidence: 0.8
+domain: architecture
+source: repo-analysis
+source_repo: https://github.com/SamuelSaha/Reqflow
+---
+
+# Reqflow Arch Type Based
+
+## Action
+
+Place code in the appropriate type folder (components/, services/, utils/, etc.)
+
+## Evidence
+
+- Type-based module organization detected
+- Folders: 
+
+---
+id: Reqflow-test-framework
+trigger: "when writing tests"
+confidence: 0.9
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/SamuelSaha/Reqflow
+---
+
+# Reqflow Test Framework
+
+## Action
+
+Use vitest as the test framework
+
+## Evidence
+
+- Test framework detected: vitest
+- File pattern: *.test.ts
+
+---
+id: Reqflow-test-naming
+trigger: "when creating a test file"
+confidence: 0.85
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/SamuelSaha/Reqflow
+---
+
+# Reqflow Test Naming
+
+## Action
+
+Name test files using the pattern: *.test.ts
+
+## Evidence
+
+- File pattern: *.test.ts
+- Consistent across test files
+
+---
+id: Reqflow-test-mocking
+trigger: "when mocking dependencies in tests"
+confidence: 0.75
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/SamuelSaha/Reqflow
+---
+
+# Reqflow Test Mocking
+
+## Action
+
+Use vi.mock for mocking
+
+## Evidence
+
+- Mocking pattern detected: vi.mock
+- Consistent across test files
+
+---
+id: Reqflow-test-types
+trigger: "when planning tests for a feature"
+confidence: 0.7
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/SamuelSaha/Reqflow
+---
+
+# Reqflow Test Types
+
+## Action
+
+Write unit, integration, e2e tests to match project standards
+
+## Evidence
+
+- Test types detected: unit, integration, e2e
+- Coverage config: no
+
+---
+id: Reqflow-workflow-database-migration
+trigger: "when modifying the database schema or adding tables"
+confidence: 0.75
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/SamuelSaha/Reqflow
+---
+
+# Reqflow Workflow Database Migration
+
+## Action
+
+Follow the database-migration workflow:
+1. Create migration file
+2. Update schema definitions
+3. Generate/update types
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~5x per month
+- Files: **/schema.*, **/types.ts, migrations/*
+
+---
+id: Reqflow-workflow-feature-development
+trigger: "when implementing a new feature"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/SamuelSaha/Reqflow
+---
+
+# Reqflow Workflow Feature Development
+
+## Action
+
+Follow the feature-development workflow:
+1. Add feature implementation
+2. Add tests for feature
+3. Update documentation
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~21x per month
+- Files: app/src/app/dashboard/settings/ai/*, app/src/components/dashboard/*, app/src/lib/api/routers/*
+
+---
+id: Reqflow-workflow-database-schema-change
+trigger: "when doing database schema change"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/SamuelSaha/Reqflow
+---
+
+# Reqflow Workflow Database Schema Change
+
+## Action
+
+Follow the database-schema-change workflow:
+1. Create Drizzle migration SQL file
+2. Update schema TypeScript files
+3. Update schema index exports
+4. Update meta journal if needed
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~8x per month
+- Files: app/drizzle/*.sql, app/src/lib/db/schema/*.ts, app/src/lib/db/schema/index.ts
+
+---
+id: Reqflow-workflow-fix-production-issues
+trigger: "when doing fix production issues"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/SamuelSaha/Reqflow
+---
+
+# Reqflow Workflow Fix Production Issues
+
+## Action
+
+Follow the fix-production-issues workflow:
+1. Identify root cause
+2. Fix code/configuration
+3. Apply type safety improvements
+4. Verify with tests
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~12x per month
+- Files: app/src/lib/auth/*.ts, app/src/middleware.ts, app/src/app/*/page.tsx
+
+---
+id: Reqflow-workflow-marketing-page-refinement
+trigger: "when doing marketing page refinement"
+confidence: 0.75
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/SamuelSaha/Reqflow
+---
+
+# Reqflow Workflow Marketing Page Refinement
+
+## Action
+
+Follow the marketing-page-refinement workflow:
+1. Update marketing components
+2. Refine copy and messaging
+3. Maintain brand consistency
+4. Optimize for conversion
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~5x per month
+- Files: app/src/components/marketing/**/*.tsx, app/src/app/page.tsx, app/src/app/**/page.tsx
+
+---
+id: Reqflow-workflow-dashboard-empty-states
+trigger: "when doing dashboard empty states"
+confidence: 0.8
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/SamuelSaha/Reqflow
+---
+
+# Reqflow Workflow Dashboard Empty States
+
+## Action
+
+Follow the dashboard-empty-states workflow:
+1. Replace skeleton loaders with empty states
+2. Add loading.tsx and error.tsx boundaries
+3. Create contextual CTAs
+4. Add proper error handling
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~6x per month
+- Files: app/src/app/dashboard/*/page.tsx, app/src/app/dashboard/*/loading.tsx, app/src/app/dashboard/*/error.tsx
+
+---
+id: Reqflow-workflow-api-route-enhancement
+trigger: "when doing api route enhancement"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/SamuelSaha/Reqflow
+---
+
+# Reqflow Workflow Api Route Enhancement
+
+## Action
+
+Follow the api-route-enhancement workflow:
+1. Create or update API route
+2. Add proper error handling
+3. Implement validation
+4. Add rate limiting if needed
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~8x per month
+- Files: app/src/app/api/**/route.ts, app/src/lib/api/routers/*.ts
+
+---
+id: Reqflow-workflow-typescript-quality-fixes
+trigger: "when doing typescript quality fixes"
+confidence: 0.7
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/SamuelSaha/Reqflow
+---
+
+# Reqflow Workflow Typescript Quality Fixes
+
+## Action
+
+Follow the typescript-quality-fixes workflow:
+1. Identify any types or type errors
+2. Create proper interfaces
+3. Replace with typed alternatives
+4. Verify type-check passes
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~4x per month
+- Files: app/src/lib/**/*.ts, app/src/components/**/*.tsx, app/src/app/**/*.tsx
+
+---
+id: Reqflow-workflow-authentication-security-improvements
+trigger: "when doing authentication security improvements"
+confidence: 0.8
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/SamuelSaha/Reqflow
+---
+
+# Reqflow Workflow Authentication Security Improvements
+
+## Action
+
+Follow the authentication-security-improvements workflow:
+1. Update auth logic
+2. Add security measures
+3. Update middleware
+4. Fix session handling
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~6x per month
+- Files: app/src/lib/auth/*.ts, app/src/middleware.ts, app/src/app/login/page.tsx
+
+---
+id: Reqflow-workflow-comprehensive-feature-documentation
+trigger: "when doing comprehensive feature documentation"
+confidence: 0.75
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/SamuelSaha/Reqflow
+---
+
+# Reqflow Workflow Comprehensive Feature Documentation
+
+## Action
+
+Follow the comprehensive-feature-documentation workflow:
+1. Create comprehensive markdown docs
+2. Include implementation guides
+3. Add troubleshooting sections
+4. Document best practices
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~5x per month
+- Files: app/docs/**/*.md, *.md
+
+---
+id: reqflow-camel-case-files
+trigger: "When creating new file names"
+confidence: 0.85
+domain: code-style
+source: repo-analysis
+source_repo: SamuelSaha/Reqflow
+---
+
+# Reqflow Camel Case Files
+
+## Action
+
+Use camelCase naming convention
+
+## Evidence
+
+- Pattern in files like drizzle.config.ts
+- Consistent across app/ directory
+
+---
+id: reqflow-pascal-case-components
+trigger: "When naming React components or classes"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: SamuelSaha/Reqflow
+---
+
+# Reqflow Pascal Case Components
+
+## Action
+
+Use PascalCase naming convention
+
+## Evidence
+
+- Components like AiAnalysisPanel.tsx
+- Consistent in components/dashboard/
+
+---
+id: reqflow-default-exports
+trigger: "When exporting main component or function from file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: SamuelSaha/Reqflow
+---
+
+# Reqflow Default Exports
+
+## Action
+
+Use default export style
+
+## Evidence
+
+- Consistent export style across components
+- Pattern in React components
+
+---
+id: reqflow-vitest-testing
+trigger: "When writing unit tests"
+confidence: 0.9
+domain: testing
+source: repo-analysis
+source_repo: SamuelSaha/Reqflow
+---
+
+# Reqflow Vitest Testing
+
+## Action
+
+Use vitest framework with *.test.ts pattern
+
+## Evidence
+
+- vitest.config.ts present
+- Testing framework configured
+
+---
+id: reqflow-vi-mock-style
+trigger: "When mocking dependencies in tests"
+confidence: 0.85
+domain: testing
+source: repo-analysis
+source_repo: SamuelSaha/Reqflow
+---
+
+# Reqflow Vi Mock Style
+
+## Action
+
+Use vi.mock() syntax
+
+## Evidence
+
+- Vitest framework indicates vi.mock usage
+- Standard vitest mocking pattern
+
+---
+id: reqflow-try-catch-errors
+trigger: "When handling potential errors"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: SamuelSaha/Reqflow
+---
+
+# Reqflow Try Catch Errors
+
+## Action
+
+Use try-catch blocks for error handling
+
+## Evidence
+
+- Error handling style: try-catch
+- No custom error classes detected
+
+---
+id: reqflow-conventional-commits
+trigger: "When making git commits"
+confidence: 0.95
+domain: git
+source: repo-analysis
+source_repo: SamuelSaha/Reqflow
+---
+
+# Reqflow Conventional Commits
+
+## Action
+
+Use format: type(scope): description with 60 char average
+
+## Evidence
+
+- fix(marketing): use USD in hero dashboard mockup
+- feat(auth): add /reset-password page
+- chore: Add .gitignore
+
+---
+id: reqflow-fix-prefix-bugs
+trigger: "When fixing bugs or issues"
+confidence: 0.9
+domain: git
+source: repo-analysis
+source_repo: SamuelSaha/Reqflow
+---
+
+# Reqflow Fix Prefix Bugs
+
+## Action
+
+Use 'fix' prefix in commit message
+
+## Evidence
+
+- fix(marketing): migrate pricing page
+- fix(signup): replace static password list
+
+---
+id: reqflow-feat-prefix-features
+trigger: "When adding new features"
+confidence: 0.9
+domain: git
+source: repo-analysis
+source_repo: SamuelSaha/Reqflow
+---
+
+# Reqflow Feat Prefix Features
+
+## Action
+
+Use 'feat' prefix in commit message
+
+## Evidence
+
+- feat(auth): add /reset-password page
+- feat(auth): password reset API routes
+
+---
+id: reqflow-drizzle-migrations
+trigger: "When changing database schema"
+confidence: 0.95
+domain: workflow
+source: repo-analysis
+source_repo: SamuelSaha/Reqflow
+---
+
+# Reqflow Drizzle Migrations
+
+## Action
+
+Create Drizzle migration SQL file and update schema TypeScript files
+
+## Evidence
+
+- app/drizzle/*.sql files
+- drizzle.config.ts present
+- Schema change workflow pattern
+
+---
+id: reqflow-api-route-structure
+trigger: "When creating API endpoints"
+confidence: 0.87
+domain: workflow
+source: repo-analysis
+source_repo: SamuelSaha/Reqflow
+---
+
+# Reqflow Api Route Structure
+
+## Action
+
+Create route.ts files in app/src/app/api/ directory
+
+## Evidence
+
+- API route enhancement workflow
+- app/src/app/api/**/route.ts pattern
+
+---
+id: reqflow-dashboard-boundaries
+trigger: "When creating dashboard pages"
+confidence: 0.88
+domain: workflow
+source: repo-analysis
+source_repo: SamuelSaha/Reqflow
+---
+
+# Reqflow Dashboard Boundaries
+
+## Action
+
+Add loading.tsx and error.tsx boundaries alongside page.tsx
+
+## Evidence
+
+- Dashboard empty states workflow
+- app/src/app/dashboard/*/ pattern
+
+---
+id: reqflow-marketing-components
+trigger: "When updating marketing content"
+confidence: 0.85
+domain: workflow
+source: repo-analysis
+source_repo: SamuelSaha/Reqflow
+---
+
+# Reqflow Marketing Components
+
+## Action
+
+Modify files in app/src/components/marketing/ directory
+
+## Evidence
+
+- Marketing page refinement workflow
+- app/src/components/marketing/**/*.tsx pattern
+
+---
+id: reqflow-auth-middleware
+trigger: "When modifying authentication"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: SamuelSaha/Reqflow
+---
+
+# Reqflow Auth Middleware
+
+## Action
+
+Update both auth files and middleware.ts together
+
+## Evidence
+
+- Authentication security workflow
+- app/src/lib/auth/*.ts and middleware.ts pattern
+
+---
+id: reqflow-type-safety-focus
+trigger: "When encountering 'any' types"
+confidence: 0.83
+domain: workflow
+source: repo-analysis
+source_repo: SamuelSaha/Reqflow
+---
+
+# Reqflow Type Safety Focus
+
+## Action
+
+Replace with proper TypeScript interfaces
+
+## Evidence
+
+- TypeScript quality fixes workflow
+- Type safety improvement pattern
+
+---
+id: reqflow-comprehensive-docs
+trigger: "When implementing complex features"
+confidence: 0.82
+domain: workflow
+source: repo-analysis
+source_repo: SamuelSaha/Reqflow
+---
+
+# Reqflow Comprehensive Docs
+
+## Action
+
+Create markdown documentation with implementation guides
+
+## Evidence
+
+- Comprehensive feature documentation workflow
+- app/docs/**/*.md pattern
+
+---
+id: reqflow-single-package-structure
+trigger: "When organizing project files"
+confidence: 0.9
+domain: architecture
+source: repo-analysis
+source_repo: SamuelSaha/Reqflow
+---
+
+# Reqflow Single Package Structure
+
+## Action
+
+Use single-package structure with app/ as main directory
+
+## Evidence
+
+- Single-package type detected
+- app/ directory as main source
+
+---
+id: reqflow-type-based-modules
+trigger: "When organizing code modules"
+confidence: 0.85
+domain: architecture
+source: repo-analysis
+source_repo: SamuelSaha/Reqflow
+---
+
+# Reqflow Type Based Modules
+
+## Action
+
+Group by type (components/, lib/, app/) rather than by feature
+
+## Evidence
+
+- Type-based module organization
+- Folder structure shows type grouping
+
