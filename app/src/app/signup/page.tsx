@@ -102,7 +102,7 @@ export default function SignupPage() {
           </div>
           <CardTitle className="text-2xl text-center">Create an account</CardTitle>
           <CardDescription className="text-center">
-            Get started with Reqflow in minutes
+            Set up your team&apos;s procurement workspace in minutes
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -155,16 +155,23 @@ export default function SignupPage() {
                 autoComplete="new-password"
                 disabled={loading}
               />
-              <div className="text-xs text-slate-500 space-y-1">
-                <p className="font-medium">Password must contain:</p>
-                <ul className="list-disc list-inside space-y-0.5 ml-2">
-                  <li>At least 12 characters</li>
-                  <li>Uppercase letter (A-Z)</li>
-                  <li>Lowercase letter (a-z)</li>
-                  <li>Number (0-9)</li>
-                  <li>Special character (!@#$%^&* etc.)</li>
+              {/* Live password validation — only shown after user starts typing */}
+              {password.length > 0 && (
+                <ul className="space-y-1 mt-1">
+                  {[
+                    { label: "12+ characters", ok: password.length >= 12 },
+                    { label: "Uppercase letter", ok: /[A-Z]/.test(password) },
+                    { label: "Lowercase letter", ok: /[a-z]/.test(password) },
+                    { label: "Number", ok: /[0-9]/.test(password) },
+                    { label: "Special character (!@#$%...)", ok: /[^A-Za-z0-9]/.test(password) },
+                  ].map(({ label, ok }) => (
+                    <li key={label} className={`flex items-center gap-2 text-xs ${ok ? "text-green-600" : "text-slate-400"}`}>
+                      <span className={`inline-block w-1.5 h-1.5 rounded-full flex-shrink-0 ${ok ? "bg-green-500" : "bg-slate-300"}`} />
+                      {label}
+                    </li>
+                  ))}
                 </ul>
-              </div>
+              )}
             </div>
 
             <Button type="submit" className="w-full" disabled={loading}>
