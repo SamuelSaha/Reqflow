@@ -6,7 +6,6 @@ import { organizations } from "./organizations";
 import { vendors } from "./vendors";
 import { contracts } from "./contracts";
 import { departments } from "./departments";
-import { requests } from "./requests";
 
 export const subscriptions = pgTable("subscriptions", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -73,10 +72,6 @@ export const subscriptionRelations = relations(subscriptions, ({ one }) => ({
   department: one(departments, {
     fields: [subscriptions.departmentId],
     references: [departments.id],
-  }),
-  sourceRequest: one(requests, {
-    fields: [subscriptions.sourceRequestId],
-    references: [requests.id],
   }),
 }));
 
