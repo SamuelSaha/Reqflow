@@ -23,6 +23,7 @@ export * from "./audit-logs";
 export * from "./verification-tokens";
 export * from "./refresh-tokens";
 export * from "./oauth-states";
+export * from "./password-reset-tokens";
 
 // Integrations
 export * from "./slack-workspaces";

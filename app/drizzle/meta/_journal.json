@@ -57,6 +57,13 @@
       "when": 1740906000000,
       "tag": "0007_ai_multi_provider",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1741392000000,
+      "tag": "0008_password_reset_tokens",
+      "breakpoints": true
     }
   ]
 }
