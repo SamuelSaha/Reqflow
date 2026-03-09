@@ -16,6 +16,7 @@ export function Spinner({ size = "md", className }: SpinnerProps) {
   return (
     <Loader2
       className={cn("animate-spin text-slate-400", sizeMap[size], className)}
+      role="status"
       aria-label="Loading"
     />
   );

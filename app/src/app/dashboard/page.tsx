@@ -21,11 +21,11 @@ import {
   AlertCircle,
   FlaskConical,
   Calendar as CalendarIcon,
-  Loader2,
 } from "lucide-react";
 import { getErrorMessage } from "@/lib/utils/error-messages";
 import { STATUS_STYLES } from "@/lib/design/tokens";
 import { EmptyRecentRequests, EmptyPendingApprovals } from "@/components/dashboard/empty-dashboard-states";
+import { InlineLoader } from "@/components/ui/inline-loader";
 
 export const dynamic = "force-dynamic";
 
@@ -58,7 +58,6 @@ export default function DashboardPage() {
   // Derive values — fall back to zero when data hasn't loaded yet
   const expiringSoonCount = activeTrials.data?.filter(t => t.daysRemaining < 7).length ?? 0;
   const urgentRenewalsCount = renewalsStats.data?.red ?? 0;
-  const anyStatsLoading = stats.isLoading || activeTrials.isLoading || renewalsStats.isLoading;
 
   return (
     <div className="space-y-6 md:space-y-8">
@@ -151,9 +150,7 @@ export default function DashboardPage() {
             <div>
               <CardTitle className="flex items-center gap-2">
                 Recent Requests
-                {recentRequests.isLoading && (
-                  <Loader2 className="h-3.5 w-3.5 animate-spin text-slate-400" />
-                )}
+                {recentRequests.isLoading && <InlineLoader size="sm" />}
               </CardTitle>
               <CardDescription>Your latest purchase requests</CardDescription>
             </div>
@@ -214,9 +211,7 @@ export default function DashboardPage() {
             <div>
               <CardTitle className="flex items-center gap-2">
                 Action Required
-                {pendingApprovals.isLoading && (
-                  <Loader2 className="h-3.5 w-3.5 animate-spin text-slate-400" />
-                )}
+                {pendingApprovals.isLoading && <InlineLoader size="sm" />}
               </CardTitle>
               <CardDescription>Approvals waiting for your review</CardDescription>
             </div>
@@ -294,7 +289,7 @@ function StatCard({
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 md:pb-2 p-4 md:p-6">
         <CardTitle className="text-xs md:text-sm font-medium">{title}</CardTitle>
         {loading ? (
-          <Loader2 className="h-4 w-4 animate-spin text-slate-400" />
+          <InlineLoader size="sm" />
         ) : (
           <Icon className={`h-4 w-4 ${highlight ? "text-blue-600" : "text-slate-600"}`} />
         )}
