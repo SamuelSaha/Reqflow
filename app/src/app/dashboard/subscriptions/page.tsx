@@ -193,7 +193,7 @@ export default function SubscriptionsPage() {
             {utilization.underutilized.slice(0, 5).map((item: UtilizationItem) => (
               <div
                 key={item.subscription.id}
-                className="flex items-center justify-between p-3 bg-amber-50/30 rounded-lg shadow-[0_0_0_1px_rgba(217,119,6,0.08)]"
+                className="flex items-center justify-between p-3 bg-white rounded-lg border border-amber-200/40"
               >
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
@@ -323,7 +323,7 @@ export default function SubscriptionsPage() {
                 return (
                   <div
                     key={sub.id}
-                    className="flex items-start justify-between p-4 rounded-lg shadow-[0_0_0_1px_rgba(0,0,0,0.03),0_1px_2px_rgba(0,0,0,0.04)] hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
+                    className="flex items-start justify-between p-4 rounded-lg border border-black/[0.06] hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
                   >
                     <div className="flex gap-3 flex-1">
                       <VendorAvatar name={sub.vendor?.name || sub.toolName} className="mt-0.5" />
@@ -407,7 +407,7 @@ export default function SubscriptionsPage() {
               <CardContent>
                 <div className="space-y-3">
                   {Object.entries(metrics.byCategory).map(([category, data]: [string, CategoryData]) => (
-                    <div key={category} className="flex items-center justify-between p-3 rounded-lg bg-slate-50/50">
+                    <div key={category} className="flex items-center justify-between p-3 rounded-lg border border-black/[0.06]">
                       <div className="flex items-center gap-3">
                         <Badge variant="pill" className={categoryColors[category as keyof typeof categoryColors]}>
                           {category}
@@ -439,7 +439,7 @@ export default function SubscriptionsPage() {
                   {Object.entries(metrics.byVendor)
                     .sort(([, a]: [string, VendorData], [, b]: [string, VendorData]) => b.monthly - a.monthly)
                     .map(([vendorId, data]: [string, VendorData]) => (
-                      <div key={vendorId} className="flex items-center justify-between p-3 rounded-lg bg-slate-50/50">
+                      <div key={vendorId} className="flex items-center justify-between p-3 rounded-lg border border-black/[0.06]">
                         <div className="flex items-center gap-3">
                           <Building2 className="h-4 w-4 text-slate-400" />
                           <div>
@@ -472,7 +472,7 @@ export default function SubscriptionsPage() {
                   {Object.entries(metrics.byDepartment)
                     .sort(([, a]: [string, DepartmentData], [, b]: [string, DepartmentData]) => b.monthly - a.monthly)
                     .map(([deptId, data]: [string, DepartmentData]) => (
-                      <div key={deptId} className="flex items-center justify-between p-3 rounded-lg bg-slate-50/50">
+                      <div key={deptId} className="flex items-center justify-between p-3 rounded-lg border border-black/[0.06]">
                         <div className="flex items-center gap-3">
                           <div>
                             <div className="text-body-sm font-medium text-slate-900">{data.departmentName}</div>

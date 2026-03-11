@@ -74,7 +74,7 @@ export default function DashboardLayout({
       </a>
 
       {/* Top nav */}
-      <header className="border-b border-black/[0.04] bg-white/80 backdrop-blur-xl sticky top-0 z-50">
+      <header className="border-b border-[var(--warm-200)]/60 bg-white/80 backdrop-blur-xl sticky top-0 z-50">
         <div className="mx-auto max-w-7xl px-4 py-3 md:px-6 md:py-4">
           <div className="flex items-center justify-between">
             <Link href="/dashboard" className="text-xl font-bold text-slate-900">
