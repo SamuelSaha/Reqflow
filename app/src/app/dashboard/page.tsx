@@ -26,6 +26,7 @@ import { getErrorMessage } from "@/lib/utils/error-messages";
 import { STATUS_STYLES } from "@/lib/design/tokens";
 import { EmptyRecentRequests, EmptyPendingApprovals } from "@/components/dashboard/empty-dashboard-states";
 import { InlineLoader } from "@/components/ui/inline-loader";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const dynamic = "force-dynamic";
 
@@ -150,7 +151,6 @@ export default function DashboardPage() {
             <div>
               <CardTitle className="flex items-center gap-2">
                 Recent Requests
-                {recentRequests.isLoading && <InlineLoader size="sm" />}
               </CardTitle>
               <CardDescription>Your latest purchase requests</CardDescription>
             </div>
@@ -161,7 +161,21 @@ export default function DashboardPage() {
             </Link>
           </CardHeader>
           <CardContent>
-            {recentRequests.error && !recentRequests.isLoading && (
+            {recentRequests.isLoading && (
+              <div className="space-y-3">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="flex items-center justify-between p-3">
+                    <div className="flex-1 space-y-2">
+                      <Skeleton className="h-4 w-3/4" />
+                      <Skeleton className="h-3 w-1/3" />
+                    </div>
+                    <Skeleton className="h-5 w-16 rounded-full ml-4" />
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {!recentRequests.isLoading && recentRequests.error && (
               <div className="text-center py-6">
                 <AlertCircle className="h-8 w-8 text-red-400 mx-auto mb-2" />
                 <p className="text-sm text-slate-900 font-medium mb-1">
@@ -173,7 +187,7 @@ export default function DashboardPage() {
               </div>
             )}
 
-            {!recentRequests.error && (!recentRequests.data || recentRequests.data.length === 0) && (
+            {!recentRequests.isLoading && !recentRequests.error && (!recentRequests.data || recentRequests.data.length === 0) && (
               <EmptyRecentRequests />
             )}
 
@@ -211,7 +225,6 @@ export default function DashboardPage() {
             <div>
               <CardTitle className="flex items-center gap-2">
                 Action Required
-                {pendingApprovals.isLoading && <InlineLoader size="sm" />}
               </CardTitle>
               <CardDescription>Approvals waiting for your review</CardDescription>
             </div>
@@ -222,7 +235,20 @@ export default function DashboardPage() {
             </Link>
           </CardHeader>
           <CardContent>
-            {pendingApprovals.error && !pendingApprovals.isLoading && (
+            {pendingApprovals.isLoading && (
+              <div className="space-y-3">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="flex items-center justify-between p-3">
+                    <div className="flex-1 space-y-2">
+                      <Skeleton className="h-4 w-3/4" />
+                      <Skeleton className="h-3 w-1/3" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {!pendingApprovals.isLoading && pendingApprovals.error && (
               <div className="text-center py-6">
                 <AlertCircle className="h-8 w-8 text-red-400 mx-auto mb-2" />
                 <p className="text-sm text-slate-900 font-medium mb-1">
@@ -234,7 +260,7 @@ export default function DashboardPage() {
               </div>
             )}
 
-            {!pendingApprovals.error && (!pendingApprovals.data || pendingApprovals.data.length === 0) && (
+            {!pendingApprovals.isLoading && !pendingApprovals.error && (!pendingApprovals.data || pendingApprovals.data.length === 0) && (
               <EmptyPendingApprovals />
             )}
 

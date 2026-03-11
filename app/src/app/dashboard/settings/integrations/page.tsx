@@ -31,6 +31,24 @@ import {
 
 export const dynamic = "force-dynamic";
 
+function CliCopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <Button
+      variant="ghost"
+      size="sm"
+      className="absolute top-2 right-2 text-slate-400 hover:text-white"
+      onClick={() => {
+        navigator.clipboard.writeText(text);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      }}
+    >
+      {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+    </Button>
+  );
+}
+
 type Provider = "quickbooks" | "xero";
 
 const providerConfig = {
@@ -470,6 +488,113 @@ export default function IntegrationsPage() {
               <span className="text-sm text-slate-400 inline-flex items-center gap-1">
                 Full documentation coming soon
               </span>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* CLI Section */}
+      <div className="mt-12">
+        <div>
+          <h2 className="text-2xl font-bold text-slate-900">
+            CLI Integration
+          </h2>
+          <p className="text-slate-600 mt-1">
+            Manage purchase requests, approvals, and budgets directly from your terminal
+          </p>
+        </div>
+
+        <Card className="mt-6 border-slate-200">
+          <CardHeader>
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-slate-100 rounded-lg">
+                <Terminal className="h-6 w-6 text-slate-700" />
+              </div>
+              <div>
+                <CardTitle className="text-xl">reqflow CLI</CardTitle>
+                <p className="text-sm text-slate-600 mt-1">
+                  API key-based access — works anywhere Node.js runs
+                </p>
+              </div>
+            </div>
+          </CardHeader>
+
+          <CardContent className="space-y-6">
+            {/* Feature grid */}
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
+                <h4 className="font-medium text-sm text-slate-900 mb-2">Available Commands</h4>
+                <ul className="text-xs text-slate-600 space-y-1 font-mono">
+                  <li>reqflow requests list / get / create / submit</li>
+                  <li>reqflow approvals list / approve / reject</li>
+                  <li>reqflow budgets list</li>
+                  <li>reqflow whoami</li>
+                </ul>
+              </div>
+              <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
+                <h4 className="font-medium text-sm text-slate-900 mb-2">Good For</h4>
+                <ul className="text-xs text-slate-600 space-y-1">
+                  <li>• Scripting and CI/CD pipelines</li>
+                  <li>• Bulk request creation from spreadsheets</li>
+                  <li>• Quick approvals without opening the browser</li>
+                  <li>• Integration with shell scripts and cron jobs</li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Setup steps */}
+            <div className="space-y-4">
+              {/* Step 1 */}
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-slate-900">
+                  1. Generate an API key
+                </p>
+                <p className="text-xs text-slate-600">
+                  Go to{" "}
+                  <a
+                    href="/dashboard/settings/security"
+                    className="text-blue-600 hover:underline"
+                  >
+                    Settings → Security
+                  </a>{" "}
+                  and create a new API key. It starts with{" "}
+                  <code className="bg-slate-100 px-1 py-0.5 rounded text-slate-800">rqf_</code>.
+                </p>
+              </div>
+
+              {/* Step 2 */}
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-slate-900">
+                  2. Install and authenticate
+                </p>
+                <div className="bg-slate-900 rounded-lg p-4 relative">
+                  <CliCopyButton
+                    text={`cd Reqflow/cli\nnpm install\nnpm run dev -- login --key rqf_... --url ${typeof window !== "undefined" ? window.location.origin : "https://app.reqflow.com"}`}
+                  />
+                  <pre className="text-xs text-slate-300 overflow-x-auto">
+                    <code>{`cd Reqflow/cli
+npm install
+npm run dev -- login --key rqf_... --url ${typeof window !== "undefined" ? window.location.origin : "https://app.reqflow.com"}`}</code>
+                  </pre>
+                </div>
+              </div>
+
+              {/* Step 3 */}
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-slate-900">
+                  3. Start using it
+                </p>
+                <div className="bg-slate-900 rounded-lg p-4 relative">
+                  <CliCopyButton
+                    text={`reqflow requests list --status pending\nreqflow approvals list\nreqflow requests create --title "Figma Pro" --amount 576 --category Software`}
+                  />
+                  <pre className="text-xs text-slate-300 overflow-x-auto">
+                    <code>{`reqflow requests list --status pending
+reqflow approvals list
+reqflow requests create --title "Figma Pro" --amount 576 --category Software`}</code>
+                  </pre>
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>

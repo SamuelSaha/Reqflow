@@ -13,6 +13,7 @@ import {
   generateFileKey,
   validateFileType,
   validateFileSize,
+  validateFileMagicBytes,
 } from "@/lib/storage/r2";
 import { createAuditLog, AuditAction } from "@/lib/monitoring/audit";
 
@@ -29,6 +30,10 @@ export const filesRouter = router({
         size: z.number(),
         entityType: z.enum(["request", "contract", "invoice"]),
         entityId: z.string().uuid().optional(), // Optional for new entities
+        // First 16 bytes of the file as a hex string for magic-byte validation.
+        // Clients should read file.slice(0, 16) and send it as
+        // Buffer.from(bytes).toString('hex') before uploading.
+        fileHeader: z.string().regex(/^[0-9a-f]{1,32}$/i).optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -62,13 +67,26 @@ export const filesRouter = router({
         }
       }
 
-      // Validate file type
+      // Validate file type (extension + MIME)
       if (!validateFileType(input.filename, input.contentType)) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message:
             "Invalid file type. Only PDF, PNG, JPG, and XLSX files are allowed.",
         });
+      }
+
+      // Validate magic bytes when the client provides the file header
+      if (input.fileHeader) {
+        const ext = input.filename.toLowerCase().split(".").pop() ?? "";
+        const headerBuffer = Buffer.from(input.fileHeader, "hex");
+        if (!validateFileMagicBytes(headerBuffer, ext)) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message:
+              "File content does not match the declared type. Upload rejected.",
+          });
+        }
       }
 
       // Validate file size (10MB max)

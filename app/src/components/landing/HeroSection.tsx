@@ -323,13 +323,6 @@ const afterSteps = [
   "Done. Your spend is tracked in real time.",
 ];
 
-const painStats = [
-  { value: "40-60%", label: "of purchases bypass any formal process" },
-  { value: "29%", label: "of SaaS subscriptions overlap or duplicate" },
-  { value: "8.3 hrs", label: "per week lost to manual procurement tasks" },
-  { value: "$15-40", label: "cost to process one invoice manually" },
-];
-
 export function ProblemSection() {
   return (
     <section className="bg-[var(--warm-50)] py-16 md:py-20 lg:py-24 px-6 md:px-12 lg:px-20 flex flex-col items-center gap-16">
@@ -416,22 +409,6 @@ export function ProblemSection() {
             })}
           </div>
         </div>
-      </div>
-
-      <div className="max-w-[1200px] w-full grid grid-cols-4 gap-6">
-        {painStats.map((stat) => (
-          <div
-            key={stat.value}
-            className="bg-white rounded-xl p-6 border border-slate-200 shadow-md hover:shadow-lg transition-shadow flex flex-col items-center gap-2"
-          >
-            <span className="text-h3 font-bold text-red-600 tracking-tight">
-              {stat.value}
-            </span>
-            <span className="text-caption font-medium text-slate-600 text-center">
-              {stat.label}
-            </span>
-          </div>
-        ))}
       </div>
     </section>
   );

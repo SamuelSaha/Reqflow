@@ -1,4 +1,5 @@
-import { PageShell } from "@/components/layout";
+import { MarketingNav } from '@/components/marketing/nav/MarketingNav';
+import { MarketingFooter } from '@/components/marketing/footer/MarketingFooter';
 import { Heart, MapPin, Users, Code, Lightbulb, Target, Sparkles } from "lucide-react";
 
 export default function CareersPage() {
@@ -37,7 +38,7 @@ export default function CareersPage() {
   ];
 
   return (
-    <PageShell>
+    <><MarketingNav />
       <section className="pt-20 pb-20 px-6 md:px-12 lg:px-20 bg-gradient-to-b from-white via-[var(--warm-50)] to-white">
         <div className="max-w-[1000px] mx-auto">
           {/* Header */}
@@ -246,6 +247,6 @@ export default function CareersPage() {
           </div>
         </div>
       </section>
-    </PageShell>
+    <MarketingFooter /></>
   );
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { PageShell } from "@/components/layout";
+import { MarketingNav } from '@/components/marketing/nav/MarketingNav';
+import { MarketingFooter } from '@/components/marketing/footer/MarketingFooter';
 import { Section } from "@/components/layout/Section";
 import { Container } from "@/components/layout/Container";
 import { Shield, TrendingUp, AlertCircle, Lock, ArrowRight, Check, Building2, Layers } from "lucide-react";
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
 
 export default function BudgetControlPage() {
   return (
-    <PageShell>
+    <><MarketingNav />
       <Section background="warm">
         <Container size="default">
           <div className="text-center max-w-[700px] mx-auto mb-16">
@@ -253,6 +254,6 @@ export default function BudgetControlPage() {
           </div>
         </Container>
       </Section>
-    </PageShell>
+    <MarketingFooter /></>
   );
 }

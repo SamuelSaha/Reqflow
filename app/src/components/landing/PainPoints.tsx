@@ -18,13 +18,6 @@ const withItems = [
   "Complete audit trail generated automatically",
 ];
 
-const metrics = [
-  { value: "40-60%", label: "of purchases bypass any formal process" },
-  { value: "29%", label: "of SaaS subscriptions overlap or duplicate" },
-  { value: "8.3 hrs", label: "per week lost to manual procurement tasks" },
-  { value: "$15-40", label: "cost to process one invoice manually" },
-];
-
 export function PainPoints() {
   return (
     <section className="py-20 md:py-28 px-6 md:px-12 lg:px-20">
@@ -78,20 +71,6 @@ export function PainPoints() {
               ))}
             </div>
           </div>
-        </div>
-
-        {/* Metrics Row */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-          {metrics.map((metric, i) => (
-            <div key={i} className="text-center md:text-left">
-              <div className="text-4xl md:text-5xl font-bold text-slate-900 mb-2">
-                {metric.value}
-              </div>
-              <div className="text-body-sm text-slate-500">
-                {metric.label}
-              </div>
-            </div>
-          ))}
         </div>
       </div>
     </section>

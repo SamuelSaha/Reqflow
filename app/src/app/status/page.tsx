@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { PageShell } from "@/components/layout";
+import { MarketingNav } from '@/components/marketing/nav/MarketingNav';
+import { MarketingFooter } from '@/components/marketing/footer/MarketingFooter';
 
 type ServiceStatus = "operational" | "degraded" | "down";
 
@@ -37,7 +38,7 @@ export default function StatusPage() {
   const allOperational = services.every((s) => s.status === "operational");
 
   return (
-    <PageShell>
+    <><MarketingNav />
       <section className="pt-20 pb-20 px-20">
         <div className="max-w-[900px] mx-auto">
           <h1 className="text-h2 font-extrabold tracking-tight text-slate-900 mb-4">System Status</h1>
@@ -121,6 +122,6 @@ export default function StatusPage() {
           </div>
         </div>
       </section>
-    </PageShell>
+    <MarketingFooter /></>
   );
 }

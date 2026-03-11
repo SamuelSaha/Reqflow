@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { PageShell } from "@/components/layout";
+import { MarketingNav } from '@/components/marketing/nav/MarketingNav';
+import { MarketingFooter } from '@/components/marketing/footer/MarketingFooter';
 import { Check, Sparkles, Users, Lock, MessageSquare, TrendingUp, ArrowRight } from "lucide-react";
 
 export default function BetaPage() {
@@ -22,7 +23,7 @@ export default function BetaPage() {
 
   if (submitted) {
     return (
-      <PageShell>
+      <><MarketingNav />
         <section className="flex-1 flex items-center justify-center py-32 px-6 bg-[var(--warm-50)]">
           <div className="max-w-[700px] text-center bg-white rounded-2xl border border-slate-200 shadow-lg p-12">
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -45,12 +46,12 @@ export default function BetaPage() {
             </div>
           </div>
         </section>
-      </PageShell>
+      <MarketingFooter /></>
     );
   }
 
   return (
-    <PageShell>
+    <><MarketingNav />
       <section className="bg-gradient-to-b from-white via-[var(--warm-50)] to-white pt-20 pb-20 px-6 md:px-12 lg:px-20">
         <div className="max-w-[1200px] mx-auto">
           {/* Hero */}
@@ -378,6 +379,6 @@ export default function BetaPage() {
           </div>
         </div>
       </section>
-    </PageShell>
+    <MarketingFooter /></>
   );
 }

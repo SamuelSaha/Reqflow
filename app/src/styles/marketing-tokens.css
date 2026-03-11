@@ -1,16 +1,16 @@
 /**
- * Marketing Design Tokens - Using Existing Brand Colors
- * Maintains Reqflow brand consistency
+ * Marketing Design Tokens — "Polished Bold"
+ * Warm, rounded, color-rich visual system
+ * Maintains Reqflow brand: Manrope, slate/blue/violet palette
  */
 
 @layer base {
   :root {
     /* === COLOR PALETTE (from existing brand) === */
-    /* Primary background - existing slate-900 */
     --mkt-deep: #0F172A;
     --mkt-deep-rgb: 15, 23, 42;
 
-    /* Slate hierarchy (existing palette) */
+    /* Slate hierarchy */
     --mkt-slate-900: #0F172A;
     --mkt-slate-800: #1E293B;
     --mkt-slate-700: #334155;
@@ -22,13 +22,13 @@
     --mkt-slate-100: #F1F5F9;
     --mkt-slate-50: #F8FAFC;
 
-    /* Accent - existing blue-600 */
+    /* Accent — blue-600 */
     --mkt-accent: #2563EB;
     --mkt-accent-rgb: 37, 99, 235;
     --mkt-accent-dark: #1D4ED8;
     --mkt-accent-light: #3B82F6;
 
-    /* Premium - existing violet for Case Builder */
+    /* Premium — violet for Case Builder */
     --mkt-premium: #8B5CF6;
     --mkt-premium-dark: #7C3AED;
 
@@ -38,19 +38,18 @@
     --mkt-error: #EF4444;
 
     /* === TYPOGRAPHY === */
-    /* Scale: 18px base, 1.333 ratio (perfect fourth) */
-    --mkt-text-xs: 0.75rem;      /* 12px */
-    --mkt-text-sm: 0.875rem;     /* 14px */
-    --mkt-text-base: 1rem;       /* 16px */
-    --mkt-text-lg: 1.125rem;     /* 18px */
-    --mkt-text-xl: 1.25rem;      /* 20px */
-    --mkt-text-2xl: 1.5rem;      /* 24px */
-    --mkt-text-3xl: 1.875rem;    /* 30px */
-    --mkt-text-4xl: 2.25rem;     /* 36px */
-    --mkt-text-5xl: 3rem;        /* 48px */
-    --mkt-text-6xl: 3.75rem;     /* 60px */
-    --mkt-text-7xl: 4.5rem;      /* 72px */
-    --mkt-text-8xl: 6rem;        /* 96px */
+    --mkt-text-xs: 0.75rem;
+    --mkt-text-sm: 0.875rem;
+    --mkt-text-base: 1rem;
+    --mkt-text-lg: 1.125rem;
+    --mkt-text-xl: 1.25rem;
+    --mkt-text-2xl: 1.5rem;
+    --mkt-text-3xl: 1.875rem;
+    --mkt-text-4xl: 2.25rem;
+    --mkt-text-5xl: 3rem;
+    --mkt-text-6xl: 3.75rem;
+    --mkt-text-7xl: 4.5rem;
+    --mkt-text-8xl: 6rem;
 
     /* Line heights */
     --mkt-leading-none: 1;
@@ -66,36 +65,36 @@
     --mkt-tracking-normal: 0;
     --mkt-tracking-wide: 0.025em;
 
-    /* === SPACING === */
-    /* 8px grid system: 8, 16, 24, 32, 48, 64, 96, 128 */
-    --mkt-space-1: 0.5rem;    /* 8px */
-    --mkt-space-2: 1rem;      /* 16px */
-    --mkt-space-3: 1.5rem;    /* 24px */
-    --mkt-space-4: 2rem;      /* 32px */
-    --mkt-space-6: 3rem;      /* 48px */
-    --mkt-space-8: 4rem;      /* 64px */
-    --mkt-space-12: 6rem;     /* 96px */
-    --mkt-space-16: 8rem;     /* 128px */
-    --mkt-space-24: 12rem;    /* 192px */
+    /* === SPACING (8px grid) === */
+    --mkt-space-1: 0.5rem;
+    --mkt-space-2: 1rem;
+    --mkt-space-3: 1.5rem;
+    --mkt-space-4: 2rem;
+    --mkt-space-6: 3rem;
+    --mkt-space-8: 4rem;
+    --mkt-space-12: 6rem;
+    --mkt-space-16: 8rem;
+    --mkt-space-24: 12rem;
 
-    /* === SHADOWS === */
-    /* Brutal shadows - hard, geometric */
-    --mkt-shadow-brutal-sm: 4px 4px 0 var(--mkt-deep);
-    --mkt-shadow-brutal: 8px 8px 0 var(--mkt-deep);
-    --mkt-shadow-brutal-md: 12px 12px 0 var(--mkt-deep);
-    --mkt-shadow-brutal-lg: 16px 16px 0 var(--mkt-deep);
-    --mkt-shadow-brutal-xl: 24px 24px 0 var(--mkt-deep);
+    /* === SHADOWS — Soft layered (replacing brutal) === */
+    --mkt-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --mkt-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --mkt-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    --mkt-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    --mkt-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    --mkt-shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 
-    /* Soft shadows for contrast */
-    --mkt-shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-                        0 2px 4px -2px rgba(0, 0, 0, 0.1);
-    --mkt-shadow-soft-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-                           0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    /* Colored glow shadows */
+    --mkt-shadow-blue-glow: 0 0 40px rgba(37, 99, 235, 0.15), 0 0 80px rgba(37, 99, 235, 0.05);
+    --mkt-shadow-violet-glow: 0 0 40px rgba(139, 92, 246, 0.15), 0 0 80px rgba(139, 92, 246, 0.05);
+    --mkt-shadow-green-glow: 0 0 40px rgba(16, 185, 129, 0.15);
 
-    /* === BORDERS === */
-    --mkt-border-width: 2px;
-    --mkt-border-radius: 0;      /* Hard edges */
-    --mkt-border-radius-sm: 4px; /* Subtle rounding when needed */
+    /* === BORDERS — Rounded, warm === */
+    --mkt-border-width: 1px;
+    --mkt-border-radius: 16px;     /* rounded-2xl */
+    --mkt-border-radius-sm: 12px;  /* rounded-xl */
+    --mkt-border-radius-lg: 24px;  /* rounded-3xl */
+    --mkt-border-radius-full: 9999px;
 
     /* === TRANSITIONS === */
     --mkt-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -105,7 +104,7 @@
     --mkt-ease-in: cubic-bezier(0.4, 0, 1, 1);
     --mkt-ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
-    /* === Z-INDEX SCALE === */
+    /* === Z-INDEX === */
     --mkt-z-base: 0;
     --mkt-z-dropdown: 1000;
     --mkt-z-sticky: 1020;
@@ -117,38 +116,47 @@
 
 /* === UTILITY CLASSES === */
 @layer utilities {
-  /* Typography utilities */
+  /* Typography */
   .text-display {
-    font-family: var(--font-display);
-    font-weight: 800;
+    font-family: var(--font-manrope), sans-serif;
+    font-weight: 600;
     letter-spacing: var(--mkt-tracking-tight);
   }
 
   .text-body {
-    font-family: var(--font-body);
+    font-family: var(--font-manrope), sans-serif;
     font-weight: 400;
   }
 
   .text-body-bold {
-    font-family: var(--font-body);
-    font-weight: 700;
+    font-family: var(--font-manrope), sans-serif;
+    font-weight: 600;
   }
 
   /* Shadow utilities */
-  .shadow-brutal-sm { box-shadow: var(--mkt-shadow-brutal-sm); }
-  .shadow-brutal { box-shadow: var(--mkt-shadow-brutal); }
-  .shadow-brutal-md { box-shadow: var(--mkt-shadow-brutal-md); }
-  .shadow-brutal-lg { box-shadow: var(--mkt-shadow-brutal-lg); }
-  .shadow-brutal-xl { box-shadow: var(--mkt-shadow-brutal-xl); }
+  .shadow-elevated { box-shadow: var(--mkt-shadow-md); }
+  .shadow-elevated-lg { box-shadow: var(--mkt-shadow-lg); }
+  .shadow-elevated-xl { box-shadow: var(--mkt-shadow-xl); }
+  .shadow-blue-glow { box-shadow: var(--mkt-shadow-blue-glow); }
+  .shadow-violet-glow { box-shadow: var(--mkt-shadow-violet-glow); }
+  .shadow-green-glow { box-shadow: var(--mkt-shadow-green-glow); }
 
-  /* Hover lift effect */
+  /* Keep brutal shadow aliases for backward compat during migration */
+  .shadow-brutal-sm { box-shadow: var(--mkt-shadow-sm); }
+  .shadow-brutal { box-shadow: var(--mkt-shadow); }
+  .shadow-brutal-md { box-shadow: var(--mkt-shadow-md); }
+  .shadow-brutal-lg { box-shadow: var(--mkt-shadow-lg); }
+  .shadow-brutal-xl { box-shadow: var(--mkt-shadow-xl); }
+
+  /* Hover lift */
   .hover-lift {
     transition: transform var(--mkt-transition-base),
                 box-shadow var(--mkt-transition-base);
   }
 
   .hover-lift:hover {
-    transform: translate(-4px, -4px);
+    transform: translateY(-4px);
+    box-shadow: var(--mkt-shadow-lg);
   }
 
   /* Gradient glow for hero */
@@ -173,51 +181,90 @@
     opacity: 0.4;
     mix-blend-mode: overlay;
     pointer-events: none;
+    border-radius: inherit;
   }
 }
 
 /* === COMPONENT PATTERNS === */
 @layer components {
-  /* Card - Brutal style */
-  .card-brutal {
-    background: var(--mkt-slate-50);
-    border: var(--mkt-border-width) solid var(--mkt-deep);
+  /* Card — Elevated style (replaces card-brutal) */
+  .card-elevated {
+    background: white;
+    border: var(--mkt-border-width) solid var(--mkt-slate-200);
+    border-radius: var(--mkt-border-radius);
     padding: var(--mkt-space-6);
+    box-shadow: var(--mkt-shadow);
+    transition: transform var(--mkt-transition-base),
+                box-shadow var(--mkt-transition-base);
+  }
+
+  .card-elevated:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--mkt-shadow-lg);
+  }
+
+  /* Card on dark bg */
+  .card-dark {
+    background: rgba(30, 41, 59, 0.5);
+    backdrop-filter: blur(12px);
+    border: var(--mkt-border-width) solid rgba(203, 213, 225, 0.1);
+    border-radius: var(--mkt-border-radius);
+    padding: var(--mkt-space-6);
+    transition: transform var(--mkt-transition-base),
+                box-shadow var(--mkt-transition-base),
+                border-color var(--mkt-transition-base);
+  }
+
+  .card-dark:hover {
+    transform: translateY(-2px);
+    border-color: rgba(203, 213, 225, 0.2);
+    box-shadow: var(--mkt-shadow-blue-glow);
+  }
+
+  /* Keep card-brutal as alias during migration */
+  .card-brutal {
+    background: white;
+    border: var(--mkt-border-width) solid var(--mkt-slate-200);
+    border-radius: var(--mkt-border-radius);
+    padding: var(--mkt-space-6);
+    box-shadow: var(--mkt-shadow);
     transition: transform var(--mkt-transition-base),
                 box-shadow var(--mkt-transition-base);
   }
 
   .card-brutal:hover {
-    transform: translate(-4px, -4px);
+    transform: translateY(-2px);
+    box-shadow: var(--mkt-shadow-lg);
   }
 
-  /* Button - Primary CTA */
+  /* Button — Primary CTA */
   .btn-primary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: var(--mkt-space-2);
-    padding: var(--mkt-space-3) var(--mkt-space-6);
-    font-family: var(--font-body);
-    font-weight: 700;
+    padding: 0.875rem 2rem;
+    font-family: var(--font-manrope), sans-serif;
+    font-weight: 600;
     font-size: var(--mkt-text-lg);
     color: white;
     background: var(--mkt-accent);
-    border: var(--mkt-border-width) solid var(--mkt-deep);
-    box-shadow: var(--mkt-shadow-brutal);
+    border: none;
+    border-radius: var(--mkt-border-radius);
+    box-shadow: var(--mkt-shadow-md), 0 0 0 0 rgba(37, 99, 235, 0);
     transition: all var(--mkt-transition-base);
     cursor: pointer;
   }
 
   .btn-primary:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: var(--mkt-shadow-brutal-md);
     background: var(--mkt-accent-dark);
+    box-shadow: var(--mkt-shadow-lg), 0 0 20px rgba(37, 99, 235, 0.3);
+    transform: translateY(-1px);
   }
 
   .btn-primary:active {
-    transform: translate(0, 0);
-    box-shadow: var(--mkt-shadow-brutal-sm);
+    transform: translateY(0);
+    box-shadow: var(--mkt-shadow-sm);
   }
 
   .btn-primary:focus-visible {
@@ -225,28 +272,54 @@
     outline-offset: 4px;
   }
 
-  /* Button - Secondary */
+  /* Button — Secondary */
   .btn-secondary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: var(--mkt-space-2);
-    padding: var(--mkt-space-3) var(--mkt-space-6);
-    font-family: var(--font-body);
-    font-weight: 700;
+    padding: 0.875rem 2rem;
+    font-family: var(--font-manrope), sans-serif;
+    font-weight: 600;
     font-size: var(--mkt-text-lg);
     color: var(--mkt-deep);
-    background: var(--mkt-slate-50);
-    border: var(--mkt-border-width) solid var(--mkt-deep);
-    box-shadow: var(--mkt-shadow-brutal);
+    background: white;
+    border: var(--mkt-border-width) solid var(--mkt-slate-200);
+    border-radius: var(--mkt-border-radius);
+    box-shadow: var(--mkt-shadow-sm);
     transition: all var(--mkt-transition-base);
     cursor: pointer;
   }
 
   .btn-secondary:hover {
-    transform: translate(-2px, -2px);
-    box-shadow: var(--mkt-shadow-brutal-md);
-    background: white;
+    background: var(--mkt-slate-50);
+    border-color: var(--mkt-slate-300);
+    box-shadow: var(--mkt-shadow-md);
+    transform: translateY(-1px);
+  }
+
+  /* Button — Ghost (on dark bg) */
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--mkt-space-2);
+    padding: 0.875rem 2rem;
+    font-family: var(--font-manrope), sans-serif;
+    font-weight: 600;
+    font-size: var(--mkt-text-lg);
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--mkt-border-radius);
+    transition: all var(--mkt-transition-base);
+    cursor: pointer;
+  }
+
+  .btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
   }
 
   /* Section container */
@@ -261,31 +334,43 @@
       padding: var(--mkt-space-8) var(--mkt-space-4);
     }
   }
+
+  /* Badge / Pill */
+  .mkt-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 1rem;
+    font-size: var(--mkt-text-sm);
+    font-weight: 500;
+    border-radius: var(--mkt-border-radius-full);
+    letter-spacing: 0.01em;
+  }
 }
 
 /* === RESPONSIVE TYPOGRAPHY === */
 @media (max-width: 1024px) {
   :root {
-    --mkt-text-8xl: 4.5rem;  /* 72px */
-    --mkt-text-7xl: 3.75rem; /* 60px */
-    --mkt-text-6xl: 3rem;    /* 48px */
+    --mkt-text-8xl: 4.5rem;
+    --mkt-text-7xl: 3.75rem;
+    --mkt-text-6xl: 3rem;
   }
 }
 
 @media (max-width: 768px) {
   :root {
-    --mkt-text-8xl: 3.5rem;  /* 56px */
-    --mkt-text-7xl: 2.5rem;  /* 40px */
-    --mkt-text-6xl: 2rem;    /* 32px */
-    --mkt-text-5xl: 2rem;    /* 32px */
-    --mkt-text-4xl: 1.75rem; /* 28px */
+    --mkt-text-8xl: 3.5rem;
+    --mkt-text-7xl: 2.5rem;
+    --mkt-text-6xl: 2rem;
+    --mkt-text-5xl: 2rem;
+    --mkt-text-4xl: 1.75rem;
   }
 }
 
 @media (max-width: 480px) {
   :root {
-    --mkt-text-8xl: 2.5rem;  /* 40px */
-    --mkt-text-7xl: 2rem;    /* 32px */
-    --mkt-text-6xl: 1.75rem; /* 28px */
+    --mkt-text-8xl: 2.5rem;
+    --mkt-text-7xl: 2rem;
+    --mkt-text-6xl: 1.75rem;
   }
 }

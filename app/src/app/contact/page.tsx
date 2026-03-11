@@ -1,8 +1,9 @@
-import { PageShell } from "@/components/layout";
+import { MarketingNav } from '@/components/marketing/nav/MarketingNav';
+import { MarketingFooter } from '@/components/marketing/footer/MarketingFooter';
 
 export default function ContactPage() {
   return (
-    <PageShell>
+    <><MarketingNav />
       <section className="pt-20 pb-20 px-20">
         <div className="max-w-[700px] mx-auto">
           <h1 className="text-h2 font-extrabold tracking-tight text-slate-900 mb-6">Contact Us</h1>
@@ -51,6 +52,6 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
-    </PageShell>
+    <MarketingFooter /></>
   );
 }

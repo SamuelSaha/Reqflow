@@ -1,10 +1,9 @@
 /**
- * Marketing Footer - Refined Brutalism
- * Design: Grid-based footer with bold sections
+ * Marketing Footer — Clean, simple layout
+ * SSR
  */
 
 import Link from 'next/link';
-import { Twitter, Linkedin, Github } from 'lucide-react';
 
 const footerSections = [
   {
@@ -14,95 +13,59 @@ const footerSections = [
       { label: 'Pricing', href: '/pricing' },
       { label: 'Integrations', href: '/integrations' },
       { label: 'Changelog', href: '/changelog' },
-      { label: 'Roadmap', href: '/roadmap' }
-    ]
-  },
-  {
-    title: 'Company',
-    links: [
-      { label: 'About', href: '/about' },
-      { label: 'Careers', href: '/careers' },
-      { label: 'Contact', href: '/contact' },
-      { label: 'Blog', href: '/blog' }
-    ]
+    ],
   },
   {
     title: 'Resources',
     links: [
       { label: 'Documentation', href: '/documentation' },
+      { label: 'Blog', href: '/blog' },
       { label: 'API Reference', href: '/api-reference' },
-      { label: 'Status', href: '/status' },
-      { label: 'Support', href: '/support' }
-    ]
+      { label: 'Support', href: '/support' },
+    ],
   },
   {
-    title: 'Legal',
+    title: 'Company',
     links: [
-      { label: 'Privacy', href: '/privacy' },
-      { label: 'Terms', href: '/terms' },
-      { label: 'Security', href: '/security' },
-      { label: 'GDPR', href: '/gdpr' }
-    ]
-  }
-];
-
-const socialLinks = [
-  { icon: Twitter, href: 'https://twitter.com/reqflow', label: 'Twitter' },
-  { icon: Linkedin, href: 'https://linkedin.com/company/reqflow', label: 'LinkedIn' },
-  { icon: Github, href: 'https://github.com/reqflow', label: 'GitHub' }
+      { label: 'About', href: '/about' },
+      { label: 'Contact', href: '/contact' },
+    ],
+  },
 ];
 
 export function MarketingFooter() {
   return (
-    <footer className="bg-mkt-deep text-white border-t-4 border-mkt-accent">
-      <div className="section-container py-16">
-        {/* Main footer grid */}
-        <div className="grid md:grid-cols-6 gap-12 mb-12">
+    <footer className="bg-slate-900 text-white border-t border-slate-800">
+      <div className="max-w-6xl mx-auto px-6 lg:px-8 py-16">
+        {/* Main grid */}
+        <div className="grid md:grid-cols-5 gap-10 lg:gap-12 mb-12">
           {/* Brand column */}
           <div className="md:col-span-2">
-            <Link href="/" className="inline-flex items-center gap-3 mb-6 group">
-              <div className="w-12 h-12 bg-mkt-accent flex items-center justify-center border-2 border-white transition-transform group-hover:-translate-y-1">
-                <span className="text-white font-bold text-2xl">R</span>
+            <Link href="/" className="inline-flex items-center gap-2.5 mb-6 group">
+              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center transition-transform group-hover:scale-105">
+                <span className="text-white font-bold text-xl">R</span>
               </div>
-              <span className="text-display text-3xl">Reqflow</span>
+              <span className="text-2xl font-semibold">Reqflow</span>
             </Link>
 
-            <p className="text-body text-mkt-slate-300 leading-relaxed mb-6 max-w-sm">
-              The connected procurement workflow for small teams. Track what you own, know when to leave.
+            <p className="text-sm text-slate-400 leading-relaxed mb-4 max-w-xs">
+              The connected procurement workflow for small teams. Track what you own, know when to
+              leave.
             </p>
 
-            {/* Social links */}
-            <div className="flex items-center gap-4">
-              {socialLinks.map((social) => {
-                const Icon = social.icon;
-                return (
-                  <a
-                    key={social.label}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-10 h-10 bg-mkt-slate-800 hover:bg-mkt-accent flex items-center justify-center border-2 border-mkt-slate-700 hover:border-mkt-accent transition-all hover:-translate-y-1"
-                    aria-label={social.label}
-                  >
-                    <Icon className="w-5 h-5" />
-                  </a>
-                );
-              })}
-            </div>
+            <p className="text-xs text-slate-500">Reqflow SAS</p>
           </div>
 
           {/* Link columns */}
           {footerSections.map((section) => (
             <div key={section.title}>
-              <h3 className="text-body-bold text-lg mb-4 text-white">
-                {section.title}
-              </h3>
-              <ul className="space-y-3">
+              <h3 className="text-sm font-semibold mb-4 text-white">{section.title}</h3>
+              <ul className="space-y-2.5">
                 {section.links.map((link) => (
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-body text-mkt-slate-400 hover:text-white transition-colors"
+                      className="text-sm text-slate-400 hover:text-white transition-colors"
                     >
                       {link.label}
                     </Link>
@@ -113,44 +76,19 @@ export function MarketingFooter() {
           ))}
         </div>
 
-        {/* Newsletter signup */}
-        <div className="mb-12 pb-12 border-b-2 border-mkt-slate-800">
-          <div className="max-w-md">
-            <h3 className="text-body-bold text-lg mb-3 text-white">
-              Stay updated
-            </h3>
-            <p className="text-body text-sm text-mkt-slate-400 mb-4">
-              Get product updates, procurement tips, and early access to new features.
-            </p>
-            <form className="flex gap-2">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 px-4 py-3 bg-mkt-slate-800 border-2 border-mkt-slate-700 text-white placeholder-mkt-slate-500 focus:outline-none focus:border-mkt-accent transition-colors"
-                aria-label="Email address"
-              />
-              <button
-                type="submit"
-                className="px-6 py-3 bg-mkt-accent text-white border-2 border-mkt-accent hover:bg-mkt-accent-dark font-bold transition-colors"
-              >
-                Subscribe
-              </button>
-            </form>
-          </div>
-        </div>
-
         {/* Bottom bar */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-mkt-slate-400">
-          <p>
-            &copy; {new Date().getFullYear()} Reqflow. All rights reserved.
-          </p>
-          <div className="flex items-center gap-6">
-            <span className="flex items-center gap-2">
-              <span className="w-2 h-2 bg-mkt-success rounded-full" />
-              <span>All systems operational</span>
-            </span>
-            <span>•</span>
-            <span>Made with ❤️ in EU</span>
+        <div className="pt-8 border-t border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+          <p>&copy; {new Date().getFullYear()} Reqflow SAS. All rights reserved.</p>
+          <div className="flex items-center gap-4">
+            <Link href="/privacy" className="hover:text-white transition-colors">
+              Privacy
+            </Link>
+            <Link href="/terms" className="hover:text-white transition-colors">
+              Terms
+            </Link>
+            <Link href="/cookies" className="hover:text-white transition-colors">
+              Cookies
+            </Link>
           </div>
         </div>
       </div>

@@ -1,4 +1,5 @@
-import { PageShell } from "@/components/layout";
+import { MarketingNav } from '@/components/marketing/nav/MarketingNav';
+import { MarketingFooter } from '@/components/marketing/footer/MarketingFooter';
 import { Sparkles, Check, Wrench, AlertCircle, Zap } from "lucide-react";
 
 export default function ChangelogPage() {
@@ -145,7 +146,7 @@ export default function ChangelogPage() {
   };
 
   return (
-    <PageShell>
+    <><MarketingNav />
       <section className="pt-20 pb-20 px-6 md:px-12 lg:px-20 bg-gradient-to-b from-white via-[var(--warm-50)] to-white">
         <div className="max-w-[900px] mx-auto">
           {/* Header */}
@@ -279,6 +280,6 @@ export default function ChangelogPage() {
           </div>
         </div>
       </section>
-    </PageShell>
+    <MarketingFooter /></>
   );
 }

@@ -4,6 +4,7 @@
  */
 
 import { router } from "./trpc";
+import { apiKeysRouter } from "./routers/api-keys";
 import { requestsRouter } from "./routers/requests";
 import { budgetsRouter } from "./routers/budgets";
 import { approvalsRouter } from "./routers/approvals";
@@ -25,6 +26,7 @@ import { notificationsRouter } from "./routers/notifications";
 import { aiRouter } from "./routers/ai";
 
 export const appRouter = router({
+  apiKeys: apiKeysRouter,
   requests: requestsRouter,
   budgets: budgetsRouter,
   approvals: approvalsRouter,

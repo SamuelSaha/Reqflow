@@ -82,7 +82,7 @@ export default function DashboardLayout({
             </Link>
 
             {/* Desktop nav */}
-            <nav className="hidden md:flex items-center gap-1 flex-1">
+            <nav className="hidden md:flex items-center gap-1 flex-1 ml-10">
               {navItems.map(({ href, label, icon: Icon, exact }) => {
                 const isActive = exact
                   ? pathname === href
@@ -156,7 +156,7 @@ export default function DashboardLayout({
       </header>
 
       {/* Main content */}
-      <main id="main-content" className="mx-auto max-w-7xl px-4 py-6 md:px-6 md:py-8">
+      <main id="main-content" className="mx-auto max-w-7xl px-4 py-12 md:px-6 md:py-20">
         <ErrorBoundary>
           <AnimatePresence mode="wait" initial={false}>
             <motion.div

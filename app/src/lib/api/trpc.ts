@@ -8,6 +8,7 @@ import superjson from "superjson";
 import { db } from "../db";
 import { getCurrentUser } from "../auth/session";
 import type { User } from "../db/schema";
+import { apiKeys } from "../db/schema";
 import { logger } from "../monitoring/logger";
 import { captureError } from "../monitoring/sentry";
 import {
@@ -17,20 +18,74 @@ import {
 import { validateCSRFToken, getCSRFTokenFromRequest, setCSRFToken } from "../security/csrf";
 import { setRLSContext, clearRLSContext } from "../security/rls-context";
 import { cookies } from "next/headers";
+import { eq, and, gt, isNull, or } from "drizzle-orm";
+
+/**
+ * Resolve a raw API key (Bearer token) to a user record.
+ * Returns null if the key is missing, invalid, or expired.
+ */
+async function getUserFromApiKey(raw: string): Promise<User | null> {
+  if (!raw.startsWith("rqf_")) return null;
+
+  // SHA-256 hash of the raw key
+  const encoder = new TextEncoder();
+  const data = encoder.encode(raw);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const hashHex = Array.from(new Uint8Array(hashBuffer))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+
+  const now = new Date();
+
+  const key = await db.query.apiKeys.findFirst({
+    where: and(
+      eq(apiKeys.keyHash, hashHex),
+      or(isNull(apiKeys.expiresAt), gt(apiKeys.expiresAt, now))
+    ),
+    with: { user: true },
+  });
+
+  if (!key) return null;
+
+  // Fire-and-forget: update lastUsedAt without blocking the request
+  void db
+    .update(apiKeys)
+    .set({ lastUsedAt: now })
+    .where(eq(apiKeys.id, key.id));
+
+  return key.user as User;
+}
 
 /**
  * Context for all tRPC procedures
- * Contains user, tenant, and database access
+ * Contains user, tenant, and database access.
+ *
+ * Supports two auth methods:
+ *  1. Cookie session (browser / web app)
+ *  2. API key via `Authorization: Bearer rqf_<key>` (CLI / programmatic)
  */
-export async function createTRPCContext() {
-  // Single DB query — tenantId is derived from the user record,
-  // not fetched separately (eliminates the prior duplicate DB hit).
-  const user = await getCurrentUser();
+export async function createTRPCContext(opts?: { req?: Request }) {
+  let user: User | null = null;
+  let isApiKeyAuth = false;
+
+  // Check for API key in Authorization header first
+  const authHeader = opts?.req?.headers.get("authorization");
+  if (authHeader?.startsWith("Bearer rqf_")) {
+    const rawKey = authHeader.slice("Bearer ".length);
+    user = await getUserFromApiKey(rawKey);
+    if (user) isApiKeyAuth = true;
+  }
+
+  // Fall back to cookie session
+  if (!user) {
+    user = await getCurrentUser();
+  }
 
   return {
     db,
     user,
     tenantId: user?.tenantId ?? null,
+    isApiKeyAuth,
   };
 }
 
@@ -104,11 +159,17 @@ const rateLimitMiddleware = t.middleware(async ({ ctx, next, path, type }) => {
 
 /**
  * CSRF protection middleware
- * Validates CSRF token on all mutations to prevent cross-site attacks
+ * Validates CSRF token on all mutations to prevent cross-site attacks.
+ * Skipped for API key authenticated requests (not cookie-based, not vulnerable to CSRF).
  */
 const csrfMiddleware = t.middleware(async ({ ctx, next, type }) => {
   // Only validate mutations (state-changing operations)
   if (type === "mutation") {
+    // API key auth is not cookie-based — CSRF doesn't apply
+    if (ctx.isApiKeyAuth) {
+      return next({ ctx });
+    }
+
     // Skip CSRF in development — cross-site attacks don't apply on localhost
     if (process.env.NODE_ENV === "development") {
       return next({ ctx });

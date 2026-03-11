@@ -65,6 +65,9 @@ export const env = createEnv({
     // AI (Claude/Anthropic)
     ANTHROPIC_API_KEY: z.string().optional(),
 
+    // Vercel deployment detection (auto-set by Vercel runtime)
+    VERCEL: z.string().optional(),
+
     // Monitoring
     AXIOM_API_TOKEN: z.string().optional(),
     AXIOM_DATASET: z.string().default("reqflow"),
@@ -95,6 +98,7 @@ export const env = createEnv({
    */
   client: {
     NEXT_PUBLIC_APP_URL: z.string().url(),
+    NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION: z.string().optional(),
   },
 
   /**
@@ -104,6 +108,7 @@ export const env = createEnv({
    */
   experimental__runtimeEnv: {
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+    NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
   },
 
   /**

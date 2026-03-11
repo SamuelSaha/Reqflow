@@ -3,7 +3,6 @@ import { Suspense } from 'react';
 // Marketing components
 import { MarketingNav } from '@/components/marketing/nav/MarketingNav';
 import { HeroRefined } from '@/components/marketing/hero/HeroRefined';
-import { TrustBar } from '@/components/marketing/sections/TrustBar';
 import { ProblemSection } from '@/components/marketing/sections/ProblemSection';
 import { ProductFlow } from '@/components/marketing/sections/ProductFlow';
 import { FinalCTA } from '@/components/marketing/sections/FinalCTA';
@@ -69,7 +68,6 @@ export default function ReqflowLanding() {
       <main id="main-content">
         <MarketingNav />
         <HeroRefined />
-        <TrustBar />
         <ProblemSection />
         <ProductFlow />
         <FinalCTA />

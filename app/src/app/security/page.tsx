@@ -1,8 +1,9 @@
-import { PageShell } from "@/components/layout";
+import { MarketingNav } from '@/components/marketing/nav/MarketingNav';
+import { MarketingFooter } from '@/components/marketing/footer/MarketingFooter';
 
 export default function SecurityPage() {
   return (
-    <PageShell>
+    <><MarketingNav />
       <section className="pt-20 pb-20 px-20">
         <div className="max-w-[900px] mx-auto">
           <h1 className="text-h2 font-extrabold tracking-tight text-slate-900 mb-4">Security Practices</h1>
@@ -131,6 +132,6 @@ export default function SecurityPage() {
           </div>
         </div>
       </section>
-    </PageShell>
+    <MarketingFooter /></>
   );
 }

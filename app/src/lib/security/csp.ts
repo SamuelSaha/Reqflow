@@ -41,8 +41,9 @@ export function buildCSP(nonce: string, isDev: boolean): string {
     "frame-ancestors 'none'",
     "base-uri 'self'",
     "form-action 'self'",
-    "upgrade-insecure-requests",
-    "block-all-mixed-content",
+    // Only upgrade/block in production — in dev the server is HTTP-only and
+    // upgrade-insecure-requests causes every JS/CSS chunk to fail with a TLS error.
+    ...(!isDev ? ["upgrade-insecure-requests", "block-all-mixed-content"] : []),
   ];
 
   return directives.join("; ");

@@ -1,11 +1,12 @@
-import { PageShell } from "@/components/layout";
+import { MarketingNav } from '@/components/marketing/nav/MarketingNav';
+import { MarketingFooter } from '@/components/marketing/footer/MarketingFooter';
 import { Section } from "@/components/layout/Section";
 import { Container } from "@/components/layout/Container";
 import { Wallet, FileText, ShieldCheck, TrendingUp, ArrowRight } from "lucide-react";
 
 export default function ForFinancePage() {
   return (
-    <PageShell>
+    <><MarketingNav />
       <Section background="warm">
         <Container size="default">
           <div className="text-center max-w-[700px] mx-auto mb-16">
@@ -175,6 +176,6 @@ export default function ForFinancePage() {
           </div>
         </Container>
       </Section>
-    </PageShell>
+    <MarketingFooter /></>
   );
 }

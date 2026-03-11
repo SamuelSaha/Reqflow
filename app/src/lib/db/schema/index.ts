@@ -44,5 +44,8 @@ export * from "./renewal-events";
 // Notifications
 export * from "./notifications";
 
+// API Keys (CLI / programmatic access)
+export * from "./api-keys";
+
 // Analytics & Monitoring
 export * from "./web-vitals";

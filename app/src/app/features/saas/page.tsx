@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { PageShell } from "@/components/layout";
+import { MarketingNav } from '@/components/marketing/nav/MarketingNav';
+import { MarketingFooter } from '@/components/marketing/footer/MarketingFooter';
 import { Section } from "@/components/layout/Section";
 import { Container } from "@/components/layout/Container";
 import { Layers, Eye, DollarSign, Calendar, ArrowRight, Check, Shield, Bell } from "lucide-react";
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
 
 export default function SaaSManagementPage() {
   return (
-    <PageShell>
+    <><MarketingNav />
       <Section background="warm">
         <Container size="default">
           <div className="text-center max-w-[700px] mx-auto mb-16">
@@ -210,6 +211,6 @@ export default function SaaSManagementPage() {
           </div>
         </Container>
       </Section>
-    </PageShell>
+    <MarketingFooter /></>
   );
 }

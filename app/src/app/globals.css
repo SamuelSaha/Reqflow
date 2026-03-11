@@ -120,6 +120,27 @@
   --color-foreground: var(--foreground);
   --color-primary: var(--primary-500);
   --color-primary-foreground: #ffffff;
+
+  /* Marketing palette — enables bg-mkt-*, text-mkt-*, border-mkt-* */
+  --color-mkt-deep: #0F172A;
+  --color-mkt-slate-50: #F8FAFC;
+  --color-mkt-slate-100: #F1F5F9;
+  --color-mkt-slate-200: #E2E8F0;
+  --color-mkt-slate-300: #CBD5E1;
+  --color-mkt-slate-400: #94A3B8;
+  --color-mkt-slate-500: #64748B;
+  --color-mkt-slate-600: #475569;
+  --color-mkt-slate-700: #334155;
+  --color-mkt-slate-800: #1E293B;
+  --color-mkt-slate-900: #0F172A;
+  --color-mkt-accent: #2563EB;
+  --color-mkt-accent-dark: #1D4ED8;
+  --color-mkt-accent-light: #3B82F6;
+  --color-mkt-premium: #8B5CF6;
+  --color-mkt-premium-dark: #7C3AED;
+  --color-mkt-success: #10B981;
+  --color-mkt-warning: #F59E0B;
+  --color-mkt-error: #EF4444;
 }
 
 * {
@@ -203,8 +224,6 @@ body {
   font-size: var(--text-caption);
   font-weight: 500;
   line-height: 1.4;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
 }
 
 /* ========================================
@@ -238,12 +257,14 @@ body {
   min-width: 44px;
 }
 
-button,
-a[role="button"],
-[role="button"] {
-  min-height: 44px;
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
+@layer base {
+  button,
+  a[role="button"],
+  [role="button"] {
+    min-height: 44px;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
 }
 
 /* ========================================

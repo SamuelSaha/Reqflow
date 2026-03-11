@@ -10,6 +10,7 @@ import { startApprovalTimersWorker } from "./workers/approval-timers.worker";
 import { startTrialRemindersWorker } from "./workers/trial-reminders.worker";
 import { startRenewalRemindersWorker } from "./workers/renewal-reminders.worker";
 import { startSyncWorker } from "./workers/sync.worker";
+import { startAiClassificationWorker } from "./workers/ai-classification.worker";
 import { logger } from "../monitoring/logger";
 
 logger.info("Starting Reqflow workers");
@@ -21,7 +22,7 @@ const workers = [
   startTrialRemindersWorker(),
   startRenewalRemindersWorker(),
   startSyncWorker(),
-  // Add more workers as needed
+  startAiClassificationWorker(),
 ];
 
 logger.info("All workers started successfully", {

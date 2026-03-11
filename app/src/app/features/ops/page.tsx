@@ -1,11 +1,12 @@
-import { PageShell } from "@/components/layout";
+import { MarketingNav } from '@/components/marketing/nav/MarketingNav';
+import { MarketingFooter } from '@/components/marketing/footer/MarketingFooter';
 import { Section } from "@/components/layout/Section";
 import { Container } from "@/components/layout/Container";
 import { Settings, Workflow, Clock, CheckCircle, ArrowRight } from "lucide-react";
 
 export default function ForOpsTeamsPage() {
   return (
-    <PageShell>
+    <><MarketingNav />
       <Section background="warm">
         <Container size="default">
           <div className="text-center max-w-[700px] mx-auto mb-16">
@@ -152,6 +153,6 @@ export default function ForOpsTeamsPage() {
           </div>
         </Container>
       </Section>
-    </PageShell>
+    <MarketingFooter /></>
   );
 }
