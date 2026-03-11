@@ -39,9 +39,11 @@ export default defineConfig({
   ],
 
   webServer: {
-    command: "npm run dev",
+    // In CI: build then start (HTTP, no HTTPS cert needed, faster than dev recompile)
+    // Locally: dev server with hot reload
+    command: process.env.CI ? "npm run start:e2e" : "npm run dev",
     url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
-    timeout: 120_000, // 2 min — cold Next.js dev start can be slow in CI
+    timeout: process.env.CI ? 300_000 : 120_000, // 5 min for CI build, 2 min for dev
   },
 });

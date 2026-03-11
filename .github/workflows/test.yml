@@ -70,7 +70,6 @@ jobs:
       AUTH_SECRET: "test-secret-key-for-ci-minimum-32-chars"
       AUTH_URL: "http://localhost:3000"
       NEXT_PUBLIC_APP_URL: "http://localhost:3000"
-      NODE_ENV: "development"
 
     steps:
       - uses: actions/checkout@v4
