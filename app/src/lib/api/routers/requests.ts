@@ -272,8 +272,20 @@ export const requestsRouter = router({
         })
         .returning();
 
-      // TODO: Trigger AI classification
-      // TODO: Check for duplicates
+      // Trigger background AI classification + duplicate check (fire-and-forget)
+      void (async () => {
+        try {
+          const { queueClassification } = await import("../../queue/queues/ai-classification");
+          await queueClassification({
+            requestId: newRequest.id,
+            tenantId: ctx.tenantId,
+            text: `${input.title} ${input.description ?? ""}`.trim(),
+            tasks: ["category", "duplicates"],
+          });
+        } catch {
+          // Non-fatal — classification failure must not break request creation
+        }
+      })();
 
       // Audit log
       await createAuditLog({
@@ -332,7 +344,7 @@ export const requestsRouter = router({
       const [updated] = await ctx.db
         .update(requests)
         .set(input.data)
-        .where(eq(requests.id, input.id))
+        .where(and(eq(requests.id, input.id), eq(requests.tenantId, ctx.tenantId)))
         .returning();
 
       // Audit log

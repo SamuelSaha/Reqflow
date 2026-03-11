@@ -42,6 +42,8 @@ const publicRoutes = [
   "/api/auth", // Auth API routes
   "/api/webhooks", // Webhook integrations (Slack, QuickBooks, etc.)
   "/api/trpc", // tRPC routes handle their own auth via protectedProcedure
+  "/api/analytics/vitals", // Web Vitals beacon — must be public (sent from unauthenticated marketing pages)
+  "/api/csp-report", // CSP violation reports — must be public (sent by browser before auth)
 ];
 
 export async function middleware(request: NextRequest) {

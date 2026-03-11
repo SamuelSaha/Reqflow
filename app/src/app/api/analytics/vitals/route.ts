@@ -5,36 +5,43 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { axiom } from '@/lib/monitoring/axiom';
 import { logger } from '@/lib/monitoring/logger';
 import { db } from '@/lib/db';
 import { webVitals } from '@/lib/db/schema';
 
-interface WebVitalMetric {
-  name: 'CLS' | 'FCP' | 'LCP' | 'TTFB' | 'INP';
-  value: number;
-  rating: 'good' | 'needs-improvement' | 'poor';
-  delta: number;
-  id: string;
-  navigationType: 'navigate' | 'reload' | 'back-forward' | 'prerender';
-  url: string;
-  userAgent: string;
-  timestamp: number;
-}
+// 🔒 SECURITY: Strict schema prevents metric injection / DB flooding
+const webVitalSchema = z.object({
+  name: z.enum(['CLS', 'FCP', 'LCP', 'TTFB', 'INP']),
+  value: z.number().min(0).max(60_000), // max 60s covers any real-world metric
+  rating: z.enum(['good', 'needs-improvement', 'poor']),
+  delta: z.number().min(-60_000).max(60_000),
+  id: z.string().max(64),
+  navigationType: z.enum(['navigate', 'reload', 'back-forward', 'prerender']),
+  url: z.string().url().max(2048),
+  userAgent: z.string().max(512),
+  timestamp: z.number().int().min(0),
+});
+
+type WebVitalMetric = z.infer<typeof webVitalSchema>;
 
 export async function POST(request: NextRequest) {
   try {
-    const metric: WebVitalMetric = await request.json();
+    const body = await request.json();
 
-    // Validate metric
-    if (!metric.name || typeof metric.value !== 'number') {
+    // 🔒 SECURITY: Validate all fields strictly — this is a public unauthenticated endpoint
+    const parsed = webVitalSchema.safeParse(body);
+    if (!parsed.success) {
       return NextResponse.json(
         { error: 'Invalid metric data' },
         { status: 400 }
       );
     }
 
-    // Extract page pathname
+    const metric: WebVitalMetric = parsed.data;
+
+    // Extract page pathname (safe — URL already validated by Zod)
     const page = new URL(metric.url).pathname;
     const ip = request.headers.get('x-forwarded-for') || 'unknown';
 

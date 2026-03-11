@@ -11,6 +11,7 @@ import {
   getConnectionLimits,
 } from "@/lib/db";
 import { getSession } from "@/lib/auth/session";
+import { logger } from "@/lib/monitoring/logger";
 
 export const runtime = "nodejs"; // Need Node.js for pg_stat_activity queries
 export const dynamic = "force-dynamic";
@@ -88,12 +89,9 @@ export async function GET() {
       recommendations: generateRecommendations(apiMetrics, workerMetrics, limits),
     });
   } catch (error) {
-    console.error("Failed to fetch pool stats:", error);
+    logger.error("Failed to fetch pool stats", error as Error);
     return NextResponse.json(
-      {
-        error: "Failed to fetch pool statistics",
-        message: error instanceof Error ? error.message : "Unknown error",
-      },
+      { error: "Failed to fetch pool statistics" },
       { status: 500 }
     );
   }

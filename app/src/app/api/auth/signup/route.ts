@@ -17,8 +17,8 @@ import { checkSignupRateLimit, checkInviteTokenRateLimit } from "@/lib/security/
 import { createVerificationToken } from "@/lib/auth/email-verification";
 import { setCSRFToken } from "@/lib/security/csrf";
 
-// Use __Host- prefix for enhanced security (requires secure=true, path="/")
-const COOKIE_NAME = "__Host-reqflow_session";
+// Must match the cookie name read by middleware.ts and simple-auth.ts
+const COOKIE_NAME = "reqflow_session";
 const COOKIE_MAX_AGE = 60 * 60 * 24; // 24 hours (matches JWT expiration)
 
 /**
@@ -185,8 +185,7 @@ export async function POST(request: Request) {
         secure: true, // Require HTTPS (always, even in dev)
         sameSite: "strict", // Prevent CSRF attacks
         maxAge: COOKIE_MAX_AGE,
-        path: "/", // Required for __Host- prefix
-        // No domain attribute (required for __Host- prefix)
+        path: "/",
       });
 
       // Set CSRF token for mutation protection
@@ -253,8 +252,7 @@ export async function POST(request: Request) {
       secure: true, // Require HTTPS (always, even in dev)
       sameSite: "strict", // Prevent CSRF attacks
       maxAge: COOKIE_MAX_AGE,
-      path: "/", // Required for __Host- prefix
-      // No domain attribute (required for __Host- prefix)
+      path: "/",
     });
 
     // Set CSRF token for mutation protection

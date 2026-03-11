@@ -34,7 +34,7 @@ export async function GET() {
     return NextResponse.json(
       {
         health: "error",
-        error: error instanceof Error ? error.message : "Unknown error",
+        error: "Service unavailable",
       },
       { status: 500 }
     );
