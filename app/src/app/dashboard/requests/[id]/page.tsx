@@ -38,17 +38,17 @@ import { Repeat } from "lucide-react";
 export const dynamic = "force-dynamic";
 
 const statusConfig: Record<string, { label: string; className: string }> = {
-  draft: { label: "Draft", className: "bg-slate-100 text-slate-700 border-slate-200" },
-  pending: { label: "Pending Approval", className: "bg-amber-100 text-amber-700 border-amber-200" },
-  approved: { label: "Approved", className: "bg-green-100 text-green-700 border-green-200" },
-  rejected: { label: "Rejected", className: "bg-red-100 text-red-700 border-red-200" },
-  cancelled: { label: "Cancelled", className: "bg-slate-100 text-slate-500 border-slate-200" },
+  draft: { label: "Draft", className: "bg-slate-50 text-slate-500 border-slate-100" },
+  pending: { label: "Pending Approval", className: "bg-amber-50 text-amber-600 border-amber-100" },
+  approved: { label: "Approved", className: "bg-green-50 text-green-600 border-green-100" },
+  rejected: { label: "Rejected", className: "bg-red-50 text-red-600 border-red-100" },
+  cancelled: { label: "Cancelled", className: "bg-slate-50 text-slate-400 border-slate-100" },
 };
 
 const decisionConfig: Record<string, { icon: typeof Clock; color: string; bg: string }> = {
-  pending: { icon: Clock, color: "text-amber-500", bg: "bg-amber-100" },
-  approved: { icon: CheckCircle2, color: "text-green-500", bg: "bg-green-100" },
-  rejected: { icon: XCircle, color: "text-red-500", bg: "bg-red-100" },
+  pending: { icon: Clock, color: "text-amber-500", bg: "bg-amber-50" },
+  approved: { icon: CheckCircle2, color: "text-green-500", bg: "bg-green-50" },
+  rejected: { icon: XCircle, color: "text-red-500", bg: "bg-red-50" },
 };
 
 export default function RequestDetailPage({
@@ -136,7 +136,7 @@ export default function RequestDetailPage({
           <div>
             <div className="flex items-center gap-3">
               <h1 className="text-h4 font-bold text-slate-900">{req.title}</h1>
-              <Badge className={status.className}>{status.label}</Badge>
+              <Badge variant="pill" className={status.className}>{status.label}</Badge>
             </div>
             <p className="text-body-sm text-slate-500 mt-1">
               {req.requestNumber} &middot; Created{" "}

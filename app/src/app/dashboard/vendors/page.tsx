@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Building2, Search, Plus } from "lucide-react";
+import { VendorAvatar } from "@/components/ui/vendor-avatar";
 
 import { SortableColumnHeader } from "@/components/ui/sortable-column-header";
 import { DataPagination } from "@/components/ui/data-pagination";
@@ -60,17 +61,17 @@ export default function VendorsPage() {
   });
 
   const complianceTierColors = {
-    none: "bg-slate-100 text-slate-700",
-    basic: "bg-blue-100 text-blue-700",
-    customer_data: "bg-yellow-100 text-yellow-700",
-    regulated: "bg-purple-100 text-purple-700",
+    none: "bg-slate-50 text-slate-500",
+    basic: "bg-blue-50 text-blue-600",
+    customer_data: "bg-yellow-50 text-yellow-600",
+    regulated: "bg-purple-50 text-purple-600",
   };
 
   const statusColors = {
-    active: "bg-green-100 text-green-700",
-    inactive: "bg-slate-100 text-slate-700",
-    blocked: "bg-red-100 text-red-700",
-    pending_review: "bg-yellow-100 text-yellow-700",
+    active: "bg-green-50 text-green-600",
+    inactive: "bg-slate-50 text-slate-500",
+    blocked: "bg-red-50 text-red-600",
+    pending_review: "bg-yellow-50 text-yellow-600",
   };
 
   if (error) {
@@ -181,9 +182,7 @@ export default function VendorsPage() {
                 >
                   <TableCell>
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center">
-                        <Building2 className="w-5 h-5 text-slate-600" />
-                      </div>
+                      <VendorAvatar name={vendor.name} />
                       <div>
                         <div className="font-medium text-slate-900">
                           {vendor.name}
@@ -210,7 +209,7 @@ export default function VendorsPage() {
                           vendor.complianceTier as keyof typeof complianceTierColors
                         ]
                       }
-                      variant="secondary"
+                      variant="pill"
                     >
                       {vendor.complianceTier.replace("_", " ")}
                     </Badge>
@@ -241,7 +240,7 @@ export default function VendorsPage() {
                           vendor.status as keyof typeof statusColors
                         ]
                       }
-                      variant="secondary"
+                      variant="pill"
                     >
                       {vendor.status.replace("_", " ")}
                     </Badge>

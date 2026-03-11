@@ -71,7 +71,7 @@ export default function BudgetsPage() {
             const isOver = utilization >= 100;
 
             return (
-              <Card key={budget.id} className={isOver ? "ring-2 ring-red-200" : isWarning ? "ring-2 ring-amber-200" : ""}>
+              <Card key={budget.id} className={`hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 ${isOver ? "ring-2 ring-red-200" : isWarning ? "ring-2 ring-amber-200" : ""}`}>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
                   <div>
                     <CardTitle className="text-base">{budget.name}</CardTitle>
@@ -80,13 +80,13 @@ export default function BudgetsPage() {
                     </p>
                   </div>
                   {isOver && (
-                    <Badge className="bg-red-100 text-red-700 border-red-200">
+                    <Badge variant="pill" className="bg-red-50 text-red-600 border-red-100">
                       <AlertTriangle className="h-3 w-3 mr-1" />
                       Over budget
                     </Badge>
                   )}
                   {isWarning && !isOver && (
-                    <Badge className="bg-amber-100 text-amber-700 border-amber-200">
+                    <Badge variant="pill" className="bg-amber-50 text-amber-600 border-amber-100">
                       <AlertTriangle className="h-3 w-3 mr-1" />
                       {utilization.toFixed(0)}% used
                     </Badge>

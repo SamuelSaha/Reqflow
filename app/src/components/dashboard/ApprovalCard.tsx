@@ -61,9 +61,9 @@ interface ApprovalCardProps {
 }
 
 const severityColors = {
-  low: "bg-slate-100 text-slate-700 border-slate-200",
-  medium: "bg-amber-50 text-amber-700 border-amber-200",
-  high: "bg-red-50 text-red-700 border-red-200",
+  low: "bg-slate-50 text-slate-500 border-slate-100",
+  medium: "bg-amber-50 text-amber-600 border-amber-100",
+  high: "bg-red-50 text-red-600 border-red-100",
 };
 
 const signalIcons = {
@@ -124,7 +124,7 @@ export function ApprovalCard({
           <div className="flex items-center gap-2">
             <Badge variant="outline">{req.category}</Badge>
             {req.urgency === "urgent" && (
-              <Badge className="bg-red-100 text-red-700 border-red-200">
+              <Badge variant="pill" className="bg-red-50 text-red-600 border-red-100">
                 Urgent
               </Badge>
             )}

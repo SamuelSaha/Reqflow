@@ -22,6 +22,7 @@ import { format, differenceInDays } from "date-fns";
 import { getErrorMessage } from "@/lib/utils/error-messages";
 import { EmptyState } from "@/components/ui/empty-state";
 import { EmptyTrialsIllustration, NoResultsIllustration } from "@/components/ui/illustrations";
+import { VendorAvatar } from "@/components/ui/vendor-avatar";
 
 export const dynamic = "force-dynamic";
 
@@ -46,15 +47,15 @@ export default function TrialsPage() {
   // Get urgency badge config
   function getUrgencyBadge(daysRemaining: number) {
     if (daysRemaining <= 0) {
-      return { color: "bg-red-100 text-red-700 border-red-200", label: "Expired" };
+      return { color: "bg-red-50 text-red-600 border-red-100", label: "Expired" };
     } else if (daysRemaining === 1) {
-      return { color: "bg-red-100 text-red-700 border-red-200", label: "1 day left" };
+      return { color: "bg-red-50 text-red-600 border-red-100", label: "1 day left" };
     } else if (daysRemaining <= 3) {
-      return { color: "bg-amber-100 text-amber-700 border-amber-200", label: `${daysRemaining}d left` };
+      return { color: "bg-amber-50 text-amber-600 border-amber-100", label: `${daysRemaining}d left` };
     } else if (daysRemaining <= 7) {
-      return { color: "bg-yellow-100 text-yellow-700 border-yellow-200", label: `${daysRemaining}d left` };
+      return { color: "bg-yellow-50 text-yellow-600 border-yellow-100", label: `${daysRemaining}d left` };
     } else {
-      return { color: "bg-green-100 text-green-700 border-green-200", label: `${daysRemaining}d left` };
+      return { color: "bg-green-50 text-green-600 border-green-100", label: `${daysRemaining}d left` };
     }
   }
 
@@ -166,21 +167,21 @@ export default function TrialsPage() {
 
             return (
               <Link key={trial.id} href={`/dashboard/trials/${trial.id}`}>
-                <Card className="hover:bg-slate-50 transition-colors cursor-pointer">
+                <Card className="hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer">
                   <CardHeader>
                     <div className="flex items-start justify-between">
-                      <div className="space-y-1 flex-1">
-                        <div className="flex items-center gap-2">
-                          <FlaskConical className="h-4 w-4 text-blue-600" />
+                      <div className="flex items-center gap-3 flex-1">
+                        <VendorAvatar name={trial.toolName} />
+                        <div className="space-y-1">
                           <CardTitle className="text-lg">{trial.toolName}</CardTitle>
+                          <p className="text-sm text-slate-600">
+                            {trial.department?.name || " - "} · {trial.category || " - "}
+                          </p>
                         </div>
-                        <p className="text-sm text-slate-600">
-                          {trial.department?.name || " - "} · {trial.category || " - "}
-                        </p>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Badge className={urgencyBadge.color}>{urgencyBadge.label}</Badge>
-                        <Badge variant="outline">
+                        <Badge variant="pill" className={urgencyBadge.color}>{urgencyBadge.label}</Badge>
+                        <Badge variant="pill" className="bg-slate-50 text-slate-500 border-slate-100">
                           {trial.status}
                         </Badge>
                       </div>

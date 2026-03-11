@@ -26,21 +26,22 @@ import {
 import { trpc } from "@/lib/api/react";
 import { EmptyState } from "@/components/ui/empty-state";
 import { EmptyBoxIllustration } from "@/components/ui/illustrations";
+import { VendorAvatar } from "@/components/ui/vendor-avatar";
 
 const statusColors = {
-  trial: "bg-blue-100 text-blue-700 border-blue-200",
-  active: "bg-green-100 text-green-700 border-green-200",
-  paused: "bg-amber-100 text-amber-700 border-amber-200",
-  cancelled: "bg-slate-100 text-slate-500 border-slate-200",
-  expired: "bg-red-100 text-red-700 border-red-200",
+  trial: "bg-blue-50 text-blue-600 border-blue-100",
+  active: "bg-green-50 text-green-600 border-green-100",
+  paused: "bg-amber-50 text-amber-600 border-amber-100",
+  cancelled: "bg-slate-50 text-slate-400 border-slate-100",
+  expired: "bg-red-50 text-red-600 border-red-100",
 };
 
 const categoryColors = {
-  saas: "bg-violet-100 text-violet-700 border-violet-200",
-  services: "bg-blue-100 text-blue-700 border-blue-200",
-  infrastructure: "bg-slate-100 text-slate-700 border-slate-200",
-  office: "bg-green-100 text-green-700 border-green-200",
-  other: "bg-gray-100 text-gray-700 border-gray-200",
+  saas: "bg-violet-50 text-violet-600 border-violet-100",
+  services: "bg-blue-50 text-blue-600 border-blue-100",
+  infrastructure: "bg-slate-50 text-slate-500 border-slate-100",
+  office: "bg-green-50 text-green-600 border-green-100",
+  other: "bg-gray-50 text-gray-500 border-gray-100",
 };
 
 type CategoryData = { monthly: number; annual: number; count: number };
@@ -121,60 +122,54 @@ export default function SubscriptionsPage() {
       )}
       {metrics && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card>
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-body-sm font-medium text-slate-600">
-                  Monthly Spend
-                </CardTitle>
-                <DollarSign className="h-4 w-4 text-slate-400" />
+          <Card className="hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+            <CardContent className="p-5 md:p-6">
+              <div className="flex items-start justify-between">
+                <div className="space-y-1">
+                  <div className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900">
+                    €{metrics.totalMonthly.toLocaleString("en", { minimumFractionDigits: 0 })}
+                  </div>
+                  <p className="text-xs md:text-sm font-medium text-slate-600">Monthly Spend</p>
+                </div>
+                <div className="h-10 w-10 rounded-xl flex items-center justify-center shrink-0 bg-green-50">
+                  <DollarSign className="h-5 w-5 text-green-500" />
+                </div>
               </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-display-sm font-bold text-slate-900">
-                €{metrics.totalMonthly.toLocaleString("en", { minimumFractionDigits: 2 })}
-              </div>
-              <p className="text-caption text-slate-500 mt-1">
-                €{metrics.totalAnnual.toLocaleString("en", { minimumFractionDigits: 2 })} annually
-              </p>
+              <p className="text-xs text-slate-500 mt-3">€{metrics.totalAnnual.toLocaleString("en", { minimumFractionDigits: 0 })} annually</p>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-body-sm font-medium text-slate-600">
-                  Active Subscriptions
-                </CardTitle>
-                <Package className="h-4 w-4 text-slate-400" />
+          <Card className="hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+            <CardContent className="p-5 md:p-6">
+              <div className="flex items-start justify-between">
+                <div className="space-y-1">
+                  <div className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900">
+                    {metrics.subscriptionCount}
+                  </div>
+                  <p className="text-xs md:text-sm font-medium text-slate-600">Active Subscriptions</p>
+                </div>
+                <div className="h-10 w-10 rounded-xl flex items-center justify-center shrink-0 bg-blue-50">
+                  <Package className="h-5 w-5 text-blue-500" />
+                </div>
               </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-display-sm font-bold text-slate-900">
-                {metrics.subscriptionCount}
-              </div>
-              <p className="text-caption text-slate-500 mt-1">
-                {Object.keys(metrics.byVendor).length} vendors
-              </p>
+              <p className="text-xs text-slate-500 mt-3">{Object.keys(metrics.byVendor).length} vendors</p>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-body-sm font-medium text-slate-600">
-                  Wasted Spend
-                </CardTitle>
-                <AlertTriangle className="h-4 w-4 text-amber-500" />
+          <Card className={`hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 ${(utilization?.totalWastedCost || 0) > 0 ? "ring-2 ring-amber-200 bg-amber-50/20" : ""}`}>
+            <CardContent className="p-5 md:p-6">
+              <div className="flex items-start justify-between">
+                <div className="space-y-1">
+                  <div className="text-3xl md:text-4xl font-bold tracking-tight text-amber-700">
+                    €{(utilization?.totalWastedCost || 0).toLocaleString("en", { minimumFractionDigits: 0 })}
+                  </div>
+                  <p className="text-xs md:text-sm font-medium text-slate-600">Wasted Spend</p>
+                </div>
+                <div className="h-10 w-10 rounded-xl flex items-center justify-center shrink-0 bg-amber-50">
+                  <AlertTriangle className="h-5 w-5 text-amber-500" />
+                </div>
               </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-display-sm font-bold text-amber-600">
-                €{(utilization?.totalWastedCost || 0).toLocaleString("en", { minimumFractionDigits: 2 })}
-              </div>
-              <p className="text-caption text-slate-500 mt-1">
-                {utilization?.totalWastedSeats || 0} unused seats
-              </p>
+              <p className="text-xs text-slate-500 mt-3">{utilization?.totalWastedSeats || 0} unused seats</p>
             </CardContent>
           </Card>
         </div>
@@ -205,7 +200,7 @@ export default function SubscriptionsPage() {
                     <p className="text-body-sm font-semibold text-slate-900">
                       {item.subscription.toolName}
                     </p>
-                    <Badge variant="outline" className={statusColors[item.subscription.status as keyof typeof statusColors]}>
+                    <Badge variant="pill" className={statusColors[item.subscription.status as keyof typeof statusColors]}>
                       {item.subscription.status}
                     </Badge>
                   </div>
@@ -328,49 +323,52 @@ export default function SubscriptionsPage() {
                 return (
                   <div
                     key={sub.id}
-                    className="flex items-start justify-between p-4 border border-slate-200 rounded-lg hover:border-slate-300 transition-colors"
+                    className="flex items-start justify-between p-4 border border-slate-100 rounded-lg hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
                   >
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-body-md font-semibold text-slate-900">
-                          {sub.toolName}
-                        </h3>
-                        <Badge variant="outline" className={statusColors[sub.status as keyof typeof statusColors]}>
-                          {sub.status}
-                        </Badge>
-                        <Badge variant="outline" className={categoryColors[sub.category as keyof typeof categoryColors]}>
-                          {sub.category}
-                        </Badge>
-                      </div>
+                    <div className="flex gap-3 flex-1">
+                      <VendorAvatar name={sub.vendor?.name || sub.toolName} className="mt-0.5" />
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="text-body-md font-semibold text-slate-900">
+                            {sub.toolName}
+                          </h3>
+                          <Badge variant="pill" className={statusColors[sub.status as keyof typeof statusColors]}>
+                            {sub.status}
+                          </Badge>
+                          <Badge variant="pill" className={categoryColors[sub.category as keyof typeof categoryColors]}>
+                            {sub.category}
+                          </Badge>
+                        </div>
 
-                      <div className="flex items-center gap-4 text-caption text-slate-600">
-                        {sub.vendor && (
+                        <div className="flex items-center gap-4 text-caption text-slate-600">
+                          {sub.vendor && (
+                            <span className="flex items-center gap-1">
+                              <Building2 className="h-3 w-3" />
+                              {sub.vendor.name}
+                            </span>
+                          )}
+                          {sub.department && (
+                            <span>{sub.department.name}</span>
+                          )}
+                          {sub.seats && (
+                            <span className="flex items-center gap-1">
+                              <Users className="h-3 w-3" />
+                              {sub.activeSeats || 0} / {sub.seats} seats
+                            </span>
+                          )}
                           <span className="flex items-center gap-1">
-                            <Building2 className="h-3 w-3" />
-                            {sub.vendor.name}
+                            <Calendar className="h-3 w-3" />
+                            {new Date(sub.startDate).toLocaleDateString()}
+                            {sub.endDate && ` - ${new Date(sub.endDate).toLocaleDateString()}`}
                           </span>
-                        )}
-                        {sub.department && (
-                          <span>{sub.department.name}</span>
-                        )}
-                        {sub.seats && (
-                          <span className="flex items-center gap-1">
-                            <Users className="h-3 w-3" />
-                            {sub.activeSeats || 0} / {sub.seats} seats
-                          </span>
-                        )}
-                        <span className="flex items-center gap-1">
-                          <Calendar className="h-3 w-3" />
-                          {new Date(sub.startDate).toLocaleDateString()}
-                          {sub.endDate && ` - ${new Date(sub.endDate).toLocaleDateString()}`}
-                        </span>
-                      </div>
+                        </div>
 
-                      {sub.description && (
-                        <p className="text-caption text-slate-500 mt-2">
-                          {sub.description}
-                        </p>
-                      )}
+                        {sub.description && (
+                          <p className="text-caption text-slate-500 mt-2">
+                            {sub.description}
+                          </p>
+                        )}
+                      </div>
                     </div>
 
                     <div className="text-right">
@@ -411,7 +409,7 @@ export default function SubscriptionsPage() {
                   {Object.entries(metrics.byCategory).map(([category, data]: [string, CategoryData]) => (
                     <div key={category} className="flex items-center justify-between p-3 border border-slate-200 rounded-lg">
                       <div className="flex items-center gap-3">
-                        <Badge variant="outline" className={categoryColors[category as keyof typeof categoryColors]}>
+                        <Badge variant="pill" className={categoryColors[category as keyof typeof categoryColors]}>
                           {category}
                         </Badge>
                         <span className="text-caption text-slate-600">{data.count} subscriptions</span>

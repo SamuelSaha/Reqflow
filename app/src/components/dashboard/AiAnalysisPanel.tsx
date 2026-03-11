@@ -12,9 +12,9 @@ interface AiAnalysisPanelProps {
 }
 
 const riskConfig = {
-  low: { label: "Low risk", className: "bg-green-100 text-green-700 border-green-200" },
-  medium: { label: "Medium risk", className: "bg-amber-100 text-amber-700 border-amber-200" },
-  high: { label: "High risk", className: "bg-red-100 text-red-700 border-red-200" },
+  low: { label: "Low risk", className: "bg-green-50 text-green-600 border-green-100" },
+  medium: { label: "Medium risk", className: "bg-amber-50 text-amber-600 border-amber-100" },
+  high: { label: "High risk", className: "bg-red-50 text-red-600 border-red-100" },
 };
 
 const recommendationConfig = {
@@ -97,7 +97,7 @@ export function AiAnalysisPanel({ requestId }: AiAnalysisPanelProps) {
             <Sparkles className="h-4 w-4 text-violet-600" />
             AI Analysis
           </CardTitle>
-          <Badge className={risk.className}>{risk.label}</Badge>
+          <Badge variant="pill" className={risk.className}>{risk.label}</Badge>
         </div>
       </CardHeader>
       <CardContent className="space-y-4">

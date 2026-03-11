@@ -19,6 +19,7 @@ import {
   Building2,
   TrendingDown,
 } from "lucide-react";
+import { VendorAvatar } from "@/components/ui/vendor-avatar";
 import {
   format,
   parseISO,
@@ -178,22 +179,22 @@ export default function RenewalsPage() {
 
             return (
               <Link key={renewal.id} href={`/dashboard/renewals/${renewal.id}`}>
-                <Card className="hover:shadow-md transition-shadow cursor-pointer">
+                <Card className="hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer">
                   <CardHeader>
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
-                          <Building2 className="h-5 w-5 text-slate-400 flex-shrink-0" />
+                      <div className="flex items-center gap-3 flex-1 min-w-0">
+                        <VendorAvatar name={vendor?.name || "Unknown"} />
+                        <div className="min-w-0">
                           <CardTitle className="text-base md:text-lg truncate">
                             {vendor?.name || "Unknown Vendor"}
                           </CardTitle>
+                          <CardDescription className="mt-1 truncate">
+                            {contract?.title || "Contract"}
+                          </CardDescription>
                         </div>
-                        <CardDescription className="mt-1 truncate">
-                          {contract?.title || "Contract"}
-                        </CardDescription>
                       </div>
                       <div className="flex items-center gap-2 flex-shrink-0">
-                        <Badge className={getUrgencyBadgeClass(renewal.urgencyColor)}>
+                        <Badge variant="pill" className={getUrgencyBadgeClass(renewal.urgencyColor)}>
                           {renewal.daysUntilDeadline < 0
                             ? "Overdue"
                             : renewal.daysUntilDeadline === 0
@@ -202,7 +203,7 @@ export default function RenewalsPage() {
                                 ? "1 day left"
                                 : `${renewal.daysUntilDeadline}d left`}
                         </Badge>
-                        <Badge variant="outline" className={getReadinessBadgeClass(renewal.readinessScore)}>
+                        <Badge variant="pill" className={getReadinessBadgeClass(renewal.readinessScore)}>
                           {renewal.readinessScore}% ready
                         </Badge>
                       </div>
@@ -414,10 +415,10 @@ function RenewalCalendar({
                     <div
                       className={`text-[10px] font-medium truncate px-1 py-0.5 rounded mb-0.5 cursor-pointer hover:opacity-80 ${
                         r.urgencyColor === "red"
-                          ? "bg-red-100 text-red-700"
+                          ? "bg-red-50 text-red-600"
                           : r.urgencyColor === "yellow"
-                          ? "bg-amber-100 text-amber-700"
-                          : "bg-green-100 text-green-700"
+                          ? "bg-amber-50 text-amber-600"
+                          : "bg-green-50 text-green-600"
                       }`}
                       title={r.contract?.vendor?.name || r.contract?.title || "Renewal"}
                     >

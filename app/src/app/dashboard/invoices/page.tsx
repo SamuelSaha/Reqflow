@@ -29,19 +29,19 @@ import { EmptyBoxIllustration } from "@/components/ui/illustrations";
 export const dynamic = "force-dynamic";
 
 const matchStatusColors = {
-  unmatched: "bg-red-100 text-red-700 border-red-200",
-  auto_matched: "bg-green-100 text-green-700 border-green-200",
-  manual_matched: "bg-blue-100 text-blue-700 border-blue-200",
-  disputed: "bg-amber-100 text-amber-700 border-amber-200",
+  unmatched: "bg-red-50 text-red-600 border-red-100",
+  auto_matched: "bg-green-50 text-green-600 border-green-100",
+  manual_matched: "bg-blue-50 text-blue-600 border-blue-100",
+  disputed: "bg-amber-50 text-amber-600 border-amber-100",
 };
 
 const statusColors = {
-  pending: "bg-slate-100 text-slate-700 border-slate-200",
-  approved: "bg-green-100 text-green-700 border-green-200",
-  paid: "bg-blue-100 text-blue-700 border-blue-200",
-  disputed: "bg-red-100 text-red-700 border-red-200",
-  overdue: "bg-amber-100 text-amber-700 border-amber-200",
-  cancelled: "bg-slate-100 text-slate-500 border-slate-200",
+  pending: "bg-slate-50 text-slate-500 border-slate-100",
+  approved: "bg-green-50 text-green-600 border-green-100",
+  paid: "bg-blue-50 text-blue-600 border-blue-100",
+  disputed: "bg-red-50 text-red-600 border-red-100",
+  overdue: "bg-amber-50 text-amber-600 border-amber-100",
+  cancelled: "bg-slate-50 text-slate-400 border-slate-100",
 };
 
 export default function InvoicesPage() {
@@ -255,10 +255,10 @@ export default function InvoicesPage() {
                 return (
                   <div
                     key={invoice.id}
-                    className={`p-4 rounded-lg border transition-all ${
+                    className={`p-4 rounded-lg border transition-all duration-200 ${
                       hasVariance && variance > 0
-                        ? "border-amber-200 bg-amber-50/50"
-                        : "border-slate-200 hover:bg-slate-50"
+                        ? "border-amber-100 bg-amber-50/50 hover:shadow-md hover:-translate-y-0.5"
+                        : "border-slate-100 hover:shadow-md hover:-translate-y-0.5"
                     }`}
                   >
                     <div className="flex items-start justify-between">
@@ -312,10 +312,10 @@ export default function InvoicesPage() {
                       {/* Badges and actions */}
                       <div className="flex flex-col items-end gap-2 ml-4">
                         <div className="flex flex-wrap gap-2 justify-end">
-                          <Badge className={matchStatusColors[(invoice.matchStatus as keyof typeof matchStatusColors) || "unmatched"]}>
+                          <Badge variant="pill" className={matchStatusColors[(invoice.matchStatus as keyof typeof matchStatusColors) || "unmatched"]}>
                             {invoice.matchStatus?.replace("_", " ") || "unmatched"}
                           </Badge>
-                          <Badge className={statusColors[invoice.status as keyof typeof statusColors]}>
+                          <Badge variant="pill" className={statusColors[invoice.status as keyof typeof statusColors]}>
                             {invoice.status}
                           </Badge>
                         </div>
@@ -391,6 +391,13 @@ export default function InvoicesPage() {
   );
 }
 
+const STAT_ICON_BG: Record<string, { iconBg: string; iconColor: string }> = {
+  blue: { iconBg: "bg-blue-50", iconColor: "text-blue-500" },
+  green: { iconBg: "bg-green-50", iconColor: "text-green-500" },
+  red: { iconBg: "bg-red-50", iconColor: "text-red-500" },
+  amber: { iconBg: "bg-amber-50", iconColor: "text-amber-500" },
+};
+
 function StatCard({
   title,
   value,
@@ -407,30 +414,29 @@ function StatCard({
   color?: "blue" | "green" | "red" | "amber";
 }) {
   const highlightColors = {
-    blue: "ring-2 ring-blue-200 bg-blue-50/30",
-    green: "ring-2 ring-green-200 bg-green-50/30",
-    red: "ring-2 ring-red-200 bg-red-50/30",
-    amber: "ring-2 ring-amber-200 bg-amber-50/30",
+    blue: "ring-2 ring-blue-200 bg-blue-50/20",
+    green: "ring-2 ring-green-200 bg-green-50/20",
+    red: "ring-2 ring-red-200 bg-red-50/20",
+    amber: "ring-2 ring-amber-200 bg-amber-50/20",
   };
 
-  const iconColors = {
-    blue: "text-blue-600",
-    green: "text-green-600",
-    red: "text-red-600",
-    amber: "text-amber-600",
-  };
+  const { iconBg, iconColor } = STAT_ICON_BG[color];
 
   return (
-    <Card className={highlight ? `${highlightColors[color]} shadow-md` : "shadow-sm hover:shadow-md transition-shadow"}>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 md:pb-2 p-4 md:p-6">
-        <CardTitle className="text-xs md:text-sm font-medium">{title}</CardTitle>
-        <Icon className={`h-4 w-4 ${highlight ? iconColors[color] : "text-slate-600"}`} />
-      </CardHeader>
-      <CardContent className="p-4 pt-0 md:p-6 md:pt-0">
-        <div className={`text-xl md:text-2xl font-bold ${highlight ? `${iconColors[color]}` : ""}`}>
-          {value}
+    <Card className={`hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 ${highlight ? highlightColors[color] : ""}`}>
+      <CardContent className="p-5 md:p-6">
+        <div className="flex items-start justify-between">
+          <div className="space-y-1">
+            <div className={`text-3xl md:text-4xl font-bold tracking-tight ${highlight ? `${iconColor.replace("text-", "text-").replace("-500", "-700")}` : "text-slate-900"}`}>
+              {value}
+            </div>
+            <p className="text-xs md:text-sm font-medium text-slate-600">{title}</p>
+          </div>
+          <div className={`h-10 w-10 rounded-xl flex items-center justify-center shrink-0 ${iconBg}`}>
+            <Icon className={`h-5 w-5 ${iconColor}`} />
+          </div>
         </div>
-        <p className="text-[10px] md:text-xs text-slate-600 mt-1">{subtitle}</p>
+        <p className="text-xs text-slate-500 mt-3">{subtitle}</p>
       </CardContent>
     </Card>
   );
