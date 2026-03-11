@@ -87,7 +87,7 @@ jobs:
 
       # npm ci doesn't resolve platform-specific optional deps from macOS-generated lock file (npm/cli#4828)
       - name: Install platform-specific native binaries
-        run: npm install --no-save @tailwindcss/oxide-linux-x64-gnu@4.2.0 lightningcss-linux-x64-gnu@1.31.1 @unrs/resolver-binding-linux-x64-gnu@1.11.1
+        run: npm install --no-save @tailwindcss/oxide-linux-x64-gnu@4.2.1 lightningcss-linux-x64-gnu@1.31.1 @unrs/resolver-binding-linux-x64-gnu@1.11.1
 
       - name: Push database schema
         run: cd app && npx drizzle-kit push --force
@@ -162,7 +162,7 @@ jobs:
 
       # npm ci doesn't resolve platform-specific optional deps from macOS-generated lock file (npm/cli#4828)
       - name: Install platform-specific native binaries
-        run: npm install --no-save @tailwindcss/oxide-linux-x64-gnu@4.2.0 lightningcss-linux-x64-gnu@1.31.1 @unrs/resolver-binding-linux-x64-gnu@1.11.1
+        run: npm install --no-save @tailwindcss/oxide-linux-x64-gnu@4.2.1 lightningcss-linux-x64-gnu@1.31.1 @unrs/resolver-binding-linux-x64-gnu@1.11.1
 
       - name: Build
         run: npm run build --workspace=app
