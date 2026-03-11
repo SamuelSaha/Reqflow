@@ -379,7 +379,7 @@ function RenewalCalendar({
         </div>
 
         {/* Calendar grid */}
-        <div className="grid grid-cols-7 gap-px bg-slate-100 rounded-lg overflow-hidden border border-slate-100">
+        <div className="grid grid-cols-7 gap-px bg-slate-100/80 rounded-lg overflow-hidden">
           {/* Empty offset cells */}
           {Array.from({ length: startOffset }).map((_, i) => (
             <div key={`offset-${i}`} className="bg-white min-h-[72px]" />
@@ -434,7 +434,7 @@ function RenewalCalendar({
                   .map((r) => (
                     <Link key={`d-${r.id}`} href={`/dashboard/renewals/${r.id}`}>
                       <div
-                        className="text-[10px] font-medium truncate px-1 py-0.5 rounded mb-0.5 cursor-pointer bg-amber-50 text-amber-600 border border-amber-200 hover:opacity-80"
+                        className="text-[10px] font-medium truncate px-1 py-0.5 rounded mb-0.5 cursor-pointer bg-amber-50 text-amber-600 hover:opacity-80"
                         title={`Deadline: ${r.contract?.vendor?.name || "contract"}`}
                       >
                         ⚠ {r.contract?.vendor?.name || "Deadline"}

@@ -117,9 +117,9 @@
 
 /* Dashboard-scoped warm overrides (does NOT change global --warm-50) */
 .dashboard-bg {
-  --warm-50: #FEF0E8;
-  --warm-100: #FDE4D8;
-  --warm-200: #FCD5C4;
+  --warm-50: #FAFAF8;
+  --warm-100: #F5F4F1;
+  --warm-200: #ECEAE6;
   position: relative;
 }
 
@@ -129,10 +129,10 @@
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.025;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
   background-repeat: repeat;
-  background-size: 200px 200px;
+  background-size: 256px 256px;
 }
 
 @theme inline {
