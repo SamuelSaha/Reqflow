@@ -47,15 +47,15 @@ export default function TrialsPage() {
   // Get urgency badge config
   function getUrgencyBadge(daysRemaining: number) {
     if (daysRemaining <= 0) {
-      return { color: "bg-red-50 text-red-600 border-red-100", label: "Expired" };
+      return { color: "bg-red-100 text-red-800", label: "Expired" };
     } else if (daysRemaining === 1) {
-      return { color: "bg-red-50 text-red-600 border-red-100", label: "1 day left" };
+      return { color: "bg-red-100 text-red-800", label: "1 day left" };
     } else if (daysRemaining <= 3) {
-      return { color: "bg-amber-50 text-amber-600 border-amber-100", label: `${daysRemaining}d left` };
+      return { color: "bg-amber-100 text-amber-800", label: `${daysRemaining}d left` };
     } else if (daysRemaining <= 7) {
-      return { color: "bg-yellow-50 text-yellow-600 border-yellow-100", label: `${daysRemaining}d left` };
+      return { color: "bg-yellow-100 text-yellow-800", label: `${daysRemaining}d left` };
     } else {
-      return { color: "bg-green-50 text-green-600 border-green-100", label: `${daysRemaining}d left` };
+      return { color: "bg-green-100 text-green-800", label: `${daysRemaining}d left` };
     }
   }
 
@@ -181,7 +181,7 @@ export default function TrialsPage() {
                       </div>
                       <div className="flex items-center gap-2">
                         <Badge variant="pill" className={urgencyBadge.color}>{urgencyBadge.label}</Badge>
-                        <Badge variant="pill" className="bg-slate-50 text-slate-500 border-slate-100">
+                        <Badge variant="pill" className="bg-slate-100 text-slate-700">
                           {trial.status}
                         </Badge>
                       </div>

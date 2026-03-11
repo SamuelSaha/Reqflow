@@ -80,13 +80,13 @@ export default function BudgetsPage() {
                     </p>
                   </div>
                   {isOver && (
-                    <Badge variant="pill" className="bg-red-50 text-red-600 border-red-100">
+                    <Badge variant="pill" className="bg-red-100 text-red-800">
                       <AlertTriangle className="h-3 w-3 mr-1" />
                       Over budget
                     </Badge>
                   )}
                   {isWarning && !isOver && (
-                    <Badge variant="pill" className="bg-amber-50 text-amber-600 border-amber-100">
+                    <Badge variant="pill" className="bg-amber-100 text-amber-800">
                       <AlertTriangle className="h-3 w-3 mr-1" />
                       {utilization.toFixed(0)}% used
                     </Badge>

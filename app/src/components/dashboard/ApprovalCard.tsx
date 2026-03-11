@@ -61,9 +61,9 @@ interface ApprovalCardProps {
 }
 
 const severityColors = {
-  low: "bg-slate-50 text-slate-500 border-slate-100",
-  medium: "bg-amber-50 text-amber-600 border-amber-100",
-  high: "bg-red-50 text-red-600 border-red-100",
+  low: "bg-slate-100 text-slate-700",
+  medium: "bg-amber-100 text-amber-800",
+  high: "bg-red-100 text-red-800",
 };
 
 const signalIcons = {
@@ -76,9 +76,9 @@ const signalIcons = {
 };
 
 const recommendationConfig = {
-  approve: { color: "bg-green-50 border-green-200 text-green-700", icon: CheckCircle2, label: "AI: Approve" },
-  review: { color: "bg-amber-50 border-amber-200 text-amber-700", icon: Eye, label: "AI: Review" },
-  flag: { color: "bg-red-50 border-red-200 text-red-700", icon: AlertTriangle, label: "AI: Flag" },
+  approve: { color: "bg-green-100 text-green-800", icon: CheckCircle2, label: "AI: Approve" },
+  review: { color: "bg-amber-100 text-amber-800", icon: Eye, label: "AI: Review" },
+  flag: { color: "bg-red-100 text-red-800", icon: AlertTriangle, label: "AI: Flag" },
 };
 
 export function ApprovalCard({
@@ -124,7 +124,7 @@ export function ApprovalCard({
           <div className="flex items-center gap-2">
             <Badge variant="outline">{req.category}</Badge>
             {req.urgency === "urgent" && (
-              <Badge variant="pill" className="bg-red-50 text-red-600 border-red-100">
+              <Badge variant="pill" className="bg-red-100 text-red-800">
                 Urgent
               </Badge>
             )}
@@ -165,7 +165,7 @@ export function ApprovalCard({
         {approval.context?.riskFlags && approval.context.riskFlags.length > 0 && (
           <div className="flex flex-wrap gap-2">
             {approval.context.riskFlags.map((flag, i) => (
-              <Badge key={i} variant="outline" className="bg-amber-50 text-amber-700 border-amber-200">
+              <Badge key={i} variant="pill" className="bg-amber-100 text-amber-800">
                 <AlertCircle className="h-3 w-3 mr-1" />
                 {flag}
               </Badge>

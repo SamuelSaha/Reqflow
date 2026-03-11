@@ -29,19 +29,19 @@ import { EmptyBoxIllustration } from "@/components/ui/illustrations";
 export const dynamic = "force-dynamic";
 
 const matchStatusColors = {
-  unmatched: "bg-red-50 text-red-600 border-red-100",
-  auto_matched: "bg-green-50 text-green-600 border-green-100",
-  manual_matched: "bg-blue-50 text-blue-600 border-blue-100",
-  disputed: "bg-amber-50 text-amber-600 border-amber-100",
+  unmatched: "bg-red-100 text-red-800",
+  auto_matched: "bg-green-100 text-green-800",
+  manual_matched: "bg-blue-100 text-blue-800",
+  disputed: "bg-amber-100 text-amber-800",
 };
 
 const statusColors = {
-  pending: "bg-slate-50 text-slate-500 border-slate-100",
-  approved: "bg-green-50 text-green-600 border-green-100",
-  paid: "bg-blue-50 text-blue-600 border-blue-100",
-  disputed: "bg-red-50 text-red-600 border-red-100",
-  overdue: "bg-amber-50 text-amber-600 border-amber-100",
-  cancelled: "bg-slate-50 text-slate-400 border-slate-100",
+  pending: "bg-slate-100 text-slate-700",
+  approved: "bg-green-100 text-green-800",
+  paid: "bg-blue-100 text-blue-800",
+  disputed: "bg-red-100 text-red-800",
+  overdue: "bg-amber-100 text-amber-800",
+  cancelled: "bg-slate-100 text-slate-600",
 };
 
 export default function InvoicesPage() {

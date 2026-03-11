@@ -29,19 +29,19 @@ import { EmptyBoxIllustration } from "@/components/ui/illustrations";
 import { VendorAvatar } from "@/components/ui/vendor-avatar";
 
 const statusColors = {
-  trial: "bg-blue-50 text-blue-600 border-blue-100",
-  active: "bg-green-50 text-green-600 border-green-100",
-  paused: "bg-amber-50 text-amber-600 border-amber-100",
-  cancelled: "bg-slate-50 text-slate-400 border-slate-100",
-  expired: "bg-red-50 text-red-600 border-red-100",
+  trial: "bg-blue-100 text-blue-800",
+  active: "bg-green-100 text-green-800",
+  paused: "bg-amber-100 text-amber-800",
+  cancelled: "bg-slate-100 text-slate-600",
+  expired: "bg-red-100 text-red-800",
 };
 
 const categoryColors = {
-  saas: "bg-violet-50 text-violet-600 border-violet-100",
-  services: "bg-blue-50 text-blue-600 border-blue-100",
-  infrastructure: "bg-slate-50 text-slate-500 border-slate-100",
-  office: "bg-green-50 text-green-600 border-green-100",
-  other: "bg-gray-50 text-gray-500 border-gray-100",
+  saas: "bg-violet-100 text-violet-800",
+  services: "bg-blue-100 text-blue-800",
+  infrastructure: "bg-slate-100 text-slate-700",
+  office: "bg-green-100 text-green-800",
+  other: "bg-gray-100 text-gray-700",
 };
 
 type CategoryData = { monthly: number; annual: number; count: number };

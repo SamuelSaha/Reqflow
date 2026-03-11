@@ -38,11 +38,11 @@ import { Repeat } from "lucide-react";
 export const dynamic = "force-dynamic";
 
 const statusConfig: Record<string, { label: string; className: string }> = {
-  draft: { label: "Draft", className: "bg-slate-50 text-slate-500 border-slate-100" },
-  pending: { label: "Pending Approval", className: "bg-amber-50 text-amber-600 border-amber-100" },
-  approved: { label: "Approved", className: "bg-green-50 text-green-600 border-green-100" },
-  rejected: { label: "Rejected", className: "bg-red-50 text-red-600 border-red-100" },
-  cancelled: { label: "Cancelled", className: "bg-slate-50 text-slate-400 border-slate-100" },
+  draft: { label: "Draft", className: "bg-slate-100 text-slate-700" },
+  pending: { label: "Pending Approval", className: "bg-amber-100 text-amber-800" },
+  approved: { label: "Approved", className: "bg-green-100 text-green-800" },
+  rejected: { label: "Rejected", className: "bg-red-100 text-red-800" },
+  cancelled: { label: "Cancelled", className: "bg-slate-100 text-slate-600" },
 };
 
 const decisionConfig: Record<string, { icon: typeof Clock; color: string; bg: string }> = {
@@ -287,7 +287,7 @@ export default function RequestDetailPage({
                               <Badge
                                 key={j}
                                 variant="outline"
-                                className="bg-amber-50 text-amber-700 border-amber-200 text-[10px] mt-1 mr-1"
+                                className="bg-amber-100 text-amber-800 text-[10px] mt-1 mr-1"
                               >
                                 {flag}
                               </Badge>

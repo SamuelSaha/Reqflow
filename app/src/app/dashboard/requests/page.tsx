@@ -54,11 +54,11 @@ const statusConfig: Record<
   string,
   { label: string; className: string; icon: typeof Clock }
 > = {
-  draft: { label: "Draft", className: "bg-slate-50 text-slate-500 border-slate-100", icon: Edit3 },
-  pending: { label: "Pending", className: "bg-amber-50 text-amber-600 border-amber-100", icon: Clock },
-  approved: { label: "Approved", className: "bg-green-50 text-green-600 border-green-100", icon: CheckCircle2 },
-  rejected: { label: "Rejected", className: "bg-red-50 text-red-600 border-red-100", icon: XCircle },
-  cancelled: { label: "Cancelled", className: "bg-slate-50 text-slate-400 border-slate-100", icon: XCircle },
+  draft: { label: "Draft", className: "bg-slate-100 text-slate-700", icon: Edit3 },
+  pending: { label: "Pending", className: "bg-amber-100 text-amber-800", icon: Clock },
+  approved: { label: "Approved", className: "bg-green-100 text-green-800", icon: CheckCircle2 },
+  rejected: { label: "Rejected", className: "bg-red-100 text-red-800", icon: XCircle },
+  cancelled: { label: "Cancelled", className: "bg-slate-100 text-slate-600", icon: XCircle },
 };
 
 const filters: { key: StatusFilter; label: string }[] = [
@@ -533,13 +533,13 @@ export default function RequestsPage() {
                       <div className="flex items-center gap-2 md:flex-col md:gap-1.5">
                         <Badge variant="pill" className={config.className}>{config.label}</Badge>
                         {req.status === "approved" && req.syncedToAccounting && (
-                          <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 text-[10px]">
+                          <Badge variant="pill" className="bg-green-100 text-green-800 text-[10px]">
                             <Receipt className="h-3 w-3 mr-1" />
                             Synced
                           </Badge>
                         )}
                         {req.status === "approved" && req.accountingSyncError && (
-                          <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200 text-[10px]">
+                          <Badge variant="pill" className="bg-red-100 text-red-800 text-[10px]">
                             <AlertTriangle className="h-3 w-3 mr-1" />
                             Sync failed
                           </Badge>

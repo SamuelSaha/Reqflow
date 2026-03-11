@@ -12,9 +12,9 @@ interface AiAnalysisPanelProps {
 }
 
 const riskConfig = {
-  low: { label: "Low risk", className: "bg-green-50 text-green-600 border-green-100" },
-  medium: { label: "Medium risk", className: "bg-amber-50 text-amber-600 border-amber-100" },
-  high: { label: "High risk", className: "bg-red-50 text-red-600 border-red-100" },
+  low: { label: "Low risk", className: "bg-green-100 text-green-800" },
+  medium: { label: "Medium risk", className: "bg-amber-100 text-amber-800" },
+  high: { label: "High risk", className: "bg-red-100 text-red-800" },
 };
 
 const recommendationConfig = {

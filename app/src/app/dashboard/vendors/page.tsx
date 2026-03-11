@@ -61,17 +61,17 @@ export default function VendorsPage() {
   });
 
   const complianceTierColors = {
-    none: "bg-slate-50 text-slate-500",
-    basic: "bg-blue-50 text-blue-600",
-    customer_data: "bg-yellow-50 text-yellow-600",
-    regulated: "bg-purple-50 text-purple-600",
+    none: "bg-slate-100 text-slate-700",
+    basic: "bg-blue-100 text-blue-800",
+    customer_data: "bg-yellow-100 text-yellow-800",
+    regulated: "bg-purple-100 text-purple-800",
   };
 
   const statusColors = {
-    active: "bg-green-50 text-green-600",
-    inactive: "bg-slate-50 text-slate-500",
-    blocked: "bg-red-50 text-red-600",
-    pending_review: "bg-yellow-50 text-yellow-600",
+    active: "bg-green-100 text-green-800",
+    inactive: "bg-slate-100 text-slate-700",
+    blocked: "bg-red-100 text-red-800",
+    pending_review: "bg-yellow-100 text-yellow-800",
   };
 
   if (error) {

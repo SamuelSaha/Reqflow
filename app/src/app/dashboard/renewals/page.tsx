@@ -415,10 +415,10 @@ function RenewalCalendar({
                     <div
                       className={`text-[10px] font-medium truncate px-1 py-0.5 rounded mb-0.5 cursor-pointer hover:opacity-80 ${
                         r.urgencyColor === "red"
-                          ? "bg-red-50 text-red-600"
+                          ? "bg-red-100 text-red-800"
                           : r.urgencyColor === "yellow"
-                          ? "bg-amber-50 text-amber-600"
-                          : "bg-green-50 text-green-600"
+                          ? "bg-amber-100 text-amber-800"
+                          : "bg-green-100 text-green-800"
                       }`}
                       title={r.contract?.vendor?.name || r.contract?.title || "Renewal"}
                     >
@@ -434,7 +434,7 @@ function RenewalCalendar({
                   .map((r) => (
                     <Link key={`d-${r.id}`} href={`/dashboard/renewals/${r.id}`}>
                       <div
-                        className="text-[10px] font-medium truncate px-1 py-0.5 rounded mb-0.5 cursor-pointer bg-amber-50 text-amber-600 hover:opacity-80"
+                        className="text-[10px] font-medium truncate px-1 py-0.5 rounded mb-0.5 cursor-pointer bg-amber-100 text-amber-800 hover:opacity-80"
                         title={`Deadline: ${r.contract?.vendor?.name || "contract"}`}
                       >
                         ⚠ {r.contract?.vendor?.name || "Deadline"}
