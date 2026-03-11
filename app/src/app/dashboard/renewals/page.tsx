@@ -379,7 +379,7 @@ function RenewalCalendar({
         </div>
 
         {/* Calendar grid */}
-        <div className="grid grid-cols-7 gap-px bg-slate-200/50 rounded-lg overflow-hidden border border-black/[0.06]">
+        <div className="grid grid-cols-7 gap-px bg-slate-200 rounded-lg overflow-hidden border border-slate-200">
           {/* Empty offset cells */}
           {Array.from({ length: startOffset }).map((_, i) => (
             <div key={`offset-${i}`} className="bg-white min-h-[72px]" />

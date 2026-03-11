@@ -257,8 +257,8 @@ export default function InvoicesPage() {
                     key={invoice.id}
                     className={`p-4 rounded-lg border transition-all duration-200 ${
                       hasVariance && variance > 0
-                        ? "border-amber-200/40 bg-amber-50/30 hover:shadow-md hover:-translate-y-0.5"
-                        : "border-black/[0.06] hover:shadow-md hover:-translate-y-0.5"
+                        ? "border-amber-200 bg-amber-50/50 hover:shadow-md hover:-translate-y-0.5"
+                        : "border-slate-200 hover:shadow-md hover:-translate-y-0.5"
                     }`}
                   >
                     <div className="flex items-start justify-between">
