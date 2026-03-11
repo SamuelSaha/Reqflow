@@ -92,35 +92,35 @@ export const STATUS_STYLES = {
     bg: COLORS.slate[100],
     text: COLORS.slate[700],
     border: COLORS.slate[200],
-    className: "bg-slate-100 text-slate-700 border-slate-200",
+    className: "bg-slate-50 text-slate-500 border-slate-100",
   },
   pending: {
     label: "Pending",
     bg: COLORS.warning[100],
     text: COLORS.warning[700],
     border: COLORS.warning[200],
-    className: "bg-amber-100 text-amber-700 border-amber-200",
+    className: "bg-amber-50 text-amber-600 border-amber-100",
   },
   approved: {
     label: "Approved",
     bg: COLORS.success[100],
     text: COLORS.success[700],
     border: COLORS.success[200],
-    className: "bg-green-100 text-green-700 border-green-200",
+    className: "bg-green-50 text-green-600 border-green-100",
   },
   rejected: {
     label: "Rejected",
     bg: COLORS.error[100],
     text: COLORS.error[700],
     border: COLORS.error[200],
-    className: "bg-red-100 text-red-700 border-red-200",
+    className: "bg-red-50 text-red-600 border-red-100",
   },
   cancelled: {
     label: "Cancelled",
     bg: COLORS.slate[100],
     text: COLORS.slate[500],
     border: COLORS.slate[200],
-    className: "bg-slate-100 text-slate-500 border-slate-200",
+    className: "bg-slate-50 text-slate-400 border-slate-100",
   },
 } as const;
 
@@ -145,6 +145,26 @@ export const URGENCY_STYLES = {
     className: "bg-red-100 text-red-700",
   },
 } as const;
+
+// ============================================================================
+// AVATAR GRADIENTS
+// ============================================================================
+
+/** 12 gradient pairs for deterministic vendor/requester avatars */
+export const AVATAR_GRADIENTS: [string, string][] = [
+  ['#8B5CF6', '#6366F1'], // violet → indigo
+  ['#3B82F6', '#6366F1'], // blue → indigo
+  ['#EC4899', '#F43F5E'], // pink → rose
+  ['#F59E0B', '#F97316'], // amber → orange
+  ['#10B981', '#14B8A6'], // emerald → teal
+  ['#06B6D4', '#3B82F6'], // cyan → blue
+  ['#8B5CF6', '#EC4899'], // violet → pink
+  ['#F97316', '#EF4444'], // orange → red
+  ['#14B8A6', '#10B981'], // teal → emerald
+  ['#6366F1', '#8B5CF6'], // indigo → violet
+  ['#64748B', '#475569'], // slate → slate (neutral)
+  ['#D946EF', '#8B5CF6'], // fuchsia → violet
+];
 
 // ============================================================================
 // TYPOGRAPHY

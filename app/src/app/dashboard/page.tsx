@@ -27,10 +27,20 @@ import { STATUS_STYLES } from "@/lib/design/tokens";
 import { EmptyRecentRequests, EmptyPendingApprovals } from "@/components/dashboard/empty-dashboard-states";
 import { InlineLoader } from "@/components/ui/inline-loader";
 import { Skeleton } from "@/components/ui/skeleton";
+import { VendorAvatar } from "@/components/ui/vendor-avatar";
 
 export const dynamic = "force-dynamic";
 
 const statusBadge = STATUS_STYLES;
+
+const STAT_ICON_STYLES: Record<string, { iconBg: string; iconColor: string }> = {
+  pendingRequests:  { iconBg: "bg-amber-50",  iconColor: "text-amber-500" },
+  myRequests:       { iconBg: "bg-blue-50",   iconColor: "text-blue-500" },
+  pendingApprovals: { iconBg: "bg-violet-50", iconColor: "text-violet-500" },
+  activeTrials:     { iconBg: "bg-cyan-50",   iconColor: "text-cyan-500" },
+  upcomingRenewals: { iconBg: "bg-orange-50", iconColor: "text-orange-500" },
+  approvedMonth:    { iconBg: "bg-green-50",  iconColor: "text-green-500" },
+};
 
 export default function DashboardPage() {
   const [stats, recentRequests, pendingApprovals, activeTrials, renewalsStats] = trpc.useQueries((t) => [
@@ -80,13 +90,15 @@ export default function DashboardPage() {
       </div>
 
       {/* Stat cards — always rendered, show 0 while loading */}
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-6 lg:grid-cols-6">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 md:grid-cols-3 md:gap-6">
         <StatCard
           title="Pending Requests"
           value={stats.data?.myPending ?? 0}
           icon={Clock}
           subtitle="Awaiting approval"
           loading={stats.isLoading}
+          iconBg={STAT_ICON_STYLES.pendingRequests.iconBg}
+          iconColor={STAT_ICON_STYLES.pendingRequests.iconColor}
         />
         <StatCard
           title="My Requests"
@@ -94,6 +106,8 @@ export default function DashboardPage() {
           icon={FileText}
           subtitle="Total submitted"
           loading={stats.isLoading}
+          iconBg={STAT_ICON_STYLES.myRequests.iconBg}
+          iconColor={STAT_ICON_STYLES.myRequests.iconColor}
         />
         <StatCard
           title="Pending Approvals"
@@ -102,6 +116,8 @@ export default function DashboardPage() {
           subtitle="Require your review"
           highlight={(stats.data?.pendingApprovals ?? 0) > 0}
           loading={stats.isLoading}
+          iconBg={STAT_ICON_STYLES.pendingApprovals.iconBg}
+          iconColor={STAT_ICON_STYLES.pendingApprovals.iconColor}
         />
         <StatCard
           title="Active Trials"
@@ -110,6 +126,8 @@ export default function DashboardPage() {
           subtitle={expiringSoonCount > 0 ? `${expiringSoonCount} expiring soon` : "Being evaluated"}
           highlight={expiringSoonCount > 0}
           loading={activeTrials.isLoading}
+          iconBg={STAT_ICON_STYLES.activeTrials.iconBg}
+          iconColor={STAT_ICON_STYLES.activeTrials.iconColor}
         />
         <StatCard
           title="Upcoming Renewals"
@@ -118,6 +136,8 @@ export default function DashboardPage() {
           subtitle={urgentRenewalsCount > 0 ? `${urgentRenewalsCount} urgent` : "Next 90 days"}
           highlight={urgentRenewalsCount > 0}
           loading={renewalsStats.isLoading}
+          iconBg={STAT_ICON_STYLES.upcomingRenewals.iconBg}
+          iconColor={STAT_ICON_STYLES.upcomingRenewals.iconColor}
         />
         <StatCard
           title="Approved This Month"
@@ -125,6 +145,8 @@ export default function DashboardPage() {
           icon={TrendingUp}
           subtitle="Total value approved"
           loading={stats.isLoading}
+          iconBg={STAT_ICON_STYLES.approvedMonth.iconBg}
+          iconColor={STAT_ICON_STYLES.approvedMonth.iconColor}
         />
       </div>
 
@@ -146,7 +168,7 @@ export default function DashboardPage() {
       {/* Two-column: recent requests + action required */}
       <div className="grid gap-4 md:gap-6 md:grid-cols-2">
         {/* Recent Requests */}
-        <Card className="shadow-sm hover:shadow-md transition-shadow">
+        <Card className="hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
               <CardTitle className="flex items-center gap-2">
@@ -162,14 +184,16 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             {recentRequests.isLoading && (
-              <div className="space-y-3">
+              <div className="divide-y divide-slate-100">
                 {[...Array(4)].map((_, i) => (
-                  <div key={i} className="flex items-center justify-between p-3">
+                  <div key={i} className="flex items-center gap-3 p-3">
+                    <Skeleton className="h-10 w-10 rounded-xl shrink-0" />
                     <div className="flex-1 space-y-2">
                       <Skeleton className="h-4 w-3/4" />
                       <Skeleton className="h-3 w-1/3" />
                     </div>
-                    <Skeleton className="h-5 w-16 rounded-full ml-4" />
+                    <Skeleton className="h-4 w-16 ml-4" />
+                    <Skeleton className="h-6 w-16 rounded-full ml-2" />
                   </div>
                 ))}
               </div>
@@ -192,25 +216,30 @@ export default function DashboardPage() {
             )}
 
             {recentRequests.data && recentRequests.data.length > 0 && (
-              <div className="space-y-3">
+              <div className="divide-y divide-slate-100">
                 {recentRequests.data.map((req) => {
                   const badge = statusBadge[req.status as keyof typeof statusBadge] ?? statusBadge.draft;
                   return (
                     <Link
                       key={req.id}
                       href={`/dashboard/requests/${req.id}`}
-                      className="flex items-center justify-between p-3 rounded-lg hover:bg-slate-50 transition-colors group"
+                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50/50 transition-colors group"
                     >
+                      <VendorAvatar name={req.vendorName || req.category || req.title} />
                       <div className="min-w-0 flex-1">
                         <p className="text-sm font-medium text-slate-900 truncate group-hover:text-blue-600">
                           {req.title}
                         </p>
                         <p className="text-xs text-slate-500 mt-0.5">
-                          {req.requestNumber} &middot;{" "}
-                          €{parseFloat(req.amount).toLocaleString("en", { minimumFractionDigits: 2 })}
+                          {req.vendorName || req.category || "Request"} &middot; {req.requestNumber}
                         </p>
                       </div>
-                      <Badge className={badge.className}>{badge.label}</Badge>
+                      <div className="text-right shrink-0">
+                        <p className="text-sm font-semibold text-slate-900">
+                          &euro;{parseFloat(req.amount).toLocaleString("en", { minimumFractionDigits: 0 })}
+                        </p>
+                      </div>
+                      <Badge variant="pill" className={badge.className}>{badge.label}</Badge>
                     </Link>
                   );
                 })}
@@ -220,7 +249,7 @@ export default function DashboardPage() {
         </Card>
 
         {/* Action Required */}
-        <Card className="shadow-sm hover:shadow-md transition-shadow">
+        <Card className="hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
               <CardTitle className="flex items-center gap-2">
@@ -236,9 +265,10 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             {pendingApprovals.isLoading && (
-              <div className="space-y-3">
+              <div className="divide-y divide-slate-100">
                 {[...Array(4)].map((_, i) => (
-                  <div key={i} className="flex items-center justify-between p-3">
+                  <div key={i} className="flex items-center gap-3 p-3">
+                    <Skeleton className="h-10 w-10 rounded-xl shrink-0" />
                     <div className="flex-1 space-y-2">
                       <Skeleton className="h-4 w-3/4" />
                       <Skeleton className="h-3 w-1/3" />
@@ -265,24 +295,25 @@ export default function DashboardPage() {
             )}
 
             {pendingApprovals.data && pendingApprovals.data.length > 0 && (
-              <div className="space-y-3">
+              <div className="divide-y divide-slate-100">
                 {pendingApprovals.data.slice(0, 5).map((approval) => (
                   <Link
                     key={approval.id}
                     href="/dashboard/approvals"
-                    className="flex items-center justify-between p-3 rounded-lg hover:bg-slate-50 transition-colors group"
+                    className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50/50 transition-colors group"
                   >
+                    <VendorAvatar name={approval.request.requester.name || approval.request.title} />
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-medium text-slate-900 truncate group-hover:text-blue-600">
                         {approval.request.title}
                       </p>
                       <p className="text-xs text-slate-500 mt-0.5">
                         {approval.request.requester.name} &middot;{" "}
-                        €{parseFloat(approval.request.amount).toLocaleString("en", { minimumFractionDigits: 2 })}
+                        &euro;{parseFloat(approval.request.amount).toLocaleString("en", { minimumFractionDigits: 0 })}
                       </p>
                     </div>
                     {(approval.context?.riskFlags?.length ?? 0) > 0 && (
-                      <AlertCircle className="h-4 w-4 text-amber-500 flex-shrink-0" />
+                      <AlertCircle className="h-4 w-4 text-amber-500 shrink-0" />
                     )}
                   </Link>
                 ))}
@@ -302,6 +333,8 @@ function StatCard({
   subtitle,
   highlight,
   loading,
+  iconBg,
+  iconColor,
 }: {
   title: string;
   value: number | string;
@@ -309,22 +342,42 @@ function StatCard({
   subtitle: string;
   highlight?: boolean;
   loading?: boolean;
+  iconBg: string;
+  iconColor: string;
 }) {
   return (
-    <Card className={highlight ? "ring-2 ring-blue-200 bg-blue-50/30 shadow-md" : "shadow-sm hover:shadow-md transition-shadow"}>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 md:pb-2 p-4 md:p-6">
-        <CardTitle className="text-xs md:text-sm font-medium">{title}</CardTitle>
-        {loading ? (
-          <InlineLoader size="sm" />
-        ) : (
-          <Icon className={`h-4 w-4 ${highlight ? "text-blue-600" : "text-slate-600"}`} />
-        )}
-      </CardHeader>
-      <CardContent className="p-4 pt-0 md:p-6 md:pt-0">
-        <div className={`text-xl md:text-2xl font-bold ${highlight ? "text-blue-700" : ""} ${loading ? "text-slate-300" : ""}`}>
-          {value}
+    <Card
+      className={
+        highlight
+          ? "ring-2 ring-blue-200 bg-blue-50/20 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
+          : "hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
+      }
+    >
+      <CardContent className="p-5 md:p-6">
+        <div className="flex items-start justify-between">
+          <div className="space-y-1">
+            <div
+              className={`text-3xl md:text-4xl font-bold tracking-tight ${
+                highlight ? "text-blue-700" : "text-slate-900"
+              } ${loading ? "text-slate-300" : ""}`}
+            >
+              {value}
+            </div>
+            <p className="text-xs md:text-sm font-medium text-slate-600">
+              {title}
+            </p>
+          </div>
+          <div
+            className={`h-10 w-10 rounded-xl flex items-center justify-center shrink-0 ${iconBg}`}
+          >
+            {loading ? (
+              <InlineLoader size="sm" />
+            ) : (
+              <Icon className={`h-5 w-5 ${iconColor}`} />
+            )}
+          </div>
         </div>
-        <p className="text-[10px] md:text-xs text-slate-600 mt-1">{subtitle}</p>
+        <p className="text-xs text-slate-500 mt-3">{subtitle}</p>
       </CardContent>
     </Card>
   );

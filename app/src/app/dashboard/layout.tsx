@@ -64,7 +64,7 @@ export default function DashboardLayout({
   });
 
   return (
-    <div className="min-h-screen bg-[var(--warm-50)]">
+    <div className="min-h-screen bg-[var(--warm-50)] dashboard-bg">
       {/* Skip navigation for keyboard/screen reader users */}
       <a
         href="#main-content"
@@ -74,7 +74,7 @@ export default function DashboardLayout({
       </a>
 
       {/* Top nav */}
-      <header className="border-b border-slate-200 bg-white/95 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+      <header className="border-b border-[var(--warm-200)]/50 bg-white/80 backdrop-blur-xl sticky top-0 z-50">
         <div className="mx-auto max-w-7xl px-4 py-3 md:px-6 md:py-4">
           <div className="flex items-center justify-between">
             <Link href="/dashboard" className="text-xl font-bold text-slate-900">
@@ -92,7 +92,7 @@ export default function DashboardLayout({
                     key={href}
                     href={href}
                     onMouseEnter={() => prefetch(href)}
-                    className={`flex items-center gap-2 text-sm font-medium px-3 py-2 rounded-lg transition-colors ${
+                    className={`flex items-center gap-2 text-sm font-medium px-3 py-2 rounded-xl transition-colors ${
                       isActive
                         ? "bg-blue-50 text-blue-700 font-semibold"
                         : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
@@ -136,7 +136,7 @@ export default function DashboardLayout({
                         key={href}
                         href={href}
                         onClick={() => setMobileMenuOpen(false)}
-                        className={`flex items-center gap-3 text-sm font-medium px-3 py-3 rounded-lg transition-colors ${
+                        className={`flex items-center gap-3 text-sm font-medium px-3 py-3 rounded-xl transition-colors ${
                           isActive
                             ? "bg-blue-50 text-blue-700 font-semibold"
                             : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
@@ -156,7 +156,7 @@ export default function DashboardLayout({
       </header>
 
       {/* Main content */}
-      <main id="main-content" className="mx-auto max-w-7xl px-4 py-12 md:px-6 md:py-20">
+      <main id="main-content" className="relative z-10 mx-auto max-w-7xl px-4 py-12 md:px-6 md:py-20">
         <ErrorBoundary>
           <AnimatePresence mode="wait" initial={false}>
             <motion.div

@@ -39,6 +39,7 @@ import {
 } from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
 import { EmptyRequestsIllustration, NoResultsIllustration } from "@/components/ui/illustrations";
+import { VendorAvatar } from "@/components/ui/vendor-avatar";
 
 import { getErrorMessage } from "@/lib/utils/error-messages";
 import Papa from "papaparse";
@@ -53,11 +54,11 @@ const statusConfig: Record<
   string,
   { label: string; className: string; icon: typeof Clock }
 > = {
-  draft: { label: "Draft", className: "bg-slate-100 text-slate-700", icon: Edit3 },
-  pending: { label: "Pending", className: "bg-amber-100 text-amber-700", icon: Clock },
-  approved: { label: "Approved", className: "bg-green-100 text-green-700", icon: CheckCircle2 },
-  rejected: { label: "Rejected", className: "bg-red-100 text-red-700", icon: XCircle },
-  cancelled: { label: "Cancelled", className: "bg-slate-100 text-slate-500", icon: XCircle },
+  draft: { label: "Draft", className: "bg-slate-50 text-slate-500 border-slate-100", icon: Edit3 },
+  pending: { label: "Pending", className: "bg-amber-50 text-amber-600 border-amber-100", icon: Clock },
+  approved: { label: "Approved", className: "bg-green-50 text-green-600 border-green-100", icon: CheckCircle2 },
+  rejected: { label: "Rejected", className: "bg-red-50 text-red-600 border-red-100", icon: XCircle },
+  cancelled: { label: "Cancelled", className: "bg-slate-50 text-slate-400 border-slate-100", icon: XCircle },
 };
 
 const filters: { key: StatusFilter; label: string }[] = [
@@ -501,14 +502,7 @@ export default function RequestsPage() {
                       href={`/dashboard/requests/${req.id}`}
                       className="flex items-center gap-3 min-w-0 flex-1"
                     >
-                      <div className="flex-shrink-0">
-                        <StatusIcon className={`h-5 w-5 ${
-                          req.status === "approved" ? "text-green-500" :
-                          req.status === "rejected" ? "text-red-500" :
-                          req.status === "pending" ? "text-amber-500" :
-                          "text-slate-400"
-                        }`} />
-                      </div>
+                      <VendorAvatar name={req.vendorName || req.category || req.title} className="flex-shrink-0" />
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
                           <p className="text-body-sm font-medium text-slate-900 truncate group-hover:text-blue-600">
@@ -537,7 +531,7 @@ export default function RequestsPage() {
                         )}
                       </div>
                       <div className="flex items-center gap-2 md:flex-col md:gap-1.5">
-                        <Badge className={config.className}>{config.label}</Badge>
+                        <Badge variant="pill" className={config.className}>{config.label}</Badge>
                         {req.status === "approved" && req.syncedToAccounting && (
                           <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 text-[10px]">
                             <Receipt className="h-3 w-3 mr-1" />
