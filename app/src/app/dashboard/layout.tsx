@@ -40,7 +40,6 @@ const navItems = [
   { href: "/dashboard/subscriptions", label: "Subscriptions", icon: Package, exact: false },
   { href: "/dashboard/invoices", label: "Invoices", icon: Receipt, exact: false },
   { href: "/dashboard/vendors", label: "Vendors", icon: Building2, exact: false },
-  { href: "/dashboard/settings", label: "Settings", icon: Settings, exact: false },
 ];
 
 export default function DashboardLayout({
@@ -82,7 +81,7 @@ export default function DashboardLayout({
             </Link>
 
             {/* Desktop nav */}
-            <nav className="hidden md:flex items-center gap-1 flex-1 ml-10">
+            <nav className="hidden md:flex items-center gap-1 flex-1 ml-10 overflow-x-auto scrollbar-hide">
               {navItems.map(({ href, label, icon: Icon, exact }) => {
                 const isActive = exact
                   ? pathname === href
@@ -92,7 +91,7 @@ export default function DashboardLayout({
                     key={href}
                     href={href}
                     onMouseEnter={() => prefetch(href)}
-                    className={`flex items-center gap-2 text-sm font-medium px-3 py-2 rounded-xl transition-colors ${
+                    className={`shrink-0 flex items-center gap-2 text-sm font-medium px-3 py-2 rounded-xl transition-colors ${
                       isActive
                         ? "bg-blue-50 text-blue-700 font-semibold"
                         : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
@@ -108,6 +107,18 @@ export default function DashboardLayout({
             {/* Right side actions */}
             <div className="flex items-center gap-2">
               <NotificationBell />
+              <Link
+                href="/dashboard/settings"
+                onMouseEnter={() => prefetch("/dashboard/settings")}
+                className={`hidden md:flex items-center justify-center h-10 w-10 rounded-xl transition-colors ${
+                  pathname.startsWith("/dashboard/settings")
+                    ? "bg-blue-50 text-blue-700"
+                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                }`}
+                aria-label="Settings"
+              >
+                <Settings className="h-4 w-4" />
+              </Link>
 
               {/* Mobile hamburger */}
               <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
@@ -127,7 +138,7 @@ export default function DashboardLayout({
                   <SheetTitle className="text-left">Navigation</SheetTitle>
                 </SheetHeader>
                 <nav className="flex flex-col gap-1 mt-4">
-                  {navItems.map(({ href, label, icon: Icon, exact }) => {
+                  {[...navItems, { href: "/dashboard/settings", label: "Settings", icon: Settings, exact: false }].map(({ href, label, icon: Icon, exact }) => {
                     const isActive = exact
                       ? pathname === href
                       : pathname.startsWith(href);

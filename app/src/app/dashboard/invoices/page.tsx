@@ -5,6 +5,12 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -20,11 +26,14 @@ import {
   Loader2,
   ThumbsUp,
   XCircle,
+  Download,
 } from "lucide-react";
 import { trpc } from "@/lib/api/react";
 import { toast } from "sonner";
 import { EmptyState } from "@/components/ui/empty-state";
 import { EmptyBoxIllustration } from "@/components/ui/illustrations";
+import Papa from "papaparse";
+import * as XLSX from "xlsx";
 
 export const dynamic = "force-dynamic";
 
@@ -99,16 +108,80 @@ export default function InvoicesPage() {
     });
   }
 
+  function buildExportRows() {
+    return (invoices ?? []).map((inv) => ({
+      "Invoice Number": inv.invoiceNumber ?? `INV-${inv.id.slice(0, 8)}`,
+      "Vendor": inv.vendor?.name ?? "",
+      "Status": inv.status,
+      "Match Status": inv.matchStatus?.replace("_", " ") ?? "unmatched",
+      "Amount": inv.amount,
+      "Tax Amount": inv.taxAmount ?? "",
+      "Total Amount": inv.totalAmount,
+      "Currency": inv.currency,
+      "Variance Amount": inv.varianceAmount ?? "",
+      "Variance Reason": inv.varianceReason ?? "",
+      "Match Confidence": inv.matchConfidence ? `${(parseFloat(inv.matchConfidence) * 100).toFixed(0)}%` : "",
+      "Issue Date": inv.issueDate ? formatDate(inv.issueDate) : "",
+      "Due Date": inv.dueDate ? formatDate(inv.dueDate) : "",
+      "Source": inv.source,
+    }));
+  }
+
+  function handleDownloadCSV() {
+    const rows = buildExportRows();
+    if (rows.length === 0) { toast.error("No invoices to export"); return; }
+    const csv = Papa.unparse(rows);
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `invoices-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function handleDownloadExcel() {
+    const rows = buildExportRows();
+    if (rows.length === 0) { toast.error("No invoices to export"); return; }
+    const ws = XLSX.utils.json_to_sheet(rows);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Invoices");
+    XLSX.writeFile(wb, `invoices-${new Date().toISOString().slice(0, 10)}.xlsx`);
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">
-          Invoice Matching
-        </h1>
-        <p className="text-slate-600 mt-1 md:mt-2 text-sm md:text-base">
-          3-way matching: Purchase Orders → Receipts → Invoices
-        </p>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">
+            Invoice Matching
+          </h1>
+          <p className="text-slate-600 mt-1 md:mt-2 text-sm md:text-base">
+            3-way matching: Purchase Orders → Receipts → Invoices
+          </p>
+        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={invoicesLoading || !invoices?.length}
+              className="shrink-0"
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Export
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={handleDownloadCSV}>
+              Download CSV
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleDownloadExcel}>
+              Download Excel (.xlsx)
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       {/* Stats Cards */}
@@ -202,19 +275,6 @@ export default function InvoicesPage() {
           {invoicesLoading && (
             <div className="flex items-center justify-center py-12">
               <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
-            </div>
-          )}
-
-          {!invoicesLoading && invoicesError && (
-            <div className="flex flex-col items-center justify-center py-12 text-center gap-3">
-              <AlertTriangle className="h-8 w-8 text-slate-300" />
-              <p className="text-sm text-slate-500">Failed to load invoices.</p>
-              <button
-                onClick={() => window.location.reload()}
-                className="text-sm text-blue-600 underline underline-offset-2"
-              >
-                Retry
-              </button>
             </div>
           )}
 

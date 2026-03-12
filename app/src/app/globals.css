@@ -141,6 +141,19 @@
   --color-primary: var(--primary-500);
   --color-primary-foreground: #ffffff;
 
+  /* shadcn/ui semantic tokens — required for bg-popover, bg-card, bg-muted, bg-accent, etc. */
+  --color-popover: #ffffff;
+  --color-popover-foreground: #0f172a;
+  --color-card: #ffffff;
+  --color-card-foreground: #0f172a;
+  --color-muted: #f1f5f9;
+  --color-muted-foreground: #64748b;
+  --color-accent: #f1f5f9;
+  --color-accent-foreground: #0f172a;
+  --color-border: #e2e8f0;
+  --color-input: #e2e8f0;
+  --color-ring: #3b82f6;
+
   /* Marketing palette — enables bg-mkt-*, text-mkt-*, border-mkt-* */
   --color-mkt-deep: #0F172A;
   --color-mkt-slate-50: #F8FAFC;
